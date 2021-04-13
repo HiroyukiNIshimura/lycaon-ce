@@ -1,0 +1,55 @@
+<div id="account-overview" v-cloak>
+  <div class="container">
+    <h3><%= __('My Account') %></h3>
+    <hr />
+    <div class="row mb-3">
+      <div class="col-sm-6">
+        <p class="text-danger" v-if="emailAddressNoLongerAvailable">
+          <%= __("The email address you changed is already in use by another user. Make sure that the email address you changed in profile editing is correct. If the email address is correct, please contact the administrator immediately") %>
+        </p>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-sm-6">
+        <h4><%= __('My Setting') %></h4>
+      </div>
+      <div class="col-sm-6">
+        <span class="float-sm-right">
+          <a class="btn btn-sm btn-default account-settings-button" href="/<%= organization.handleId %>/account/profile"><%= __('Profile editing') %></a>
+        </span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-3"><%= __('Full Name') %>:</div>
+      <div class="col">
+        <strong>{{ me.fullName }}</strong>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-3"><%= __('Mail Address') %>:</div>
+      <div class="col">
+        <strong
+          :class="[me.emailStatus === 'unconfirmed' || me.emailStatus === 'change-requested' ? 'text-muted' : '']">{{ me.emailChangeCandidate ? me.emailChangeCandidate : me.emailAddress }}</strong>
+        <span v-if="me.emailStatus === 'unconfirmed' || me.emailStatus === 'change-requested'"
+          class="badge badge-pill badge-warning"><%= __('pending') %></span>
+      </div>
+    </div>
+    <hr />
+    <div class="row mb-3">
+      <div class="col-sm-6">
+        <h4><%= __('Password') %></h4>
+      </div>
+      <div class="col-sm-6">
+        <span class="float-sm-right">
+          <a class="btn btn-sm btn-default account-settings-button" href="/<%= organization.handleId %>/account/password"><%= __('Change Password') %></a>
+        </span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-3"><%= __('Password') %>:</div>
+      <div class="col"><strong>••••••••••</strong></div>
+    </div>
+    <hr />
+  </div>
+</div>
+<%- /* Expose locals as `window.SAILS_LOCALS` :: */ exposeLocalsToBrowser() %>

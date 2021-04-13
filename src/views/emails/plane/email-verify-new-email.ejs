@@ -1,0 +1,12 @@
+<% /* Note: This is injected into `views/layouts/layout-email.ejs` */ %>
+<%= __('Hello {0}').format(fullName) %>
+
+<%= __('You have requested an email address update for your account') %>
+<%= __('Click the button below to confirm your new email address') %> :
+
+<%= __('Confirm your email address') %>:
+[ <%= url.resolve(sails.config.custom.baseUrl,'/email/confirm')+'?token='+encodeURIComponent(token) %> ]
+
+------------------------------
+Sincerely,
+Team Lycaon

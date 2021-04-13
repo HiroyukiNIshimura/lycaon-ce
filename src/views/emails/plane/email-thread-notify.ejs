@@ -1,0 +1,38 @@
+<% /* Note: This is injected into `views/layouts/layout-email.ejs` */ %>
+
+<%= __('Thread [#{0}] Update Notice').format(thread.no) %>
+
+<%= action %>
+<% if (comment) { %>
+<%= comment %>
+<% } %>
+
+<%= __('Changer') %>：<%= updater %>
+<%= __('Update date') %>：<%= updatedAt %>
+------------------------------
+
+<%= __('Team') %>：<%= team.name %>
+[ <%= url.resolve(sails.config.custom.baseUrl, `/${organization.handleId}/team/${team.id}`) %> ]
+
+<%= title %>
+[ <%= url.resolve(sails.config.custom.baseUrl, `/${organization.handleId}/thread/${thread.id}`) %><%= locals.hashTag ? hashTag : ''  %> ]
+
+------------------------------
+
+<%= __('Category') %>：<%= thread.category %>
+<%= __('Status') %>：<%= thread.status %>
+<%= __('Concept') %>：<%= thread.concept %>
+<%= __('Person in charge') %>：<%= thread.responsible %>
+<%= __('Deadline') %>：<%= thread.dueDate %>
+<%= __('Tags') %>：<%= thread.tags %>
+
+<%- threadBody %>
+
+------------------------------
+
+<%= __('Please use the URL below to set whether or not to deliver emails related to threads') %>
+[ <%= settingUrl %> ]
+------------------------------
+
+Sincerely,
+<%= fromName %>

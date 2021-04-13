@@ -1,0 +1,51 @@
+<div class="md-form">
+  <label for="form-name" class="md-textarea-label"><%= __("Name") %></label>
+  <input type="text" maxlength="20" id="form-name" class="form-control" :class="[formErrors.name ? 'is-invalid' : '']"
+    v-model="formData.name" />
+  <div class="invalid-feedback" v-if="formErrors.name"><%= __("Please enter a name") %></div>
+</div>
+
+<div class="row mt-3">
+  <div class="col-auto">
+    <div class="row">
+      <div class="col">
+        <label><%= __("Term") %></label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <v-date-picker :columns="$screens({ default: 1, lg: 2 })" ref="calendar" :attributes="calendar"
+          :masks="calendarMasks" is-inline v-model="selectedDateRang" is-range></v-date-picker>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row mt-3">
+  <div class="col">
+    <label for="form-responsible"><%= __("Person in charge") %>
+      <small class="ml-2"><a href="javascript:void(0)"
+          @click="chooseMe"><%= __("Choose yourself") %></a></small></label>
+  </div>
+</div>
+<div class="row">
+  <div class="col-3">
+    <select class="browser-default custom-select" id="form-responsible" v-model="responsible">
+      <option value=""><%= __("Not set") %></option>
+      <option v-for="item in team.users" v-bind:value="item.id">
+        {{ item.fullName }}
+      </option>
+    </select>
+  </div>
+</div>
+
+<div id="cloud-error" class="row">
+  <div class="col-sm-6">
+    <p class="text-danger" v-if="cloudError === 'nameAlreadyInUse'">
+      <%= __("Milestones that use that name already exist") %>
+    </p>
+    <p class="text-danger" v-else-if="cloudError">
+      <%= __("An error occurred while processing the request. Please check the information and try again. If the error persists, please contact your administrator") %>
+    </p>
+  </div>
+</div>

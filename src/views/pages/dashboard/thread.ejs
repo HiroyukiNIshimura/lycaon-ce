@@ -1,0 +1,324 @@
+<div id="thread" v-cloak>
+  <div class="container">
+    <%- partial ('thread-modals.ejs') %>
+
+    <ajax-form id="query-member-form" action="queryAllMember" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedMemberForm"
+      @rejected="onCloudError" :handle-parsing="handleParsingMemberForm">
+    </ajax-form>
+
+    <div id="cloud-error" class="row">
+      <div class="col-sm-6">
+        <p class="text-danger" v-if="cloudError === 'childIsParent'">
+          <%= __("The selected thread is the forking thread for this thread. It cannot be associated") %>
+        </p>
+        <p class="text-danger" v-else-if="cloudError === 'childIsThis'">
+          <%= __("The selected thread is this thread. It cannot be associated") %>
+        </p>
+        <p class="text-danger" v-else-if="cloudError === 'childAlreadyInUse'">
+          <%= __("The selected thread is already associated with this thread") %>
+        </p>
+        <p class="text-danger" v-else-if="cloudError === 'parentIsThis'">
+          <%= __("The selected thread is the thread forked from this thread. It cannot be associated") %>
+        </p>
+        <p class="text-danger" v-else-if="cloudError === 'parentAlreadyInUse'">
+          <%= __("The fork source has already been set for the selected thread. If you want to change the fork source, delete the association with the current fork source") %>
+        </p>
+        <p class="text-danger" v-else-if="cloudError === 'alreadyLocked'">
+          <%= __("This thread is already archived and write-protected") %>
+        </p>
+        <p class="text-danger" v-else-if="cloudError === 'alreadyInWorking'">
+          {{ i18n('This thread is already being worked on by {0}').format(cloudErrorRawData.message) }}
+        </p>
+        <p class="text-danger" v-else-if="cloudError">
+          <%= __("An error occurred while processing the request. Please check the information and try again. If the error persists, please contact your administrator") %>
+        </p>
+      </div>
+    </div>
+
+    <div class="row">
+      <!--main contents-->
+      <div class="col-9 col-xs-6" id="main-contents" :class="mainContents">
+        <%- partial ('thread-header-actions.ejs') %>
+        <!-- thread-editor -->
+        <ajax-form id="form-update-thraed" action="updateThread" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedForm"
+          @rejected="onCloudError" :handle-parsing="handleParsingForm">
+          <transition name="fade">
+            <div class="row" v-show="threadMode === 'edit'">
+              <div class="col">
+                <div class="row">
+                  <div class="col text-right">
+                    <button type="button" class="btn btn-light btn-sm" @click="onEditCancelClick">
+                      <i class="fas fa-window-close"></i> <%= __("Cancel") %>
+                    </button>
+                    <button type="submit" class="btn btn-primary btn-sm">
+                      <i class="far fa-save"></i> <%= __("Save") %>
+                    </button>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    <div class="md-form">
+                      <input type="text" maxlength="120" id="thread-subject" class="form-control" v-model.trim="thread.subject" autocomplete="thread-subject"
+                        :class="[formErrors.subject ? 'is-invalid' : '']" />
+                      <label for="thread-subject"><%= __("Thread") %> #{{ thread.id }}</label>
+                      <div class="invalid-feedback" v-if="formErrors.subject">
+                        <%= __("Please enter a subject") %>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-auto mb-3">
+                    <label for="thread-category"><%= __("Category") %></label>
+                    <select class="browser-default custom-select" id="thread-category" v-model="thread.category.id"
+                      :class="[formErrors.category ? 'is-invalid' : '']">
+                      <option v-for="item in categories" v-bind:value="item.id">
+                        {{ item.name }}
+                      </option>
+                    </select>
+                    <div class="invalid-feedback" v-if="formErrors.category">
+                      <%= __("Please select a category") %>
+                    </div>
+                  </div>
+                  <div class="col-auto mb-3">
+                    <label for="thread-responsible"><%= __("Person in charge") %>
+                      <small class="ml-2"><a href="javascript:void(0)" @click="chooseMe"><%= __("Choose yourself") %></a></small></label>
+                    <select class="browser-default custom-select" id="thread-responsible" v-model="selectedResponsible">
+                      <option value=""><%= __("Not set") %></option>
+                      <option v-for="item in comboMembers" v-bind:value="item.id">
+                        {{ item.fullName }}
+                      </option>
+                    </select>
+                  </div>
+                  <div class="col-auto mb-3">
+                    <label for="thread-concept"><%= __("Concept") %></label>
+                    <select class="browser-default custom-select" id="thread-concept" v-model="thread.concept" :class="[formErrors.concept ? 'is-invalid' : '']"
+                      :disabled="local">
+                      <option value="0"><%= __("draft") %></option>
+                      <option value="1"><%= __("published") %></option>
+                    </select>
+                    <div class="invalid-feedback" v-if="formErrors.concept">
+                      <%= __("Please select a concept") %>
+                    </div>
+                  </div>
+                  <div class="col-auto mb-3" v-if="milestone.length > 0">
+                    <label for="thread-milestone"><%= __("Milestone") %></label>
+                    <select class="browser-default custom-select" id="thread-milestone" v-model="selectedMilestone">
+                      <option value=""><%= __("Not set") %></option>
+                      <option v-for="item in milestone" v-bind:value="item.id">
+                        {{ item.name }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <div class="row mt-3">
+                  <!-- 自分がオーナーの場合変更可能 -->
+                  <div class="col-auto" v-if="thread.owner && thread.owner.id === me.id">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="form-check-input" id="thread-local" v-model="local" true-value="true" false-value="false" />
+                      <label class="form-check-label" for="thread-local"><%= __("Private thread") %></label>
+                    </div>
+                  </div>
+                </div>
+                <div class="row mt-3">
+                  <div class="col">
+                    <label for="thread-tags"><%= __("Tags") %><small class="text-muted ml-3"><%= __("You can tag up to {0}").format(10) %></small></label>
+                    <v-tagify ref="tagify" id="thread-tags" :settings="tagifySettings" @add="onAddTagify" @remove="onRemoveTagify"></v-tagify>
+                  </div>
+                </div>
+                <div class="row mt-3">
+                  <div class="col">
+                    <div ref="threadEditor" id="thread-editor"></div>
+                  </div>
+                </div>
+                <!-- appendix -->
+                <editor-file :appendix="appendix" :organization="organization" mode="update" :delete-appendix="deleteAppendix" :download-appendix="downloadAppendix" :whitelist="witeListOfExts"
+                  :add-image="addImageBlobHook" :is-uploading="isUploading" :planlimitation="planlimitation" title="thread" :is-demosite="isDemosite"
+                  :hidden-upload="thread.locked">
+                </editor-file>
+
+                <div class="row mt-1">
+                  <div class="col text-right">
+                    <button type="button" class="btn btn-light btn-sm" @click="onEditCancelClick">
+                      <i class="fas fa-window-close"></i> <%= __("Cancel") %>
+                    </button>
+                    <button type="submit" class="btn btn-primary btn-sm">
+                      <i class="far fa-save"></i> <%= __("Save") %>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </transition>
+        </ajax-form>
+        <!-- thread-view -->
+        <div class="row" v-show="threadMode === 'view'">
+          <div class="col">
+            <div class="row">
+              <div class="col-auto">
+                <small><label class="" for="thread-view-activity"><%= __("Activities") %></label></small>
+                <select class="browser-default custom-select custom-select-sm" id="thread-view-activity" v-model="viewActivity">
+                  <option value="0"><%= __("All") %></option>
+                  <option value="1"><%= __("Comments and replies only") %></option>
+                  <option value="2"><%= __("Activity only") %></option>
+                </select>
+              </div>
+
+              <div class="col-auto col-md offset-md-2 mt-2" v-if="thread.locked">
+                <div class="alert alert-warning text-left" role="alert">
+                  <small>
+                    <%= __("This thread has been archived. Unarchive to make changes to thread comments and replies") %>
+                  </small>
+                </div>
+              </div>
+            </div>
+            <div class="row mt-3" v-if="fork">
+              <div class="col">
+                <ajax-form id="delete-parent-form" action="deleteParent" :syncing.sync="syncing" :cloud-error.sync="cloudError"
+                  @submitted="submittedDeleteParentForm" @rejected="onCloudError" :handle-parsing="handleParsingDeleteParentForm">
+                  <small><span class="badge badge-default"><%= __("Fork source thread") %></span><a class="ml-2" :href="forkLink"
+                      v-if="fork.status === 1"><del>[#{{ fork.no }}] {{ fork.subject }}</del></a>
+                    <a class="ml-2" :href="forkLink" v-else>[#{{ fork.no }}] {{ fork.subject }}</a>
+                    <a class="ml-3" href="javascript:void(0)" @click="deleteParent" data-toggle="tooltip" data-placement="bottom"
+                      :title="i18n('Remove the association with the fork source')"><i class="fas fa-unlink"></i></a>
+                  </small>
+                </ajax-form>
+              </div>
+            </div>
+            <div class="row border border-top-0 border-right-0 border-left-0 mt-3">
+              <div class="col">
+                <div class="row">
+                  <div class="col">
+                    <span class="h6 text-muted mr-3"><%= __("Thread") %> #{{ thread.no }}</span>
+                    <span class="badge badge-success" v-if="thread.working"><%= __("Working") %></span>
+                    <span style="color: Tomato" class="mr-1" v-if="isFan">
+                      <i class="fas fa-flag"></i>
+                    </span>
+                    <a :href="mindmapLink" class="badge badge-info" v-if="fork || children.length > 0"><%= __("Mindmap") %></a>
+                  </div>
+                </div>
+                <div class="row mt-1">
+                  <div class="col">
+                    <span class="h4">{{ thread.subject }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row mt-3" v-if="children.length > 0">
+              <div class="col">
+                <small>
+                  <span class="badge badge-default" data-toggle="collapse" data-target="#wrapper-childlen" aria-expand="true"
+                    aria-controls="wrapper-childlen"><%= __("Related thread") %></span>
+                </small>
+              </div>
+            </div>
+            <ajax-form id="delete-child-form" action="deleteRef" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedDeleteChildForm"
+              @rejected="onCloudError" :handle-parsing="handleParsingDeleteChildForm">
+              <div class="row collapse show" v-for="(item, index) in children" id="wrapper-childlen">
+                <div class="col">
+                  <small><span class="text-muted"> </span>
+                    <a :href="chiledLinks(item)" v-if="item.status === 1">
+                      <del>[#{{ item.no }}] {{ item.subject }}</del>
+                    </a>
+                    <a :href="chiledLinks(item)" v-else> [#{{ item.no }}] {{ item.subject }} </a>
+                    <a class="ml-3" href="javascript:void(0)" @click="deleteChild(item, index)" data-toggle="tooltip" data-placement="bottom"
+                      :title="i18n('Remove the association with this thread')"><i class="fas fa-unlink"></i></a>
+                  </small>
+                </div>
+              </div>
+            </ajax-form>
+
+            <div class="row mt-2 align-items-center">
+              <div class="col-auto">
+                <small class="text-muted"><%= __("Concept") %></small>
+                <span class="badge badge-light ml-2" v-if="thread.concept === 0"><%= __("draft") %></span>
+                <span class="badge badge-success ml-2" v-else><%= __("published") %></span>
+              </div>
+              <div class="col-auto">
+                <small class="text-muted"><%= __("Categroy") %></small>
+                <span class="badge badge-light ml-2">{{ thread.category.name }}</span>
+              </div>
+              <div class="col-auto" v-if="thread.local">
+                <span class="badge badge-light"><%= __("Private") %></span>
+              </div>
+              <div class="col-auto" v-if="thread.responsible">
+                <small class="text-muted"><%= __("Person in charge") %></small>
+                <span class="ml-2">
+                  <user-identity :user="thread.responsible" :organization="organization" size="sm"></user-identity>
+                </span>
+              </div>
+              <div class="col-auto">
+                <small class="ml-3"><a href="javascript:void(0);" @click="jumpToCommentEditor"><%= __("Comment on this thread") %></a></small>
+              </div>
+            </div>
+            <div class="row mt-2">
+              <div class="col-auto">
+                <small class="text-muted"><%= __("Tags") %></small>
+              </div>
+              <div class="col">
+                <a :href="tagLink(item)" class="badge badge-success mr-1" data-toggle="tooltip" data-placement="top" :title="tagTooltip"
+                  v-for="(item, index) in thread.tags">{{
+                  item.name
+                }}</a>
+              </div>
+            </div>
+            <!-- appendix -->
+            <editor-file :appendix="appendix" :organization="organization" mode="update" :delete-appendix="deleteAppendix" :download-appendix="downloadAppendix" :whitelist="witeListOfExts"
+              :add-image="addImageBlobHook" :is-uploading="isUploading" :planlimitation="planlimitation" title="thread" :is-demosite="isDemosite"
+              :hidden-upload="thread.locked">
+            </editor-file>
+            <div class="row mt-5 mb-5 p-3 shadow rounded" v-show="thread.body">
+              <div class="col">
+                <div class="row" v-if="thread.emotional">
+                  <div class="col text-right"><small><a href="javascript:void(0)" @click="showEmotionsRadar"><%= __('Emotional Rader') %></a></small></div>
+                </div>
+                <div class="row">
+                  <div class="col text-break" id="viewer" ref="loadingContainer"></div>
+                </div>
+              </div>
+            </div>
+            <div class="row mt-3 mb-3" v-show="!thread.body">
+            </div>
+          </div>
+        </div>
+
+        <div v-for="item in activities">
+          <!-- activities -->
+          <%- partial ('thread-activity.ejs') %>
+
+          <div v-if="isCreateSneeze(item.type)">
+            <div v-show="viewActivity != 2">
+              <!-- sneeze -->
+              <%- partial ('thread-sneeze.ejs') %>
+              <!-- reply -->
+              <%- partial ('thread-reply.ejs') %>
+            </div>
+          </div>
+        </div>
+        <ajax-form action="createSneeze" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedSneezeCreateForm" @rejected="onCloudError"
+          :handle-parsing="handleParsingSneezeCreateForm">
+          <div class="row mt-3" v-show="!isProtected">
+            <div class="col">
+              <div id="comment-editor"></div>
+            </div>
+          </div>
+          <div class="row mt-3" v-show="!isProtected">
+            <div class="col text-right">
+              <button type="submit" class="btn btn-primary btn-sm">
+                <i class="fas fa-comment"></i> <%= __("Add comment") %>
+              </button>
+            </div>
+          </div>
+        </ajax-form>
+      </div>
+      <!--right-sidebar-->
+      <%- partial ('thread-right-side-menu.ejs') %>
+    </div>
+    <div class="sidebar-collapse" id="sidebarCollapse" :class="sidebarCollapse" @click="toggleRightMenu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+</div>
+<%- /* Expose locals as `window.SAILS_LOCALS` :: */ exposeLocalsToBrowser() %>

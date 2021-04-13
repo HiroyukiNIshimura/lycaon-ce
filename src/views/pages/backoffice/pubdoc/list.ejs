@@ -1,0 +1,90 @@
+<div id="backoffice-pubdoc-list" v-cloak>
+  <div class="container">
+    <modal v-if="showDeleteModal">
+      <div class="card">
+        <div class="card-header"><%= __("Confirmation dialog") %></div>
+        <div class="card-body">
+          <h5 class="card-title"><%= __("Confirmation of not publishing") %></h5>
+          <p class="card-text"><%= __("Makes the selected Wiki private. Is it OK?") %></p>
+          <div class="text-right">
+            <button type="button" class="btn btn-danger btn-sm" @click="doSubmit">
+              <i class="far fa-eye-slash"></i> <%= __("No Publish") %>
+            </button>
+            <button type="button" class="btn btn-light btn-sm" @click="showDeleteModal = false">
+              <i class="fas fa-window-close"></i> <%= __("Cancel") %>
+            </button>
+          </div>
+        </div>
+      </div>
+    </modal>
+    <modal v-if="showRecoverModal">
+      <div class="card">
+        <div class="card-header"><%= __("Confirmation dialog") %></div>
+        <div class="card-body">
+          <h5 class="card-title"><%= __("Confirmation of publication") %></h5>
+          <p class="card-text"><%= __("Publish the selected Wiki. Is it OK?") %></p>
+          <div class="text-right">
+            <button type="button" class="btn btn-primary btn-sm" @click="doSubmit">
+              <i class="far fa-eye"></i> <%= __("Publish") %>
+            </button>
+            <button type="button" class="btn btn-light btn-sm" @click="showRecoverModal = false">
+              <i class="fas fa-window-close"></i> <%= __("Cancel") %>
+            </button>
+          </div>
+        </div>
+      </div>
+    </modal>
+    <div id="cloud-error" class="row">
+      <div class="col-sm-6">
+        <p class="text-danger" v-if="cloudError">
+          <%= __("An error occurred while processing the request. Please check the information and try again. If the error persists, please contact your administrator") %>
+        </p>
+      </div>
+    </div>
+
+    <ajax-form id="update-deleted-form" action="updateWikiDeleted" :syncing.sync="syncing"
+      :cloud-error.sync="cloudError" @submitted="submittedForm" @rejected="onCloudError"
+      :handle-parsing="handleParsingForm">
+    </ajax-form>
+
+    <div class="row">
+      <div class="col text-right">
+        <a class="btn btn-info btn-sm" href="/admin/pubdoc/create"><i class="fas fa-plus-circle"></i>
+          <%= __("Create New") %></a>
+      </div>
+    </div>
+    <div class="row mt-4" v-if="records > 0">
+      <div class="col-auto">
+        <h4>Wiki</h4>
+      </div>
+      <div class="col-auto">
+        <v-pagination :page="pagination.page" :page-count="getPageCount" :handler="clickCallback"></v-pagination>
+      </div>
+      <div class="col">
+        <small><span><%= __("Total number of wikis") %> {{ formatter.format(records) }}
+            {{ i18nformatN('Wiki', 'Wikis', records) }}</span></small>
+      </div>
+    </div>
+    <div class="row mt-4" v-else>
+      <div class="col text-muted"><%= __("Public wiki not found") %></div>
+    </div>
+    <div class="row">
+      <div class="col-auto mb-2 ml-1 admin-wiki-card" v-for="item in wikis" v-inview:parent="'animate'">
+        <wiki-card :wiki="item" :organization="organization" is-public="true" is-animate="false">
+          <div class="text-right mt-auto">
+            <button type="button" class="btn btn-primary btn-sm" @click="clickDetetOrRecver(item)" v-if="item.deleted">
+              <i class="far fa-eye"></i> <%= __("Publish") %>
+            </button>
+            <button type="button" class="btn btn-danger btn-sm" @click="clickDetetOrRecver(item)" v-else>
+              <i class="far fa-eye-slash"></i> <%= __("No Publish") %>
+            </button>
+            <a class="btn btn-primary btn-sm" :href="editLink(item)">
+              <i class="far fa-edit"></i> <%= __("Edit") %>
+            </a>
+          </div>
+        </wiki-card>
+      </div>
+    </div>
+  </div>
+</div>
+<%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>

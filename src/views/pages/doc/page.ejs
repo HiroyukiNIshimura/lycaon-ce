@@ -1,0 +1,29 @@
+<div id="pubdoc-page" v-cloak>
+  <div class="container">
+    <div class="row border border-top-0 border-right-0 border-left-0 mt-3">
+      <div class="col">
+        <span class="h4">{{ wiki.subject }}</span>
+      </div>
+    </div>
+    <div class="row mt-1">
+      <div class="col text-right">
+        <small><lycaon-timestamp :at="wiki.createdAt" format="timeago" :translator="translator" short="true"></lycaon-timestamp>
+        </small>
+      </div>
+    </div>
+    <div class="row mt-2" v-if="wiki.tags.length > 0">
+      <div class="col-auto">
+        <small class="text-muted"><%= __("Tags") %></small>
+      </div>
+      <div class="col">
+        <span class="badge badge-success mr-1" v-for="(item, index) in wiki.tags">{{
+          item.name
+        }}</span>
+      </div>
+    </div>
+    <div class="row mt-5 mb-5 p-3 shadow rounded">
+      <div class="col text-break" id="viewer"></div>
+    </div>
+  </div>
+</div>
+<%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>

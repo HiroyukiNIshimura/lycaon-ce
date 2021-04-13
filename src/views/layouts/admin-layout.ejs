@@ -1,0 +1,563 @@
+<% if (typeof me === 'undefined') {
+  var me = undefined;
+} %>
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <title><%= sails.config.custom.platformName %></title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <% if (sails.config.environment === 'production') { %>
+  <!-- Google Analytics, Google Tag Manager, etc. -->
+  <% } else { %>
+  <meta name="robots" content="noindex">
+  <% } %>
+
+  <% /*
+        Stylesheets
+        ========================
+
+        Stylesheets can be hard-coded as «link» tags, automatically injected
+        by the asset pipeline between "STYLES" and "STYLES END", or both.
+        (https://sailsjs.com/docs/concepts/assets/task-automation)
+    */ %>
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Kosugi+Maru&display=swap" rel="stylesheet">
+
+  <% /* Auto-injected «link» tags: */ %>
+  <!--STYLES-->
+  <link rel="stylesheet" href="/dependencies/fontawesome/all.css">
+  <link rel="stylesheet" href="/dependencies/bootstrap-4/bootstrap.min.css">
+  <link rel="stylesheet" href="/dependencies/cookieconsent/cookieconsent.css">
+  <link rel="stylesheet" href="/dependencies/MDB/mdb.min.css">
+  <link rel="stylesheet" href="/dependencies/select2/select2.css">
+  <link rel="stylesheet" href="/dependencies/tagify/tagify.css">
+  <link rel="stylesheet" href="/dependencies/toastui-editor/codemirror.min.css">
+  <link rel="stylesheet" href="/dependencies/toastui-editor/highlight.css">
+  <link rel="stylesheet" href="/dependencies/toastui-editor/toastui-editor.min.css">
+  <link rel="stylesheet" href="/dependencies/toastui-editor/tui-chart.min.css">
+  <link rel="stylesheet" href="/dependencies/toastui-editor/tui-color-picker.min.css">
+  <link rel="stylesheet" href="/dependencies/vertical-timeline/vertical-timeline.css">
+  <link rel="stylesheet" href="/dependencies/vue-inview/animate.min.css">
+  <link rel="stylesheet" href="/dependencies/vue-loading-overlay/vue-loading.css">
+  <link rel="stylesheet" href="/dependencies/vue-mindmap/vue-mindmap.css">
+  <link rel="stylesheet" href="/dependencies/vue-toast-notification/theme-default.css">
+  <link rel="stylesheet" href="/dependencies/vue-upload-component/cropper.min.css">
+  <link rel="stylesheet" href="/styles/importer.css">
+  <!--STYLES END-->
+
+  <style>
+    html,
+    body {
+      padding: 0;
+      margin: 0;
+      height: 100%
+    }
+
+    main {
+      position: relative;
+      padding-bottom: 120px;
+      box-sizing: border-box;
+      min-height: 100vh;
+      margin-top: 21%;
+    }
+
+    footer.page-footer {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+    }
+
+    @media (min-width: 576px) {
+      main {
+        margin-top: 15%;
+      }
+    }
+
+    @media (min-width: 768px) {
+      main {
+        margin-top: 12%;
+      }
+    }
+
+    @media (min-width: 992px) {
+      main {
+        margin-top: 8%;
+      }
+    }
+
+    @media (min-width: 1200px) {
+      main {
+        margin-top: 0%;
+      }
+    }
+
+    @media (min-width: 768px) {
+      body {
+        padding-top: 0;
+      }
+    }
+
+    @media (min-width: 768px) {
+      body {
+        margin-left: 232px;
+      }
+    }
+
+    .navbar.fixed-left {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1030;
+    }
+
+    @media (min-width: 768px) {
+      .navbar.fixed-left {
+        bottom: 0;
+        width: 232px;
+        flex-flow: column nowrap;
+        align-items: flex-start;
+      }
+
+      .navbar.fixed-left .navbar-collapse {
+        flex-grow: 0;
+        flex-direction: column;
+        width: 100%;
+      }
+
+      .navbar.fixed-left .navbar-collapse .navbar-nav {
+        flex-direction: column;
+        width: 100%;
+      }
+
+      .navbar.fixed-left .navbar-collapse .navbar-nav .nav-item {
+        width: 100%;
+      }
+
+      .navbar.fixed-left .navbar-collapse .navbar-nav .nav-item .dropdown-menu {
+        top: 0;
+      }
+    }
+
+    @media (min-width: 768px) {
+      .navbar.fixed-left {
+        right: auto;
+      }
+
+      .navbar.fixed-left .navbar-nav .nav-item .dropdown-toggle:after {
+        border-top: 0.3em solid transparent;
+        border-left: 0.3em solid;
+        border-bottom: 0.3em solid transparent;
+        border-right: none;
+        vertical-align: baseline;
+      }
+
+      .navbar.fixed-left .navbar-nav .nav-item .dropdown-menu {
+        left: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <nav class="navbar fixed-left navbar-expand-md navbar-dark bg-dark fixed-top scrolling-navbar">
+      <a class="navbar-brand" href="/"><img class="logo" width="100px" alt="Lycaon logo"
+          src="/images/header-logo.png" /></a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler"
+        aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarToggler">
+        <ul class="nav navbar-nav nav-flex-icons ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/<%= organization.handleId %>/admin/teams">
+              <i class="fas fa-users fa-fw"></i>
+              <span class="clearfix d-none d-sm-inline-block ml-1"> <%= __('Teams') %></span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/<%= organization.handleId %>/admin/users">
+              <i class="fas fa-users-cog fa-fw"></i>
+              <span class="clearfix d-none d-sm-inline-block ml-1"> <%= __('Users') %></span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/<%= organization.handleId %>/admin/categories">
+              <i class="fas fa-tasks fa-fw"></i>
+              <span class="clearfix d-none d-sm-inline-block ml-1"> <%= __('Categories') %></span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/<%= organization.handleId %>/admin/wikis">
+              <i class="fab fa-wikipedia-w fa-fw"></i>
+              <span class="clearfix d-none d-sm-inline-block ml-1"> <%= __('Wikis') %></span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/<%= organization.handleId %>/admin/settings">
+              <i class="fas fa-cog fa-fw"></i>
+              <span class="clearfix d-none d-sm-inline-block ml-1"> <%= __('Setting') %></span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/<%= organization.handleId %>/admin/plan">
+              <i class="fas fa-hand-holding-usd fa-fw"></i>
+              <span class="clearfix d-none d-sm-inline-block ml-1"> <%= __('Usage plan') %></span>
+            </a>
+          </li>
+          <% if(organization.isBackOffice) { %>
+          <li class="nav-item">
+            <a class="nav-link navi-backoffice" href="/admin/organization">
+              <i class="far fa-building fa-fw"></i>
+              <span class="clearfix d-none d-sm-inline-block ml-1"> <%= __('Organizations') %></span>
+            </a>
+          </li>
+          <% if(sails.config.custom.usePublicWiki) { %>
+          <li class="nav-item">
+            <a class="nav-link navi-backoffice" href="/admin/pubdocs">
+              <i class="fas fa-globe fa-fw"></i>
+              <span class="clearfix d-none d-sm-inline-block ml-1"> <%= __('Public Wikis') %></span>
+            </a>
+          </li>
+          <% } %>
+          <li class="nav-item">
+            <a class="nav-link navi-backoffice" href="/admin/notification">
+              <i class="far fa-bell fa-fw"></i>
+              <span class="clearfix d-none d-sm-inline-block ml-1"> <%= __('System notification') %></span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link navi-backoffice" href="/admin/backups">
+              <i class="fas fa-database fa-fw"></i>
+              <span class="clearfix d-none d-sm-inline-block ml-1"> <%= __('Backup') %></span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link navi-backoffice" href="/admin/status">
+              <i class="fas fa-info fa-fw"></i>
+              <span class="clearfix d-none d-sm-inline-block ml-1"> <%= __('System information') %></span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link navi-backoffice" href="#collapse-jobs" role="button" data-toggle="collapse" data-target="#collapse-jobs" aria-expanded="false" aria-controls="collapse-jobs">
+              <i class="fas fa-stopwatch fa-fw"></i>
+              <span class="clearfix d-none d-sm-inline-block ml-1"> ジョブ</span>
+            </a>
+            <ul id="collapse-jobs" class="collapse">
+              <li class="nav-item">
+                <a class="nav-link navi-backoffice" href="/admin/jobs/queue"> キュー
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link navi-backoffice" href="/admin/jobs/log"> ログ
+                </a>
+              </li>
+            </ul>
+          </li>
+          <% } %>
+
+          <li class="nav-item">
+            <a class="nav-link" href="<%= sails.config.custom.helpPageUrl %>" target="_blank">
+              <i class="fas fa-question-circle fa-fw"></i>
+              <span class="clearfix d-none d-sm-inline-block ml-1"> Help</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-info" href="/logout">
+              <i class="fas fa-sign-out-alt fa-fw"></i><span class="ml-1"> <%= __('Sign out') %></span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <div class="scrollTop-btn" style="display: none;">
+      <i class="fas fa-chevron-up scrollTop-btn-icon"></i>
+    </div>
+    <!-- Alert if email has not been confirmed -->
+    <% if(me&&me.emailChangeCandidate) { %>
+    <div class="container-fluid">
+      <div class="alert alert-secondary mt-2" role="alert">
+        <%= __('You need to confirm the changed email address') %>
+        <%- __("You still sign in as <strong> [{0}] </strong> until you click the link sent to <strong> [{1}] </strong> need to do it").format(me.emailChangeCandidate, me.emailAddress) %>
+      </div>
+    </div>
+    <% } else if(me&&me.emailStatus === 'unconfirmed') { %>
+    <div class="container-fluid">
+      <div class="alert alert-secondary mt-2" role="alert">
+        <%= __('You have not yet confirmed your email address change') %>
+        <%- __("Access to your account may be restricted until you click the link sent to <strong>[{0}]</strong>").format(me.emailChangeCandidate ? me.emailChangeCandidate : me.emailAddress) %>
+      </div>
+    </div>
+    <% } %>
+
+    <div class="main-container">
+      <%- body %>
+    </div>
+
+    <footer class="page-footer font-small">
+      <!-- Footer Elements -->
+      <div class="container-fluid text-center text-md-left">
+      </div>
+      <div class="footer-copyright text-right py-3">Copyright &copy; <%= sails.config.custom.platformCopyrightYear %>
+        <a class="mr-1" target="_blank"
+          href="<%= sails.config.custom.platformCompanyAboutHref %>"><%= sails.config.custom.platformCompanyName %></a>.<span
+          class="mr-3">All rights reserved.</span><br /><a class="text-info fotter-policy mr-4" href="/doc/policy"
+          target="_blank"><%= __('User policy/Privacy policy') %></a>
+      </div>
+    </footer>
+  </main>
+
+
+
+  <% /*
+      Client-side JavaScript
+      ========================
+
+      Scripts can be hard-coded as «script» tags, automatically injected
+      by the asset pipeline between "SCRIPTS" and "SCRIPTS END", or both.
+      (https://sailsjs.com/docs/concepts/assets/task-automation)
+    */ %>
+
+  <% /* Delete the global `self` to help avoid client-side bugs.
+    (see https://developer.mozilla.org/en-US/docs/Web/API/Window/self) */ %>
+  <script>
+    delete window.self;
+
+  </script>
+
+  <%/* bowser.js (for browser detection) -- included inline to avoid issues with minification that could affect the unsupported browser overlay */%>
+  <script>!function(e,i,s){if("undefined"!=typeof module&&module.exports)module.exports=s();else if("function"==typeof define&&define.amd)define(i,s);else e[i]=s()}(this,"bowser",function(){var e=true;function i(i){function s(e){var s=i.match(e);return s&&s.length>1&&s[1]||""}function o(e){var s=i.match(e);return s&&s.length>1&&s[2]||""}var r=s(/(ipod|iphone|ipad)/i).toLowerCase(),n=/like android/i.test(i),t=!n&&/android/i.test(i),a=/nexus\s*[0-6]\s*/i.test(i),d=!a&&/nexus\s*[0-9]+/i.test(i),l=/CrOS/.test(i),f=/silk/i.test(i),m=/sailfish/i.test(i),v=/tizen/i.test(i),p=/(web|hpw)os/i.test(i),c=/windows phone/i.test(i),u=/SamsungBrowser/i.test(i),h=!c&&/windows/i.test(i),w=!r&&!f&&/macintosh/i.test(i),b=!t&&!m&&!v&&!p&&/linux/i.test(i),g=o(/edg([ea]|ios)\/(\d+(\.\d+)?)/i),k=s(/version\/(\d+(\.\d+)?)/i),x=/tablet/i.test(i)&&!/tablet pc/i.test(i),y=!x&&/[^-]mobi/i.test(i),S=/xbox/i.test(i),B;if(/opera/i.test(i))B={name:"Opera",opera:e,version:k||s(/(?:opera|opr|opios)[\s\/](\d+(\.\d+)?)/i)};else if(/opr\/|opios/i.test(i))B={name:"Opera",opera:e,version:s(/(?:opr|opios)[\s\/](\d+(\.\d+)?)/i)||k};else if(/SamsungBrowser/i.test(i))B={name:"Samsung Internet for Android",samsungBrowser:e,version:k||s(/(?:SamsungBrowser)[\s\/](\d+(\.\d+)?)/i)};else if(/coast/i.test(i))B={name:"Opera Coast",coast:e,version:k||s(/(?:coast)[\s\/](\d+(\.\d+)?)/i)};else if(/yabrowser/i.test(i))B={name:"Yandex Browser",yandexbrowser:e,version:k||s(/(?:yabrowser)[\s\/](\d+(\.\d+)?)/i)};else if(/ucbrowser/i.test(i))B={name:"UC Browser",ucbrowser:e,version:s(/(?:ucbrowser)[\s\/](\d+(?:\.\d+)+)/i)};else if(/mxios/i.test(i))B={name:"Maxthon",maxthon:e,version:s(/(?:mxios)[\s\/](\d+(?:\.\d+)+)/i)};else if(/epiphany/i.test(i))B={name:"Epiphany",epiphany:e,version:s(/(?:epiphany)[\s\/](\d+(?:\.\d+)+)/i)};else if(/puffin/i.test(i))B={name:"Puffin",puffin:e,version:s(/(?:puffin)[\s\/](\d+(?:\.\d+)?)/i)};else if(/sleipnir/i.test(i))B={name:"Sleipnir",sleipnir:e,version:s(/(?:sleipnir)[\s\/](\d+(?:\.\d+)+)/i)};else if(/k-meleon/i.test(i))B={name:"K-Meleon",kMeleon:e,version:s(/(?:k-meleon)[\s\/](\d+(?:\.\d+)+)/i)};else if(c){B={name:"Windows Phone",osname:"Windows Phone",windowsphone:e};if(g){B.msedge=e;B.version=g}else{B.msie=e;B.version=s(/iemobile\/(\d+(\.\d+)?)/i)}}else if(/msie|trident/i.test(i))B={name:"Internet Explorer",msie:e,version:s(/(?:msie |rv:)(\d+(\.\d+)?)/i)};else if(l)B={name:"Chrome",osname:"Chrome OS",chromeos:e,chromeBook:e,chrome:e,version:s(/(?:chrome|crios|crmo)\/(\d+(\.\d+)?)/i)};else if(/edg([ea]|ios)/i.test(i))B={name:"Microsoft Edge",msedge:e,version:g};else if(/vivaldi/i.test(i))B={name:"Vivaldi",vivaldi:e,version:s(/vivaldi\/(\d+(\.\d+)?)/i)||k};else if(m)B={name:"Sailfish",osname:"Sailfish OS",sailfish:e,version:s(/sailfish\s?browser\/(\d+(\.\d+)?)/i)};else if(/seamonkey\//i.test(i))B={name:"SeaMonkey",seamonkey:e,version:s(/seamonkey\/(\d+(\.\d+)?)/i)};else if(/firefox|iceweasel|fxios/i.test(i)){B={name:"Firefox",firefox:e,version:s(/(?:firefox|iceweasel|fxios)[ \/](\d+(\.\d+)?)/i)};if(/\((mobile|tablet);[^\)]*rv:[\d\.]+\)/i.test(i)){B.firefoxos=e;B.osname="Firefox OS"}}else if(f)B={name:"Amazon Silk",silk:e,version:s(/silk\/(\d+(\.\d+)?)/i)};else if(/phantom/i.test(i))B={name:"PhantomJS",phantom:e,version:s(/phantomjs\/(\d+(\.\d+)?)/i)};else if(/slimerjs/i.test(i))B={name:"SlimerJS",slimer:e,version:s(/slimerjs\/(\d+(\.\d+)?)/i)};else if(/blackberry|\bbb\d+/i.test(i)||/rim\stablet/i.test(i))B={name:"BlackBerry",osname:"BlackBerry OS",blackberry:e,version:k||s(/blackberry[\d]+\/(\d+(\.\d+)?)/i)};else if(p){B={name:"WebOS",osname:"WebOS",webos:e,version:k||s(/w(?:eb)?osbrowser\/(\d+(\.\d+)?)/i)};/touchpad\//i.test(i)&&(B.touchpad=e)}else if(/bada/i.test(i))B={name:"Bada",osname:"Bada",bada:e,version:s(/dolfin\/(\d+(\.\d+)?)/i)};else if(v)B={name:"Tizen",osname:"Tizen",tizen:e,version:s(/(?:tizen\s?)?browser\/(\d+(\.\d+)?)/i)||k};else if(/qupzilla/i.test(i))B={name:"QupZilla",qupzilla:e,version:s(/(?:qupzilla)[\s\/](\d+(?:\.\d+)+)/i)||k};else if(/chromium/i.test(i))B={name:"Chromium",chromium:e,version:s(/(?:chromium)[\s\/](\d+(?:\.\d+)?)/i)||k};else if(/chrome|crios|crmo/i.test(i))B={name:"Chrome",chrome:e,version:s(/(?:chrome|crios|crmo)\/(\d+(\.\d+)?)/i)};else if(t)B={name:"Android",version:k};else if(/safari|applewebkit/i.test(i)){B={name:"Safari",safari:e};if(k)B.version=k}else if(r){B={name:"iphone"==r?"iPhone":"ipad"==r?"iPad":"iPod"};if(k)B.version=k}else if(/googlebot/i.test(i))B={name:"Googlebot",googlebot:e,version:s(/googlebot\/(\d+(\.\d+))/i)||k};else B={name:s(/^(.*)\/(.*) /),version:o(/^(.*)\/(.*) /)};if(!B.msedge&&/(apple)?webkit/i.test(i)){if(/(apple)?webkit\/537\.36/i.test(i)){B.name=B.name||"Blink";B.blink=e}else{B.name=B.name||"Webkit";B.webkit=e}if(!B.version&&k)B.version=k}else if(!B.opera&&/gecko\//i.test(i)){B.name=B.name||"Gecko";B.gecko=e;B.version=B.version||s(/gecko\/(\d+(\.\d+)?)/i)}if(!B.windowsphone&&(t||B.silk)){B.android=e;B.osname="Android"}else if(!B.windowsphone&&r){B[r]=e;B.ios=e;B.osname="iOS"}else if(w){B.mac=e;B.osname="macOS"}else if(S){B.xbox=e;B.osname="Xbox"}else if(h){B.windows=e;B.osname="Windows"}else if(b){B.linux=e;B.osname="Linux"}function O(e){switch(e){case"NT":return"NT";case"XP":return"XP";case"NT 5.0":return"2000";case"NT 5.1":return"XP";case"NT 5.2":return"2003";case"NT 6.0":return"Vista";case"NT 6.1":return"7";case"NT 6.2":return"8";case"NT 6.3":return"8.1";case"NT 10.0":return"10";default:return undefined}}var T="";if(B.windows)T=O(s(/Windows ((NT|XP)( \d\d?.\d)?)/i));else if(B.windowsphone)T=s(/windows phone (?:os)?\s?(\d+(\.\d+)*)/i);else if(B.mac){T=s(/Mac OS X (\d+([_\.\s]\d+)*)/i);T=T.replace(/[_\s]/g,".")}else if(r){T=s(/os (\d+([_\s]\d+)*) like mac os x/i);T=T.replace(/[_\s]/g,".")}else if(t)T=s(/android[ \/-](\d+(\.\d+)*)/i);else if(B.webos)T=s(/(?:web|hpw)os\/(\d+(\.\d+)*)/i);else if(B.blackberry)T=s(/rim\stablet\sos\s(\d+(\.\d+)*)/i);else if(B.bada)T=s(/bada\/(\d+(\.\d+)*)/i);else if(B.tizen)T=s(/tizen[\/\s](\d+(\.\d+)*)/i);if(T)B.osversion=T;var P=!B.windows&&T.split(".")[0];if(x||d||"ipad"==r||t&&(3==P||P>=4&&!y)||B.silk)B.tablet=e;else if(y||"iphone"==r||"ipod"==r||t||a||B.blackberry||B.webos||B.bada)B.mobile=e;if(B.msedge||B.msie&&B.version>=10||B.yandexbrowser&&B.version>=15||B.vivaldi&&B.version>=1||B.chrome&&B.version>=20||B.samsungBrowser&&B.version>=4||B.firefox&&B.version>=20||B.safari&&B.version>=6||B.opera&&B.version>=10||B.ios&&B.osversion&&B.osversion.split(".")[0]>=6||B.blackberry&&B.version>=10.1||B.chromium&&B.version>=20)B.a=e;else if(B.msie&&B.version<10||B.chrome&&B.version<20||B.firefox&&B.version<20||B.safari&&B.version<6||B.opera&&B.version<10||B.ios&&B.osversion&&B.osversion.split(".")[0]<6||B.chromium&&B.version<20)B.c=e;else B.x=e;return B}var s=i("undefined"!==typeof navigator?navigator.userAgent||"":"");s.test=function(e){for(var i=0;i<e.length;++i){var o=e[i];if("string"===typeof o)if(o in s)return true}return false};function o(e){return e.split(".").length}function r(e,i){var s=[],o;if(Array.prototype.map)return Array.prototype.map.call(e,i);for(o=0;o<e.length;o++)s.push(i(e[o]));return s}function n(e){var i=Math.max(o(e[0]),o(e[1]));var s=r(e,function(e){var s=i-o(e);e+=new Array(s+1).join(".0");return r(e.split("."),function(e){return new Array(20-e.length).join("0")+e}).reverse()});while(--i>=0)if(s[0][i]>s[1][i])return 1;else if(s[0][i]===s[1][i]){if(0===i)return 0}else return-1}function t(e,o,r){var t=s;if("string"===typeof o){r=o;o=void 0}if(void 0===o)o=false;if(r)t=i(r);var a=""+t.version;for(var d in e)if(e.hasOwnProperty(d))if(t[d]){if("string"!==typeof e[d])throw new Error("Browser version in the minVersion map should be a string: "+d+": "+String(e));return n([a,e[d]])<0}return o}function a(e,i,s){return!t(e,i,s)}s.isUnsupportedBrowser=t;s.compareVersions=n;s.check=a;s._detect=i;s.detect=i;return s});</script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment-with-locales.min.js" integrity="sha512-LGXaggshOkD/at6PFNcp2V2unf9LzFq6LE+sChH7ceMTDP0g2kn6Vxwgg7wkPP7AAtX+lmPqPdxB47A0Nz0cMQ==" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.33/moment-timezone-with-data-10-year-range.js" integrity="sha512-Zy6GmgJpPiVngCfEP3NZcAH5CdPuHg2RtF1w3jUln677wOsQPmZEVbdI9x6SraTrawfNFeE98YfFA/jAcJ1kVg==" crossorigin="anonymous"></script>
+
+  <% /* Auto-injected «script» tags: */ %>
+  <!--SCRIPTS-->
+  <script src="/dependencies/fontawesome/all.js"></script>
+  <script src="/dependencies/sails.io.js"></script>
+  <script src="/dependencies/lodash.js"></script>
+  <script src="/dependencies/jquery.min.js"></script>
+  <script src="/dependencies/vue.js"></script>
+  <script src="/dependencies/vue-router.js"></script>
+  <script src="/dependencies/axios-0.19.2.min.js"></script>
+  <script src="/dependencies/bootstrap-4/bootstrap.bundle.min.js"></script>
+  <script src="/dependencies/cheetahGrid/cheetah-grid.js"></script>
+  <script src="/dependencies/cheetahGrid/vue-cheetah-grid.js"></script>
+  <script src="/dependencies/cloud.js"></script>
+  <script src="/dependencies/code-prettify/run_prettify.js"></script>
+  <script src="/dependencies/cookieconsent/cookieconsent.js"></script>
+  <script src="/dependencies/diff.min.js"></script>
+  <script src="/dependencies/gantt-elastic/bundle.js"></script>
+  <script src="/dependencies/gantt-elastic/dayjs.js"></script>
+  <script src="/dependencies/gantt-elastic/GanttElastic.umd.js"></script>
+  <script src="/dependencies/gantt-elastic/Header.umd.js"></script>
+  <script src="/dependencies/i18next.js"></script>
+  <script src="/dependencies/jdenticon-2/jdenticon-2.2.0.js"></script>
+  <script src="/dependencies/jdenticon-2/jdenticon-2.2.0.min.js"></script>
+  <script src="/dependencies/jquery.easing.min.js"></script>
+  <script src="/dependencies/markdown-it.js"></script>
+  <script src="/dependencies/MDB/bs-custom-file-input.js"></script>
+  <script src="/dependencies/MDB/chart.js"></script>
+  <script src="/dependencies/MDB/chartjs-plugin-colorschemes.min.js"></script>
+  <script src="/dependencies/MDB/enhanced-modals.js"></script>
+  <script src="/dependencies/MDB/forms-free.js"></script>
+  <script src="/dependencies/MDB/jquery.easing.js"></script>
+  <script src="/dependencies/MDB/scrolling-navbar.js"></script>
+  <script src="/dependencies/MDB/treeview.js"></script>
+  <script src="/dependencies/MDB/velocity.js"></script>
+  <script src="/dependencies/MDB/waves.js"></script>
+  <script src="/dependencies/MDB/wow.js"></script>
+  <script src="/dependencies/paginate/vuejs-paginate.2.1.0.js"></script>
+  <script src="/dependencies/parasails.js"></script>
+  <script src="/dependencies/push.js"></script>
+  <script src="/dependencies/raphael/raphael.min.js"></script>
+  <script src="/dependencies/select2/0.select2.js"></script>
+  <script src="/dependencies/select2/i18n/en.js"></script>
+  <script src="/dependencies/select2/i18n/ja.js"></script>
+  <script src="/dependencies/tagify/tagify.min.js"></script>
+  <script src="/dependencies/toastui-editor/toastui-editor-all.min.js"></script>
+  <script src="/dependencies/toastui-editor/toastui-editor-plugin-chart.min.js"></script>
+  <script src="/dependencies/toastui-editor/toastui-editor-plugin-code-syntax-highlight-all.min.js"></script>
+  <script src="/dependencies/toastui-editor/toastui-editor-plugin-color-syntax.min.js"></script>
+  <script src="/dependencies/toastui-editor/toastui-editor-plugin-table-merged-cell.min.js"></script>
+  <script src="/dependencies/toastui-editor/toastui-editor-plugin-uml.min.js"></script>
+  <script src="/dependencies/toastui-editor/z_i18n/de-de.js"></script>
+  <script src="/dependencies/toastui-editor/z_i18n/es-es.js"></script>
+  <script src="/dependencies/toastui-editor/z_i18n/et-et.js"></script>
+  <script src="/dependencies/toastui-editor/z_i18n/fr-fr.js"></script>
+  <script src="/dependencies/toastui-editor/z_i18n/hi-in.js"></script>
+  <script src="/dependencies/toastui-editor/z_i18n/it-it.js"></script>
+  <script src="/dependencies/toastui-editor/z_i18n/ja-jp.js"></script>
+  <script src="/dependencies/toastui-editor/z_i18n/ko-kr.js"></script>
+  <script src="/dependencies/toastui-editor/z_i18n/pt-pt.js"></script>
+  <script src="/dependencies/toastui-editor/z_i18n/ru-ru.js"></script>
+  <script src="/dependencies/toastui-editor/z_i18n/zh-cn.js"></script>
+  <script src="/dependencies/underscore-deep-extend.js"></script>
+  <script src="/dependencies/v-calendar/v-calender.js"></script>
+  <script src="/dependencies/vertical-timeline/vertical-timeline.js"></script>
+  <script src="/dependencies/vue-inview/vue-inview.min.js"></script>
+  <script src="/dependencies/vue-loading-overlay/vue-loading-overlay.js"></script>
+  <script src="/dependencies/vue-mindmap/vue-mindmap.js"></script>
+  <script src="/dependencies/vue-toast-notification/vue-toast-notification.js"></script>
+  <script src="/dependencies/vue-upload-component/cropper.min.js"></script>
+  <script src="/dependencies/vue-upload-component/vue-upload-component.min.js"></script>
+  <script src="/dependencies/vue.draggable/sortable.min.js"></script>
+  <script src="/dependencies/vue.draggable/vuedraggable.umd.min.js"></script>
+  <script src="/dependencies/zxcvbn.js"></script>
+  <script src="/js/cloud.setup.js"></script>
+  <script src="/js/components/activity-card.component.js"></script>
+  <script src="/js/components/ajax-form.component.js"></script>
+  <script src="/js/components/avatar-upload.component.js"></script>
+  <script src="/js/components/clipboard.component.js"></script>
+  <script src="/js/components/drop-fileupload.component.js"></script>
+  <script src="/js/components/editor-file.component.js"></script>
+  <script src="/js/components/honeypot.component.js"></script>
+  <script src="/js/components/lycaon-timestamp.component.js"></script>
+  <script src="/js/components/modal.component.js"></script>
+  <script src="/js/components/thread-card.component.js"></script>
+  <script src="/js/components/user-identity.component.js"></script>
+  <script src="/js/components/v-ajax-select2.component.js"></script>
+  <script src="/js/components/v-loading.js"></script>
+  <script src="/js/components/v-pagination.component.js"></script>
+  <script src="/js/components/v-select2.component.js"></script>
+  <script src="/js/components/v-tab.component.js"></script>
+  <script src="/js/components/v-tabs.component.js"></script>
+  <script src="/js/components/v-tagify.component.js"></script>
+  <script src="/js/components/viewer-file.component.js"></script>
+  <script src="/js/components/vote-card.component.js"></script>
+  <script src="/js/components/vue-infinite-loading.js"></script>
+  <script src="/js/components/wiki-card.component.js"></script>
+  <script src="/js/utilities/00.vue.setup.js"></script>
+  <script src="/js/utilities/app-global.js"></script>
+  <script src="/js/utilities/locales/de.js"></script>
+  <script src="/js/utilities/locales/en.js"></script>
+  <script src="/js/utilities/locales/es.js"></script>
+  <script src="/js/utilities/locales/et.js"></script>
+  <script src="/js/utilities/locales/fr.js"></script>
+  <script src="/js/utilities/locales/hi.js"></script>
+  <script src="/js/utilities/locales/it.js"></script>
+  <script src="/js/utilities/locales/ja.js"></script>
+  <script src="/js/utilities/locales/ko.js"></script>
+  <script src="/js/utilities/locales/pt.js"></script>
+  <script src="/js/utilities/locales/ru.js"></script>
+  <script src="/js/utilities/locales/work-delete.js"></script>
+  <script src="/js/utilities/locales/zh-cn.js"></script>
+  <script src="/js/pages/498.page.js"></script>
+  <script src="/js/pages/account/account-overview.page.js"></script>
+  <script src="/js/pages/account/edit-password.page.js"></script>
+  <script src="/js/pages/account/edit-profile.page.js"></script>
+  <script src="/js/pages/admin/category/create.page.js"></script>
+  <script src="/js/pages/admin/category/edit.page.js"></script>
+  <script src="/js/pages/admin/category/list.page.js"></script>
+  <script src="/js/pages/admin/plan/change-complete.page.js"></script>
+  <script src="/js/pages/admin/plan/change-downgrade-confirm.page.js"></script>
+  <script src="/js/pages/admin/plan/change-upgrade-confirm.page.js"></script>
+  <script src="/js/pages/admin/plan/change.page.js"></script>
+  <script src="/js/pages/admin/plan/info.page.js"></script>
+  <script src="/js/pages/admin/plan/unsubscribed-complete.page.js"></script>
+  <script src="/js/pages/admin/plan/unsubscribed.page.js"></script>
+  <script src="/js/pages/admin/settings/edit.page.js"></script>
+  <script src="/js/pages/admin/team/create.page.js"></script>
+  <script src="/js/pages/admin/team/edit.page.js"></script>
+  <script src="/js/pages/admin/team/list.page.js"></script>
+  <script src="/js/pages/admin/user/create.page.js"></script>
+  <script src="/js/pages/admin/user/edit.page.js"></script>
+  <script src="/js/pages/admin/user/list.page.js"></script>
+  <script src="/js/pages/admin/wiki/list.page.js"></script>
+  <script src="/js/pages/backoffice/backup/list.page.js"></script>
+  <script src="/js/pages/backoffice/jobs/list.page.js"></script>
+  <script src="/js/pages/backoffice/jobs/queue.page.js"></script>
+  <script src="/js/pages/backoffice/notification/create.page.js"></script>
+  <script src="/js/pages/backoffice/notification/edit.page.js"></script>
+  <script src="/js/pages/backoffice/notification/list.page.js"></script>
+  <script src="/js/pages/backoffice/organization/edit.page.js"></script>
+  <script src="/js/pages/backoffice/organization/list.page.js"></script>
+  <script src="/js/pages/backoffice/pubdoc/create.page.js"></script>
+  <script src="/js/pages/backoffice/pubdoc/edit.page.js"></script>
+  <script src="/js/pages/backoffice/pubdoc/list.page.js"></script>
+  <script src="/js/pages/backoffice/status/view.page.js"></script>
+  <script src="/js/pages/contact/complete.page.js"></script>
+  <script src="/js/pages/contact/confirm.page.js"></script>
+  <script src="/js/pages/contact/entry.page.js"></script>
+  <script src="/js/pages/dashboard/git-show.page.js"></script>
+  <script src="/js/pages/dashboard/main.page.js"></script>
+  <script src="/js/pages/dashboard/milestone/create.page.js"></script>
+  <script src="/js/pages/dashboard/milestone/edit.page.js"></script>
+  <script src="/js/pages/dashboard/milestone/sort.page.js"></script>
+  <script src="/js/pages/dashboard/milestone/view.page.js"></script>
+  <script src="/js/pages/dashboard/mindmap.page.js"></script>
+  <script src="/js/pages/dashboard/new-thread.pag.js"></script>
+  <script src="/js/pages/dashboard/notification/list.page.js"></script>
+  <script src="/js/pages/dashboard/notification/view.page.js"></script>
+  <script src="/js/pages/dashboard/team.page.js"></script>
+  <script src="/js/pages/dashboard/thread.page.js"></script>
+  <script src="/js/pages/dashboard/vote/answer.page.js"></script>
+  <script src="/js/pages/dashboard/vote/create.page.js"></script>
+  <script src="/js/pages/dashboard/vote/edit.page.js"></script>
+  <script src="/js/pages/dashboard/vote/view.page.js"></script>
+  <script src="/js/pages/dashboard/welcome.page.js"></script>
+  <script src="/js/pages/doc/page.page.js"></script>
+  <script src="/js/pages/doc/policy.page.js"></script>
+  <script src="/js/pages/entrance/confirmed-email.page.js"></script>
+  <script src="/js/pages/entrance/forgot-password.page.js"></script>
+  <script src="/js/pages/entrance/login.page.js"></script>
+  <script src="/js/pages/entrance/new-account-password.page.js"></script>
+  <script src="/js/pages/entrance/new-organization.page.js"></script>
+  <script src="/js/pages/entrance/new-password.page.js"></script>
+  <script src="/js/pages/homepage.page.js"></script>
+  <script src="/js/pages/member/info.page.js"></script>
+  <script src="/js/pages/upload-error.page.js"></script>
+  <script src="/js/pages/wiki/edit-wiki.page.js"></script>
+  <script src="/js/pages/wiki/new-wiki.page.js"></script>
+  <script src="/js/pages/wiki/wiki.page.js"></script>
+  <!--SCRIPTS END-->
+
+  <% /* Display an overlay if the current browser is not supported.
+    (Relies on `bowser`, which is loaded inline above.) */ %>
+  <script>
+    (function () {
+      if (typeof bowser !== 'undefined') {
+        var LATEST_SUPPORTED_VERSION_BY_OS = {
+          iOS: '10',
+          Android: '6'
+        };
+        var LATEST_SUPPORTED_VERSION_BY_USER_AGENT = {
+          msedge: '16',
+          msie: '11',
+          safari: '10',
+          firefox: '28',
+          chrome: '29',
+          opera: '17',
+        };
+        var LATEST_SUPPORTED_VERSION_BY_BROWSER_NAME = {
+          'microsoft edge': LATEST_SUPPORTED_VERSION_BY_USER_AGENT.msedge,
+          'internet explorer': LATEST_SUPPORTED_VERSION_BY_USER_AGENT.msie,
+          'safari': LATEST_SUPPORTED_VERSION_BY_USER_AGENT.safari,
+          'firefox': LATEST_SUPPORTED_VERSION_BY_USER_AGENT.firefox,
+          'chrome': LATEST_SUPPORTED_VERSION_BY_USER_AGENT.chrome,
+          'opera': LATEST_SUPPORTED_VERSION_BY_USER_AGENT.opera
+        };
+        var isUnsupportedBrowser = (
+          bowser.isUnsupportedBrowser(LATEST_SUPPORTED_VERSION_BY_USER_AGENT, window.navigator.userAgent)
+        );
+        var isUnsupportedOS = (
+          LATEST_SUPPORTED_VERSION_BY_OS[bowser.osname] &&
+          bowser.compareVersions([bowser.osversion, LATEST_SUPPORTED_VERSION_BY_OS[bowser.osname]]) < 0
+        );
+        if (isUnsupportedBrowser || isUnsupportedOS) {
+          alert('This operating system is not supported.');
+        }
+      }
+    })();
+
+  </script>
+</body>
+
+</html>

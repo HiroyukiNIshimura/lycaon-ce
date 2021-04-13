@@ -1,0 +1,199 @@
+<div class="col-auto col-xs-6" id="right-sidebar" :class="rightSidebar">
+  <nav class="right-sidebar-nav">
+    <ul class="nav flex-column list-style-icons accordion" id="accordion_menu">
+      <li class="nav-item mt-3">
+        <a class="text-warning" data-toggle="collapse" href="#menu-concept" aria-controls="#menu-concept" aria-expanded="false"
+          @click="clickMenu('menu-concept')">
+          <i class="fas fa-globe fa-fw"></i> <%= __('Concept') %>
+        </a>
+      </li>
+      <ul id="menu-concept" class="nav flex-column list-style-icons collapse" data-parent="#accordion_menu">
+        <li class="nav-item">
+          <ajax-form id="update-concept-form" action="updateThreadConcept" :syncing.sync="syncing" :cloud-error.sync="cloudError"
+            @submitted="submittedConceptForm" @rejected="onCloudError" :handle-parsing="handleParsingConceptForm">
+            <div class="text-right">
+              <button type="submit" class="btn btn-primary btn-sm ml-3" v-if="thread.concept === 0">
+                <i class="fas fa-envelope-open-text"></i> <%= __('published') %>
+              </button>
+              <button type="submit" class="btn btn-primary btn-sm ml-3" v-else>
+                <i class="fas fa-envelope"></i> <%= __('draft') %>
+              </button>
+            </div>
+          </ajax-form>
+        </li>
+      </ul>
+
+      <li class="nav-item mt-3">
+        <a class="text-warning" data-toggle="collapse" href="#menu-due-date" aria-controls="#menu-due-date" aria-expanded="false"
+          @click="clickMenu('menu-due-date')">
+          <i class="far fa-calendar-check fa-fw"></i> <%= __('Deadline') %>
+        </a>
+      </li>
+      <ul id="menu-due-date" class="nav flex-column list-style-icons collapse" data-parent="#accordion_menu">
+        <li class="nav-item">
+          <div>
+            <span class="text-white">{{ dueDate }}</span>
+            <span class="text-danger ml-2" v-if="dueDate" @click="unSelectedClick"><i class="fas fa-times"></i></span>
+          </div>
+          <div class="mt-1">
+            <v-date-picker ref="calendar" :attributes="calendar" :masks="calendarMasks" is-inline v-model="selectedDate"></v-date-picker>
+          </div>
+          <ajax-form id="update-duedate-form" action="updateThreadDuedate" :syncing.sync="syncing" :cloud-error.sync="cloudError"
+            @submitted="submittedDuedateForm" @rejected="onCloudError" :handle-parsing="handleParsingDuedateForm">
+            <div class="text-right">
+              <button type="submit" class="btn btn-primary btn-sm ml-3">
+                <i class="fas fa-plus-circle"></i> <%= __('Confirm') %>
+              </button>
+            </div>
+          </ajax-form>
+        </li>
+      </ul>
+
+      <li class="nav-item mt-3">
+        <a class="text-warning" data-toggle="collapse" href="#menu-work" aria-controls="#menu-work" aria-expanded="false" @click="clickMenu('menu-work')">
+          <i class="fas fa-code-branch fa-fw"></i> <%= __('Work') %>
+        </a>
+      </li>
+      <ul id="menu-work" class="nav flex-column list-style-icons collapse" data-parent="#accordion_menu">
+        <li class="nav-item">
+          <ajax-form id="update-working-form" action="updateThreadWorking" :syncing.sync="syncing" :cloud-error.sync="cloudError"
+            :cloud-error-raw-data.sync="cloudErrorRawData" @submitted="submittedWorkingForm" @rejected="onCloudError"
+            :handle-parsing="handleParsingWorkingForm">
+            <div class="text-right">
+              <span class="text-white" v-if="thread.working && thread.workingUser.id !== me.id">
+                {{ i18n('{0} is working').format(thread.workingUser.fullName) }}
+              </span>
+              <button type="submit" class="btn btn-primary btn-sm ml-3" v-else-if="thread.working && thread.workingUser.id === me.id">
+                <i class="fas fa-code-branch fa-rotate-180 fa-flip-vertical"></i> <%= __('Release work') %>
+              </button>
+              <button type="submit" class="btn btn-primary btn-sm ml-3" v-else-if="!thread.working">
+                <i class="fas fa-code-branch"></i> <%= __('Working') %>
+              </button>
+            </div>
+          </ajax-form>
+        </li>
+      </ul>
+      <li class="nav-item mt-3">
+        <a class="text-warning" data-toggle="collapse" href="#menu-responsible" aria-controls="#menu-responsible" aria-expanded="false"
+          @click="clickMenu('menu-responsible')">
+          <i class="fas fa-user fa-fw"></i> <%= __('Person in charge') %>
+        </a>
+      </li>
+      <ul id="menu-responsible" class="nav flex-column list-style-icons collapse" data-parent="#accordion_menu">
+        <li class="nav-item">
+          <ajax-form id="update-responsible-form" action="updateThreadResponsible" :syncing.sync="syncing" :cloud-error.sync="cloudError"
+            @submitted="submittedResponsibleForm" @rejected="onCloudError" :handle-parsing="handleParsingResponsibleForm">
+            <div class="mt-1">
+              <select class="browser-default custom-select custom-select-sm" id="thread-side-responsible" v-model="responsible">
+                <option value=""><%= __('Not set') %></option>
+                <option v-for="item in comboMembers" v-bind:value="item.id">
+                  {{ item.fullName }}
+                </option>
+              </select>
+            </div>
+            <div class="text-right">
+              <button type="submit" class="btn btn-primary btn-sm ml-3">
+                <i class="fas fa-plus-circle"></i> <%= __('Confirm') %>
+              </button>
+            </div>
+          </ajax-form>
+        </li>
+      </ul>
+
+      <li class="nav-item mt-3">
+        <a class="text-warning" data-toggle="collapse" href="#menu-priority" aria-controls="#menu-priority" aria-expanded="false"
+          @click="clickMenu('menu-priority')">
+          <i class="fas fa-weight fa-fw"></i> <%= __('Importance') %>
+        </a>
+      </li>
+      <ul id="menu-priority" class="nav flex-column list-style-icons collapse" data-parent="#accordion_menu">
+        <li class="nav-item">
+          <ajax-form id="update-priority-form" action="updateThreadPriority" :syncing.sync="syncing" :cloud-error.sync="cloudError"
+            @submitted="submittedPriorityForm" @rejected="onCloudError" :handle-parsing="handleParsingPriorityForm">
+            <div class="mt-1">
+              <select class="browser-default custom-select custom-select-sm" id="thread-priority" v-model="priority">
+                <option value="0"><%= __('Low') %></option>
+                <option value="1"><%= __('Normally') %></option>
+                <option value="2"><%= __('High') %></option>
+              </select>
+            </div>
+            <div class="text-right">
+              <button type="submit" class="btn btn-primary btn-sm ml-3">
+                <i class="fas fa-plus-circle"></i> <%= __('Confirm') %>
+              </button>
+            </div>
+          </ajax-form>
+        </li>
+      </ul>
+      <li class="nav-item mt-3">
+        <a class="text-warning" data-toggle="collapse" href="#menu-parent" aria-controls="#menu-parent" aria-expanded="false" @click="clickMenu('menu-parent')">
+          <i class="fas fa-project-diagram fa-fw"></i> <%= __('Set fork source thread') %>
+        </a>
+      </li>
+      <ul id="menu-parent" class="nav flex-column list-style-icons collapse" data-parent="#accordion_menu">
+        <li class="nav-item">
+          <ajax-form id="create-parent-form" action="createParent" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedParentForm"
+            @rejected="onCloudError" :handle-parsing="handleParsingParentForm">
+            <div class="row">
+              <div class="col align-self-center">
+                <v-ajax-select2 class="thread-search ml-2" v-model="parentSelected" :url="select2Url" @select="parentSelectedEvent"
+                  :placeholder="select2placeholder" :settings="select2Settings" />
+              </div>
+              <div class="col-auto align-self-center">
+                <button type="submit" class="btn btn-primary btn-sm">
+                  <i class="fas fa-plus-circle"></i> <%= __('Confirm') %>
+                </button>
+              </div>
+            </div>
+            <small class="text-white">{{ parentSelected.text }}</small>
+          </ajax-form>
+        </li>
+      </ul>
+      <li class="nav-item mt-3">
+        <a class="text-warning" data-toggle="collapse" href="#menu-children" aria-controls="#menu-children" aria-expanded="false"
+          @click="clickMenu('menu-children')">
+          <i class="fas fa-link fa-fw"></i> <%= __('Add related thread') %>
+        </a>
+      </li>
+      <ul id="menu-children" class="nav flex-column list-style-icons collapse" data-parent="#accordion_menu">
+        <li class="nav-item">
+          <ajax-form id="create-child-form" action="createRef" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedChildForm"
+            @rejected="onCloudError" :handle-parsing="handleParsingChildForm">
+            <div class="row">
+              <div class="col align-self-center">
+                <v-ajax-select2 class="thread-search ml-2" v-model="childSelected" :url="select2Url" @select="childSelectedEvent"
+                  :placeholder="select2placeholder" :settings="select2Settings" />
+              </div>
+              <div class="col-auto align-self-center">
+                <button type="submit" class="btn btn-primary btn-sm">
+                  <i class="fas fa-plus-circle"></i> <%= __('Add') %>
+                </button>
+              </div>
+            </div>
+            <small class="text-white">{{ childSelected.text }}</small>
+          </ajax-form>
+        </li>
+      </ul>
+      <li class="nav-item mt-3">
+        <a class="text-warning" data-toggle="collapse" href="#menu-lock" aria-controls="#menu-lock" aria-expanded="false" @click="clickMenu('menu-lock')">
+          <i class="fas fa-lock fa-fw"></i> <%= __('Archive') %>
+        </a>
+      </li>
+      <ul id="menu-lock" class="nav flex-column list-style-icons collapse" data-parent="#accordion_menu">
+        <li class="nav-item">
+          <ajax-form id="update-lock-form" action="updateThreadLock" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedLockForm"
+            @rejected="onCloudError" :handle-parsing="handleParsingLockForm">
+            <div class="text-right">
+              <button type="submit" class="btn btn-primary btn-sm ml-3" v-if="thread.locked">
+                <i class="fas fa-unlock-alt"></i> <%= __('Unarchive') %>
+              </button>
+              <button type="submit" class="btn btn-primary btn-sm ml-3" v-else>
+                <i class="fas fa-lock"></i> <%= __('Archive') %>
+              </button>
+            </div>
+          </ajax-form>
+        </li>
+      </ul>
+    </ul>
+  </nav>
+</div>

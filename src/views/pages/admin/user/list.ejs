@@ -1,0 +1,124 @@
+<div id="admin-user-list" v-cloak>
+  <div class="container">
+    <modal v-if="showDeleteModal">
+      <div class="card">
+        <div class="card-header"><%= __("Confirmation dialog") %></div>
+        <div class="card-body">
+          <h5 class="card-title"><%= __("Confirmation of deletion") %></h5>
+          <p class="card-text"><%= __("Deletes the selected user. Is it OK?") %></p>
+          <div class="text-right">
+            <button type="button" class="btn btn-danger btn-sm" @click="doDelete">
+              <i class="far fa-trash-alt"></i> <%= __("Delete") %>
+            </button>
+            <button type="button" class="btn btn-light btn-sm" @click="showDeleteModal = false">
+              <i class="fas fa-window-close"></i> <%= __("Cancel") %>
+            </button>
+          </div>
+        </div>
+      </div>
+    </modal>
+    <modal v-if="showResetModal">
+      <div class="card">
+        <div class="card-header"><%= __("Confirmation dialog") %></div>
+        <div class="card-body">
+          <h5 class="card-title"><%= __("Confirmation of initial password reset email resend") %></h5>
+          <p class="card-text"><%= __("Resend the initial password reset email. Is it OK?") %></p>
+          <div class="text-right">
+            <button type="button" class="btn btn-primary btn-sm" @click="doResetPassword">
+              <i class="far fa-paper-plane"></i> <%= __("Resend") %>
+            </button>
+            <button type="button" class="btn btn-light btn-sm" @click="showResetModal = false">
+              <i class="fas fa-window-close"></i> <%= __("Cancel") %>
+            </button>
+          </div>
+        </div>
+      </div>
+    </modal>
+
+    <div id="cloud-error" class="row">
+      <div class="col-sm-6">
+        <p class="text-danger" v-if="cloudError === 'isNologin'">
+          <%= __("This user is used by the system and cannot be deleted") %>
+        </p>
+        <p class="text-danger" v-else-if="cloudError === 'using'">
+          <%= __("The user is involved in threads and wikis. To stop using it, consider disabling it with 'Disable this user' on the edit page instead of deleting it") %>
+        </p>
+        <p class="text-danger" v-else-if="cloudError === 'lastOneAdmin'">
+          <%= __("This user is an admin user, but the last admin user. If you need to delete it, please promote another user to an administrator because no one can use the management function") %>
+        </p>
+        <p class="text-danger" v-else-if="cloudError === 'nowLogedin'">
+          <%= __("You cannot delete yourself while logged in. Please log in as another administrator user and execute the deletion") %>
+        </p>
+        <p class="text-danger" v-else-if="cloudError">
+          <%= __("An error occurred while processing the request. Please check the information and try again. If the error persists, please contact your administrator") %>
+        </p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col text-right">
+        <a class="btn btn-info btn-sm" href="/<%= organization.handleId %>/admin/user/create"><i
+            class="fas fa-plus-circle"></i> <%= __("Add new user") %></a>
+      </div>
+    </div>
+    <div class="row mt-4" v-if="records > 0">
+      <div class="col-auto">
+        <h4><%= __("Users") %></h4>
+      </div>
+      <div class="col-auto">
+        <v-pagination :page="pagination.page" :page-count="getPageCount" :handler="clickCallback"></v-pagination>
+      </div>
+      <div class="col">
+        <small><span><%= __("Total number of users") %> {{ formatter.format(records) }}
+            {{ i18nformatN('User', 'Users', records) }}</span></small>
+      </div>
+    </div>
+    <div class="row mt-4" v-else>
+      <div class="col text-muted"><%= __("User not found") %></div>
+    </div>
+    <div class="row">
+      <div class="col-auto mb-2 ml-1" v-for="item in users">
+        <div class="card card-width h-100">
+          <div class="card-body">
+            <div class="card-title">
+              <user-identity :user="item" :organization="organization" size="" show-user-name="false"></user-identity>
+              <a class="" :href="infoLink(item)">{{ item.fullName }}</a>
+            </div>
+            <div class="card-subtitle">
+              <small v-if="item.lastSeenAt && item.lastSeenAt > 0"><%= __("Last access") %>
+                <lycaon-timestamp :at="item.lastSeenAt" format="timeago"></lycaon-timestamp></small>
+              <small v-else><%= __("No access") %></small>
+            </div>
+
+            <div class="card-text text-right">
+              <div class="btn-group btn-group-sm" v-if="!item.isNologin">
+                <a :href="link(item)" class="btn btn-info"><i class="far fa-edit"></i> <%= __("Edit") %></a>
+                <button type="button" class="btn btn-info btn-sm dropdown-toggle dropdown-toggle-split"
+                  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item" href="javascript:void(0)" @click="clickResetPassword(item)"
+                    v-if="!item.isSandbox && !item.isSuperAdmin"><%= __("Resend initial password reset email") %></a>
+
+                  <a class="dropdown-item" href="javascript:void(0)"
+                    @click="clickDeleteUser(item)"><%= __("Delete this user") %></a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer">
+            <span class="badge badge-danger" v-if="item.isSuperAdmin"><%= __("Administrator") %></span>
+            <span class="badge badge-warning" v-if="item.deleted"><%= __("Invalid user") %></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ajax-form id="reset-password-form" action="resetPassword" :syncing.sync="syncing" :cloud-error.sync="cloudError"
+    @submitted="submittedResetForm" @rejected="onCloudError" :handle-parsing="handleParsingResetForm">
+  </ajax-form>
+  <ajax-form id="delete-user-form" action="deleteUser" :syncing.sync="syncing" :cloud-error.sync="cloudError"
+    @submitted="submittedDeleteForm" @rejected="onCloudError" :handle-parsing="handleParsingDeleteForm">
+  </ajax-form>
+</div>
+<%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>

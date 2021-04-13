@@ -1,0 +1,127 @@
+<div id="member-info" v-cloak>
+  <div class="container">
+    <ajax-form id="query-message-form" action="messageList" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedMessageForm"
+      @rejected="onCloudError" :handle-parsing="handleParsingMessageForm">
+    </ajax-form>
+    <ajax-form id="create-message-form" action="createMessage" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedCreateMessageForm"
+      @rejected="onCloudError" :handle-parsing="handleParsingCreateMessageForm">
+    </ajax-form>
+    </v-tab>
+    <ajax-form id="read-message-form" action="readMessage" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedReadMessageForm"
+      @rejected="onCloudError" :handle-parsing="handleParsingReadMessageForm">
+    </ajax-form>
+    <ajax-form id="query-monthly-form" action="analytics" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedMonthlyForm"
+      @rejected="onCloudError" :handle-parsing="handleParsingMonthlyForm">
+    </ajax-form>
+    <ajax-form id="query-daily-form" action="analytics" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedDailyForm"
+      @rejected="onCloudError" :handle-parsing="handleParsingDailyForm">
+    </ajax-form>
+    <ajax-form id="query-hourly-form" action="analytics" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedHourlyForm"
+      @rejected="onCloudError" :handle-parsing="handleParsingHourlyForm">
+    </ajax-form>
+    <ajax-form id="query-weekly-form" action="analytics" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedWeeklyForm"
+      @rejected="onCloudError" :handle-parsing="handleParsingWeeklyForm">
+    </ajax-form>
+
+    <div class="row">
+      <div class="col-auto">
+        <user-identity :user="user" :organization="organization" size=""></user-identity>
+      </div>
+      <div class="col text-right">
+        <a class="btn btn-light btn-sm" :href="returnLink"><i class="far fa-arrow-alt-circle-left"></i>
+          <%= __("Back") %></a>
+      </div>
+    </div>
+    <v-tabs ref="menberInfo" :options="{ useUrlFragment: false, defaultTabHash: 'tab-info' }" @changed="tabChanged">
+      <v-tab :name="i18n('Member information')" id="tab-info">
+        <div class="row mt-3">
+          <div class="col-3"><%= __("Full Name") %>:</div>
+          <div class="col">
+            {{ user.fullName }}
+          </div>
+        </div>
+        <div class="row mt-3">
+          <div class="col-3"><%= __("Mail Address") %>:</div>
+          <div class="col">
+            {{ user.emailAddress }}
+          </div>
+        </div>
+        <div class="row mt-3">
+          <div class="col-3"><%= __("About") %>:</div>
+          <div class="col">
+            {{ user.skil }}
+          </div>
+        </div>
+        <div class="row mt-3">
+          <div class="col-3"><%= __("Last access") %>:</div>
+          <div class="col">
+            <span v-if="user.lastSeenAt && user.lastSeenAt > 0">
+                <lycaon-timestamp :at="user.lastSeenAt" format="timeago"></lycaon-timestamp>
+            </span>
+            <span v-else><%= __("No access") %></span>
+          </div>
+        </div>
+      </v-tab>
+      <v-tab :name="i18n('Message')" id="tab-message" v-if="enableMessageTab">
+        <div class="row mt-3">
+          <div class="col">
+            <div class="md-form" id="message-input">
+              <i class="far fa-comment-dots prefix"></i>
+              <label for="my-message" class="md-textarea-label">{{ messegeLabel }}</label>
+              <textarea id="my-message" class="md-textarea form-control" rows="3" maxlength="2000"
+                :class="[formErrors.contents || formErrors.contentsLength ? 'is-invalid' : '']" v-model.trim="formData.contents"></textarea>
+              <div class="invalid-feedback" v-if="formErrors.contents">
+                <%= __('Please enter a message') %>
+              </div>
+              <div class="invalid-feedback" v-if="formErrors.contentsLength">
+                <%= __('Please enter within {0} characters').format(2000) %>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col text-right">
+            <button type="button" class="btn btn-primary btn-sm" @click="sendMessage"><%= __('Send') %></button>
+          </div>
+        </div>
+        <div class="border border-light rounded py-3 px-3 mt-3" v-if="queryResults.length > 0">
+          <div v-inview:enter="onRead" :id="getId(item)" :class="messageStyle(item)" v-for="(item, index) in queryResults" :key="index"
+            v-inview:animate="'zoomInDown'">
+            <div class="row">
+              <div class="col-auto">
+                <span class="date-ago"><lycaon-timestamp :at="item.createdAt" format="timeago"></lycaon-timestamp></span>
+              </div>
+              <div class="col-auto" v-if="isMyMessage(item)">
+                <span v-if="item.readAt" v-inview:animate="'fadeInLeft'">
+                  <small class="badge badge-pill badge-success">{{ i18n('Already read') }}
+                  </small><small class="ml-3"><lycaon-timestamp :at="item.readAt" format="timeago"></lycaon-timestamp></small>
+                </span>
+                <span v-else v-inview:animate="'fadeInLeft'">
+                  <small class="badge badge-pill badge-warning">{{ i18n('not yet read') }}</small>
+                </span>
+              </div>
+            </div>
+            <p v-html="normalize(item.contents)"></p>
+          </div>
+          <infinite-loading spinner="waveDots" @infinite="messageHandler"></infinite-loading>
+        </div>
+        <div class="border border-light rounded py-3 px-3" v-else>
+          <small><%= __('No messages') %> <i class="far fa-grin-beam-sweat"></i></small>
+        </div>
+      </v-tab>
+      <v-tab :name="i18n('Analysis (monthly)')" id="tab-monthly">
+        <canvas id="monthly-chart"></canvas>
+      </v-tab>
+      <v-tab :name="i18n('Analysis (daily)')" id="tab-daily">
+        <canvas id="daily-chart"></canvas>
+      </v-tab>
+      <v-tab :name="i18n('Analysis (by day of the week)')" id="tab-weekly">
+        <canvas id="weekly-chart"></canvas>
+      </v-tab>
+      <v-tab :name="i18n('Analysis (hourly)')" id="tab-hourly">
+        <canvas id="hourly-chart"></canvas>
+      </v-tab>
+    </v-tabs>
+  </div>
+</div>
+<%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>

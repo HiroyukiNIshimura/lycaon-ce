@@ -1,0 +1,20 @@
+<div id="milestone-create" v-cloak>
+  <div class="container">
+    <ajax-form action="createMilestone" :syncing.sync="syncing" :cloud-error.sync="cloudError"
+      @submitted="submittedForm" @rejected="onCloudError" :handle-parsing="handleParsingForm">
+      <p class="h4 mb-4"><%= __("New Milestone") %></p>
+
+      <%- partial ('form.ejs', { type: 'create' }) %>
+
+      <div class="row">
+        <div class="col text-right">
+          <a class="btn btn-light btn-sm" :href="backToUrl"><i class="fas fa-window-close"></i> <%= __("Cancel") %></a>
+          <button type="submit" class="btn btn-primary btn-sm">
+            <i class="fas fa-plus-circle"></i> <%= __("Create") %>
+          </button>
+        </div>
+      </div>
+    </ajax-form>
+  </div>
+</div>
+<%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>

@@ -1,0 +1,21 @@
+<div id="admin-category-edit" v-cloak>
+  <div class="container">
+    <ajax-form action="updateCategory" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedForm"
+      @rejected="onCloudError" :handle-parsing="handleParsingForm">
+      <h4 class="mb-4"><%= __("Edit Category") %></h4>
+
+      <%- partial ('form.ejs', { type: 'edit' }) %>
+
+      <div class="row">
+        <div class="col text-right">
+          <a class="btn btn-light btn-sm" href="/<%= organization.handleId %>/admin/categories"><i
+              class="fas fa-window-close"></i> <%= __("Cancel") %></a>
+          <button type="submit" class="btn btn-primary btn-sm">
+            <i class="far fa-save"></i> <%= __("Save") %>
+          </button>
+        </div>
+      </div>
+    </ajax-form>
+  </div>
+</div>
+<%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>

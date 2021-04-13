@@ -1,0 +1,62 @@
+<% /* Note: This is injected into `views/layouts/layout-email.ejs` */ %>
+
+<h3 style="margin-bottom: 0px"><%= __('Weekly Report') %>（<%= reportDate %>）</h3>
+
+<% for (var team of teams) { %>
+<h4><%= __('Team') %>：<%= team.name %></h4>
+<p><%= __('Number of threads') %>：<%= team.totalQty %></p>
+<p style="margin-top: 0px">
+    <%= __('open') %> = <%= team.openQty %> （<%= __('Not in charge')%> = <%= team.noAsignQty %>）
+</p>
+<p style="margin-top: 0px"><%= __('close') %> = <%= team.closeQty %></p>
+
+<h4><%= __('Expired thread') %></h4>
+<% if(team.nears.length > 0) { %>
+<% for (var orver of team.orvers) { %>
+<p>
+    <%= __('Deadline') %>：<%= orver.dueDateFormated %>
+    <a style="color: #00acc4"
+        href="<%= url.resolve(sails.config.custom.baseUrl, `/${organization.handleId}/thread/${orver.no}`) %>">[#<%= orver.no %>]
+        <%= orver.subject %></a>
+</p>
+<p><%= __('Person in charge') %>：<%= orver.asignName %></p>
+<% } %>
+<% } else { %>
+<p><%= __('No report') %></p>
+<% } %>
+
+<h4><%= __('Deadline thread') %></h4>
+<% if(team.nears.length > 0) { %>
+<% for (var near of team.nears) { %>
+<p>
+    <%= __('Deadline') %>：<%= near.dueDateFormated %>
+    <a style="color: #00acc4"
+        href="<%= url.resolve(sails.config.custom.baseUrl, `/${organization.handleId}/thread/${near.no}`) %>">[#<%= near.no %>]
+        <%= near.subject %></a>
+</p>
+<p><%= __('Person in charge') %>：<%= near.asignName %></p>
+<% } %>
+<% } else { %>
+<p><%= __('No report') %></p>
+<% } %>
+
+<h4><%= __('Abandoned thread') %></h4>
+<% if(team.leaveAlones.length > 0) { %>
+<% for (var leaveAlone of team.leaveAlones) { %>
+<p>
+    <%= __('Last updated') %>：<%= leaveAlone.updatedAtFormated %>
+    <a style="color: #00acc4"
+        href="<%= url.resolve(sails.config.custom.baseUrl, `/${organization.handleId}/thread/${leaveAlone.no}`) %>">[#<%= leaveAlone.no %>]
+        <%= leaveAlone.subject %></a>
+</p>
+<p><%= __('Person in charge') %>：<%= leaveAlone.asignName %></p>
+<% } %>
+<% } else { %>
+<p><%= __('No report') %></p>
+<% } %>
+
+<hr />
+<% } %>
+
+<p style="margin-bottom: 5px">Sincerely,</p>
+<p style="margin-top: 0px">Team Lycaon</p>

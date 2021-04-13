@@ -1,0 +1,62 @@
+<div id="edit-wiki" v-cloak>
+  <div class="container">
+    <modal v-if="showConflictModal">
+      <div class="modal-header">
+        <h5 class="modal-title"><%= __("Editing conflicts occur") %></h5>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col text-break">
+            {{ i18n("{0} edited and saved this Wiki. Unfortunately, with the current Lycaon, it is not possible to determine if it is okay to save this conflict. Please edit again, such as saving your changes to the clipboard", [conflictUser.fullName]) }}
+          </div>
+        </div>
+        <div class="row mt-3" v-if="wiki.subject !== newSubject">
+          <div class="col">
+            <h6><%= __("The subject has changed") %></h6>
+            <ul>
+              <li class="text-primary">-{{ wiki.subject }}</li>
+              <li class="text-danger">+{{ newSubject }}</li>
+            </ul>
+          </div>
+        </div>
+        <div class="row mt-3" v-if="diff.length > 0">
+          <div class="col">
+            <h6 class="mb-1"><%= __("Changed body diff") %></h6>
+            <div v-for="item in diff">
+              <div v-if="item.prefix === '+'" class="text-danger">
+                {{ item.prefix }}{{ item.value }}
+              </div>
+              <div v-else-if="item.prefix === '-'" class="text-primary">
+                {{ item.prefix }}{{ item.value }}
+              </div>
+              <div class="text-truncate" v-else>{{ item.prefix }}{{ item.value }}</div>
+            </div>
+          </div>
+        </div>
+        <div class="row mt-3">
+          <div class="col">
+            <h6><%= __("Body you modified (copy and use)") %></h6>
+            <textarea readonly id="my-body" class="form-control" rows="10" v-model="myBody"></textarea>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col text-right">
+            <button type="button" class="btn btn-info btn-sm" @click="onEditCancelClick">
+              <%= __("Finish this edit") %>
+            </button>
+          </div>
+        </div>
+      </div>
+    </modal>
+
+    <div id="cloud-error" class="row">
+      <div class="col-sm-6">
+        <p class="text-danger" v-if="cloudError">
+          <%= __("An error occurred while processing the request. Please check the information and try again. If the error persists, please contact your administrator") %>
+        </p>
+      </div>
+    </div>
+    <%- partial ('form.ejs', { action: 'updateWiki' }) %>
+  </div>
+</div>
+<%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>

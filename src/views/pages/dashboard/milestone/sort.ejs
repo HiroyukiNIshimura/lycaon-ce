@@ -1,0 +1,45 @@
+<div id="milestone-sort" v-cloak>
+  <div class="container">
+    <div class="row">
+      <div class="col text-right">
+        <a class="btn btn-light btn-sm" :href="backToUrl"><i class="fas fa-window-close"></i> <%= __("Back") %></a>
+      </div>
+    </div>
+
+    <div class="row mt-4">
+      <div class="col-auto">
+        <h4><%= __("Milestone sorting") %></h4>
+      </div>
+      <div class="col">
+        <span class="text-muted"><%= __("You can change the display order by dragging") %></span>
+      </div>
+    </div>
+    <div class="row mt-3">
+      <draggable v-model="milestone" @start="inDrag=true" @end="inDrag=false" v-bind="dragOptions" @change="onChanged">
+        <transition-group type="transition" :name="!inDrag ? 'flip-list' : null">
+          <div class="col-auto mb-2 ml-1 milestone-item" v-for="item in milestone" :key="item.id">
+            <div class="card card-width">
+              <div class="card-body">
+                <span class="card-title">
+                  {{ item.name }}
+                </span>
+                <p class="card-text"><%= __("Display order") %>:{{ item.lineNo }}</p>
+              </div>
+            </div>
+          </div>
+        </transition-group>
+      </draggable>
+    </div>
+  </div>
+  <ajax-form id="update-order-form" action="updateMilestoneOrder" :syncing.sync="syncing" :cloud-error.sync="cloudError"
+    @submitted="submittedForm" @rejected="onCloudError" :handle-parsing="handleParsingForm">
+  </ajax-form>
+  <div id="cloud-error" class="row">
+    <div class="col-sm-6">
+      <p class="text-danger" v-if="cloudError">
+        <%= __("An error occurred while processing the request. Please check the information and try again. If the error persists, please contact your administrator") %>
+      </p>
+    </div>
+  </div>
+</div>
+<%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>

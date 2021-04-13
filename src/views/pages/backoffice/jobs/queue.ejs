@@ -1,0 +1,37 @@
+<div id="backoffice-jobs-queue" v-cloak>
+  <div class="container">
+    <div class="row mt-4" v-if="jobs.length < 1">
+      <div class="col text-muted">キューにジョブは登録されていません</div>
+    </div>
+    <div class="row mt-4 mb-3" v-else>
+      <div class="col">キュー件数：{{ jobs.length }}</div>
+    </div>
+
+    <div style="height: 700px; border: solid 1px #ddd;">
+      <c-grid :data="jobs" theme="MATERIAL_DESIGN" readonly>
+        <c-grid-column field="name"
+                              width="300">
+          ジョブID
+        </c-grid-column>
+        <c-grid-column field="description"
+                        width= "300">
+          説明
+        </c-grid-column>
+        <c-grid-column field="repeatInterval"
+                              width="150">
+          インターバル
+        </c-grid-column>
+        <c-grid-column field="nextRunAt" :filter="dateFormat"
+                        width= "200">
+          次回起動
+        </c-grid-column>
+        <c-grid-column field="priority" :filter="toString"
+                        width= "120">
+          優先度
+        </c-grid-column>
+      </c-grid>
+    </div>
+
+  </div>
+</div>
+<%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>

@@ -1,0 +1,107 @@
+<div id="admin-plan-change" v-cloak>
+  <div class="container">
+    <h4 class="mt-5 mb-4"><%= __('Apply for plan change') %></h4>
+    <hr>
+    <div id="cloud-error" class="row">
+      <div class="col-sm-6">
+        <p class="text-danger" v-if="cloudError === 'requestAlready'">
+          <%= __("Request to change plan is already being processed") %>
+        </p>
+        <p class="text-danger" v-else-if="cloudError">
+          <%= __("An error occurred while processing the request. Please check the information and try again. If the error persists, please contact your administrator") %>
+        </p>
+      </div>
+    </div>
+    <div class="card-deck">
+      <div class="card plan-card" :class="bgClass(billboard.name)" v-for="(billboard, index) in billboards">
+        <div class="card-body">
+          <h2 class="card-title text-center text-default">
+            {{ billboard.name }}
+          </h2>
+          <div class="alert alert-primary text-center">
+            {{ billboard.classFeeling }}
+          </div>
+          <div class="card-text text-center mt-3">
+            <dl>
+              <dt>
+                {{ i18n('Number of users') }}
+              </dt>
+              <dd>
+                {{ billboard.maxUser }}
+              </dd>
+              <dt>
+                {{ i18n('Number of teams') }}
+              </dt>
+              <dd>
+                {{ billboard.maxTeam }}
+              </dd>
+              <dt>
+                {{ i18n('Number of attachments to the thread') }}
+              </dt>
+              <dd>
+                {{ billboard.maxFilePerThread }}
+              </dd>
+              <dt>
+                {{ i18n('Total attachment size to thread') }}
+              </dt>
+              <dd>
+                {{ billboard.maxSizePerThread }}
+              </dd>
+              <dt>
+                {{ i18n('Number of attachments to the Wiki') }}
+              </dt>
+              <dd>
+                {{ billboard.maxFilePerWiki }}
+              </dd>
+              <dt>
+                {{ i18n('Total attachment size to Wiki') }}
+              </dt>
+              <dd>
+                {{ billboard.maxSizePerWiki }}
+              </dd>
+              <dt>
+                {{ i18n('Number of attachments to the circular notice') }}
+              </dt>
+              <dd>
+                {{ billboard.maxFilePerVote }}
+              </dd>
+              <dt>
+                {{ i18n('Total attachment size to circular notice') }}
+              </dt>
+              <dd>
+                {{ billboard.maxSizePerVote }}
+              </dd>
+              <dt>
+                {{ i18n('Storage limit') }}
+              </dt>
+              <dd>
+                {{ billboard.maxQuota }}
+              </dd>
+              <dt>
+                {{ i18n('git log support') }}
+              </dt>
+              <dd>
+                {{ billboard.allowUseGit }}
+              </dd>
+            </dl>
+          </div>
+          <div class="custom-control custom-checkbox text-center">
+            <input type="radio" class="custom-control-input" :id="getId(index)" :value="index" v-model="selected" />
+            <label class="custom-control-label" :for="getId(index)" v-if="!isCurrent(index)"><%= __("Change to this plan") %></label>
+            <label class="custom-control-label" :for="getId(index)" v-else><%= __("Current plan") %></label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <ajax-form action="checkGrade" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedForm" @rejected="onCloudError"
+      :handle-parsing="handleParsingForm">
+      <div class="row mt-5">
+        <div class="col text-center">
+          <button type="submit" class="btn btn-primary" :disabled="!allowSubmit"><%= __('Change to the selected plan')%></button>
+        </div>
+      </div>
+    </ajax-form>
+  </div>
+</div>
+<%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>

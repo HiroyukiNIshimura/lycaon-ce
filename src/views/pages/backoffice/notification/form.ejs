@@ -1,0 +1,59 @@
+<div class="row">
+  <div class="col-md-4">
+    <label for="notification-category"><%= __("Category") %></label>
+    <select class="browser-default custom-select" id="notification-category" v-model="formData.category">
+      <option value="notice"><%= __("notice") %></option>
+      <option value="important"><%= __("important") %></option>
+      <option value="maintenance"><%= __("maintenance") %></option>
+    </select>
+  </div>
+</div>
+
+<div class="md-form mt-5">
+  <input type="text" maxlength="200" id="notification-subject" class="form-control" v-model.trim="formData.subject" autocomplete="notification-subject"
+    :class="[formErrors.subject || formErrors.subjectLength ? 'is-invalid' : '']" />
+  <label for="notification-subject"><%= __("Please enter a subject") %></label>
+  <div class="invalid-feedback" v-if="formErrors.subject"><%= __("Please enter a subject") %></div>
+  <div class="invalid-feedback" v-if="formErrors.subjectLength"><%= __('Please enter within {0} characters').format(200) %></div>
+</div>
+<div class="md-form">
+    <label for="notification-body"
+        class="md-textarea-label"><%= __('Please enter the content') %></label>
+    <textarea id="notification-body" class="md-textarea form-control" rows="10" maxlength="5000"
+        :class="[formErrors.body || formErrors.bodyLength ? 'is-invalid' : '']" v-model.trim="formData.body"></textarea>
+    <div class="invalid-feedback" v-if="formErrors.body">
+        <%= __("Please enter the content") %>
+    </div>
+    <div class="invalid-feedback" v-if="formErrors.bodyLength">
+        <%= __('Please enter within {0} characters').format(5000) %>
+    </div>
+</div>
+
+<div class="row mt-3">
+  <div class="col">
+      <div class="invalid-feedback" v-if="formErrors.subject"><%= __("Please enter the content") %></div>
+  </div>
+</div>
+
+<div class="row mt-3">
+  <div class="col-auto">
+    <div class="row">
+      <div class="col">
+        <label><%= __("Publication start date") %></label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <v-date-picker :columns="1" ref="calendar" :attributes="calendar" :masks="calendarMasks" :min-date="minDate" is-inline
+          v-model="selectedDate"></v-date-picker>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="input-error-message" v-if="formErrors.postingAt"><%= __("Please enter the publication start date") %></div>
+
+<div class="custom-control custom-checkbox mt-3">
+  <input type="checkbox" class="custom-control-input" id="notification-deleted" v-model="formData.deleted" />
+  <label class="custom-control-label" for="notification-deleted"><%= __("Not posted") %></label>
+</div>
+

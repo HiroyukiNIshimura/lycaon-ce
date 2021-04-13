@@ -1,0 +1,121 @@
+<div id="policy" v-cloak>
+  <div class="container">
+    <v-tabs panel-id="policy" ref="policy" class="mb-5">
+      <v-tab name="<%= __("User policy") %>" id="tab-user-policy" :is-slot-if="false">
+        <%- res.policy.user %>
+        <div>
+          {{ formatedUserAt }} 施行
+        </div>
+      </v-tab>
+      <v-tab name="<%= __("Privacy policy") %>" id="tab-privacy-policy" :is-slot-if="false">
+        <%- res.policy.privacy %>
+        <div>
+          {{ formatedPrivacyAt }} 制定
+        </div>
+      </v-tab>
+      <v-tab name="<%= __("Notation based on the Specified Commercial Transactions Law") %>" id="tab-commercial"
+        :is-slot-if="false">
+        <div>
+          <dl>
+            <dt>
+              <%= __("Business name") %>
+            </dt>
+            <dd>
+              <%= __("Bright L Co., Ltd") %>
+            </dd>
+          </dl>
+          <dl>
+            <dt>
+              <%= __("Business location") %>
+            </dt>
+            <dd>
+              <%= __("2-377-3 Katsushika-cho, Funabashi-shi, Chiba Keiyo Daiichi Building 502") %>
+            </dd>
+          </dl>
+          <dl>
+            <dt>
+              <%= __("Representative name") %>
+            </dt>
+            <dd>
+              <%= __("Tetsuro Nagao") %>
+            </dd>
+          </dl>
+          <dl>
+            <dt>
+              <%= __("Homepage URL") %>
+            </dt>
+            <dd>
+              <a href="<%= sails.config.custom.platformCompanyAboutHref %>"><%= sails.config.custom.platformCompanyAboutHref %></a>
+            </dd>
+          </dl>
+          <dl>
+            <dt>
+              <%= __("Inquiry form") %>
+            </dt>
+            <dd>
+              <a href="<%= sails.config.custom.baseUrl %>/contact"><%= sails.config.custom.baseUrl %>/contact</a>
+            </dd>
+          </dl>
+          <dl>
+            <dt>
+              <%= __("phone number") %>
+            </dt>
+            <dd>
+              <%= __("In principle, we use the inquiry form to answer inquiries. Thank you for your cooperation") %><br><%= __("Our phone number will be notified by e-mail without delay based on the customer's request") %><br><%= __("We do not accept contact for business purposes, so please refrain from doing so") %>
+            </dd>
+          </dl>
+          <dl>
+            <dt>
+              <%= __("Selling price, service consideration and other conditions") %>
+            </dt>
+            <dd>
+              <%= __("Set the selling price or the consideration for the offer (consumption tax, etc. will be added separately) for each product or service, and display it on the corresponding page. For products or services that have special terms of sale or offer, the terms will be displayed on the relevant page of each product or service") %>
+            </dd>
+          </dl>
+          <dl>
+            <dt>
+              <%= __("Time to deliver products or time to provide services") %>
+            </dt>
+            <dd>
+              <%= __("As soon as payment is confirmed and registration to the service is completed, we will start providing the service without delay and will continue to provide the service for the duration of the contract with us") %>
+            </dd>
+          </dl>
+          <dl>
+            <dt>
+              <%= __("When and how to pay the price") %>
+            </dt>
+            <dd>
+              <%= __("Bank transfer") %>
+            </dd>
+          </dl>
+          <dl>
+            <dt>
+              <%= __("Expenses required other than the product price") %>
+            </dt>
+            <dd>
+              <%= __("None. However, you will be responsible for the consumption tax in addition to the service price. In addition, the customer is required to prepare the Internet connection fee and other telecommunications line communication costs separately. (The amount is as determined by each business operator contracted by the customer)") %>
+            </dd>
+          </dl>
+          <dl>
+            <dt>
+              <%= __("Cancellation conditions, etc") %>
+            </dt>
+            <dd>
+              <%= __("No refunds will be made, including cancellations and refunds based on daily calculations. If the usage fee is not paid, we will inform you to that effect. In addition, if payment is not made for 3 days or more after billing the usage fee, the use of the service will be automatically stopped. (Data is stored for a certain period of time)") %>
+            </dd>
+          </dl>
+          <dl>
+            <dt>
+              <%= __("Handling when there is a defect in the product or service") %>
+            </dt>
+            <dd>
+              <%= __("The service is provided as it is, and we are not responsible for any defects in the service") %>
+            </dd>
+          </dl>
+        </div>
+      </v-tab>
+    </v-tabs>
+  </div>
+
+</div>
+<%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>

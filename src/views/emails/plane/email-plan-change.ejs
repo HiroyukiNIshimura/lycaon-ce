@@ -1,0 +1,26 @@
+<% /* Note: This is injected into `views/layouts/layout-email.ejs` */ %>
+<%= __('We accepted the plan change') %></p>
+
+<%= __('Plan change request date') %>: <%= __('planChangeDate') %>
+
+<%= __('Current plan') %>: <%= billing.organization.plan %>
+<%= __('Plan after change') %>: <%= newPlan %> (<%= __(grade) %>)
+<%= __('Desired change application start date') %>: <%= preferredDate %>
+
+<% if (grade === 'Downgrade') { %>
+<%= __('Reason for downgrade') %>: <%= reasons %>
+<% } %>
+
+<%- __('If you make a mistake, Please contact us') %>
+[ <%= `${sails.config.custom.baseUrl}/contact` %> ]
+
+------------------------------
+
+<%= __('Organization ID') %>: <%= billing.organization.handleId %>
+<%= __('Organization name') %>: <%= billing.organization.name %>
+<%= __('Representative name') %>: <%= billing.organization.fullName %>
+<%= __('Representative email address') %>: <%= billing.organization.emailAddress %>
+
+------------------------------
+Sincerely,
+Team Lycaon

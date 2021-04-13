@@ -1,0 +1,86 @@
+/**
+ * importer.less
+ *
+ * By default, new Sails projects are configured to compile this file
+ * from LESS to CSS.  Unlike CSS files, LESS files are not compiled and
+ * included automatically unless they are imported below.
+ *
+ * For more information see:
+ *   https://sailsjs.com/anatomy/assets/styles/importer-less
+ */
+
+// Styleguide  (LESS mixins/variables only, no global selectors)
+@import 'styleguide/index.less';
+
+// Overall layout  (contains global selectors)
+@import 'bootstrap-overrides.less';
+@import 'layout.less';
+
+// Per-component styles
+// @import 'components/datepicker.component.less';
+@import 'components/v-loading.less';
+@import 'components/vue-tabs-component.less';
+@import 'components/card.component.less';
+@import 'components/vue-infinite-loading.less';
+
+// Per-page styles
+@import 'pages/homepage.less';
+@import 'pages/dashboard/welcome.less';
+@import 'pages/dashboard/main.less';
+@import 'pages/dashboard/team.less';
+@import 'pages/dashboard/thread.less';
+@import 'pages/dashboard/new-thread.less';
+@import 'pages/dashboard/git-show.less';
+@import 'pages/dashboard/milestone/sort.less';
+@import 'pages/dashboard/vote/view.less';
+@import 'pages/dashboard/vote/create.less';
+@import 'pages/dashboard/vote/edit.less';
+@import 'pages/dashboard/mindmap.less';
+
+@import 'pages/entrance/login.less';
+@import 'pages/entrance/forgot-password.less';
+@import 'pages/entrance/new-password.less';
+@import 'pages/entrance/new-account-password.less';
+@import 'pages/entrance/new-organization.less';
+@import 'pages/account/account-overview.less';
+@import 'pages/account/edit-password.less';
+@import 'pages/account/edit-profile.less';
+@import 'pages/member/info.less';
+
+@import 'pages/wiki/wiki.less';
+@import 'pages/wiki/new-wiki.less';
+@import 'pages/wiki/edit-wiki.less';
+
+@import 'pages/admin/user/list.less';
+@import 'pages/admin/user/edit.less';
+@import 'pages/admin/user/create.less';
+@import 'pages/admin/category/list.less';
+@import 'pages/admin/category/edit.less';
+@import 'pages/admin/category/create.less';
+@import 'pages/admin/team/list.less';
+@import 'pages/admin/team/edit.less';
+@import 'pages/admin/team/create.less';
+@import 'pages/admin/wiki/list.less';
+@import 'pages/admin/settings/edit.less';
+@import 'pages/admin/plan/info.less';
+@import 'pages/admin/plan/unsubscribed.less';
+@import 'pages/admin/plan/change.less';
+
+@import 'pages/backoffice/pubdoc/list.less';
+@import 'pages/backoffice/backup/list.less';
+@import 'pages/backoffice/status/view.less';
+@import 'pages/backoffice/organization/list.less';
+@import 'pages/backoffice/organization/edit.less';
+@import 'pages/backoffice/notification/list.less';
+
+@import 'pages/403.less';
+@import 'pages/404.less';
+@import 'pages/498.less';
+@import 'pages/500.less';
+
+@import 'pages/doc/page.less';
+@import 'pages/doc/policy.less';
+
+@import 'pages/contact/entry.less';
+@import 'pages/contact/confirm.less';
+@import 'pages/contact/complete.less';

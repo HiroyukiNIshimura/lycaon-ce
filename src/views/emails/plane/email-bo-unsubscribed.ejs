@@ -1,0 +1,12 @@
+<% /* Note: This is injected into `views/layouts/layout-email.ejs` */ %>
+以下の退会依頼が発生しています。迅速に処理を行ってください。
+------------------------------
+
+<%= __('Organization ID') %>: <%= billing.organization.handleId %>
+<%= __('Organization name') %>: <%= billing.organization.name %>
+<%= __('Representative name') %>: <%= billing.organization.fullName %>
+<%= __('Representative email address') %>: <%= billing.organization.emailAddress %>
+
+------------------------------
+Sincerely,
+Team Lycaon Backoffice

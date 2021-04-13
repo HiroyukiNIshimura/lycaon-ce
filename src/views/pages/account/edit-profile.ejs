@@ -1,0 +1,158 @@
+<div id="edit-profile" v-cloak>
+  <div class="container">
+    <h3><%= __('Profile editing') %></h3>
+    <hr />
+    <ajax-form action="updateProfile" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedForm"
+      @rejected="onCloudError" :handle-parsing="handleParsingForm">
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="md-form">
+            <label for="full-name"><%= __('Full Name') %></label>
+            <input class="form-control" id="full-name" name="full-name" type="text" maxlength="120"
+              :class="[formErrors.fullName || formErrors.fullNameLength ? 'is-invalid' : '']"
+              v-model.trim="formData.fullName" autocomplete="name" />
+            <div class="invalid-feedback" v-if="formErrors.fullName"><%= __('Please enter your full name') %></div>
+            <div class="invalid-feedback" v-if="formErrors.fullNameLength">
+              <%= __('Please enter within {0} characters').format(120) %>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="md-form">
+            <label for="email-address"><%= __('Mail Address') %></label>
+            <input class="form-control" id="email-address" name="email-address" type="text" maxlength="300"
+              :class="[formErrors.emailAddress || formErrors.emailAddressLength ? 'is-invalid' : '']"
+              v-model.trim="formData.emailAddress" autocomplete="email" />
+            <div class="invalid-feedback" v-if="formErrors.emailAddress">
+              <%= __('Please enter a valid email address') %>
+            </div>
+            <div class="invalid-feedback" v-if="formErrors.emailAddressLength">
+              <%= __('Please enter within {0} characters').format(300) %>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="md-form">
+            <label for="my-skil"
+              class="md-textarea-label"><%= __('About (up to {0} characters)').format(1000) %></label>
+            <textarea id="my-skil" class="md-textarea form-control" rows="3" maxlength="1000"
+              :class="[formErrors.skil ? 'is-invalid' : '']" v-model.trim="formData.skil"></textarea>
+            <div class="invalid-feedback" v-if="formErrors.skil">
+              <%= __('Please enter within {0} characters').format(1000) %>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          <small><label for="my-language"><%= __('Language setting') %></label></small>
+          <select class="browser-default custom-select custom-select-sm" id="my-language" v-model="formData.language">
+            <option v-for="item in locales" v-bind:value="item.key">
+              {{ item.text }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col-auto">
+          <p><%= __('Set your avatar') %></p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <div class="custom-control custom-radio">
+            <input type="radio" class="custom-control-input" id="radio-identify" value="identify"
+              v-model="avatarType" />
+            <label class="custom-control-label" for="radio-identify"><%= __('Default') %></label>
+          </div>
+          <div class="custom-control custom-radio">
+            <input type="radio" class="custom-control-input" id="radio-gravatar" value="gravatar"
+              v-model="avatarType" />
+            <label class="custom-control-label" for="radio-gravatar"><a href="https://ja.gravatar.com/"
+                target="_blank"><%= __('Gravatar') %><i class="fas fa-external-link-alt ml-1"></i></a></label>
+          </div>
+          <div class="custom-control custom-radio">
+            <input type="radio" class="custom-control-input" id="radio-user-avatar" value="user-avatar"
+              v-model="avatarType" />
+            <label class="custom-control-label" for="radio-user-avatar"><%= __('Set by yourself') %></label>
+          </div>
+        </div>
+      </div>
+      <div class="row" v-show="avatarType === 'user-avatar'">
+        <div class="col-auto">
+          <avatar-upload :has-avatar="hasAvatar" :avatar-url="avatarUrl"></avatar-upload>
+        </div>
+      </div>
+      <div class="row mt-3" id="mail-settings">
+        <div class="col-sm-6">
+          <hr />
+          <label for="team-selector"><%= __('The selected team does not receive thread emails') %></label>
+          <v-tagify ref="tagify" id="team-selector" :settings="tagifySettings" @add="onAddTagify"
+            @remove="onRemoveTagify">
+          </v-tagify>
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col-sm-6">
+          <label for="category"><%= __('Receive thread emails for selected categories') %></label>
+          <v-tagify ref="tagifyCategory" id="category-selector" :settings="categoryTagifySettings"
+            @add="onAddCategoryTagify" @remove="onRemoveCategoryTagify">
+          </v-tagify>
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col-sm-6">
+          <label for="tag-selector"><%= __('Receive thread emails about selected tags') %></label>
+          <v-tagify ref="tagifyTag" id="tag-selector" :settings="tagTagifySettings" @add="onAddTagTagify"
+            @remove="onRemoveTagTagify">
+          </v-tagify>
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col-sm-6">
+          <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" id="form-not-need-my-own-email"
+              v-model="formData.notNeedMyOwnEmail" />
+            <label class="custom-control-label"
+              for="form-not-need-my-own-email"><%= __("I don't need email notifications of my activities") %></label>
+          </div>
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col-sm-6">
+          <hr />
+          <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" id="form-no-raise-thread-notify"
+              v-model="formData.noRaiseThreadNotify" />
+            <label class="custom-control-label"
+              for="form-no-raise-thread-notify"><%= __("Do not notify the screen about threads") %></label>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          <p class="text-danger" v-if="cloudError === 'emailAlreadyInUse'">
+            <%= __("An account already exists that uses that email address") %>
+          </p>
+          <p class="text-danger" v-else-if="cloudError">
+            <small><%= __("An error occurred while processing the request. Please check the information and try again. If the error persists, please contact your administrator") %></small>
+          </p>
+        </div>
+        <div class="col-sm-6">
+          <div class="form-group text-right">
+            <a class="btn btn-light btn-sm" href="/<%= organization.handleId %>/account"><i
+                class="fas fa-window-close"></i> <%= __("Cancel") %></a>
+            <button type="submit" class="btn btn-primary btn-sm">
+              <i class="far fa-save"></i> <%= __("Save") %>
+            </button>
+          </div>
+        </div>
+      </div>
+    </ajax-form>
+  </div>
+</div>
+<%- /* Expose locals as `window.SAILS_LOCALS` :: */ exposeLocalsToBrowser() %>

@@ -1,0 +1,13 @@
+<div id="backoffice-pubdoc-create" v-cloak>
+  <div class="container">
+    <div id="cloud-error" class="row">
+      <div class="col-sm-6">
+        <p class="text-danger" v-if="cloudError">
+          <%= __("An error occurred while processing the request. Please check the information and try again. If the error persists, please contact your administrator") %>
+        </p>
+      </div>
+    </div>
+    <%- partial ('form.ejs', { action: 'createWiki' }) %>
+  </div>
+</div>
+<%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>

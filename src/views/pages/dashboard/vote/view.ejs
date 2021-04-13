@@ -1,0 +1,116 @@
+<div id="vote-view" v-cloak>
+  <div class="container">
+    <ajax-form id="confirm-circulation" action="confirmCirculation" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedConfirmForm"
+      @rejected="onCloudError" :handle-parsing="handleParsingConfirmForm">
+    </ajax-form>
+    <div id="cloud-error" class="row">
+      <div class="col-sm-6">
+        <p class="text-danger" v-if="cloudError === 'alreadyAnswerd'">
+          <%= __("You have already confirmed the circulation") %>
+        </p>
+        <p class="text-danger" v-else-if="cloudError === 'confirmNotReleased'">
+          <%= __("Confirmation results cannot be registered in the circulation before publication") %>
+        </p>
+        <p class="text-danger" v-else-if="cloudError === 'notConfirmPassedDeadline'">
+          <%= __("Confirmation results cannot be registered in the circulation that has passed the deadline") %>
+        </p>
+        <p class="text-danger" v-else-if="cloudError">
+          <%= __("An error occurred while processing the request. Please check the information and try again. If the error persists, please contact your administrator") %>
+        </p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col text-right">
+        <a class="btn btn-light btn-sm" :href="returnLink"><i class="far fa-arrow-alt-circle-left"></i>
+          <%= __("Back") %></a>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <div class="row border border-top-0 border-right-0 border-left-0 mt-3">
+          <div class="col">
+            <span class="h4">{{ vote.subject }}</span>
+          </div>
+        </div>
+        <div class="row mt-2">
+          <div class="col-auto">
+            <span><%= __("Author") %>: </span>
+            <user-identity :user="vote.author" :organization="organization" size="sm"></user-identity>
+          </div>
+        </div>
+        <!-- appendix -->
+        <viewer-file :organization="organization" :appendix="appendix" :download-appendix="downloadAppendix"></viewer-file>
+        <div class="row mt-5 mb-5 p-3 shadow rounded">
+          <div class="col text-break" id="viewer"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-3">
+      <div class="col">
+        <dl>
+          <dt><%= __("Release date") %></dt>
+          <dd>{{ formatDate(vote.circulationFrom) }}</dd>
+          <dt v-if="vote.isQuestionnaireFormat"><%= __("Reply deadline") %></dt>
+          <dt v-else><%= __("End date") %></dt>
+          <dd>{{ formatDate(vote.circulationTo) }}</dd>
+        </dl>
+      </div>
+    </div>
+    <div class="row mt-3" v-if="beforeRelease">
+      <div class="col text-center alert alert-warning ml-5 mr-5" role="alert">
+        <span><%= __("This circulation has not been published yet. It cannot be confirmed or answered") %></span>
+      </div>
+    </div>
+    <div class=" row mt-3">
+      <div class="col text-center" v-if="allowConfirmed">
+        <button type="button" class="btn btn-primary" @click="submitConfirm"><i class="fas fa-check-circle"></i>
+          <%= __("Contents have been confirmed") %></button>
+      </div>
+      <div class="col text-center alert alert-primary ml-5 mr-5" role="alert" v-else-if="confirmed">
+        <span class="">{{ answeredAt }} <%= __("Confirmed") %></span>
+      </div>
+    </div>
+    <div class="row mt-1" v-if="vote.isQuestionnaireFormat">
+      <div class="col border border-info rounded py-3 px-3">
+        <span>{{vote.question}}</span>
+        <ul>
+          <li v-for="item in vote.choices">{{ item.choices }}</li>
+        </ul>
+        <span v-if="vote.multipleAnswers">(<%= __("Multiple answers can be selected") %>)</span>
+        <div class="text-center" v-if="allowAnswere">
+          <a class="btn btn-info" :href="answerLink" v-if="notAnswered"><i class="fas fa-check-circle"></i>
+            <%= __("Answer") %></a>
+          <a class="btn btn-info" :href="answerEditLink" v-else><i class="fas fa-check-double"></i>
+            <%= __("Correct the answer") %></a>
+        </div>
+
+        <div class="mt-5"><%= __("Answer status") %></div>
+        <div class="row">
+          <div class="col-sm-6">
+            <canvas id="vote-chart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-5">
+      <div class="col">
+        <p><%= __("Users to circulate") %></p>
+        <ul class="users-to-circulate">
+          <li v-for="item in vote.users">
+            <span class="badge badge-success" v-if="item.answered"><%= __("Answered") %></span>
+            <span class="badge badge-light" v-else><%= __("Unanswered") %></span>
+
+            <user-identity class="ml-1" :user="item" :organization="organization" size="sm"></user-identity>
+            <span v-if="item.answered">
+              {{ getAnswers(item) }}
+            </span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</div>
+<%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>

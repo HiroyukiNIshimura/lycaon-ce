@@ -1,0 +1,15 @@
+<% /* Note: This is injected into `views/layouts/layout-email.ejs` */ %>
+<%= __('This email is sent to the representative of the organization {0} that is using the free plan').format(organization.name) %>
+
+<%= __('No one has been using Lycaon for the last {0} days').format(expireDays) %>
+<%= __('Organizations that have not been used for a long period of time may be deleted without notice to secure system resources') %>
+
+<%= __('If you are considering withdrawing from the membership, please complete the withdrawal procedure from this page') %>
+[ <%= `/${organization.handleId}/admin/plan/unsubscribed` %> ]
+
+<%- __('Click here for plan changes') %>
+[ <%- `/${organization.handleId}/admin/plan/change` %> ]
+
+------------------------------
+Sincerely,
+Team Lycaon

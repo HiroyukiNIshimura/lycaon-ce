@@ -1,0 +1,1 @@
+https://uicdn.toast.com/editor/latest/i18n/

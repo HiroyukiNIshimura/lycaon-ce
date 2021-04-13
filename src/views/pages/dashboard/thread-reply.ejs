@@ -1,0 +1,105 @@
+<transition name="reply-register">
+  <div class="row mt-3 p-2" style="display: none" :id="getReplyRegisterIdentityWrapper(item.sneeze)"
+    v-show="showReplyRegister(item.sneeze)">
+    <div class="col">
+      <div class="row">
+        <div class="col">
+          <div :id="getReplyRegisterIdentity(item.sneeze)"></div>
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col text-right">
+          <ajax-form action="createReply" :syncing.sync="syncing" :cloud-error.sync="cloudError"
+            @submitted="submittedReplyCreateForm" @rejected="onCloudError"
+            :handle-parsing="handleParsingReplyCreateForm">
+            <button type="button" class="btn btn-light btn-sm" @click="onReplyRegisterCancelClick(item.sneeze)">
+              <i class="fas fa-window-close"></i> <%= __("Cancel") %>
+            </button>
+            <button type="submit" class="btn btn-primary btn-sm">
+              <i class="fas fa-reply"></i> <%= __("Add reply") %>
+            </button>
+          </ajax-form>
+        </div>
+      </div>
+    </div>
+  </div>
+</transition>
+
+<div class="row" v-for="reply in replyCollection(item.sneeze)">
+  <div class="col ml-1 ml-md-5 mt-3 w-100">
+    <div class="card reply-card" :id="getSneezeReplyIdentity(reply)">
+      <div class="card-body">
+        <div class="row d-none d-sm-block">
+          <div class="col">
+            <user-identity :user="reply.owner" :organization="organization" size=""></user-identity>
+            <small class="card-subtitle ml-2 text-muted">[ <a :href="replyAnker(reply)">rep-{{ reply.serialNumber }}</a> ]
+            </small>
+            <small class="card-subtitle text-muted">
+              - <lycaon-timestamp :at="reply.createdAt" format="timeago" :translator="replyTranslator"></lycaon-timestamp> [
+              <a :href="sneezeAnker(item.sneeze)">comment-{{ item.sneeze.serialNumber }}</a>
+              ]</small>
+            <clipboard class="ml-2" :data="reply.comment"></clipboard>
+          </div>
+        </div>
+        <div class="row d-block d-sm-none">
+          <div class="col">
+            <user-identity :user="reply.owner" :organization="organization" size="">
+            </user-identity>
+          </div>
+        </div>
+        <div class="row d-block d-sm-none">
+          <div class="col">
+            <small class="card-subtitle ml-2 text-muted">[ <a :href="replyAnker(reply)">rep-{{ reply.serialNumber }}</a>
+              ]</small>
+            <small class="card-subtitle text-muted">
+              - <lycaon-timestamp :at="reply.createdAt" format="timeago" :translator="replyTranslator"></lycaon-timestamp> [
+              <a :href="sneezeAnker(item.sneeze)">comment-{{ item.sneeze.serialNumber }}</a>
+              ]</small>
+            <clipboard class="ml-2" :data="reply.comment"></clipboard>
+          </div>
+        </div>
+        <!-- reply-view -->
+        <transition name="reply">
+          <div class="wapper-coment" v-show="showReplyView(reply)">
+            <div class="row mt-2">
+              <div class="col-auto">
+                <div class="card-text" :id="getReplyIdentity(reply)"></div>
+              </div>
+            </div>
+            <div class="row mt-3">
+              <div class="col text-right">
+                <button type="button" class="btn btn-outline-indigo btn-sm" data-toggle="tooltip" data-placement="bottom"
+                  :title="i18n('Edit this reply')" :disabled="thread.locked" @click="onReplyEditClick(reply)"
+                  v-if="reply.owner && reply.owner.id === me.id">
+                  <i class="far fa-edit"></i> <%= __("Edit") %>
+                </button>
+              </div>
+            </div>
+          </div>
+        </transition>
+        <!-- reply-editor -->
+        <div :id="getReplyEditorIdentityWrapper(reply)" class="wapper-coment-editor" style="display: none"
+          v-show="showReplyEditor(reply)">
+          <ajax-form action="updateReply" :syncing.sync="syncing" :cloud-error.sync="cloudError"
+            @submitted="submittedReplyUpdateForm" @rejected="onCloudError" :handle-parsing="handleParsingReplyUpdateForm">
+            <div class="row mt-2">
+              <div class="col">
+                <div :id="getReplyEditorIdentity(reply)"></div>
+              </div>
+            </div>
+            <div class="row mt-3">
+              <div class="col text-right">
+                <button type="button" class="btn btn-light btn-sm" @click="onReplyEditCancelClick(reply)">
+                  <i class="fas fa-window-close"></i> <%= __("Cancel") %>
+                </button>
+                <button type="submit" class="btn btn-primary btn-sm">
+                  <i class="far fa-save"></i> <%= __("Save") %>
+                </button>
+              </div>
+            </div>
+          </ajax-form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

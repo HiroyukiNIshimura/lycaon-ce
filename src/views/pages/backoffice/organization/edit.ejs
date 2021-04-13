@@ -1,0 +1,152 @@
+<div id="backoffice-organization-edit" v-cloak>
+  <div class="container">
+    <modal v-if="showCancelPlanChangeModal">
+      <div class="card">
+        <div class="card-header"><%= __("Confirmation dialog") %></div>
+        <div class="card-body">
+          <h5 class="card-title"><%= __("Confirmation of cancellation") %></h5>
+          <p class="card-text"><%= __("Cancel the request to change the plan. Is it OK?") %></p>
+          <div class="text-right">
+            <button type="button" class="btn btn-danger btn-sm" @click="doCancelPlanChange">
+              <i class="fas fa-bell-slash"></i> <%= __("Execute") %>
+            </button>
+            <button type="button" class="btn btn-light btn-sm" @click="showCancelPlanChangeModal = false">
+              <i class="fas fa-window-close"></i> <%= __("Cancel") %>
+            </button>
+          </div>
+        </div>
+      </div>
+    </modal>
+    <modal v-if="showCancelUnsubscribedModal">
+      <div class="card">
+        <div class="card-header"><%= __("Confirmation dialog") %></div>
+        <div class="card-body">
+          <h5 class="card-title"><%= __("Confirmation of cancellation") %></h5>
+          <p class="card-text"><%= __("Cancel the unsubscribed request. Is it OK?") %></p>
+          <div class="text-right">
+            <button type="button" class="btn btn-danger btn-sm" @click="doCancelUnsubscribed">
+              <i class="fas fa-bell-slash"></i> <%= __("Execute") %>
+            </button>
+            <button type="button" class="btn btn-light btn-sm" @click="showCancelUnsubscribedModal = false">
+              <i class="fas fa-window-close"></i> <%= __("Cancel") %>
+            </button>
+          </div>
+        </div>
+      </div>
+    </modal>
+
+
+    <ajax-form action="updateOrganization" :syncing.sync="syncing" :cloud-error.sync="cloudError"
+      @submitted="submittedForm" @rejected="onCloudError" :handle-parsing="handleParsingForm">
+      <h4 class="mb-4"><%= __("Edit Organization") %></h4>
+      <dl>
+        <dt class="text-muted"><%= __("Organization ID") %></dt>
+        <dd class="text-left">{{ org.handleId }}</dd>
+        <dt class="text-muted"><%= __("Organization name") %></dt>
+        <dd class="text-left">{{ org.name }}</dd>
+        <dt class="text-muted"><%= __("Representative name") %></dt>
+        <dd class="text-left">{{ org.fullName }}</dd>
+        <dt class="text-muted"><%= __("Representative email address") %></dt>
+        <dd class="text-left">{{ org.emailAddress }}</dd>
+      </dl>
+      <div class="alert alert-warning" role="alert" v-if="billing.unsubscribedAt">
+        <%= __("A request for Unsubscribed has occurred. Please process quickly") %>
+        <button type="button" class="btn btn-danger btn-sm"
+          @click="showCancelUnsubscribedModal = true"><%= __("Cancel the unsubscribed request") %></button>
+      </div>
+      <div class="alert alert-warning" role="alert" v-if="billing.planChangeAt">
+        <%= __("A request to change the plan has occurred. Please process quickly") %>
+        <button type="button" class="btn btn-danger btn-sm"
+          @click="showCancelPlanChangeModal = true"><%= __("Cancel the plan change request") %></button>
+      </div>
+      <hr>
+      <div class="mt-3">
+        <label for="form-plan"><%= __("Contract plan") %></label>
+        <select class="browser-default custom-select mb-4" id="form-plan" v-model="formData.plan">
+          <option value="free"><%= __("Free") %>(free)</option>
+          <option value="prime"><%= __("Prime") %>(prime)</option>
+          <option value="pine"><%= __("Pine") %>(pine)</option>
+          <option value="bamboo"><%= __("Bamboo") %>(bamboo)</option>
+          <option value="plum"><%= __("Plum") %>(Plum)</option>
+        </select>
+      </div>
+      <div class="custom-control custom-checkbox mt-1">
+        <input type="checkbox" class="custom-control-input" id="form-deleted" v-model="formData.deleted" />
+        <label class="custom-control-label" for="form-deleted"><%= __("Disable this organization") %></label>
+      </div>
+      <hr>
+      <h5 class="mt-5 mb-3"><%= __("Billing information") %></h5>
+      <div class="md-form">
+        <label for="form-customerName"><%= __("Billing name") %></label>
+        <input type="text" maxlength="100" id="form-customerName" class="form-control"
+          :class="[formErrors.customerName ? 'is-invalid' : '']" v-model="formData.customerName" />
+      </div>
+
+      <div class="md-form">
+        <label for="form-zipCode"><%= __("Postal code") %></label>
+        <input type="text" maxlength="8" id="form-zipCode" class="form-control"
+          :class="[formErrors.zipCode ? 'is-invalid' : '']" v-model="formData.zipCode" />
+        <div class="invalid-feedback" v-if="formErrors.zipCode">
+          <%= __("Please enter a valid zip code") %>
+        </div>
+      </div>
+      <div class="">
+        <label for="form-prefecture"><%= __("Prefectures") %></label>
+        <select class="browser-default custom-select" id="form-prefecture" v-model="formData.prefecture">
+          <option v-for="item in prefectures" v-bind:value="item">{{ item }}</option>
+        </select>
+      </div>
+      <div class="md-form">
+        <label for="form-city"><%= __("City name") %></label>
+        <input type="text" maxlength="100" id="form-city" class="form-control"
+          :class="[formErrors.city ? 'is-invalid' : '']" v-model="formData.city" />
+      </div>
+
+      <div class="md-form">
+        <label for="form-street"><%= __("Address etc") %></label>
+        <input type="text" maxlength="100" id="form-street" class="form-control"
+          :class="[formErrors.street ? 'is-invalid' : '']" v-model="formData.street" />
+      </div>
+
+      <div class="md-form">
+        <label for="form-building"><%= __("Name of buildings etc") %></label>
+        <input type="text" maxlength="100" id="form-building" class="form-control"
+          :class="[formErrors.building ? 'is-invalid' : '']" v-model="formData.building" />
+      </div>
+      <div class="md-form">
+        <label for="form-phoneNo"><%= __("Phone number") %></label>
+        <input type="text" maxlength="100" id="form-phoneNo" class="form-control"
+          :class="[formErrors.phoneNo ? 'is-invalid' : '']" v-model="formData.phoneNo" />
+        <div class="invalid-feedback" v-if="formErrors.phoneNo">
+          <%= __("Please enter a valid phone number") %>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col text-right">
+          <a class="btn btn-light btn-sm" href="/admin/organization"><i class="fas fa-window-close"></i>
+            <%= __("Cancel") %></a>
+          <button type="submit" class="btn btn-primary btn-sm">
+            <i class="far fa-save"></i> <%= __("Save") %>
+          </button>
+        </div>
+      </div>
+    </ajax-form>
+
+    <ajax-form id="form-cancel-unsubscribed" action="cancelUnsubscribed" :syncing.sync="syncing"
+      :cloud-error.sync="cloudError" @submitted="submittedForm" @rejected="onCloudError"
+      :handle-parsing="handleParsingCancelForm"></ajax-form>
+    <ajax-form id="form-cancel-plan-change" action="cancelPlanChange" :syncing.sync="syncing"
+      :cloud-error.sync="cloudError" @submitted="submittedForm" @rejected="onCloudError"
+      :handle-parsing="handleParsingCancelForm"></ajax-form>
+
+    <div id="cloud-error" class="row">
+      <div class="col-sm-6">
+        <p class="text-danger" v-if="cloudError">
+          <%= __("An error occurred while processing the request. Please check the information and try again. If the error persists, please contact your administrator") %>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+<%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>

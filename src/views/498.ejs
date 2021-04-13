@@ -1,0 +1,16 @@
+<div id="498">
+  <div class="container text-center">
+    <h3>
+      <%= __("We're sorry, the link has expired or is already in use") %>
+    </h3>
+    <hr />
+    <div class="help">
+      <p><%= __("If you try again ...") %></p>
+      <p>
+        <%- __("Please perform <a> password reset </a>") %>
+      </p>
+      <a class="btn btn-lg btn-info mt-3" href="/password/forgot"><%= __("Reset password") %></a>
+    </div>
+  </div>
+</div>
+<%- /* Expose locals as `window.SAILS_LOCALS` :: */ exposeLocalsToBrowser() %>

@@ -1,0 +1,20 @@
+<% /* Note: This is injected into `views/layouts/layout-email.ejs` */ %>
+
+<%= __('Notice from the system') %>
+
+<%= __('This is a notification from a system that you have missed since your last login') %>
+
+<% for (var item of notifications) { %>
+<%= item.displayDate %>
+<%= item.subject %>
+<%= __('see next') %>
+[ <%= url.resolve(sails.config.custom.baseUrl, `/notification/${item.id}`) %> ]
+<% } %>
+
+------------------------------
+<%= __('Check notifications from the system') %>
+[ <%= url.resolve(sails.config.custom.baseUrl, `/notification`) %> ]
+
+------------------------------
+Sincerely,
+Team Lycaon

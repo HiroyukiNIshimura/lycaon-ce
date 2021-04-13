@@ -1,0 +1,359 @@
+@footer-height: 40px;
+@container-md-max-width: 1100px;
+
+[v-cloak] {
+  display: block;
+  padding: 50px 0;
+}
+
+@keyframes spinner {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+[v-cloak]:before {
+  content: '';
+  box-sizing: border-box;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 30px;
+  height: 30px;
+  margin-top: -10px;
+  margin-left: -10px;
+  border-radius: 50%;
+  border: 2px solid #ccc;
+  border-top-color: #333;
+  animation: spinner 0.6s linear infinite;
+  text-indent: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+[v-cloak] > * {
+  display: none;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+}
+
+@media screen and (max-width: 768px) {
+  html,
+  body {
+    -webkit-overflow-scrolling: touch !important;
+    overflow: auto;
+    height: 100%;
+  }
+  body {
+    position: relative;
+    overflow-x: hidden;
+    min-height: 100%;
+  }
+}
+
+main {
+  position: relative; /*←相対位置*/
+  padding-bottom: 120px; /*←footerの高さ*/
+  box-sizing: border-box; /*←全て含めてmin-height:100vhに*/
+  min-height: 100vh;
+  margin-top: 21%;
+}
+
+.container {
+  padding-top: 1rem;
+}
+footer.page-footer {
+  position: absolute; /*←絶対位置*/
+  bottom: 0; /*下に固定*/
+  width: 100%;
+}
+@media (min-width: 576px) {
+  main {
+    margin-top: 15%;
+  }
+}
+
+@media (min-width: 768px) {
+  main {
+    margin-top: 12%;
+  }
+}
+
+@media (min-width: 992px) {
+  main {
+    margin-top: 8%;
+  }
+}
+
+@media (min-width: 1200px) {
+  main {
+    margin-top: 6%;
+  }
+}
+
+.tags-look .tagify__dropdown__item {
+  display: inline-block;
+  border-radius: 3px;
+  padding: 0.3em 0.5em;
+  border: 1px solid #ccc;
+  background: #f3f3f3;
+  margin: 0.2em;
+  font-size: 0.85em;
+  color: black;
+  transition: 0s;
+}
+
+.tags-look .tagify__dropdown__item--active {
+  color: black;
+}
+
+.tags-look .tagify__dropdown__item:hover {
+  background: lightyellow;
+  border-color: gold;
+}
+
+.scrollTop-btn {
+  position: fixed;
+  right: 1.5em;
+  bottom: 3em;
+  width: 36px;
+  height: 36px;
+  line-height: 36px;
+  text-align: center;
+  border-radius: 50%;
+  background: #5bc8ac;
+  z-index: 999;
+}
+
+.scrollTop-btn-icon {
+  color: #fff;
+  font-size: 16px;
+}
+
+.drop-area {
+  height: 150px;
+  border: 5px solid gray;
+  border-radius: 15px;
+  height: 100%;
+}
+
+.dragEnter {
+  border: 10px dotted powderblue;
+}
+
+.tagify {
+  border-radius: 0.25rem;
+}
+
+img.user-icon {
+  width: 42px;
+  height: 42px;
+}
+img.user-icon-sm {
+  width: 36px;
+  height: 36px;
+}
+svg.user-icon {
+  width: 42px;
+  height: 42px;
+}
+svg.user-icon-sm {
+  width: 36px;
+  height: 36px;
+}
+
+.blink {
+  animation: blinkAnime 3.5s infinite alternate;
+}
+@keyframes blinkAnime {
+  0% {
+    color: #1a1aff;
+  }
+  100% {
+    color: #ff7f7f;
+  }
+}
+
+.md-form label.md-textarea-label {
+  top: -0.5rem;
+}
+
+.tui-editor-contents {
+  img {
+    max-width: 80%;
+    height: auto;
+  }
+}
+
+@media (max-width: 576px) {
+  .tagify {
+    --placeholder-color: transparent;
+    --placeholder-color-focus: transparent;
+  }
+}
+
+.query-hits {
+  background-color: rgba(255, 244, 86, 0.774);
+}
+
+.score-color-0 {
+  color: #e03114;
+}
+.score-color-1 {
+  color: #ffa500;
+}
+.score-color-2 {
+  color: #4fe02c;
+}
+.score-color-3 {
+  color: #4169e1;
+}
+.score-color-4 {
+  color: #000080;
+}
+
+.fotter-policy {
+  font-size: small;
+}
+
+.input-error-message {
+  margin-top: 0.25rem;
+  color: #dc3545;
+  font-size: 80%;
+}
+
+.file-list {
+  list-style: none;
+}
+
+.img-file-list {
+  width: 100px;
+  height: auto;
+  margin-right: 0.5rem;
+}
+
+.te-md-container .CodeMirror,
+.tui-editor-contents,
+.tui-editor-contents-placeholder,
+.tui-editor-defaultUI {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, 'Kosugi Maru',
+    'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+    'Noto Color Emoji';
+  font-size: 1rem;
+}
+
+.markdown-styles {
+  code {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial,
+      'Kosugi Maru', 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+      'Segoe UI Symbol', 'Noto Color Emoji';
+    font-size: 1rem;
+  }
+  pre {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial,
+      'Kosugi Maru', 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+      'Segoe UI Symbol', 'Noto Color Emoji';
+    font-size: 1rem;
+  }
+  blockquote {
+    border-color: #ea5219;
+    margin-top: 2em;
+    margin-bottom: 1em;
+  }
+  h1 {
+    color: #494949;
+    font-weight: bold;
+    //border: solid 3px #ea5219;
+    padding: 0.5em;
+    //border-radius: 0.5em;
+    margin: 0 0 1em;
+  }
+  h2 {
+    color: #494949;
+    position: relative;
+    font-weight: bold;
+    margin: 0 0 1em;
+    padding: 0.5em 0.5em 0.5em 2.1em;
+    border-bottom: 2px solid #ea5219;
+  }
+  h2:before {
+    content: '□';
+    font-size: 180%;
+    position: absolute;
+    color: #ea5219;
+    top: 0.15em;
+    left: 0.1em;
+    height: 12px;
+    width: 12px;
+  }
+  h2:after {
+    content: '□';
+    font-size: 120%;
+    position: absolute;
+    color: #000000;
+    top: 0.78em;
+    left: 0;
+    height: 12px;
+    width: 12px;
+  }
+  h3 {
+    color: #494949;
+    padding: 0.5em 0.75em;
+    background-color: #f4f4f4;
+    border-left: 6px solid #ea5219;
+  }
+  h4 {
+    color: #494949;
+    padding: 0.5em 0.75em;
+    background-color: #f4f4f4;
+    border-radius: 6px;
+  }
+  h5 {
+    color: #494949;
+    padding: 0.5em 0.75em;
+    border-bottom-style: dotted;
+    border-bottom-color: #ea5219;
+    border-bottom-width: thin;
+  }
+  table thead th {
+    background: #ea5219;
+    font-weight: bold;
+    vertical-align: top;
+    color: #fff;
+  }
+  table th,
+  table td {
+    padding: 6px 13px;
+    border: 1px solid #ddd;
+  }
+  table tr {
+    background-color: #fff;
+    border-top: 1px solid #ccc;
+  }
+  hr {
+    background-color: #fff;
+    border-color: #ea5219;
+    border-top: 1px dashed #ea5219;
+  }
+
+  li {
+    margin-bottom: 0.5em;
+  }
+  a {
+    color: #4078c0;
+    text-decoration: none;
+  }
+  a:hover,
+  a:active {
+    text-decoration: underline;
+  }
+
+  img {
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12) !important;
+  }
+}

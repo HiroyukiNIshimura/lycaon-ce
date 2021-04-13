@@ -1,0 +1,11 @@
+<% /* Note: This is injected into `views/layouts/layout-email.ejs` */ %>
+<%= __('Notification of message reception from {0}').format(user.fullName) %>
+
+<%= __('Posted date') %>：<%= postedAt %>
+
+<%= __('Please check from this link') %>:
+[ <%= url.resolve(sails.config.custom.baseUrl, `/${organization.handleId}/member/${user.id}?tab=tab-message`) %> ]
+
+------------------------------
+Sincerely,
+<%= fromName %>

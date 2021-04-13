@@ -1,0 +1,22 @@
+<% /* Note: This is injected into `views/layouts/layout-email.ejs` */ %>
+<%= __('Thank you for your inquiry') %>
+
+<%= __("We will reply to your inquiries by phone or email in the near future") %>
+
+------------------------------
+<%= __('Inquiry') %>: <%= inquery.contents %>
+( <%= inquery.category %> )
+
+<%= __('Full Name') %>: <%= inquery.fullName %>
+<%= __("Mail Address") %>: <%= inquery.emailAddress %>
+<%= __("Organization name") %>: <%= inquery.organization %>
+<%= __("Postal code") %>: <%= inquery.zipCode %>
+<%= __("Prefectures") %>: <%= inquery.prefecture %>
+<%= __("City name") %>: <%= inquery.city %>
+<%= __("Address etc") %>: <%= inquery.street %>
+<%= __("Name of buildings etc") %>: <%= inquery.building %>
+<%= __('Phone number') %>: <%= inquery.phoneNo %>
+
+------------------------------
+Sincerely,
+Team Lycaon

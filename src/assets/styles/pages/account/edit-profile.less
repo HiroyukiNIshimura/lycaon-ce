@@ -1,0 +1,39 @@
+#edit-profile {
+  padding-top: 75px;
+  padding-bottom: 75px;
+
+  .user-avatar .avatar-upload .rounded-circle {
+    width: 200px;
+    height: 200px;
+  }
+  .user-avatar .text-center .btn {
+    margin: 0 0.5rem;
+  }
+  .user-avatar .avatar-edit-image {
+    max-width: 100%;
+  }
+  .user-avatar .drop-active {
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    position: fixed;
+    z-index: 9999;
+    opacity: 0.6;
+    text-align: center;
+    background: #000;
+  }
+  .user-avatar .drop-active h3 {
+    margin: -0.5em 0 0;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+    font-size: 40px;
+    color: #fff;
+    padding: 0;
+  }
+}

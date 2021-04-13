@@ -1,0 +1,50 @@
+<div id="notification-list" v-cloak>
+  <div class="container">
+    <ajax-form id="query-form" action="queryNotification" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedQueryForm" @rejected="onCloudError" :handle-parsing="handleParsingQueryForm">
+    </ajax-form>
+
+    <h5>
+      <%= __('Notice from the system') %>
+      <small class="text-muted ml-3"><%= __('Total number') %> {{ formatter.format(queryCount) }}
+        {{ i18nformatN('Item', 'Items', queryCount) }}</small>
+    </h5>
+
+    <div class="row">
+      <div class="col text-right">
+        <a class="btn btn-light btn-sm" :href="backToLink"><i class="far fa-arrow-alt-circle-left"></i>
+          <%= __("Back") %></a>
+      </div>
+    </div>
+
+    <div class="mt-3" v-if="queryResults.length > 0">
+      <div class="row" v-for="item in queryResults">
+        <div class="col-12 mb-2 ml-1">
+          <a class="card" :href="itemLink(item)">
+            <div class="card-body">
+              <div class="card-header">
+                <div>
+                  <span class="badge badge-light badge-pill" v-if="item.category === 'notice'">{{ i18n(item.category) }}</span>
+                  <span class="badge badge-danger badge-pill" v-if="item.category === 'important'">{{ i18n(item.category) }}</span>
+                  <span class="badge badge-warning badge-pill" v-if="item.category === 'maintenance'">{{ i18n(item.category) }}</span>
+                  <span class="ml-3 text-muted">{{ formatDate(item.postingAt) }}</span>
+                  <span class="ml-3" v-if="item.isNotRead">
+                    <small class="badge badge-pill badge-warning">{{ i18n('not yet read') }}
+                    </small>
+                  </span>
+                </div>
+              </div>
+              <div class="card-text mt-3">
+                <a class="ml-3" :href="itemLink(item)">{{ item.subject }}</a>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+      <infinite-loading spinner="waveDots" @infinite="infiniteHandler"></infinite-loading>
+    </div>
+    <div v-else-if="mounted">
+      <small><%= __('Currently, there is no notification from the system') %> <i class="far fa-grin-beam-sweat"></i></small>
+    </div>
+  </div>
+</div>
+<%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>

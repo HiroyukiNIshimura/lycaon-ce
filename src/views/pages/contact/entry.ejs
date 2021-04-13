@@ -1,0 +1,209 @@
+<div id="contact-entry" v-cloak>
+  <div class="container">
+    <div id="cloud-error" class="row">
+      <div class="col-sm-6">
+        <p class="text-danger" v-if="cloudError">
+          <%= __("An error occurred while processing the request. Please check the information and try again. If the error persists, please contact your administrator") %>
+        </p>
+      </div>
+    </div>
+    <h4><%= __('Inquiry form') %></h4>
+    <hr>
+    <div class="row">
+      <div class="col">
+        <%- partial ('step-area.ejs', { clazz: 'step01-now' }) %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <div><%= __('We accept inquiries from customers using the inquiry form')%></div>
+        <div><%= __("Please fill in the required items and press 'Confirm input contents'")%></div>
+      </div>
+    </div>
+    <ajax-form action="entryInquery" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedForm"
+      @rejected="onCloudError" :handle-parsing="handleParsingForm">
+      <div class="row mt-5">
+        <div class="col">
+          <h4 class="assistance"><%= __('Please enter your inquiry')%></h4>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-8">
+          <div class="md-form">
+            <label for="form-contents" class="md-textarea-label"><span
+                class="badge badge-pill badge-danger mr-2"><%= __('required') %></span><%= __('Inquiry') %></label>
+            <textarea id="form-contents" class="md-textarea form-control" rows="5" maxlength="2000"
+              :class="[formErrors.contents ? 'is-invalid' : '']" v-model.trim="formData.contents"></textarea>
+            <div class="invalid-feedback" v-if="formErrors.contents"><%= __('Please enter your inquiry') %></div>
+            <div class="invalid-feedback" v-if="formErrors.contentsLength">
+              <%= __('Please enter within {0} characters').format(2000) %>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-8 mt-1 ml-3">
+          <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" id="form-check-1" value="0" v-model="categories" />
+            <label class="custom-control-label"
+              for="form-check-1"><%= __('Questions about application') %></label>
+          </div>
+          <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" id="form-check-2" value="1" v-model="categories" />
+            <label class="custom-control-label"
+              for="form-check-2"><%= __("Questions about features") %></label>
+          </div>
+          <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" id="form-check-3" value="2" v-model="categories" />
+            <label class="custom-control-label"
+              for="form-check-3"><%= __("On-premises quote") %></label>
+          </div>
+          <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" id="form-check-3" value="3" v-model="categories" />
+            <label class="custom-control-label"
+              for="form-check-3"><%= __("Inquiries about disabilities") %></label>
+          </div>
+          <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" id="form-check-3" value="4" v-model="categories" />
+            <label class="custom-control-label"
+              for="form-check-3"><%= __("Questions about cancellation") %></label>
+          </div>
+          <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" id="form-check-4" value="5" v-model="categories" />
+            <label class="custom-control-label" for="form-check-4"><%= __("Other") %></label>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mt-5">
+        <div class="col">
+          <h4 class="assistance"><%= __('Please enter your customer information')%></h4>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="md-form">
+            <label for="form-full-name"><span
+                class="badge badge-pill badge-danger mr-2"><%= __('required') %></span><%= __('Full Name') %></label>
+            <input class="form-control" id="form-full-name" type="text" maxlength="120"
+              :class="[formErrors.fullName || formErrors.fullNameLength ? 'is-invalid' : '']"
+              v-model.trim="formData.fullName" autocomplete="name" />
+            <div class="invalid-feedback" v-if="formErrors.fullName"><%= __('Please enter your full name') %></div>
+            <div class="invalid-feedback" v-if="formErrors.fullNameLength">
+              <%= __('Please enter within {0} characters').format(120) %>
+            </div>
+          </div>
+          <div class="md-form">
+            <label for="form-emailAddress"><span
+                class="badge badge-pill badge-danger mr-2"><%= __('required') %></span><%= __("Mail Address") %></label>
+            <input class="form-control" id="form-emailAddress" type="text" maxlength="300"
+              :class="[formErrors.emailAddress || formErrors.emailAddressLength ? 'is-invalid' : '']"
+              v-model.trim="formData.emailAddress" />
+            <div class="invalid-feedback" v-if="formErrors.emailAddress">
+              <%= __("Please enter a valid email address") %>
+            </div>
+            <div class="invalid-feedback" v-if="formErrors.emailAddressLength">
+              <%= __("Please enter within {0} characters").format(300) %>
+            </div>
+          </div>
+          <div class="md-form">
+            <label for="form-organization"><%= __("Organization name") %></label>
+            <input class="form-control" id="form-organization" type="text" maxlength="100"
+              :class="[formErrors.organizationLength ? 'is-invalid' : '']" v-model.trim="formData.organization" />
+            <div class="invalid-feedback" v-if="formErrors.organizationLength">
+              <%= __("Please enter within {0} characters").format(100) %>
+            </div>
+          </div>
+
+          <div class="md-form">
+            <label for="form-zip-code"><%= __("Postal code") %></label>
+            <input class="form-control" id="form-zip-code" type="text" maxlength="50"
+              :class="[formErrors.zipCodeLength ? 'is-invalid' : '']" v-model.trim="formData.zipCode" />
+            <div class="invalid-feedback" v-if="formErrors.zipCodeLength">
+              <%= __("Please enter within {0} characters").format(50) %>
+            </div>
+          </div>
+          <div class="md-form">
+            <label for="form-prefecture"><%= __("Prefectures") %></label>
+            <input class="form-control" id="form-prefecturee" type="text" maxlength="50"
+              :class="[formErrors.prefectureLength ? 'is-invalid' : '']" v-model.trim="formData.prefecture" />
+            <div class="invalid-feedback" v-if="formErrors.prefectureLength">
+              <%= __("Please enter within {0} characters").format(100) %>
+            </div>
+          </div>
+          <div class="md-form">
+            <label for="form-city"><%= __("City name") %></label>
+            <input class="form-control" id="form-city" type="text" maxlength="50"
+              :class="[formErrors.cityLength ? 'is-invalid' : '']" v-model.trim="formData.city" />
+            <div class="invalid-feedback" v-if="formErrors.cityLength">
+              <%= __("Please enter within {0} characters").format(50) %>
+            </div>
+          </div>
+          <div class="md-form">
+            <label for="form-street"><%= __("Address etc") %></label>
+            <input class="form-control" id="form-street" type="text" maxlength="100"
+              :class="[formErrors.streetLength ? 'is-invalid' : '']" v-model.trim="formData.street" />
+            <div class="invalid-feedback" v-if="formErrors.streetLength">
+              <%= __("Please enter within {0} characters").format(100) %>
+            </div>
+          </div>
+          <div class="md-form">
+            <label for="form-building"><%= __("Name of buildings etc") %></label>
+            <input class="form-control" id="form-building" type="text" maxlength="100"
+              :class="[formErrors.buildingLength ? 'is-invalid' : '']" v-model.trim="formData.building" />
+            <div class="invalid-feedback" v-if="formErrors.buildingLength">
+              <%= __("Please enter within {0} characters").format(100) %>
+            </div>
+          </div>
+          <div class="md-form">
+            <label for="form-phone-no"><%= __('Phone number') %></label>
+            <input class="form-control" id="form-phone-no" type="text" maxlength="20"
+              :class="[formErrors.phoneNoLength ? 'is-invalid' : '']" v-model.trim="formData.phoneNo"
+              autocomplete="phone" />
+            <div class="invalid-feedback" v-if="formErrors.phoneNoLength">
+              <%= __('Please enter within {0} characters').format(20) %>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col">
+          <h4 class="assistance"><%= __('Handling of personal information')%></h4>
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col">
+          <p><%= __('Please check the following items, and if you agree, check [Agree]')%></p>
+          <a class="ml-3" href="/doc/policy?tab=privacy" target="_blank"><%= __("Privacy policy") %><i
+              class="fas fa-external-link-alt ml-1"></i></a>
+        </div>
+      </div>
+
+      <div class="row mt-3">
+        <div class="col-auto">
+          <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" id="form-policy-check" v-model="policyChecked" />
+            <label class="custom-control-label"
+              for="form-policy-check"><span
+                class="badge badge-pill badge-danger mr-2"><%= __('required') %></span><%= __("I agree to the handling of personal information") %></label>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mt-5">
+        <div class="col text-center">
+          <div><%= __('Click the [Go to input confirmation screen] button to confirm the input contents')%></div>
+          <div><%= __('Thank you for your input')%></div>
+        </div>
+      </div>
+      <honeypot :form-data="formData"></honeypot>
+      <div class="row">
+        <div class="col text-center">
+          <button type="submit" :disabled="!policyChecked"
+            class="btn btn-amber btn-lg"><%= __('To the confirmation screen of the input contents')%></button>
+        </div>
+      </div>
+    </ajax-form>
+  </div>
+</div>
+<%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>

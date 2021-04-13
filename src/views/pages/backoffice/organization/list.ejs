@@ -1,0 +1,118 @@
+<div id="backoffice-organization-list" v-cloak>
+  <div class="container">
+    <modal v-if="showDeleteModal">
+      <div class="card">
+        <div class="card-header"><%= __("Confirmation dialog") %></div>
+        <div class="card-body">
+          <h5 class="card-title"><%= __("Confirmation of deletion") %></h5>
+          <p class="card-text"><%= __("Delete the selected organization. Is it OK?") %></p>
+          <div class="text-right">
+            <button type="button" class="btn btn-danger btn-sm" @click="doDelete">
+              <i class="far fa-trash-alt"></i> <%= __("Delete") %>
+            </button>
+            <button type="button" class="btn btn-light btn-sm" @click="showDeleteModal = false">
+              <i class="fas fa-window-close"></i> <%= __("Cancel") %>
+            </button>
+          </div>
+        </div>
+      </div>
+    </modal>
+
+    <ajax-form id="form-delete-organization" action="deleteOrganization" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedForm"
+      @rejected="onCloudError" :handle-parsing="handleParsingForm"></ajax-form>
+
+    <div class="row">
+      <div class="col text-right">
+        <a class="btn btn-info btn-sm" href="/admin/organization/new"><i class="fas fa-plus-circle"></i>
+          <%= __("Add new organization") %></a>
+      </div>
+    </div>
+
+    <div id="cloud-error" class="row mt-3">
+      <div class="col-sm-6">
+        <p class="text-danger" v-if="cloudError">
+          <%= __("An error occurred while processing the request. Please check the information and try again. If the error persists, please contact your administrator") %>
+        </p>
+      </div>
+    </div>
+
+    <div class="row mt-4" v-if="records > 0">
+      <div class="col-auto">
+        <h4><%= __("Organizations") %></h4>
+      </div>
+      <div class="col-auto">
+        <v-pagination :page="pagination.page" :page-count="getPageCount" :handler="clickCallback"></v-pagination>
+      </div>
+      <div class="col">
+        <small>
+          <span><%= __("Total number of organizations") %> {{ formatter.format(records) }}
+            {{ i18nformatN('Organization', 'Organizations', records) }}</span>
+        </small>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-auto mb-2 ml-1" v-for="item in organizations">
+        <div class="card card-width">
+          <div class="card-body">
+            <h6 class="card-subtitle text-muted">{{ item.handleId }}</h6>
+            <h5 class="card-title mt-1">{{ item.name }}</h5>
+            <div class="card-text">
+              <span class="ml-3 text-truncate"><%= __("Representative") %> : {{ item.fullName }}</span>
+            </div>
+            <div class="card-text">
+              <span class="ml-3 text-truncate">{{ item.emailAddress }}</span>
+            </div>
+            <div class="card-text mt-3">
+              <span class="mr-2"><%= __("Plan") %>:</span> <span class="badge" :class="planStyle(item)">{{ item.plan }}</span><span
+                class="badge badge-pill badge-danger ml-3" v-if="item.isBackOffice">BackOffice</span>
+            </div>
+            <hr />
+            <dl>
+              <dt class="card-text"><%= __("Users") %></dt>
+              <dd class="text-right">{{ formatter.format(item.userQty) }}</dd>
+              <dt class="card-text"><%= __("Teams") %></dt>
+              <dd class="text-right">{{ formatter.format(item.teamQty) }}</dd>
+              <dt class="card-text"><%= __("Categories") %></dt>
+              <dd class="text-right">{{ formatter.format(item.categoryQty) }}</dd>
+              <dt class="card-text"><%= __("Tags") %></dt>
+              <dd class="text-right">{{ formatter.format(item.tagQty) }}</dd>
+              <dt class="card-text"><%= __("Threads") %></dt>
+              <dd class="text-right">{{ formatter.format(item.threadQty) }}</dd>
+              <dt class="card-text"><%= __("Wikis") %></dt>
+              <dd class="text-right">{{ formatter.format(item.wikiQty) }}</dd>
+              <dt class="card-text"><%= __("Circular notices") %></dt>
+              <dd class="text-right">{{ formatter.format(item.voteQty) }}</dd>
+              <dt class="card-text"><%= __("Thread attachment size") %></dt>
+              <dd class="text-right">{{ floatFormatter.format(item.threadItemSize / 1024/ 1024) }}MB</dd>
+              <dt class="card-text"><%= __("Wiki attachment size") %></dt>
+              <dd class="text-right">{{ floatFormatter.format(item.wikiItemSize / 1024/ 1024) }}MB</dd>
+              <dt class="card-text"><%= __("Circular notice attachment size") %></dt>
+              <dd class="text-right">{{ floatFormatter.format(item.voteItemSize / 1024/ 1024) }}MB</dd>
+            </dl>
+            <div class="text-right" v-if="!item.isBackOffice">
+              <div class="btn-group btn-group-sm">
+                <a :href="link(item)" class="btn btn-info"><i class="far fa-edit"></i> <%= __("Edit") %></a>
+                <button type="button" class="btn btn-info btn-sm dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true"
+                  aria-expanded="false">
+                  <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item" href="javascript:void(0)" @click="deleteOrganization(item)"><%= __("Delete this organization") %></a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer">
+            <span class="badge badge-warning ml-3" v-if="item.billing.planChangeAt"><%= __("Plan change request") %></span>
+            <span class="badge badge-warning ml-3" v-if="item.billing.unsubscribedAt"><%= __("Unsubscribed request") %></span>
+            <span class="badge badge-warning ml-3" v-if="item.deleted"><%= __("Invalid organization") %></span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-deck">
+    </div>
+  </div>
+</div>
+<%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>

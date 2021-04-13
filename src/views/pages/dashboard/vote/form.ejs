@@ -1,0 +1,127 @@
+<div class="md-form">
+  <input type="text" maxlength="200" id="vote-subject" class="form-control" v-model.trim="formData.subject" autocomplete="vote-subject"
+    :class="[formErrors.subject ? 'is-invalid' : '']" />
+  <label for="vote-subject"><%= __("Please enter the title of the circulation notice") %></label>
+  <div class="invalid-feedback" v-if="formErrors.subject"><%= __("Please enter a subject") %></div>
+</div>
+<div class="row mt-3">
+  <div class="col">
+    <div ref="voteEditor" id="vote-editor"></div>
+  </div>
+</div>
+<!-- appendix -->
+<% if(action === 'updateVote') { %>
+<editor-file :appendix="appendix" :organization="organization" mode="update" :delete-appendix="deleteAppendix" :download-appendix="downloadAppendix" :whitelist="witeListOfExts"
+  :add-image="addImageBlobHook" :is-uploading="isUploading" :planlimitation="planlimitation" title="vote" :is-demosite="isDemosite">
+</editor-file>
+<% } else { %>
+<editor-file :appendix="appendix" :organization="organization" mode="create" :delete-appendix="deleteAppendix" :download-appendix="downloadAppendix" :whitelist="witeListOfExts"
+  :add-image="addImageBlobHook" :is-uploading="isUploading" :planlimitation="planlimitation" title="vote" :is-demosite="isDemosite">
+</editor-file>
+<% } %>
+
+<div class="input-error-message" v-if="formErrors.body"><%= __("Please enter the contents of the circulation") %></div>
+<div class="row mt-3">
+  <div class="col-auto">
+    <div class="row">
+      <div class="col">
+        <label><%= __("Circulation period") %></label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <v-date-picker :columns="$screens({ default: 1, lg: 2 })" ref="calendar" :attributes="calendar" :masks="calendarMasks" :min-date="minDate" is-inline
+          v-model="selectedDateRang" is-range></v-date-picker>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="input-error-message" v-if="formErrors.period"><%= __("Please enter a circulation period") %></div>
+
+<div class="row mt-3">
+  <div class="col-auto">
+    <label for="user-selector"><%= __("Users to circulate") %></label>
+    <v-tagify ref="userTagify" id="user-selector" :settings="userTagifySettings" @add="onAddUserTagify" @remove="onRemoveUserTagify">
+    </v-tagify>
+  </div>
+</div>
+<div class="input-error-message" v-if="formErrors.users"><%= __("Please enter the members to circulate") %></div>
+
+<div class="row align-items-center mt-3 ml-3">
+  <div class="col">
+    <small><a href="javascript:void(0)" @click="addOrganizationAll"><%= __('Add the entire organization') %></a></small>
+  </div>
+</div>
+<div class="row align-items-center ml-3">
+  <div class="col-auto">
+    <small><a href="javascript:void(0)" @click="addTeamAll"><%= __('Add all members of the selected team') %></a></small>
+  </div>
+</div>
+<div class="row align-items-center ml-3">
+  <div class="col-12 col-md-3 align-self-center">
+    <select class="browser-default custom-select" v-model="selectedTeam">
+      <option v-for="item in teams" v-bind:value="item.id">
+        {{ item.name }}
+      </option>
+    </select>
+  </div>
+</div>
+<div class="row align-items-center ml-3">
+  <div class="col">
+    <small><a href="javascript:void(0)" @click="clearAll"><%= __('Clear selection') %></a></small>
+  </div>
+</div>
+
+<hr>
+
+<div class="custom-control custom-checkbox mt-3">
+  <input type="checkbox" class="custom-control-input" id="vote-format" v-model="formData.isQuestionnaireFormat" />
+  <label class="custom-control-label" for="vote-format"><%= __("Questionnaire format") %></label>
+</div>
+
+<div v-show="formData.isQuestionnaireFormat">
+  <div class="md-form">
+    <input type="text" maxlength="200" id="vote-question" class="form-control" v-model.trim="formData.question" autocomplete="vote-question"
+      :class="[formErrors.question ? 'is-invalid' : '']" />
+    <label for="vote-question"><%= __("Please enter a question") %></label>
+    <div class="invalid-feedback" v-if="formErrors.question"><%= __("Please enter a question") %></div>
+  </div>
+
+  <div class="row mt-3">
+    <div class="col-auto">
+      <label for="question-selector"><%= __("Choice list") %></label>
+      <v-tagify ref="questionTagify" id="question-selector" :settings="questionTagifySettings" @add="onAddQuestionTagify" @remove="onRemoveQuestionTagify">
+      </v-tagify>
+    </div>
+  </div>
+  <div class="input-error-message" v-if="formErrors.choices"><%= __("Please enter the question options") %></div>
+
+  <div class="custom-control custom-checkbox mt-3">
+    <input type="checkbox" class="custom-control-input" id="vote-other-answers" v-model="formData.hasOther" />
+    <label class="custom-control-label" for="vote-other-answers"><%= __("Add others that can be entered in the choices") %></label>
+  </div>
+  <div class="custom-control custom-checkbox">
+    <input type="checkbox" class="custom-control-input" id="vote-multiple-answers" v-model="formData.multipleAnswers" />
+    <label class="custom-control-label" for="vote-multiple-answers"><%= __("Multiple answers") %></label>
+  </div>
+
+  <div class="row mt-5 ml-1 mr-1">
+    <div class="col border border-info rounded py-3 px-3">
+      <p class="text-muted"><%= __("Question viewer") %></p>
+      <span>{{formData.question}}</span>
+      <ul>
+        <li v-for="item in selectedQuestions">{{ item.value }}</li>
+        <li v-if="selectedQuestions.length > 0 && formData.hasOther"><%= __("Other (with input items)") %></li>
+      </ul>
+      <span v-if="formData.multipleAnswers">(<%= __("Multiple answers can be selected") %>)</span>
+    </div>
+  </div>
+</div>
+
+<div id="cloud-error" class="row">
+  <div class="col-sm-6">
+    <p class="text-danger" v-if="cloudError">
+      <%= __("An error occurred while processing the request. Please check the information and try again. If the error persists, please contact your administrator") %>
+    </p>
+  </div>
+</div>

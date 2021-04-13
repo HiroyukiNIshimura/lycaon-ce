@@ -1,0 +1,112 @@
+<div id="wiki" v-cloak>
+  <div class="container">
+    <modal v-if="showCloseWikiModal">
+      <div class="card">
+        <div class="card-header"><%= __("Confirmation dialog") %></div>
+        <div class="card-body">
+          <h5 class="card-title"><%= __("Confirmation of not publishing") %></h5>
+          <p class="card-text">
+            <%= __("Keep this Wiki private. Is this Wiki invisible to all users (you need administrator privileges to publish it again)?") %>
+          </p>
+          <div class="text-right">
+            <button type="button" class="btn btn-danger btn-sm" @click="doCloseWiki">
+              <i class="far fa-eye-slash"></i> <%= __("Not publishing") %>
+            </button>
+            <button type="button" class="btn btn-light btn-sm" @click="showCloseWikiModal = false">
+              <i class="fas fa-window-close"></i> <%= __("Cancel") %>
+            </button>
+          </div>
+        </div>
+      </div>
+    </modal>
+    <ajax-form id="close-wiki-form" action="deleteWiki" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedForm"
+      @rejected="onCloudError" :handle-parsing="handleParsingForm">
+    </ajax-form>
+    <ajax-form id="flag-wiki-form" action="updateWikiFlag" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedFlagForm"
+      @rejected="onCloudError" :handle-parsing="handleParsingFlagForm">
+    </ajax-form>
+    <ajax-form id="vote-wiki-form" action="updateWikiVote" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedVoteForm"
+      @rejected="onCloudError" :handle-parsing="handleParsingVoteForm">
+    </ajax-form>
+
+    <div class="row">
+      <div class="col text-right">
+        <a class="btn btn-light btn-sm" :href="returnLink"><i class="far fa-arrow-alt-circle-left"></i>
+          <%= __("Back") %></a>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <div class="row border border-top-0 border-right-0 border-left-0 mt-3">
+          <div class="col">
+            <span class="h4">{{ wiki.subject }}</span>
+          </div>
+        </div>
+        <div class="row mt-2">
+          <div class="col-auto">
+            <small class="text-muted"><%= __("Tags") %></small>
+          </div>
+          <div class="col">
+            <a :href="tagLink(item)" class="badge badge-success mr-1" data-toggle="tooltip" data-placement="top" :title="tagTooltip"
+              v-for="(item, index) in wiki.tags">{{
+              item.name
+            }}</a>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col text-right">
+            <button type="button" class="btn btn-danger btn-sm" @click="closeWiki" v-if="wiki.owner && me.id === wiki.owner.id">
+              <i class="far fa-eye-slash"></i> <%= __("Not publishing") %>
+            </button>
+            <a class="btn btn-info btn-sm" :href="editLink" :class="isWikiEditDisabled"><i class="far fa-edit"></i>
+              <%= __("Edit") %></a>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-auto col-md text-right" v-if="isWikiEditDisabled">
+            <div class="alert alert-primary blink text-center" role="alert">
+              <small> {{ i18n('This Wiki is being edited by {0} ...').format(conflictUser.fullName) }}</small>
+            </div>
+          </div>
+        </div>
+        <!-- appendix -->
+        <viewer-file :organization="organization" :appendix="appendix" :download-appendix="downloadAppendix"></viewer-file>
+        <div class="row mt-3 mb-3 p-3 shadow rounded">
+          <div class="col text-break" id="viewer"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" v-if="bottomBtnShow">
+      <div class="col text-right">
+        <a class="btn btn-light btn-sm" :href="returnLink"><i class="far fa-arrow-alt-circle-left"></i>
+          <%= __("Back") %></a>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-auto">
+        <small>
+        <a class="mr-3" href="javascript:void(0)" @click="clickUpdateVote">
+          <i class="far fa-thumbs-up"></i> <%= __("How nice!") %> × {{ formatter.format(niceCount) }}
+        </a>
+        <a href="javascript:void(0)" @click="ckickUpdateFlag" v-if="isFan">
+          <span style="color: Tomato">
+            <i class="fas fa-flag"></i>
+          </span> <%= __("Remove the flag") %>
+        </a>
+        <a href="javascript:void(0)" @click="ckickUpdateFlag" v-else>
+          <i class="far fa-flag"></i> <%= __("Flag") %>
+        </a>
+        </small>
+      </div>
+    </div>
+    <div class="row mt-5">
+      <div class="col text-right">
+        <small>
+          <lycaon-timestamp :at="wiki.createdAt" format="timeago" :translator="translator"></lycaon-timestamp>
+        </small>
+      </div>
+    </div>
+  </div>
+</div>
+<%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>

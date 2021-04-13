@@ -1,0 +1,468 @@
+<div id="team" v-cloak>
+  <div class="container">
+    <modal v-if="showMemberModal">
+      <div class="modal-header">
+        <h5 class="modal-title"><%= __('Members') %></h5>
+        <button type="button" class="close" @click="hideMembers">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row mb-1" v-for="item in allMembers">
+          <div class="col">
+            <div class="card">
+              <div class="card-body">
+                <div class="card-title">
+                  <user-identity :user="item" :organization="organization" size=""></user-identity>
+                </div>
+                <div class="card-subtitle" v-if="item.lastSeenAt && item.lastSeenAt > 0">
+                  <small v-if="item.lastSeenAt && item.lastSeenAt > 0"><%= __('Last access') %>
+                    <lycaon-timestamp :at="item.lastSeenAt" format="timeago"></lycaon-timestamp></small>
+                  <small v-else><%= __('No access') %></small>
+                </div>
+                <div class="card-text">
+                  <span class="badge badge-warning" v-if="item.deleted"><%= __('Invalid user') %></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <infinite-loading :identifier="infiniteId" spinner="waveDots" @infinite="allMemberHandler"></infinite-loading>
+      </div>
+    </modal>
+
+    <div class="row">
+      <div class="col-sm-6">
+        <p class="text-danger" v-if="cloudError">
+          <%= __("An error occurred while processing the request. Please check the information and try again. If the error persists, please contact your administrator") %>
+        </p>
+      </div>
+    </div>
+    <div class="row align-items-center">
+      <div class="col-auto">
+        <span><small><a class="text-light" href="/"><%= __('Main page') %></a></small><small class="text-light ml-2 mr-2"><i
+              class="fas fa-chevron-right"></i></small></span>
+        <span class="h6 text-muted"><%= __('Team') %></span>
+      </div>
+      <div class="col-12 col-md-8">
+        <span class="h3">{{ team.name }}</span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col text-muted">
+        <small>team id: {{ team.id }}</small>
+      </div>
+    </div>
+    <div class="row mt-3">
+      <div class="col text-muted"><%= __('Description') %></div>
+    </div>
+    <div class="row">
+      <div class="col">{{ team.description }}</div>
+    </div>
+    <div class="row mt-3">
+      <div class="col text-muted">
+        <%= __('Members') %> <small>{{ formatter.format(memberQty) }}
+          {{ i18nformatN('person', 'people', memberQty) }}</small>
+      </div>
+    </div>
+    <div class="row mt-3 align-items-center">
+      <div class="col-auto mr-3 mb-1" v-for="item in members">
+        <user-identity :user="item" :organization="organization" size="sm"></user-identity>
+      </div>
+      <div class="col-auto mr-3 mb-1" v-if="memberQty > members.length">
+        <button type="button" class="btn btn-link text-primary" @click="showAllMember">
+          <i class="fas fa-user-friends"></i>
+          <%= __('other') %> {{ memberQty - members.length }}
+          {{ i18nformatN('person', 'people', memberQty - members.length) }}
+        </button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-5 col-sm-10">
+        <div class="card-text mt-3"><%= __('Open : Closed') %></div>
+        <canvas id="summary-chart"></canvas>
+      </div>
+      <div class="col-md-5 col-sm-10">
+        <div class="card-text mt-3"><%= __('Details of the open') %></div>
+        <canvas id="summary-chart-sub"></canvas>
+      </div>
+    </div>
+    <div class="row mt-3">
+      <div class="col text-right">
+        <button type="button" class="btn btn-info" @click="onNewThreadCkick">
+          <i class="fas fa-plus-circle"></i> <%= __('New thread') %>
+        </button>
+      </div>
+    </div>
+
+    <ajax-form id="query-team-form" action="queryThreads" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedQueryForm"
+      @rejected="onCloudError" :handle-parsing="handleParsingQueryThreadForm">
+    </ajax-form>
+    <ajax-form id="query-thread-form" action="queryMyThread" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedQueryForm"
+      @rejected="onCloudError" :handle-parsing="handleParsingQueryMyThreadForm">
+    </ajax-form>
+    <ajax-form id="query-activity-form" action="queryActivity" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedQueryForm"
+      @rejected="onCloudError" :handle-parsing="handleParsingQueryActivityForm">
+    </ajax-form>
+    <ajax-form id="query-flag-form" action="queryFlag" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedQueryForm"
+      @rejected="onCloudError" :handle-parsing="handleParsingQueryFlagForm">
+    </ajax-form>
+    <ajax-form id="query-working-form" action="queryWorking" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedQueryForm"
+      @rejected="onCloudError" :handle-parsing="handleParsingQueryWorkingForm">
+    </ajax-form>
+    <ajax-form id="query-private-form" action="queryLocal" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedQueryForm"
+      @rejected="onCloudError" :handle-parsing="handleParsingQueryLocalForm">
+    </ajax-form>
+    <ajax-form id="query-git-form" action="queryGitlog" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedQueryForm"
+      @rejected="onCloudError" :handle-parsing="handleParsingQueryGitForm">
+    </ajax-form>
+    <ajax-form id="query-wiki-form" action="queryWiki" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedQueryForm"
+      @rejected="onCloudError" :handle-parsing="handleParsingQueryWikiForm">
+    </ajax-form>
+    <ajax-form id="query-member-form" action="queryAllMember" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedMemberForm"
+      @rejected="onCloudError" :handle-parsing="handleParsingMemberForm">
+    </ajax-form>
+    <ajax-form id="query-counter-form" action="queryCounter" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedCounterForm"
+      @rejected="onCloudError" :handle-parsing="handleParsingCounterForm">
+    </ajax-form>
+    <ajax-form id="query-ambiguity-form" action="queryAmbiguity" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedQueryForm"
+      @rejected="onCloudError" :handle-parsing="handleParsingAmbiguityForm">
+    </ajax-form>
+    <ajax-form id="query-vote-form" action="queryVote" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedQueryForm"
+      @rejected="onCloudError" :handle-parsing="handleParsingQueryVoteForm">
+    </ajax-form>
+
+    <v-tabs :panel-id="panelId" :options="{ useUrlFragment: false, defaultTabHash: 'tab-team' }" @changed="tabChanged">
+      <v-tab :name="i18n('Open threads')" id="tab-team">
+        <%- partial ('team-query.ejs') %>
+        <div class="row mt-3">
+          <div class="col-auto">
+            <small><label for="query-sort"><%= __('Sort order') %></label></small>
+            <select class="browser-default custom-select custom-select-sm" id="query-sort" v-model="query.sort">
+              <option value="0"><%= __('Newest update date') %></option>
+              <option value="1"><%= __('Oldest update date') %></option>
+              <option value="2"><%= __('Newest creation date and time') %></option>
+              <option value="3"><%= __('Oldest creation date and time') %></option>
+              <option value="4"><%= __('In descending order of importance') %></option>
+              <option value="5"><%= __('In ascending order of importance') %></option>
+              <option value="6"><%= __('Newest deadline') %></option>
+              <option value="7"><%= __('Oldest deadline') %></option>
+              <option value="8"><%= __('In descending order of urgency') %></option>
+              <option value="9"><%= __('In ascending order of urgency') %></option>
+            </select>
+          </div>
+          <div class="col-auto form-group">
+            <small><label for="query-word"><%= __('Word search') %></label></small>
+            <input type="text" maxlength="30" class="form-control form-control-sm" id="query-word" v-model="query.word" v-on:keyup.enter="queryAmbiguity" />
+          </div>
+        </div>
+        <div class="row mt-3" id="query-results">
+          <div class="col">
+            <h5>
+              <%= __('Threads') %>
+              <small class="text-muted"><%= __('Total number of search results') %>
+                {{ formatter.format(queryCount) }} {{ i18nformatN('Item', 'Items', queryCount) }}</small>
+            </h5>
+            <div id="thread-results" class="mt-3" v-if="queryResults.length > 0">
+              <div class="row">
+                <div class="col-auto mb-2 ml-1" v-for="item in queryResults" v-inview:parent="'animate'">
+                  <thread-card :thread="item" :selected-tags="selectedTags" :organization="organization" class="thread-card">
+                  </thread-card>
+                </div>
+              </div>
+              <infinite-loading spinner="waveDots" @infinite="threadHandler"></infinite-loading>
+            </div>
+            <div v-else class="text-muted mt-3">
+              <small><%= __('No thread found that meets the criteria') %> <i class="far fa-grin-beam-sweat"></i></small>
+            </div>
+          </div>
+        </div>
+      </v-tab>
+      <v-tab :name="i18n('Workings')" id="tab-working" :counter="counter.working">
+        <div class="row">
+          <div class="col">
+            <h5>
+              <%= __('Working threads') %>
+              <small class="text-muted"><%= __('Total number of search results') %>
+                {{ formatter.format(queryCount) }} {{ i18nformatN('Item', 'Items', queryCount) }}</small>
+            </h5>
+            <div class="mt-3" v-if="queryResults.length > 0">
+              <div class="row">
+                <div class="col-auto mb-2 ml-1" v-for="item in queryResults">
+                  <thread-card :thread="item" :organization="organization" class="thread-card">
+                  </thread-card>
+                </div>
+              </div>
+              <infinite-loading spinner="waveDots" @infinite="workingHandler"></infinite-loading>
+            </div>
+            <div v-else class="text-muted mt-3">
+              <small><%= __('No threads are working') %> <i class="far fa-grin-beam-sweat"></i></small>
+            </div>
+          </div>
+        </div>
+      </v-tab>
+      <v-tab :name="i18n('Threads in charge')" id="tab-thread" :counter="counter.myThread">
+        <div class="row">
+          <div class="col">
+            <h5>
+              <%= __('The threads you are in charge of') %>
+              <small class="text-muted"><%= __('Total number of search results') %>
+                {{ formatter.format(queryCount) }} {{ i18nformatN('Item', 'Items', queryCount) }}</small>
+            </h5>
+            <div class="row align-items-center">
+              <div class="col-auto">
+                <div class="btn-group btn-group-toggle">
+                  <label class="btn btn-light-blue btn-sm" for="status-open" :class="openActive">
+                    <input type="radio" id="status-open" v-model="selectedStatus" value="0" />
+                    <%= __('open') %>
+                  </label>
+                  <label class="btn btn-light-blue btn-sm" for="status-close" :class="closeActive">
+                    <input type="radio" id="status-close" v-model="selectedStatus" value="1" />
+                    <%= __('close') %>
+                  </label>
+                </div>
+              </div>
+              <div class="col-auto">
+                <small><label for="my-query-category"><%= __('Category') %></label></small>
+              </div>
+              <div class="col">
+                <select class="browser-default custom-select-sm" v-model="selectedCategory" id="my-query-category">
+                  <option value=""><%= __('All') %></option>
+                  <option v-for="item in categories" v-bind:value="item.id">
+                    {{ item.name }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="mt-3" v-if="queryResults.length > 0">
+              <div class="row">
+                <div class="col-auto mb-2 ml-1" v-for="item in queryResults">
+                  <thread-card :thread="item" :organization="organization" class="thread-card">
+                  </thread-card>
+                </div>
+              </div>
+              <infinite-loading spinner="waveDots" @infinite="myThreadHandler"></infinite-loading>
+            </div>
+            <div v-else class="text-muted mt-3">
+              <small><%= __('No thread in charge') %> <i class="far fa-grin-beam-sweat"></i></small>
+            </div>
+          </div>
+        </div>
+      </v-tab>
+      <v-tab :name="i18n('With flag')" id="tab-flag" :counter="counter.flag">
+        <div class="row">
+          <div class="col">
+            <h5>
+              <%= __('Flagged threads') %>
+              <small class="text-muted"><%= __('Total number of search results') %>
+                {{ formatter.format(queryCount) }} {{ i18nformatN('Item', 'Items', queryCount) }}</small>
+            </h5>
+            <div class="mt-3" v-if="queryResults.length > 0">
+              <div class="row">
+                <div class="col-auto mb-2 ml-1" v-for="item in queryResults">
+                  <thread-card :thread="item" :organization="organization" class="thread-card">
+                  </thread-card>
+                </div>
+              </div>
+              <infinite-loading spinner="waveDots" @infinite="flagHandler"></infinite-loading>
+            </div>
+            <small v-else class="text-muted"><%= __('No thread has been flagged') %> <i class="far fa-grin-beam-sweat"></i></small>
+          </div>
+        </div>
+      </v-tab>
+      <v-tab :name="i18n('Privates')" id="tab-private" :counter="counter.local">
+        <div class="row">
+          <div class="col">
+            <h5 class="mb-3">
+              <%= __('Your private threads') %>
+              <small class="text-muted"><%= __('Total number of search results') %>
+                {{ formatter.format(queryCount) }} {{ i18nformatN('Item', 'Items', queryCount) }}</small>
+            </h5>
+            <div class="mt-3" v-if="queryResults.length > 0">
+              <div class="row">
+                <div class="col-auto mb-2 ml-1" v-for="item in queryResults">
+                  <thread-card :thread="item" :organization="organization" class="thread-card">
+                  </thread-card>
+                </div>
+              </div>
+              <infinite-loading spinner="waveDots" @infinite="localHandler"></infinite-loading>
+            </div>
+            <div v-else class="text-muted mt-3">
+              <small><%= __('There is no private thread') %> <i class="far fa-grin-beam-sweat"></i></small>
+            </div>
+          </div>
+        </div>
+      </v-tab>
+      <v-tab :name="i18n('Activities')" id="tab-activity">
+        <div class="row">
+          <div class="col">
+            <h5 class="mb-3">
+              <%= __('Activities') %>
+              <small class="text-muted"><%= __('Total number of search results') %>
+                {{ formatter.format(queryCount) }} {{ i18nformatN('Item', 'Items', queryCount) }}</small>
+            </h5>
+            <div class="row">
+              <div class="col-auto">
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="query-nonmyown" v-model="nonmyown" />
+                  <label class="custom-control-label" for="query-nonmyown"><small><%= __('Other than my activities') %></small></label>
+                </div>
+              </div>
+            </div>
+            <div class="mt-3" v-if="queryResults.length > 0">
+              <div id="activity-timeline">
+                <div class="activity-content" :data-vtdate="formatDatetime(item.createdAt)" v-for="item in queryResults">
+                  <div data-vticon="true">
+                    <img class="vtimeline-icon-img" src="/images/clock2.png">
+                  </div>
+                  <activity-card :activity="item" :organization="organization"></activity-card>
+                </div>
+              </div>
+              <infinite-loading spinner="waveDots" @infinite="activityHandler"></infinite-loading>
+            </div>
+            <div v-else class="text-muted mt-3">
+              <small><%= __('No activity') %> <i class="far fa-grin-beam-sweat"></i></small>
+            </div>
+          </div>
+        </div>
+      </v-tab>
+      <v-tab :name="i18n('git commit')" id="tab-git" v-if="showGit">
+        <div class="row">
+          <div class="col">
+            <h5>
+              <%= __('git commit log') %>
+              <small class="text-muted"><%= __('Total number') %> {{ formatter.format(queryCount) }}
+                {{ i18nformatN('Item', 'Items', queryCount) }}</small>
+            </h5>
+            <div v-if="team.connectType === 0">
+              <%= __('Repository') %>: {{ team.gitRepository }} | {{ team.gitOrigin }}
+            </div>
+            <div v-else>
+              <%= __('Repository') %>: {{ team.gitlabApi }}/{{ team.gitlabProjectId }} | {{ team.gitOrigin }}
+            </div>
+            <div id="holder" class="revision-graph"></div>
+            <div class="mt-3" v-if="queryResults.length > 0">
+              <div class="row" v-for="item in queryResults">
+                <div class="changeset-container col-12 mb-2 ml-1">
+                  <div class="card git-card">
+                    <div class="card-body">
+                      <div class="card-header">
+                        <div>
+                          <%= __('commit') %>: <a :href="gitLink(item.id)">{{ item.hash }}</a>
+                        </div>
+                        <div><%= __('committer') %>: {{ item.author_name }}</div>
+                        <div>{{ formatDatetime(item.commitAt) }}</div>
+                        <div>ref: {{ item.refs }}</div>
+                      </div>
+                      <div class="card-text mt-3">
+                        {{ item.message }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <infinite-loading spinner="waveDots" @infinite="gitHandler"></infinite-loading>
+            </div>
+            <div v-else class="text-muted mt-3">
+              <small><%= __('Is there a git commit log? Logs are syncing. It will take a few minutes to synchronize, so please wait for a while') %>
+                <i class="far fa-grin-beam-sweat"></i></small>
+            </div>
+          </div>
+        </div>
+      </v-tab>
+      <v-tab name="wiki" id="tab-wiki">
+        <div class="text-right">
+          <button type="button" class="btn btn-info" @click="onNewWikiCkick">
+            <i class="fas fa-plus-circle"></i> <%= __('New Wiki') %>
+          </button>
+        </div>
+        <div class="row">
+          <div class="col">
+            <h5 class="mb-3">
+              Wiki
+              <small class="text-muted"><%= __('Total number of search results') %>
+                {{ formatter.format(queryCount) }} {{ i18nformatN('Item', 'Items', queryCount) }}</small>
+            </h5>
+            <div class="row">
+              <div class="col-auto">
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="query-wikiflag" v-model="wikiflags" />
+                  <label class="custom-control-label" for="query-wikiflag"><small><%= __('With flag') %></small></label>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-auto">
+                <small><label for="query-tags"><%= __('Filter by tag') %></label></small>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <v-tagify ref="wikitagify" :settings="tagifySettings" @add="onAddWikiTagify" @remove="onRemoveWikiTagify">
+                </v-tagify>
+              </div>
+            </div>
+            <div class="row mt-3" v-if="queryResults.length > 0">
+              <div class="col-auto mb-2 ml-1 wiki-card" v-for="(item, index) in queryResults" :key="index">
+                <wiki-card :wiki="item" :organization="organization" :show-team="false"></wiki-card>
+              </div>
+              <infinite-loading spinner="waveDots" @infinite="wikiHandler"></infinite-loading>
+            </div>
+            <div v-else class="text-muted mt-3">
+              <small><%= __('No Wiki available') %> <i class="far fa-grin-beam-sweat"></i></small>
+            </div>
+          </div>
+        </div>
+      </v-tab>
+      <v-tab :name="i18n('Circular notice')" id="tab-circular" :counter="counter.votes">
+        <div class="text-right">
+          <button type="button" class="btn btn-info" @click="onNewVoteCkick">
+            <i class="fas fa-plus-circle"></i> <%= __('New circulation notice') %>
+          </button>
+        </div>
+        <div class="row mt-3">
+          <div class="col">
+            <h5 class="mb-3">
+              <%= __('Circular notice') %>
+              <small class="text-muted"><%= __('Total number of search results') %>
+                {{ formatter.format(queryCount) }} {{ i18nformatN('Item', 'Items', queryCount) }}</small>
+            </h5>
+            <div class="row align-items-center">
+              <div class="col-auto">
+                <div class="btn-group btn-group-toggle">
+                  <label class="btn btn-light-blue btn-sm" for="vote-new" :class="newVoteActive">
+                    <input type="radio" id="vote-new" v-model="voteState" value="0" />
+                    <%= __('New') %>
+                  </label>
+                  <label class="btn btn-light-blue btn-sm" for="vote-open" :class="openVoteActive">
+                    <input type="radio" id="vote-open" v-model="voteState" value="1" />
+                    <%= __('Circulating') %>
+                  </label>
+                  <label class="btn btn-light-blue btn-sm" for="vote-close" :class="closeVoteActive">
+                    <input type="radio" id="vote-close" v-model="voteState" value="2" />
+                    <%= __('Past circulation') %>
+                  </label>
+                  <label class="btn btn-light-blue btn-sm" for="vote-my" :class="myVoteActive">
+                    <input type="radio" id="vote-my" v-model="voteState" value="3" />
+                    <%= __('My circular notice') %>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="row mt-3" v-if="queryResults.length > 0">
+              <div class="col-auto mb-2 vote-card" v-for="(item, index) in queryResults" :key="index" v-inview:parent="'animate'">
+                <vote-card :vote="item" :organization="organization" :state="item.answerState" :user="me"></vote-card>
+              </div>
+              <infinite-loading spinner="waveDots" @infinite="circularHandler"></infinite-loading>
+            </div>
+            <div v-else class="text-muted mt-3">
+              <small><%= __('No Circular notice available') %> <i class="far fa-grin-beam-sweat"></i></small>
+            </div>
+          </div>
+        </div>
+      </v-tab>
+    </v-tabs>
+  </div>
+</div>
+<%- /* Expose locals as `window.SAILS_LOCALS` :: */ exposeLocalsToBrowser() %>

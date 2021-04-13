@@ -1,0 +1,22 @@
+<div id="upload-error" v-cloak>
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <div class="alert alert-danger" role="alert">
+          {{ errorMessage }}
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col text-center">
+        <h4>[#{{ model.no }}] {{ model.subject}}</h4>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col text-center">
+        <a :href="backToLink" class="btn btn-info">{{ buttonText }}</a>
+      </div>
+    </div>
+  </div>
+</div>
+<%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>

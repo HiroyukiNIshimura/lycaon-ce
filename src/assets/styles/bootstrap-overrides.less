@@ -1,0 +1,128 @@
+/**
+ * This file is for overriding some default bootstrap styles.
+ *
+ * > NOTE THAT THIS FILE AFFECTS GLOBAL STYLES.
+ */
+
+//MDB
+//https://mdbootstrap.com/education/bootstrap/
+
+.btn-circle-timeline {
+  position: relative;
+  width: 30px;
+  height: 30px;
+  padding: 6px 0px;
+  border-color: lightgray;
+  border-width: thin;
+  border-radius: 15px;
+  text-align: center;
+  font-size: 12px;
+  line-height: 1.42857;
+}
+.btn.btn-light.btn-circle-timeline.waves-effect.waves-light {
+  cursor: default;
+}
+.btn.btn-light.btn-circle-timeline.icon-red.waves-effect.waves-light {
+  border-color: #f74200;
+  background-color: #ff9169 !important;
+}
+.btn.btn-light.btn-circle-timeline.icon-yellow.waves-effect.waves-light {
+  border-color: #f3f700;
+  background-color: #fdff82 !important;
+}
+.btn.btn-light.btn-circle-timeline {
+  cursor: default;
+}
+.btn.btn-light.btn-circle-timeline.icon-red {
+  border-color: #f74200;
+  background-color: #ff9169 !important;
+}
+.btn.btn-light.btn-circle-timeline.icon-yellow {
+  border-color: #f3f700;
+  background-color: #fdff82 !important;
+}
+/*
+.btn-circle-timeline::before {
+  content: "";
+  display: inline-block;
+  position: absolute;
+  right: 0.42em;
+  top: -0.9em;
+  border-width: 0;
+  background: #81c7d4;
+  width: 1.43em;
+  height: 0.2em;
+  -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+}
+
+.btn-circle-timeline::after {
+  content: "";
+  display: inline-block;
+  position: absolute;
+  right: 0.42em;
+  bottom: -0.9em;
+  border-width: 0;
+  background: #81c7d4;
+  width: 1.43em;
+  height: 0.2em;
+  -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+}
+*/
+.pagination .page-item.active .page-link {
+  color: #fff;
+  background-color: #4285f4;
+  border-radius: 0.125rem;
+  -webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+  -webkit-transition: all 0.2s linear;
+  transition: all 0.2s linear;
+}
+
+.navbar.navbar-dark .breadcrumb .nav-item .nav-link,
+.navbar.navbar-dark .navbar-nav .nav-item .nav-link.navi-backoffice {
+  color: orange;
+}
+
+.scrollable-menu {
+  height: auto;
+  max-height: 500px;
+  overflow-x: hidden;
+}
+
+.dropdown-menu.scrollable-menu.dropdown-menu-right.custom-menu.show {
+  width: 270px;
+}
+
+.dropdown-menu.dropdown-menu-right.custom-account-menu.show {
+  right: auto;
+  left: 0;
+}
+
+@media (min-width: 990px) {
+  .dropdown-menu.scrollable-menu.dropdown-menu-right.custom-menu.show {
+    width: 380px;
+    right: auto;
+    left: 0;
+  }
+}
+
+@media (min-width: 576px) {
+  .dropdown-menu.dropdown-menu-right.custom-account-menu.show {
+    right: 0;
+    left: auto;
+  }
+}
+
+.md-form label {
+  color:rgb(189, 189, 189);
+  font-size: 0.9rem;
+}
+.md-form label.active {
+  font-size: 0.8rem;
+}

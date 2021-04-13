@@ -1,0 +1,89 @@
+<div id="vote-answer" v-cloak>
+  <div class="container">
+    <ajax-form id="create-answer" action="createAnswer" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedForm"
+      @rejected="onCloudError" :handle-parsing="handleParsingForm">
+    </ajax-form>
+    <ajax-form id="update-answer" action="updateAnswer" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedForm"
+      @rejected="onCloudError" :handle-parsing="handleParsingForm">
+    </ajax-form>
+    <div id="cloud-error" class="row">
+      <div class="col-sm-6">
+        <p class="text-danger" v-if="cloudError === 'alreadyAnswerd'">
+          <%= __("You have already confirmed the circulation") %>
+        </p>
+        <p class="text-danger" v-else-if="cloudError === 'notAnswerNotReleased'">
+          <%= __("Answer results cannot be registered in the circulation before publication") %>
+        </p>
+        <p class="text-danger" v-else-if="cloudError === 'notAnswerPassedDeadline'">
+          <%= __("Answer results cannot be registered in the circulation that has passed the deadline") %>
+        </p>
+        <p class="text-danger" v-else-if="cloudError">
+          <%= __("An error occurred while processing the request. Please check the information and try again. If the error persists, please contact your administrator") %>
+        </p>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <div class="row border border-top-0 border-right-0 border-left-0 mt-3">
+          <div class="col">
+            <span class="h4">{{ vote.subject }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-auto">
+        <span><%= __("Author") %>: </span>
+        <user-identity :user="vote.author" :organization="organization" size="sm"></user-identity>
+      </div>
+    </div>
+
+    <div class="row mt-3" v-if="isEditMode">
+      <div class="col text-center alert alert-primary ml-5 mr-5" role="alert">
+        <span class="">{{ answeredAt }} <%= __("Answered") %></span>
+      </div>
+    </div>
+
+    <div class="row mt-5">
+      <div class="col">
+        <span>{{vote.question}}</span>
+      </div>
+    </div>
+
+    <div class="row mt-3" v-if="vote.multipleAnswers">
+      <div class="col">
+        <div class="custom-control custom-checkbox" v-for="(item, index) in vote.choices">
+          <input type="checkbox" class="custom-control-input" :id="getCheckBoxId(index)" :value="item.id" v-model="multipleAnswer" />
+          <label class="custom-control-label" :for="getCheckBoxId(index)">{{ item.choices }}</label>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-3" v-else>
+      <div class="col">
+        <div class="custom-control custom-checkbox" v-for="(item, index) in vote.choices">
+          <input type="radio" class="custom-control-input" :id="getRadioId(index)" :value="item.id" v-model="singleAnswer" />
+          <label class="custom-control-label" :for="getRadioId(index)">{{ item.choices }}</label>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-3" v-show="otherEnabled">
+      <div class="col">
+        <div class="md-form">
+          <label for="my-message" class="md-textarea-label"><%= __('Please enter any other answers') %></label>
+          <textarea id="my-message" class="md-textarea form-control" rows="3" maxlength="500" :class="[formErrors.other ? 'is-invalid' : '']"
+            v-model.trim="other"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col text-right">
+        <a class="btn btn-light btn-sm" :href="returnLink"><i class="fas fa-window-close"></i> <%= __("Cancel") %></a>
+        <button type="button" class="btn btn-primary btn-sm" @click="submitAnswer">
+          <i class="far fa-save"></i> <%= __("Confirm") %>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>

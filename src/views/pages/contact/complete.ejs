@@ -1,0 +1,34 @@
+<div id="contact-complete" v-cloak>
+  <div class="container">
+    <h4><%= __('Inquiry form') %></h4>
+    <hr>
+    <div class="row">
+      <div class="col">
+        <%- partial ('step-area.ejs', { clazz: 'step03-now' }) %>
+      </div>
+    </div>
+    <div class="row mt-5">
+      <div class="col">
+        <h4><%= __('Thank you for your inquiry')%></h4>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <div><%= __('We will automatically reply to the copy email to the email address you entered')%></div>
+        <div>
+          <%= __("If you do not receive this copy of the e-mail, there is a possibility that the e-mail address you entered is incorrect or there is some trouble on the Internet. Sorry to trouble you, but please call us or contact us again. I would like to say")%>
+        </div>
+        <br>
+        <div><%= __('We will reply to your inquiries by phone or email in the near future')%></div>
+      </div>
+    </div>
+    <honeypot :form-data="formData"></honeypot>
+    <div class="row mt-5">
+      <div class="col text-center">
+        <button type="button" onclick="window.open('about:blank', '_self').close();"
+          class="btn btn-amber btn-lg"><%= __('Close_')%></button>
+      </div>
+    </div>
+  </div>
+</div>
+<%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>

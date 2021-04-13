@@ -1,0 +1,1 @@
+const lycaon_lang_work_delete = {"Log not found":""};

@@ -1,0 +1,21 @@
+<div id="admin-category-create" v-cloak>
+  <div class="container">
+    <ajax-form action="createCategory" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedForm"
+      @rejected="onCloudError" :handle-parsing="handleParsingForm">
+      <h4 class="mb-4"><%= __("New Category") %></h4>
+
+      <%- partial ('form.ejs', { type: 'create' }) %>
+
+      <div class="row">
+        <div class="col text-right">
+          <a class="btn btn-light btn-sm" href="/<%= organization.handleId %>/admin/categories"><i
+              class="fas fa-window-close"></i> <%= __("Cancel") %></a>
+          <button type="submit" class="btn btn-primary btn-sm">
+            <i class="fas fa-plus-circle"></i> <%= __("Create") %>
+          </button>
+        </div>
+      </div>
+    </ajax-form>
+  </div>
+</div>
+<%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>

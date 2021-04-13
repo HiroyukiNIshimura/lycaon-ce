@@ -1,0 +1,158 @@
+<div class="row">
+  <div class="col-12 col-sm-auto">
+    <span class="text-muted mr-3"><%= __("Team") %></span><a :href="teamLink">{{ team.name }}</a>
+  </div>
+  <div class="col-12 col-sm-auto" v-if="thread.milestone">
+    <span class="text-muted mr-3"><%= __("Milestone") %></span><a :href="milestoneLink">{{ thread.milestone.name }}</a>
+  </div>
+</div>
+<div class="row mt-1">
+  <div class="col text-muted">
+    <%= __("Members") %> <small>{{ formatter.format(memberQty) }}
+      {{ i18nformatN('person', 'people', memberQty) }}</small>
+  </div>
+</div>
+<div class="row mt-1 border border-top-0 border-right-0 border-left-0  align-items-center">
+  <div class="col-auto mr-3 mb-1" v-for="item in members">
+    <user-identity :user="item" :organization="organization" size="sm"></user-identity>
+  </div>
+  <div class="col-auto mr-3 mb-1" v-if="memberQty > members.length">
+    <button type="button" class="btn btn-link text-primary" @click="showAllMember">
+      <i class="fas fa-user-friends"></i> <%= __("other") %> {{ memberQty - members.length }}
+      {{ i18nformatN('person', 'people', memberQty - members.length) }}
+    </button>
+  </div>
+</div>
+
+<!-- updateThreadState -->
+<ajax-form id="status-update-form" action="updateThreadState" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedStatusForm"
+  @rejected="onCloudError" :handle-parsing="handleParsingStatusForm">
+  <div class="row">
+    <div class="col-auto mt-1">
+      <p class="h5 mt-1">
+        <span :class="displayStatusClass"><i :class="displayStatusIcon" class="mr-1"></i>{{ displayStatus }}</span>
+      </p>
+    </div>
+    <div class="col-auto mt-1 ml-1">
+      <small>
+        <user-identity :user="thread.owner" :organization="organization" size="sm"></user-identity>
+        - <lycaon-timestamp :at="thread.createdAt" format="timeago" :translator="translator"></lycaon-timestamp>
+      </small>
+    </div>
+    <div class="col text-right d-none d-lg-block">
+      <button type="submit" class="btn btn-indigo btn-sm" v-if="isClosed && !isProtected">
+        <i class="fas fa-exclamation-circle"></i> <%= __('Open this thread') %>
+      </button>
+      <button type="submit" class="btn btn-indigo btn-sm" v-else-if="!isClosed && !isProtected">
+        <i class="fas fa-check-circle"></i> <%= __('Close this thread') %>
+      </button>
+    </div>
+  </div>
+  <div class="row d-none d-lg-block">
+    <div class="col-12 col-sm-auto text-right">
+      <div class="btn-group">
+        <button type="button" class="btn btn-info btn-sm" @click="onNewThreadCkick">
+          <i class="fas fa-plus-circle"></i> <%= __('New thread') %>
+        </button>
+        <button type="button" class="btn btn-info btn-sm dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true"
+          aria-expanded="false">
+          <span class="sr-only">Toggle Dropdown</span>
+        </button>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" href="javascript:void(0)" @click="onNewThreadCkick"><%= __('New thread') %></a>
+          <a class="dropdown-item" href="javascript:void(0)" @click="onForkCkick"><%= __('Fork thread') %></a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="javascript:void(0)" @click="updateFlagSubmit" v-if="isFan"><%= __('Remove the flag') %></a>
+          <a class="dropdown-item" href="javascript:void(0)" @click="updateFlagSubmit" v-else><%= __('Flag') %></a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="javascript:void(0)" @click="onConvertToWikiCkick"><%= __('Convert to Wiki') %></a>
+        </div>
+        <div v-if="!isProtected">
+          <button :disabled="isThreadEditDisabled || threadMode === 'edit'" type="button" class="btn btn-info btn-sm" @click="onEditClick" data-toggle="tooltip"
+            data-placement="bottom" :title="i18n('Edit this thread')">
+            <i class="far fa-edit"></i> <%= __("Edit") %>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row d-none d-sm-block d-lg-none">
+    <div class="col-auto text-right">
+      <div class="dropdown">
+        <button class="btn btn-info btn-sm dropdown-toggle" type="button" id="dropdownMenuButton1" data-toggle="dropdown" aria-haspopup="true"
+          aria-expanded="false">
+          <%= __('Action') %>
+        </button>
+        <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left" aria-labelledby="dropdownMenuButton1">
+          <a class="dropdown-item" href="javascript:void(0)" v-if="isClosed && !isProtected" @click="updateStatusSubmit"><%= __('Open this thread') %></a>
+          <a class="dropdown-item" href="javascript:void(0)" @click="updateStatusSubmit"
+            v-else-if="!isClosed && !isProtected"><%= __('Close this thread') %></a>
+          <a class="dropdown-item" href="javascript:void(0)" @click="onNewThreadCkick"><%= __('New thread') %></a>
+          <a class="dropdown-item" href="javascript:void(0)" @click="onForkCkick"><%= __('Fork thread') %></a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="javascript:void(0)" @click="updateFlagSubmit" v-if="isFan"><%= __('Remove the flag') %></a>
+          <a class="dropdown-item" href="javascript:void(0)" @click="updateFlagSubmit" v-else><%= __('Flag') %></a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="javascript:void(0)" @click="onConvertToWikiCkick"><%= __('Convert to Wiki') %></a>
+        </div>
+      </div>
+      <div v-if="!isProtected">
+        <button :disabled="isThreadEditDisabled || threadMode === 'edit'" type="button" class="btn btn-info btn-sm" @click="onEditClick" data-toggle="tooltip"
+          data-placement="bottom" :title="i18n('Edit this thread')">
+          <i class="far fa-edit"></i> <%= __("Edit") %>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="row d-block d-sm-none mt-2">
+    <div class="col text-right">
+      <div class="dropdown">
+        <div class="dropdown-wrapper">
+          <button class="btn btn-info btn-sm btn-block dropdown-toggle" type="button" id="dropdownMenuButton2" data-toggle="dropdown" aria-haspopup="true"
+            aria-expanded="false">
+            <%= __('Action') %>
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
+            <a class="dropdown-item" href="javascript:void(0)" v-if="isClosed && !isProtected" @click="updateStatusSubmit"><%= __('Open this thread') %></a>
+            <a class="dropdown-item" href="javascript:void(0)" @click="updateStatusSubmit"
+              v-else-if="!isClosed && !isProtected"><%= __('Close this thread') %></a>
+            <a class=" dropdown-item" href="javascript:void(0)" @click="onNewThreadCkick"><%= __('New thread') %></a>
+            <a class="dropdown-item" href="javascript:void(0)" @click="onForkCkick"><%= __('Fork thread') %></a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="javascript:void(0)" @click="updateFlagSubmit" v-if="isFan"><%= __('Remove the flag') %></a>
+            <a class="dropdown-item" href="javascript:void(0)" @click="updateFlagSubmit" v-else><%= __('Flag') %></a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="javascript:void(0)" @click="onConvertToWikiCkick"><%= __('Convert to Wiki') %></a>
+          </div>
+        </div>
+      </div>
+      <div class="mt-1" v-if="!isProtected">
+        <button :disabled="isThreadEditDisabled || threadMode === 'edit'" type="button" class="btn btn-info btn-sm btn-block" @click="onEditClick"
+          data-toggle="tooltip" data-placement="bottom" :title="i18n('Edit this thread')">
+          <i class="far fa-edit"></i> <%= __("Edit") %>
+        </button>
+      </div>
+    </div>
+  </div>
+</ajax-form>
+<div class="row mt-1 align-items-center">
+  <div class="col-auto">
+    <small><%= __("Importance") %>: </small>
+    <span class="badge badge-danger" v-if="thread.priority === 2">{{ priorityWord }}</span>
+    <small v-else>{{ priorityWord }}</small>
+  </div>
+  <div class="col-3" v-if="thread.dueDateAt">
+    <div class="review-rating-progress">
+      <small class="review-rating-level"><%= __("Urgency") %>: </small>
+      <div class="progress">
+        <div class="progress-bar progress-bar-striped bg-danger" :style="urgencyRate" role="progressbar" :aria-valuenow="thread.urgency" aria-valuemin="0"
+          aria-valuemax="100">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ajax-form id="flag-update-form" action="updateThreadFlag" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedFlagForm"
+  @rejected="onCloudError" :handle-parsing="handleParsingFlagForm">
+</ajax-form>

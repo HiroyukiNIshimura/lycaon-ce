@@ -1,0 +1,27 @@
+<div id="milestone-edit" v-cloak>
+  <div class="container">
+    <ajax-form id="form-delete" action="deleteMilestone" :syncing.sync="syncing" :cloud-error.sync="cloudError"
+      @submitted="submittedDeleteForm" @rejected="onCloudError" :handle-parsing="handleParsingDeleteForm">
+    </ajax-form>
+    <ajax-form id="form-update" action="updateMilestone" :syncing.sync="syncing" :cloud-error.sync="cloudError"
+      @submitted="submittedForm" @rejected="onCloudError" :handle-parsing="handleParsingForm">
+    </ajax-form>
+
+    <p class="h4 mb-4"><%= __("Edit Milestone") %></p>
+
+    <%- partial ('form.ejs', { type: 'edit' }) %>
+
+    <div class="row">
+      <div class="col text-right">
+        <a class="btn btn-light btn-sm" :href="backToUrl"><i class="fas fa-window-close"></i> <%= __("Cancel") %></a>
+        <button type="button" class="btn btn-danger btn-sm" @click="submitForm('#form-delete')">
+          <i class="far fa-trash-alt"></i> <%= __("Delete") %>
+        </button>
+        <button type="button" class="btn btn-primary btn-sm" @click="submitForm('#form-update')">
+          <i class="far fa-save"></i> <%= __("Save") %>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>

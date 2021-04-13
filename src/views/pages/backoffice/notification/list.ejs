@@ -1,0 +1,59 @@
+<div id="backoffice-notification-list" v-cloak>
+  <div class="container">
+    <div class="row">
+      <div class="col text-right">
+        <a class="btn btn-info btn-sm" href="/admin/notification/new"><i class="fas fa-plus-circle"></i>
+          <%= __("Create New") %></a>
+      </div>
+    </div>
+    <div class="row mt-4" v-if="records > 0">
+      <div class="col-auto">
+        <h4><%= __("System notification") %></h4>
+      </div>
+      <div class="col-auto">
+        <v-pagination :page="pagination.page" :page-count="getPageCount" :handler="clickCallback"></v-pagination>
+      </div>
+      <div class="col">
+        <small><span><%= __("Total number") %> {{ formatter.format(records) }}
+            {{ i18nformatN('Item', 'Items', records) }}</span></small>
+      </div>
+    </div>
+    <div class="row mt-4" v-else>
+      <div class="col text-muted"><%= __("System notification not found") %></div>
+    </div>
+
+    <div class="row">
+      <div class="col-auto mb-2 ml-1" v-for="item in notifications">
+        <div class="card card-width">
+          <div class="card-body">
+            <p class="card-text">
+              <span class="badge badge-light" v-if="item.category === 'notice'">{{ i18n(item.category) }}</span>
+              <span class="badge badge-danger" v-if="item.category === 'important'">{{ i18n(item.category) }}</span>
+              <span class="badge badge-warning" v-if="item.category === 'maintenance'">{{ i18n(item.category) }}</span>
+            </p>
+
+            <p class="card-text">
+              <%= __('Publication start date')%> : {{ formatDate(item.postingAt) }}
+            </p>
+
+            <p class="card-text text-truncate">
+              <%= __('Subject')%> : {{ item.subject }}
+            </p>
+
+            <p class="card-text text-truncate">
+              <%= __('not yet read')%> : {{ item.notReadQty }}
+            </p>
+
+            <div class="card-text text-right">
+                <a :href="link(item)" class="btn btn-info btn-sm"><i class="far fa-edit"></i> <%= __("Edit") %></a>
+            </div>
+          </div>
+          <div class="card-footer">
+            <span class="badge badge-warning" v-if="item.deleted"><%= __("Not posted") %></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>

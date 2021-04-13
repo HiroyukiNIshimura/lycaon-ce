@@ -1,0 +1,188 @@
+<modal v-if="showMemberModal">
+    <div class="modal-header">
+        <h5 class="modal-title">
+            <%= __("Members") %>
+        </h5>
+        <button type="button" class="close" @click="hideMembers">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="row mb-1" v-for="item in allMembers">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-title">
+                            <user-identity :user="item" :organization="organization" size=""></user-identity>
+                        </div>
+                        <div class="card-subtitle" v-if="item.lastSeenAt && item.lastSeenAt > 0">
+                            <small v-if="item.lastSeenAt && item.lastSeenAt > 0">
+                                <%= __("Last access") %>
+                                <lycaon-timestamp :at="item.lastSeenAt" format="timeago"></lycaon-timestamp>
+                            </small>
+                            <small v-else>
+                                <%= __("No access") %>
+                            </small>
+                        </div>
+                        <div class="card-text">
+                            <span class="badge badge-warning" v-if="item.deleted">
+                                <%= __("Invalid user") %>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <infinite-loading :identifier="infiniteId" spinner="waveDots" @infinite="allMemberHandler"></infinite-loading>
+    </div>
+</modal>
+<modal v-if="showConflictModal">
+    <div class="modal-header">
+        <h5 class="modal-title">
+            <%= __("Editing conflicts occur") %>
+        </h5>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col text-break">
+                {{ i18n("{0} edited and saved this thread. Unfortunately, with the current Lycaon, it is not possible to determine if it is okay to save this conflict. Please edit again, such as saving your changes to the clipboard", [conflictUser.fullName]) }}
+            </div>
+        </div>
+        <div class="row mt-3" v-if="thread.subject !== newSubject">
+            <div class="col">
+                <h6>
+                    <%= __("The subject has changed") %>
+                </h6>
+                <ul>
+                    <li class="text-primary">-{{ thread.subject }}</li>
+                    <li class="text-danger">+{{ newSubject }}</li>
+                </ul>
+            </div>
+        </div>
+        <div class="row mt-3" v-if="diff.length > 0">
+            <div class="col">
+                <h6 class="mb-1">
+                    <%= __("Changed body diff") %>
+                </h6>
+                <div v-for="item in diff">
+                    <div v-if="item.prefix === '+'" class="text-danger">
+                        {{ item.prefix }}{{ item.value }}
+                    </div>
+                    <div v-else-if="item.prefix === '-'" class="text-primary">
+                        {{ item.prefix }}{{ item.value }}
+                    </div>
+                    <div class="text-truncate" v-else>{{ item.prefix }}{{ item.value }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col">
+                <h6>
+                    <%= __("Body you modified (copy and use)") %>
+                </h6>
+                <textarea readonly id="my-body" class="form-control" rows="10" v-model="myBody"></textarea>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col text-right">
+                <button type="button" class="btn btn-info btn-sm" @click="reload">
+                    <%= __("Finish this edit") %>
+                </button>
+            </div>
+        </div>
+    </div>
+</modal>
+<modal v-if="showRefsUpdateModal">
+    <div class="card">
+        <div class="card-header">
+            <%= __("Confirmation dialog") %>
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">
+                <%= __("Confirmation of milestone changes in related threads") %>
+            </h5>
+            <p class="card-text">
+                <%= __("Milestones change, do you want to change milestones for related threads at the same time?") %>
+            </p>
+            <div class="text-right">
+                <button type="button" class="btn btn-danger btn-sm" @click="setRefsUpdate(true)">
+                    <i class="fas fa-thumbs-up"></i>
+                    <%= __("Yes") %>
+                </button>
+                <button type="button" class="btn btn-light btn-sm" @click="setRefsUpdate(false)">
+                    <i class="fas fa-hand-paper"></i>
+                    <%= __("No_") %>
+                </button>
+            </div>
+        </div>
+    </div>
+</modal>
+<modal v-if="showDeleteParentModal">
+    <div class="card">
+        <div class="card-header">
+            <%= __("Confirmation dialog") %>
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">
+                <%= __("Confirmation of related deletion") %>
+            </h5>
+            <p class="card-text">
+                <%= __("Remove the association with the forking thread. Is it OK?") %>
+            </p>
+            <div class="text-right">
+                <button type="button" class="btn btn-danger btn-sm" @click="onDeleteParent">
+                    <i class="far fa-trash-alt"></i>
+                    <%= __("Delete") %>
+                </button>
+                <button type="button" class="btn btn-light btn-sm" @click="showDeleteParentModal = false">
+                    <i class="fas fa-window-close"></i>
+                    <%= __("Cancel") %>
+                </button>
+            </div>
+        </div>
+    </div>
+</modal>
+<modal v-if="showDeleteChildModal">
+    <div class="card">
+        <div class="card-header">
+            <%= __("Confirmation dialog") %>
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">
+                <%= __("Confirmation of related deletion") %>
+            </h5>
+            <p class="card-text">
+                <%= __("Remove the association with the forked thread. Is it OK?") %>
+            </p>
+            <div class="text-right">
+                <button type="button" class="btn btn-danger btn-sm" @click="onDeleteChild">
+                    <i class="far fa-trash-alt"></i>
+                    <%= __("Delete") %>
+                </button>
+                <button type="button" class="btn btn-light btn-sm" @click="showDeleteChildModal = false">
+                    <i class="fas fa-window-close"></i>
+                    <%= __("Cancel") %>
+                </button>
+            </div>
+        </div>
+    </div>
+</modal>
+<modal v-if="showEmotionsModal">
+    <div class="card">
+        <div class="card-header">
+            <%= __("Emotional Rader") %>
+            <button type="button" class="close" @click="showEmotionsModal = false">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="card-body">
+            <canvas id="emotions-radar"></canvas>
+            <div class="text-right">
+                <button type="button" class="btn btn-light btn-sm" @click="showEmotionsModal = false">
+                    <i class="fas fa-window-close"></i>
+                    <%= __("close") %>
+                </button>
+            </div>
+        </div>
+    </div>
+</modal>

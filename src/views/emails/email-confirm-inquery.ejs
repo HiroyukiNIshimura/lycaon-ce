@@ -1,0 +1,74 @@
+<% /* Note: This is injected into `views/layouts/layout-email.ejs` */ %>
+<p style="margin-bottom: 25px;"><%= __('Thank you for your inquiry') %></p>
+<p style="margin-bottom: 25px;">
+    <%= __("We will reply to your inquiries by phone or email in the near future") %>
+</p>
+
+<dl>
+    <dt>
+        <%= __('Inquiry') %>
+    </dt>
+    <dd>
+        <%= inquery.contents %>
+    </dd>
+     <dd>
+        ( <%= inquery.category %> )
+    </dd>
+    <dt>
+        <%= __('Full Name') %>
+    </dt>
+    <dd>
+        <%= inquery.fullName %>
+    </dd>
+    <dt>
+        <%= __("Mail Address") %>
+    </dt>
+    <dd>
+        <%= inquery.emailAddress %>
+    </dd>
+    <dt>
+        <%= __("Organization name") %>
+    </dt>
+    <dd>
+        <%= inquery.organization %>
+    </dd>
+    <dt>
+        <%= __("Postal code") %>
+    </dt>
+    <dd>
+        <%= inquery.zipCode %>
+    </dd>
+    <dt>
+        <%= __("Prefectures") %>
+    </dt>
+    <dd>
+        <%= inquery.prefecture %>
+    </dd>
+    <dt>
+        <%= __("City name") %>
+    </dt>
+    <dd>
+        <%= inquery.city %>
+    </dd>
+    <dt>
+        <%= __("Address etc") %>
+    </dt>
+    <dd>
+        <%= inquery.street %>
+    </dd>
+    <dt>
+        <%= __("Name of buildings etc") %>
+    </dt>
+    <dd>
+        <%= inquery.building %>
+    </dd>
+    <dt>
+        <%= __('Phone number') %>
+    </dt>
+    <dd>
+        <%= inquery.phoneNo %>
+    </dd>
+</dl>
+
+<p style="margin-bottom: 5px;">Sincerely,</p>
+<p style="margin-top: 0px;">Team Lycaon</p>

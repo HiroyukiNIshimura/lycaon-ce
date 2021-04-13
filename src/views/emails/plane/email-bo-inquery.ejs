@@ -1,0 +1,20 @@
+<% /* Note: This is injected into `views/layouts/layout-email.ejs` */ %>
+<%= inquery.fullName %> さん [ <%= inquery.emailAddress %> ] からのお問い合わせを受け付けました。
+
+------------------------------
+<%= __('Inquiry') %>: <%= inquery.contents %>
+( <%= inquery.category %> )
+
+<%= __('Full Name') %>: <%= inquery.fullName %>
+<%= __("Mail Address") %>: <%= inquery.emailAddress %>
+<%= __("Organization name") %>: <%= inquery.organization %>
+<%= __("Postal code") %>: <%= inquery.zipCode %>
+<%= __("Prefectures") %>: <%= inquery.prefecture %>
+<%= __("City name") %>: <%= inquery.city %>
+<%= __("Address etc") %>: <%= inquery.street %>
+<%= __("Name of buildings etc") %>: <%= inquery.building %>
+<%= __('Phone number') %>: <%= inquery.phoneNo %>
+
+------------------------------
+Sincerely,
+Team Lycaon Backoffice

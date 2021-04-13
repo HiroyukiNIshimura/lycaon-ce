@@ -1,0 +1,154 @@
+<div class="md-form">
+  <label for="form-name"><%= __("Team name") %></label>
+  <input type="text" maxlength="100" id="form-name" class="form-control" :class="[formErrors.name ? 'is-invalid' : '']"
+    v-model="formData.name" />
+  <div class="invalid-feedback" v-if="formErrors.name"><%= __("Please enter the team name") %></div>
+</div>
+
+<div class="md-form">
+  <label for="form-description"
+    class="md-textarea-label"><%= __("Description (up to {0} characters)").format(500) %></label>
+  <textarea id="form-description" class="md-textarea form-control" rows="3" maxlength="500"
+    :class="[formErrors.description ? 'is-invalid' : '']" v-model.trim="formData.description"></textarea>
+  <div class="invalid-feedback" v-if="formErrors.description">
+    <%= __("Please enter within {0} characters").format(500) %></div>
+</div>
+
+<div class="row mt-3">
+  <div class="col-auto">
+    <label for="user-selector"><%= __("Participating users") %></label>
+    <v-tagify ref="userTagify" id="user-selector" :settings="userTagifySettings" @add="onAddUserTagify"
+      @remove="onRemoveUserTagify">
+    </v-tagify>
+  </div>
+</div>
+<div class="row mt-3">
+  <div class="col-auto">
+    <label for="category-selector"><%= __("Category to use") %></label>
+    <v-tagify ref="categoryTagify" id="category-selector" :settings="categoryTagifySettings" @add="onAddcategoryTagify"
+      @remove="onRemovecategoryTagify" :class="[formErrors.category ? 'is-invalid' : '']">
+    </v-tagify>
+    <div class="invalid-feedback" v-if="formErrors.category">
+      <%= __("Please select at least one category") %>
+    </div>
+  </div>
+</div>
+
+<% if(!isDemosite && planlimitation.allowUseGit) { %>
+<div class="custom-control custom-checkbox">
+  <input type="checkbox" class="custom-control-input" id="form-use-git" v-model="useGit" />
+  <label class="custom-control-label" for="form-use-git"><%= __("Work with git") %></label>
+</div>
+
+<v-tabs :panel-id="panelId" ref="gittab" class="mb-5" :options="{ useUrlFragment: false, defaultTabHash: 'tab-team' }"
+  @changed="tabChanged" v-show="useGit">
+  <v-tab :name="i18n('github API')" id="tab-basic" :is-slot-if="false">
+    <span><%= __("When accessing the repository via the github v3 API") %></span>
+    <div class="md-form">
+      <label for="form-git-user" class="md-textarea-label"><%= __("github owner") %></label>
+      <input type="text" maxlength="300" id="form-git-user" class="form-control"
+        :class="[formErrors.gitUser ? 'is-invalid' : '']" v-model="formData.gitUser" />
+      <div class="invalid-feedback" v-if="formErrors.gitUser"><%= __("Please enter the github owner") %></div>
+    </div>
+
+    <div class="md-form">
+      <label for="form-git-repository"
+        class="md-textarea-label"><%= __("github repository name") %></label>
+      <input type="text" maxlength="2000" id="form-git-repository" class="form-control"
+        :class="[formErrors.gitRepository ? 'is-invalid' : '']" v-model="formData.gitRepository" />
+      <div class="invalid-feedback" v-if="formErrors.gitRepository">
+        <%= __("Please enter the github repository name") %>
+      </div>
+    </div>
+
+    <div class="md-form">
+      <label for="form-git-password" class="md-textarea-label"><%= __("Access token (access token issued by github)") %></label>
+      <input type="password" maxlength="100" id="form-git-password" class="form-control"
+        :class="[formErrors.gitPassword ? 'is-invalid' : '']" v-model="formData.gitPassword" />
+      <div class="invalid-feedback" v-if="formErrors.gitPassword">
+        <%= __("Please enter the access token") %>
+      </div>
+    </div>
+  </v-tab>
+  <v-tab :name="i18n('gitlab API')" id="tab-gitlab" :is-slot-if="false">
+    <span><%= __("When accessing the repository via the gitlab API") %></span>
+
+    <div class="md-form">
+      <label for="form-gitlab-api"
+        class="md-textarea-label"><%= __("Enter the URL of the gitlab API (eg https://gitlab.example.com/api/v4)") %></label>
+      <input type="text" maxlength="2000" id="form-gitlab-api" class="form-control"
+        :class="[formErrors.gitlabApi ? 'is-invalid' : '']" v-model="formData.gitlabApi" />
+      <div class="invalid-feedback" v-if="formErrors.gitlabApi"><%= __("Please enter a valid URL") %></div>
+    </div>
+
+    <div class="md-form">
+      <label for="form-gitlab-token"
+        class="md-textarea-label"><%= __("Access token (access token issued by gitlab)") %></label>
+      <input type="text" maxlength="200" id="form-gitlab-token" class="form-control"
+        :class="[formErrors.gitlabToken ? 'is-invalid' : '']" v-model="formData.gitlabToken" />
+      <div class="invalid-feedback" v-if="formErrors.gitlabToken">
+        <%= __("Please enter the access token") %>
+      </div>
+    </div>
+    <div class="md-form">
+      <label for="form-gitlab-project-id"
+        class="md-textarea-label"><%= __("gitlab project ID (numerical value)") %></label>
+      <input type="text" maxlength="10" id="form-gitlab-project-id" class="form-control"
+        :class="[formErrors.gitlabProjectId ? 'is-invalid' : '']" v-model="formData.gitlabProjectId" />
+      <div class="invalid-feedback" v-if="formErrors.gitlabProjectId">
+        <%= __("Please enter the project ID") %>
+      </div>
+    </div>
+
+    <div class="md-form">
+      <label for="form-git-origin" class="md-textarea-label"><%= __("git branch name (default: master)") %></label>
+      <input type="text" id="form-git-origin" maxlength="400" class="form-control"
+        :class="[formErrors.gitOrigin ? 'is-invalid' : '']" v-model="formData.gitOrigin" />
+      <div class="invalid-feedback" v-if="formErrors.gitOrigin"><%= __("Please enter the git branch name") %></div>
+    </div>
+  </v-tab>
+</v-tabs>
+<% } %>
+
+<div class="row mt-3">
+  <div class="col-auto">
+    <label><%= __("Initial value of the concept when creating a new thread") %></label>
+  </div>
+</div>
+<div class="custom-control custom-radio">
+  <input type="radio" class="custom-control-input" id="radio-draft" value="0"
+    v-model="defaultConcept" />
+  <label class="custom-control-label" for="radio-draft"><%= __('draft') %></label>
+</div>
+<div class="custom-control custom-radio">
+  <input type="radio" class="custom-control-input" id="radio-published" value="1"
+    v-model="defaultConcept" />
+  <label class="custom-control-label" for="radio-published"><%= __('published') %></label>
+</div>
+
+<% if(type === 'edit') { %>
+<div class="custom-control custom-checkbox mt-5">
+  <input type="checkbox" class="custom-control-input" id="form-deleted" v-model="formData.deleted" />
+  <label class="custom-control-label" for="form-deleted"><%= __("Disable this team") %></label>
+</div>
+<% } %>
+
+<div id="cloud-error" class="row mt-3">
+  <div class="col-sm-6">
+    <p class="text-danger" v-if="cloudError === 'isSandbox'">
+      <%= __("This team is used by the system and cannot be deleted") %>
+    </p>
+    <p class="text-danger" v-else-if="cloudError === 'nameAlreadyInUse'">
+      <%= __("A team already exists that uses that name") %>
+    </p>
+    <p class="text-danger" v-else-if="cloudError === 'repositoryNotfound'">
+      <%= __("I can't access the repository you set up") %>
+    </p>
+    <p class="text-danger" v-else-if="cloudError === 'unplanned'">
+      <%= __("No more teams can be created with the current plan. Please consider updating your plan") %>
+    </p>
+    <p class="text-danger" v-else-if="cloudError">
+      <%= __("An error occurred while processing the request. Please check the information and try again. If the error persists, please contact your administrator") %>
+    </p>
+  </div>
+</div>

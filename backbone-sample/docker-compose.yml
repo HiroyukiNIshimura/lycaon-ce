@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+  postgresql:
+    image: lycaon_postgresql_prod
+    build:
+      context: ./postgresql/
+      dockerfile: Dockerfile
+    container_name: lycaon_postgresql_prod
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=P@ssw0rd
+      - POSTGRES_DB=lycaondb
+      - PGDATA=/var/lib/postgresql/lycaon
+    volumes:
+      - ./db:/var/lib/postgresql/lycaon
+    ports:
+      - 5433:5432
+
+  redis:
+    image: redis:alpine3.12
+    container_name: lycaon_redis_prod
+    restart: always
+    ports:
+      - 6380:6379
+
+  mongo:
+    image: mongo
+    command: --wiredTigerCacheSizeGB 0.25
+    container_name: lycaon_mongo_prod
+    restart: always
+    volumes:
+      - ./mongo:/data/db
+    ports:
+      - 27017:27017
