@@ -145,6 +145,61 @@ module.exports.bootstrap = async function () {
         botid: bot.id,
       });
     }
+
+    if ((await Organization.count({ handleId: "example" })) < 1) {
+      await sails.helpers.createSequence.with({ handleId: "example" });
+
+      let org = await Organization.create({
+        handleId: "example",
+        name: "example organization",
+        emailAddress: "foo@example.com",
+        fullName: "foo example",
+        plan: "example",
+        isBackOffice: true,
+      }).fetch();
+
+      await Billing.create({ organization: org.id });
+
+      await SysSettings.create({
+        internalEmailAddress: "support@example.com",
+        fromEmailAddress: "support@example.com",
+        fromName: "Team Example",
+        organization: org.id,
+        maxUploadFileSize: 1024 * 1024 * 500,
+      });
+
+      let createdUsers = await User.createEach([
+        {
+          emailAddress: "foo@example.com",
+          fullName: "foo example",
+          isSuperAdmin: true,
+          password: await bcrypt.hash("P@ssw0rd", 10),
+          organization: org.id,
+        },
+      ]).fetch();
+
+      var team = await Team.create({
+        name: "Team Example",
+        description: "BackOffice",
+        users: createdUsers.map((obj) => obj.id),
+        organization: org.id,
+      }).fetch();
+
+      await Category.createEach([
+        {
+          name: "Issues",
+          displayOrder: 1,
+          organization: org.id,
+          teams: [team.id],
+        },
+        {
+          name: "Bugtrack",
+          displayOrder: 2,
+          organization: org.id,
+          teams: [team.id],
+        },
+      ]);
+    }
   };
 
   try {
