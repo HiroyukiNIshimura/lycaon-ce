@@ -65,7 +65,11 @@ $ docker-compose build
 $ docker-compose up -d
 ```
 
+## Demo site
 
+https://lycaondemo.bright-l.0am.jp
 
+User: demoo@example.com
+Password: lycaon4321
 
-
+> The data on this site will be deleted with each version upgrade.
