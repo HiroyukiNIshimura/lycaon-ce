@@ -63,13 +63,13 @@ SELECT "vote".*
 AND "vote"."author" = $2
 `;
 
-    var OEDER_OPEN = `ORDER BY "vote"."circulationFrom" ASC, "vote"."circulationTo" ASC
+    var OEDER_OPEN = `ORDER BY "vote"."circulationFrom" DESC, "vote"."circulationTo" DESC
 LIMIT $6 OFFSET $7
 `;
-    var OEDER_CLOSED = `ORDER BY "vote"."circulationFrom" ASC, "vote"."circulationTo" ASC
+    var OEDER_CLOSED = `ORDER BY "vote"."circulationFrom" DESC, "vote"."circulationTo" DESC
 LIMIT $4 OFFSET $5
 `;
-    var OEDER_MY = `ORDER BY "vote"."circulationFrom" ASC, "vote"."circulationTo" ASC
+    var OEDER_MY = `ORDER BY "vote"."circulationFrom" DESC, "vote"."circulationTo" DESC
 LIMIT $3 OFFSET $4
 `;
 
