@@ -6,6 +6,10 @@ Lycaonは、チームを組んで何かを達成するためのクラウド型�
 
 [Click here for details](https://www.lycaon-cloud.com/)
 
+![shot-1.png](/images/shot-1.png)
+
+![shot-2.png](/images/shot-2.png)
+
 ## Installation
 
 With [node](https://nodejs.org/en/) [installed:](https://nodejs.org/en/download/)　Please use LTS
