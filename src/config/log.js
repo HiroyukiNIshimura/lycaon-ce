@@ -18,8 +18,8 @@ log4js.configure({
     dateFile: {
       type: 'dateFile',
       filename: 'logs/lycaon-daily.log',
-      pattern: 'yyyy-MM-dd-hh',
-      backups: 48,
+      pattern: 'yyyy-MM-dd',
+      daysToKeep: 30,
       compress: true,
       layout: {
         type: 'pattern',
