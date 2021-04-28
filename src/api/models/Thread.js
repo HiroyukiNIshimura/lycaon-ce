@@ -106,6 +106,18 @@ module.exports = {
       type: 'string',
       description: 'エモーショナル判定結果（JSON文字列）',
     },
+    openCloseElapsed: {
+      type: 'ref',
+      columnType: 'bigint',
+      description: '最初のopenから最後のクローズまでの経過時間',
+      example: 1502844074211,
+    },
+    workingCloseElapsed: {
+      type: 'ref',
+      columnType: 'bigint',
+      description: '作業中から作業リリースまたはクローズまでの経過時間の集計',
+      example: 1502844074211,
+    },
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
     //  ╚═╝╩ ╩╚═╝╚═╝═╩╝╚═╝

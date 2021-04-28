@@ -63,6 +63,10 @@ module.exports = {
           thread: updated,
         });
 
+        if (inputs.status === 1) {
+          await sails.helpers.timeMeasurement.with({ db: db, thread: updated });
+        }
+
         await sails.helpers.sendThreadMailWrapper.with({
           thread: updated.id,
           action: 'status',
