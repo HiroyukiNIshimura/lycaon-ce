@@ -96,11 +96,20 @@ parasails.registerPage('admin-settings-edit', {
         if (
           !argins.maxUploadFileSize ||
           !Number.isInteger(argins.maxUploadFileSize) ||
-          argins.maxUploadFileSize <= 0 ||
+          argins.maxUploadFileSize < 1 ||
           argins.maxUploadFileSize > 1024 * 1024 * 500
         ) {
           this.formErrors.maxUploadFileSize = true;
         }
+      }
+
+      if (
+        !argins.workingHoursPerDay ||
+        !Number.isInteger(Number(argins.workingHoursPerDay)) ||
+        Number(argins.workingHoursPerDay) < 1 ||
+        Number(argins.workingHoursPerDay) > 24
+      ) {
+        this.formErrors.workingHoursPerDay = true;
       }
 
       if (!argins.notMailSend && !argins.fromEmailAddress) {

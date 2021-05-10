@@ -278,10 +278,12 @@ parasails.registerPage('team', {
           },
           options: {
             responsive: true,
-            legend: {
-              position: 'left',
-            },
+            maintainAspectRatio: true,
+            aspectRatio: 2,
             plugins: {
+              legend: {
+                position: 'left',
+              },
               colorschemes: {
                 scheme: 'brewer.PastelOne9',
               },
@@ -307,10 +309,12 @@ parasails.registerPage('team', {
           },
           options: {
             responsive: true,
-            legend: {
-              position: 'left',
-            },
+            maintainAspectRatio: true,
+            aspectRatio: 2,
             plugins: {
+              legend: {
+                position: 'left',
+              },
               colorschemes: {
                 scheme: 'brewer.SetThree9',
               },

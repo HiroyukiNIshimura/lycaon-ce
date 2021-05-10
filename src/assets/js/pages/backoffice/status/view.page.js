@@ -159,7 +159,7 @@ parasails.registerPage('backoffice-status-view', {
       c1.getContext('2d').canvas.height = 260;
       if (c1) {
         new Chart(c1, {
-          type: 'horizontalBar',
+          type: 'bar',
           data: data,
           options: {
             elements: {
@@ -167,14 +167,8 @@ parasails.registerPage('backoffice-status-view', {
                 borderWidth: 2,
               },
             },
+            indexAxis: 'y',
             responsive: true,
-            legend: {
-              display: false,
-              position: 'right',
-            },
-            title: {
-              display: false,
-            },
             scales: {
               xAxes: [
                 {
@@ -187,6 +181,13 @@ parasails.registerPage('backoffice-status-view', {
               ],
             },
             plugins: {
+              legend: {
+                display: false,
+                position: 'right',
+              },
+              title: {
+                display: false,
+              },
               colorschemes: {
                 scheme: 'tableau.Orange20',
                 /**https://nagix.github.io/chartjs-plugin-colorschemes/colorchart.html */

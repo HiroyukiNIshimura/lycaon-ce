@@ -35,6 +35,8 @@ parasails.registerPage('thread', {
     childSelected: {},
     dueDate: '', //for display
     selectedDate: {},
+    minDate: undefined,
+    maxDate: undefined,
     priority: 0,
     responsible: Number,
     membersPage: 1,
@@ -358,6 +360,25 @@ parasails.registerPage('thread', {
       } else {
         this.dueDate = null;
       }
+    },
+    selectedMilestone: function (val) {
+      if (val) {
+        var milestone = _.find(this.milestone, (o) => {
+          return o.id == val;
+        });
+        if (milestone && milestone.startAt && milestone.duration) {
+          var start = moment(Number(milestone.startAt)).startOf('day').valueOf();
+          var end = Number(start) + Number(milestone.duration);
+
+          this.minDate = new Date(start);
+          this.maxDate = new Date(end);
+
+          return;
+        }
+      }
+
+      this.minDate = undefined;
+      this.maxDate = undefined;
     },
   },
   //  ╦╔╗╔╔╦╗╔═╗╦═╗╔═╗╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
@@ -1396,20 +1417,20 @@ parasails.registerPage('thread', {
             ],
           },
           options: {
-            legend: {
-              display: false,
-              position: 'top',
-            },
-            title: {
-              display: false,
-              text: 'Emotions Radar Chart',
-            },
             scale: {
               ticks: {
                 beginAtZero: true,
               },
             },
             plugins: {
+              legend: {
+                display: false,
+                position: 'top',
+              },
+              title: {
+                display: false,
+                text: 'Emotions Radar Chart',
+              },
               colorschemes: {
                 scheme: 'tableau.Orange20',
                 /**https://nagix.github.io/chartjs-plugin-colorschemes/colorchart.html */

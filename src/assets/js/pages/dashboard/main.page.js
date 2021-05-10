@@ -173,10 +173,13 @@ parasails.registerPage('main', {
             },
             options: {
               responsive: true,
-              legend: {
-                position: 'left',
-              },
+              maintainAspectRatio: true,
+              aspectRatio: 2,
               plugins: {
+                legend: {
+                  position: 'left',
+                },
+                title: { display: false, text: i18next.t('Open : Closed'), padding: 0 },
                 colorschemes: {
                   scheme: 'brewer.PastelOne9',
                 },
@@ -202,10 +205,13 @@ parasails.registerPage('main', {
             },
             options: {
               responsive: true,
-              legend: {
-                position: 'left',
-              },
+              maintainAspectRatio: true,
+              aspectRatio: 2,
               plugins: {
+                legend: {
+                  position: 'left',
+                },
+                title: { display: false, text: i18next.t('Details of the open'), padding: 0 },
                 colorschemes: {
                   scheme: 'brewer.SetThree9',
                 },

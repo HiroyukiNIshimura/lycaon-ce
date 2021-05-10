@@ -130,6 +130,7 @@ module.exports = {
 
             try {
               await sails.models[identity].createEach(list).usingConnection(db);
+              sails.log.info(`ロード...${identity} ${dump}`);
             } catch (err) {
               //
               sails.log.error(err);

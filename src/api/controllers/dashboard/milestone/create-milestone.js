@@ -1,3 +1,5 @@
+const moment = require('moment');
+
 module.exports = {
   friendlyName: 'Create milestone',
 
@@ -51,10 +53,12 @@ module.exports = {
     var duration;
 
     if (inputs.startAt) {
-      startAt = inputs.startAt;
+      startAt = moment(Number(inputs.startAt)).startOf('day').valueOf();
     }
     if (inputs.endAt && inputs.startAt) {
-      duration = inputs.endAt - inputs.startAt;
+      duration =
+        moment(Number(inputs.endAt)).startOf('day').valueOf() -
+        moment(Number(inputs.startAt)).startOf('day').valueOf();
     }
 
     var created = {};

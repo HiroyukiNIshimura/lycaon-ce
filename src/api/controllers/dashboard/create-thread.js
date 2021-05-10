@@ -87,6 +87,15 @@ module.exports = {
       emotional: JSON.stringify(emotional),
     };
 
+    if (inputs.milestone) {
+      var milestone = await Milestone.findOne({ id: inputs.milestone });
+      if (milestone && milestone.startAt && milestone.duration) {
+        //マイルストーンが指定されていた際は
+        //期限日をマイルストーンの終了日に
+        thread.dueDateAt = Number(milestone.startAt) + Number(milestone.duration);
+      }
+    }
+
     if (inputs.fork) {
       var parent = await Thread.findOne({
         id: inputs.fork,

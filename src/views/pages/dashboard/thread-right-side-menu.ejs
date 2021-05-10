@@ -36,7 +36,7 @@
             <span class="text-danger ml-2" v-if="dueDate" @click="unSelectedClick"><i class="fas fa-times"></i></span>
           </div>
           <div class="mt-1">
-            <v-date-picker ref="calendar" :attributes="calendar" :masks="calendarMasks" is-inline v-model="selectedDate"></v-date-picker>
+            <v-date-picker ref="calendar" :attributes="calendar" :masks="calendarMasks" is-inline v-model="selectedDate" :min-date="minDate" :max-date="maxDate"></v-date-picker>
           </div>
           <ajax-form id="update-duedate-form" action="updateThreadDuedate" :syncing.sync="syncing" :cloud-error.sync="cloudError"
             @submitted="submittedDuedateForm" @rejected="onCloudError" :handle-parsing="handleParsingDuedateForm">

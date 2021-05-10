@@ -16,6 +16,9 @@ module.exports = {
       columnType: 'smallint',
       isIn: [0, 1, 2, 3, 4, 5, 6],
       defaultsTo: 1,
+      min: 0,
+      max: 6,
+      isInteger: true,
       description: '週次報告送信曜日',
     },
     maxUploadFileSize: {
@@ -55,6 +58,15 @@ module.exports = {
       maxLength: 100,
       description: '外部に送信するメールのfrom名称',
     },
+    workingHoursPerDay: {
+      type: 'number',
+      defaultsTo: 8,
+      isInteger: true,
+      max: 24,
+      min: 1,
+      description: '1日の作業時間',
+    },
+
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
     //  ╚═╝╩ ╩╚═╝╚═╝═╩╝╚═╝

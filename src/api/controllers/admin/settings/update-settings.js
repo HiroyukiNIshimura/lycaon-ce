@@ -7,6 +7,9 @@ module.exports = {
     weeklyReportDay: {
       type: 'number',
       isIn: [0, 1, 2, 3, 4, 5, 6],
+      min: 0,
+      max: 6,
+      isInteger: true,
       required: true,
     },
     maxUploadFileSize: {
@@ -38,6 +41,13 @@ module.exports = {
     fromName: {
       type: 'string',
       maxLength: 100,
+    },
+    workingHoursPerDay: {
+      type: 'number',
+      defaultsTo: 8,
+      isInteger: true,
+      max: 24,
+      min: 1,
     },
   },
   exits: {

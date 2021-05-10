@@ -57,9 +57,13 @@
                     </div>
                     <div class="card-text"><%= __('Total number of threads') %>: {{ item.summary.total }}</div>
                     <div class="card-text mt-3"><%= __('Open : Closed') %></div>
-                    <canvas :id="teamChartId(item)"></canvas>
+                    <div class="chart-container">
+                      <canvas :id="teamChartId(item)"></canvas>
+                    </div>
                     <div class="card-text mt-3"><%= __('Details of the open') %></div>
-                    <canvas :id="teamChartSubId(item)"></canvas>
+                    <div class="chart-container">
+                      <canvas :id="teamChartSubId(item)"></canvas>
+                    </div>
                   </div>
                 </div>
               </div>

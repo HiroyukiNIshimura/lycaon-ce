@@ -1,3 +1,5 @@
+const moment = require('moment');
+
 module.exports = {
   friendlyName: 'Update thread',
   description: 'Update the thread',
@@ -79,6 +81,20 @@ module.exports = {
     thread.responsible = inputs.responsible ? inputs.responsible : null;
     thread.milestone = inputs.milestone ? inputs.milestone : null;
 
+    var milestone;
+    if (inputs.milestone) {
+      milestone = await Milestone.findOne({ id: inputs.milestone });
+      if (milestone && milestone.startAt && milestone.duration && current.dueDateAt) {
+        if (
+          Number(milestone.startAt) > Number(current.dueDateAt) ||
+          Number(milestone.startAt) + Number(milestone.duration) < Number(current.dueDateAt)
+        ) {
+          //期限日がマイルストーンの期間外の場合はマイルストーンの終了日に変更
+          thread.dueDateAt = Number(milestone.startAt) + Number(milestone.duration);
+        }
+      }
+    }
+
     var emotional = await sails.helpers.emotionCheck.with({
       contents: inputs.subject + '。' + inputs.body,
     });
@@ -128,12 +144,22 @@ module.exports = {
           .set(thread)
           .usingConnection(db);
 
-        if (current.milestone !== updated.milestone && inputs.refsUpdate === 1) {
+        if (
+          updated.milestone &&
+          current.milestone !== updated.milestone &&
+          inputs.refsUpdate === 1
+        ) {
           var refs = await ThreadRef.find({ left: updated.id });
           for (let ref of refs) {
-            await Thread.updateOne({ id: ref.right })
-              .set({ milestone: updated.milestone })
-              .usingConnection(db);
+            var vals = {
+              milestone: updated.milestone,
+            };
+            if (milestone && milestone.startAt && milestone.duration) {
+              //関連スレッドのマイルストーンを自動変更する際は
+              //期限日をマイルストーンの終了日に
+              vals.dueDateAt = Number(milestone.startAt) + Number(milestone.duration);
+            }
+            await Thread.updateOne({ id: ref.right }).set(vals).usingConnection(db);
           }
         }
 

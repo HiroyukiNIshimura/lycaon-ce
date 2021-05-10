@@ -98,6 +98,17 @@
       </div>
       <hr />
 
+      <h5><%= __('Burndown chart') %></h5>
+      <div class="md-form">
+        <input type="number" id="form-working-hours-per-day" class="form-control" v-model="formData.workingHoursPerDay"
+          :class="[formErrors.workingHoursPerDay ? 'is-invalid' : '']" />
+        <label
+          for="form-working-hours-per-day"><%= __('Working hours per day') %></label>
+        <div class="invalid-feedback" v-if="formErrors.workingHoursPerDay">
+          <%= __('Enter an integer from 1 to 24') %>
+        </div>
+      </div>
+
       <div class="row">
         <div class="col text-right">
           <a class="btn btn-light btn-sm" href="/<%= organization.handleId %>/admin/settings"><i

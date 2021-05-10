@@ -26,8 +26,11 @@ Vue.component('gantt-elastic', GanttElastic);
 Vue.use(VueLoading);
 Vue.component('loadingOverlay', VueLoading);
 
-//https://github.com/anteriovieira/vue-mindmap/blob/master/README.md?ref=kabanoki.net
+/*https://github.com/anteriovieira/vue-mindmap/blob/master/README.md?ref=kabanoki.net*/
 Vue.use(VueMindmap);
 
 /*https://future-architect.github.io/cheetah-grid/documents/introduction/getting-started-with-vue.html#installation */
 Vue.use(vueCheetahGrid);
+
+/*https://github.com/hellocomet/vue-svg-gauge#readme */
+Vue.use(VueSvgGauge);

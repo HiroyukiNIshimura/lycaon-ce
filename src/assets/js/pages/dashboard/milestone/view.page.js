@@ -3,6 +3,7 @@ parasails.registerPage('milestone-view', {
   //  ║║║║║ ║ ║╠═╣║    ╚═╗ ║ ╠═╣ ║ ║╣
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
   data: {
+    floatFormatter: floatFormatter,
     tasks: [],
     dynamicStyle: {
       'task-list-header-label': {
@@ -47,6 +48,10 @@ parasails.registerPage('milestone-view', {
         'letter-spacing': '1px',
       },
     },
+    noResults: false,
+    burndownDialog: false,
+    serverMessage: 'No results',
+    openClose: {},
   },
 
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
@@ -146,6 +151,12 @@ parasails.registerPage('milestone-view', {
                 width: '100%',
               },
             },
+            html: true,
+            events: {
+              click({ data, column }) {
+                self.showBurndownDialog(data);
+              },
+            },
           },
         ],
       },
@@ -240,6 +251,10 @@ parasails.registerPage('milestone-view', {
       }
 
       var progress = self.progressValue(entry);
+      var start = entry.startAt ? new Date(Number(entry.startAt)) : undefined;
+      if (start) {
+        start.setHours(0, 0, 0, 0);
+      }
 
       let task = {
         id: entry.viewLineNo,
@@ -252,10 +267,12 @@ parasails.registerPage('milestone-view', {
         thread: `<a href="javascript:void(0)" data-toggle="tooltip" data-placement="bottom" title="${i18next.t(
           'Related thread'
         )}"><i class="fas fa-tasks"></i></a>`,
-        start: entry.startAt ? new Date(Number(entry.startAt)) : undefined,
+        start: start,
         duration: entry.duration ? Number(entry.duration) : 0,
-        progress: progress,
-        type: 'milestone', //project, milestone, task
+        progress: `<a href="javascript:void(0)" style="color:#0077c0;" data-toggle="tooltip" data-placement="bottom" title="${i18next.t(
+          'Burndown chart'
+        )}">${progress}</a>`,
+        type: 'task', //project, milestone, task
         entity: entry,
         milestoneId: entry.id,
       };
@@ -294,7 +311,7 @@ parasails.registerPage('milestone-view', {
       location.href = `/${this.organization.handleId}/team/${this.team.id}?milestone=${data.id}`;
     },
     editLink: function (data) {
-      return `/milestone/edit/${data.milestoneId}`;
+      return `/${this.organization.handleId}/milestone/edit/${data.id}`;
     },
     memberLink: function (data) {
       if (!data.user) {
@@ -314,12 +331,150 @@ parasails.registerPage('milestone-view', {
     },
     progressValue: function (data) {
       var progress = 0;
-      if (Number(data.openQty) + Number(data.closedQty) > 0) {
-        progress = Math.round(
-          (Number(data.closedQty) / (Number(data.openQty) + Number(data.closedQty))) * 100
-        );
+      var openQty = data.openQty ? Number(data.openQty) : 0;
+      var closedQty = data.closedQty ? Number(data.closedQty) : 0;
+      if (openQty + closedQty > 0) {
+        progress = Math.round((closedQty / (openQty + closedQty)) * 100);
       }
       return progress;
+    },
+    showBurndownDialog: async function (data) {
+      var url = `/api/v1/milestone/burndown/${data.milestoneId}`;
+
+      if (this.isMobile) {
+        url = `/api/v1/milestone/burndown/${data.id}`;
+      }
+
+      var burndownConfig;
+      var resouceConfig;
+      this.noResults = true;
+
+      try {
+        var response = await $lycaon.axios.get(url, {});
+        if (response && response.data) {
+          if (response.data.burndown) {
+            this.noResults = false;
+
+            var buildBurndown = function () {
+              var labels = _.keys(response.data.burndown);
+              labels[0] = '';
+              var ideal = [];
+              var plan = [];
+              var achievement = [];
+              _.mapKeys(response.data.burndown, (value, key) => {
+                ideal.push(value.ideal);
+                plan.push(value.plan);
+                achievement.push(value.achievement);
+              });
+
+              var config = {
+                type: 'line',
+                data: {
+                  labels: labels,
+                  datasets: [
+                    {
+                      label: i18next.t('_ideal_'),
+                      data: ideal,
+                      radius: 0,
+                      lineTension: 0,
+                      fill: false,
+                    },
+                    {
+                      label: i18next.t('_plan_'),
+                      data: plan,
+                      radius: 0,
+                      lineTension: 0,
+                      fill: false,
+                    },
+                    {
+                      label: i18next.t('_performance_'),
+                      data: achievement,
+                      radius: 0,
+                      lineTension: 0,
+                      fill: false,
+                    },
+                  ],
+                },
+                options: {
+                  responsive: true,
+                  plugins: {
+                    colorschemes: {
+                      scheme: 'brewer.Accent3',
+                      /**https://nagix.github.io/chartjs-plugin-colorschemes/colorchart.html */
+                    },
+                  },
+                },
+              };
+              return config;
+            };
+
+            var buildResource = function () {
+              var labels = _.map(response.data.openClose.members, (o) => {
+                return o.fullName;
+              });
+
+              var datasets = [
+                {
+                  axis: 'y',
+                  fill: false,
+                  data: _.map(response.data.openClose.members, (o) => {
+                    return o.burden;
+                  }),
+                },
+              ];
+
+              var config = {
+                type: 'bar',
+                data: {
+                  labels: labels,
+                  datasets: datasets,
+                },
+                options: {
+                  indexAxis: 'y',
+                  responsive: true,
+                  scales: {
+                    xAxes: [{ ticks: { beginAtZero: true } }],
+                  },
+                  plugins: {
+                    legend: { display: false },
+                    title: {
+                      display: true,
+                      text: i18next.t('Thread in charge'),
+                    },
+                    colorschemes: {
+                      scheme: 'brewer.PastelTwo3',
+                      /**https://nagix.github.io/chartjs-plugin-colorschemes/colorchart.html */
+                    },
+                  },
+                },
+              };
+              return config;
+            };
+
+            burndownConfig = buildBurndown();
+            resouceConfig = buildResource();
+          }
+
+          this.openClose = response.data.openClose;
+
+          if (response.data.message) {
+            this.serverMessage = response.data.message;
+          }
+        }
+      } catch (error) {
+        console.log(error);
+      }
+
+      this.burndownDialog = true;
+
+      this.$nextTick(() => {
+        if (burndownConfig) {
+          new Chart(document.getElementById('burndown-chart'), burndownConfig);
+        }
+        if (buildResource) {
+          new Chart(document.getElementById('resource-chart'), resouceConfig);
+        }
+      });
     },
   },
   computed: {
@@ -337,6 +492,9 @@ parasails.registerPage('milestone-view', {
         return false;
       }
       return !!bowser.mobile || !!bowser.tablet;
+    },
+    getServerMessage: function () {
+      return i18next.t(this.serverMessage);
     },
   },
 });

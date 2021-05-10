@@ -26,13 +26,26 @@ module.exports = {
   fn: async function (inputs) {
     var current = await Thread.findOne({
       id: inputs.id,
-    });
+    }).populate('milestone');
     if (!current) {
       throw 'notFound';
     }
 
     if (current.dueDateAt === inputs.dueDate) {
       return;
+    }
+
+    if (
+      current.milestone &&
+      current.milestone.startAt &&
+      current.milestone.duration &&
+      inputs.dueDate
+    ) {
+      var start = moment(Number(current.milestone.startAt)).startOf('day').valueOf();
+      var end = Number(start) + Number(current.milestone.duration);
+      if (end < inputs.dueDate || start > inputs.dueDate) {
+        throw 'badRequest';
+      }
     }
 
     var team = await sails.helpers.validateMembership.with({

@@ -39,6 +39,10 @@ module.exports = {
         }
       }
 
+      if (inputs.thread.status === 1 && !valueSets.openCloseElapsed) {
+        valueSets.openCloseElapsed = inputs.thread.updatedAt - inputs.thread.createdAt;
+      }
+
       var st = 0;
       var workingCloseElapsed = 0;
 

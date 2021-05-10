@@ -16,20 +16,27 @@
     a = 'quarter',
     o = 'year',
     f = 'date',
-    h = /^(\d{4})[-/]?(\d{1,2})?[-/]?(\d{0,2})[^0-9]*(\d{1,2})?:?(\d{1,2})?:?(\d{1,2})?.?(\d+)?$/,
-    c = /\[([^\]]+)]|Y{2,4}|M{1,4}|D{1,2}|d{1,4}|H{1,2}|h{1,2}|a|A|m{1,2}|s{1,2}|Z{1,2}|SSS/g,
-    d = function (t, e, n) {
+    h = /^(\d{4})[-/]?(\d{1,2})?[-/]?(\d{0,2})[^0-9]*(\d{1,2})?:?(\d{1,2})?:?(\d{1,2})?[.:]?(\d+)?$/,
+    c = /\[([^\]]+)]|Y{1,4}|M{1,4}|D{1,2}|d{1,4}|H{1,2}|h{1,2}|a|A|m{1,2}|s{1,2}|Z{1,2}|SSS/g,
+    d = {
+      name: 'en',
+      weekdays: 'Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday'.split('_'),
+      months: 'January_February_March_April_May_June_July_August_September_October_November_December'.split(
+        '_'
+      ),
+    },
+    $ = function (t, e, n) {
       var r = String(t);
       return !r || r.length >= e ? t : '' + Array(e + 1 - r.length).join(n) + t;
     },
-    $ = {
-      s: d,
+    l = {
+      s: $,
       z: function (t) {
         var e = -t.utcOffset(),
           n = Math.abs(e),
           r = Math.floor(n / 60),
           i = n % 60;
-        return (e <= 0 ? '+' : '-') + d(r, 2, '0') + ':' + d(i, 2, '0');
+        return (e <= 0 ? '+' : '-') + $(r, 2, '0') + ':' + $(i, 2, '0');
       },
       m: function t(e, n) {
         if (e.date() < n.date()) return -t(n, e);
@@ -54,16 +61,9 @@
         return void 0 === t;
       },
     },
-    l = {
-      name: 'en',
-      weekdays: 'Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday'.split('_'),
-      months: 'January_February_March_April_May_June_July_August_September_October_November_December'.split(
-        '_'
-      ),
-    },
     y = 'en',
     M = {};
-  M[y] = l;
+  M[y] = d;
   var m = function (t) {
       return t instanceof S;
     },
@@ -82,15 +82,15 @@
       var n = 'object' == typeof e ? e : {};
       return (n.date = t), (n.args = arguments), new S(n);
     },
-    g = $;
+    g = l;
   (g.l = D),
     (g.i = m),
     (g.w = function (t, e) {
-      return v(t, { locale: e.$L, utc: e.$u, $offset: e.$offset });
+      return v(t, { locale: e.$L, utc: e.$u, x: e.$x, $offset: e.$offset });
     });
   var S = (function () {
       function d(t) {
-        (this.$L = this.$L || D(t.locale, null, !0)), this.parse(t);
+        (this.$L = D(t.locale, null, !0)), this.parse(t);
       }
       var $ = d.prototype;
       return (
@@ -113,6 +113,7 @@
             }
             return new Date(e);
           })(t)),
+            (this.$x = t.x || {}),
             this.init();
         }),
         ($.init = function () {
@@ -367,7 +368,7 @@
       };
     }),
     (v.extend = function (t, e) {
-      return t(e, S, v), v;
+      return t.$i || (t(e, S, v), (t.$i = !0)), v;
     }),
     (v.locale = D),
     (v.isDayjs = m),
@@ -376,6 +377,7 @@
     }),
     (v.en = M[y]),
     (v.Ls = M),
+    (v.p = {}),
     v
   );
 });
