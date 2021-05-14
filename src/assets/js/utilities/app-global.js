@@ -363,7 +363,7 @@ const $lycaon = {
     if (!message) {
       return;
     }
-    Vue.$toast.success(message, { duration: 2500 });
+    Vue.$toast.success(message, { duration: 3000 });
   },
   warningToast: function (key, parames) {
     var message = this.i18n(key, parames);
@@ -674,29 +674,6 @@ const $lycaon = {
       $('#stack-message').hide();
     }
   },
-  lycaonEditorToolbarItems: [
-    'heading',
-    'bold',
-    'italic',
-    'strike',
-    'divider',
-    'hr',
-    'quote',
-    'divider',
-    'ul',
-    'ol',
-    'task',
-    'indent',
-    'outdent',
-    'divider',
-    'table',
-    //'image',
-    //'link',
-    'divider',
-    'code',
-    'codeblock',
-    'divider',
-  ],
   axios: {
     get: async function (url, config, common) {
       var conf = _.extend({}, config || {});
@@ -707,6 +684,22 @@ const $lycaon = {
         common || {}
       );
       return await axios.get(url, conf);
+    },
+    getWith: async function (url, data, config, common) {
+      var conf = _.extend({}, config || {});
+      axios.defaults.headers.common = _.extend(
+        {
+          'x-csrf-token': SAILS_LOCALS._csrf,
+        },
+        common || {}
+      );
+      return await axios.get(
+        url,
+        {
+          params: data,
+        },
+        conf
+      );
     },
     post: async function (url, data, config, common) {
       var conf = _.extend({}, config || {});
@@ -846,16 +839,26 @@ $(function () {
   /* https://jdenticon.com/js-api/A_data-jdenticon-value.html */
   jdenticon.config = { replaceMode: 'observe' };
 
+  new SmoothScroll('a[href*="#"]', {
+    speed: 300,
+    header: 'header',
+  });
+
   var lycaonLoad = function () {
     var url = $(location).attr('href');
     if (url.indexOf('#') != -1) {
       var anchor = url.split('#');
       if (anchor.length > 1) {
-        if (anchor[anchor.length - 1]) {
-          var target = $('#' + anchor[anchor.length - 1]);
+        var ref = anchor[anchor.length - 1];
+        if (ref) {
+          var target = $('#' + decodeURI(ref));
           if (target.length) {
-            var pos = Math.floor(target.offset().top) - 100;
-            $('html, body').animate({ scrollTop: pos }, 500);
+            var fixedHeader = document.querySelector('header');
+            if (fixedHeader) {
+              var height = parseInt(window.getComputedStyle(fixedHeader).height, 10);
+              var pos = Math.floor(target.offset().top) - (height + fixedHeader.offsetTop);
+              $('html, body').animate({ scrollTop: pos }, 500);
+            }
           }
         }
       }

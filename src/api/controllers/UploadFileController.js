@@ -306,6 +306,15 @@ module.exports = {
           createdRecord.owner = user;
           sails.log.debug(`添付ファイルを登録しました。${virtualPath}`);
 
+          await sails.helpers.agendaSchedule.with({
+            ttl: Date.now() + sails.config.custom.documentTokenizeTTL,
+            job: 'document-tokenize',
+            data: {
+              type: container,
+              item: createdRecord,
+            },
+          });
+
           return res.json({
             item: createdRecord,
             url: url,
@@ -432,8 +441,10 @@ module.exports = {
     if (item) {
       try {
         let target = path.resolve(sails.config.appPath, item.virtualPath);
-        fs.unlinkSync(target);
-        sails.log.debug(`添付ファイル(L)を削除しました。${target}`);
+        if (fs.existsSync(target)) {
+          fs.unlinkSync(target);
+          sails.log.debug(`添付ファイル(L)を削除しました。${target}`);
+        }
       } catch (err) {
         //無視
         sails.log.error(err);
@@ -441,8 +452,10 @@ module.exports = {
 
       try {
         let target = path.resolve(sails.config.appPath, item.virtualPathMid);
-        fs.unlinkSync(target);
-        sails.log.debug(`添付ファイル(M)を削除しました。${target}`);
+        if (fs.existsSync(target)) {
+          fs.unlinkSync(target);
+          sails.log.debug(`添付ファイル(M)を削除しました。${target}`);
+        }
       } catch (err) {
         //無視
         sails.log.error(err);
@@ -450,8 +463,10 @@ module.exports = {
 
       try {
         let target = path.resolve(sails.config.appPath, item.virtualPathSmall);
-        fs.unlinkSync(target);
-        sails.log.debug(`添付ファイル(S)を削除しました。${target}`);
+        if (fs.existsSync(target)) {
+          fs.unlinkSync(target);
+          sails.log.debug(`添付ファイル(S)を削除しました。${target}`);
+        }
       } catch (err) {
         //無視
         sails.log.error(err);

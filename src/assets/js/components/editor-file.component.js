@@ -26,6 +26,8 @@ parasails.registerComponent('editorFile', {
     'isDemosite',
     'hiddenUpload',
     'closed',
+    'showQuery',
+    'parent',
   ],
   //  ╦╔╗╔╦╔╦╗╦╔═╗╦    ╔═╗╔╦╗╔═╗╔╦╗╔═╗
   //  ║║║║║ ║ ║╠═╣║    ╚═╗ ║ ╠═╣ ║ ║╣
@@ -37,6 +39,8 @@ parasails.registerComponent('editorFile', {
       formatDate: $lycaon.formatter.formatDate,
       showDeleteModal: false,
       selectedItem: {},
+      queryWord: '',
+      hits: {},
     };
   },
 
@@ -83,41 +87,46 @@ parasails.registerComponent('editorFile', {
     </div>
   </div>
   <div class="collapse mt-4" :class="isShow" id="wrapper-appendix">
-        <div class="row">
-            <div class="col">
-            <ul class="file-list">
-                <li v-for="(item, index) in appendix">
-                    <small v-if="mode === 'update'">
-                        <i class="fas fa-paperclip"></i>
-                        <a class="mr-2" :href="downloadAppendix(item, index)" rel="noopener">{{ item.name }} <i class="fas fa-cloud-download-alt fa-lg"></i></a> <lycaon-timestamp :at="item.createdAt" format="timeago" :translator="translator"></lycaon-timestamp>
-                        <user-identity :user="item.owner" :organization="organization" size="sm"></user-identity>
-                        {{ i18n("Attached file") }}
-                        <a href="javascript:void(0)" @click="showDeleteDialog(item, index)"><i class="far fa-trash-alt"></i></a>
-                    </small>
-                    <small v-else>
-                    <i class="fas fa-paperclip"></i>
-                    {{ item.name }} / {{ formatter.format(item.size) }}{{ i18n("byte") }}
-                        <a href="javascript:void(0)" @click="showDeleteDialog(item, index)"><i class="far fa-trash-alt"></i></a>
-                    </small>
-                </li>
-            </ul>
-            </div>
-        </div>
-        <div class="row mt-2">
-            <div class="col"><small class="text-muted">{{ limitation }}</small></div>
-        </div>
-        <div class="row mt-3" v-if="!hiddenUpload">
-            <drop-fileupload :whitelist="whitelist" :callback="addImage" :is-uploading="isUploading"></drop-fileupload>
-        </div>
+    <div class="row justify-content-end" v-if="showQuery">
+      <div class="col-auto form-group">
+        <small><label for="query-word" data-toggle="tooltip" :title="queryTooltip">{{ i18n('Word search') }}</label></small>
+        <input type="text" maxlength="30" class="form-control form-control-sm" id="query-word" v-model="queryWord" v-on:keyup.enter="fullTextSearch"/>
+      </div>
     </div>
+    <div class="row">
+      <div class="col">
+        <ul class="file-list">
+          <li v-for="(item, index) in appendix">
+            <small v-if="mode === 'update'">
+                <i class="fas fa-paperclip"></i>
+                <a class="mr-2" :class="[hits[item.id] ? 'hit-active': '']" :href="downloadAppendix(item, index)" rel="noopener">{{ item.name }} <i class="fas fa-cloud-download-alt fa-lg"></i></a> <lycaon-timestamp :at="item.createdAt" format="timeago" :translator="translator"></lycaon-timestamp>
+                <user-identity :user="item.owner" :organization="organization" size="sm"></user-identity>
+                {{ i18n("Attached file") }}
+                <a href="javascript:void(0)" @click="showDeleteDialog(item, index)"><i class="far fa-trash-alt"></i></a>
+            </small>
+            <small v-else>
+              <i class="fas fa-paperclip"></i>
+              <span :class="[hits[item.id] ? 'hit-active': '']">{{ item.name }} / {{ formatter.format(item.size) }}{{ i18n("byte") }}</span>
+              <a href="javascript:void(0)" @click="showDeleteDialog(item, index)"><i class="far fa-trash-alt"></i></a>
+            </small>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col"><small class="text-muted">{{ limitation }}</small></div>
+    </div>
+    <div class="row mt-3" v-if="!hiddenUpload">
+      <drop-fileupload :whitelist="whitelist" :callback="addImage" :is-uploading="isUploading"></drop-fileupload>
+    </div>
+  </div>
 </div>
     `,
-
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
   //  ║  ║╠╣ ║╣ ║  ╚╦╝║  ║  ║╣
   //  ╩═╝╩╚  ╚═╝╚═╝ ╩ ╚═╝╩═╝╚═╝
   beforeMount: function () {
-    //…
+    this.hits = {};
   },
   mounted: async function () {
     //
@@ -148,6 +157,35 @@ parasails.registerComponent('editorFile', {
     },
     translator: function (val) {
       return this.i18n('At {0},', [val]);
+    },
+    fullTextSearch: async function () {
+      this.hits = {};
+      if (!this.queryWord) {
+        return;
+      }
+
+      try {
+        var url = `/api/v1/query/document/${this.parent}`;
+        var response = await $lycaon.axios.getWith(url, { word: this.queryWord });
+        if (response.data && response.data.length > 0) {
+          for (let entry of response.data) {
+            var target = _.find(this.appendix, (o) => {
+              return o.id == entry.id;
+            });
+            if (target) {
+              this.hits[target.id] = true;
+            }
+          }
+        }
+
+        if (Object.keys(this.hits).length > 0) {
+          $lycaon.successToast('Found the word in the highlighted attachment');
+        }
+
+        this.$forceUpdate();
+      } catch (err) {
+        console.log(err);
+      }
     },
   },
   computed: {
@@ -314,6 +352,9 @@ parasails.registerComponent('editorFile', {
       }
 
       return i18next.t(mainKey).format(i18next.t(docName), firstKey, allKey);
+    },
+    queryTooltip: function () {
+      return i18next.t('Full-text search in PDF, MS-EXCEL, MS-WORD attachments');
     },
   },
 });

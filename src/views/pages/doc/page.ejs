@@ -21,9 +21,35 @@
         }}</span>
       </div>
     </div>
-    <div class="row mt-5 mb-5 p-3 shadow rounded">
-      <div class="col text-break" id="viewer"></div>
+
+     <div class="text-right" v-show="!showToc"><span class="d-none d-md-block"><a href="javascript:void(0)" @click="buildToc"><%= __("Table of contents") %></a></span></div>
+
+    <div class="row mt-3 mb-3 p-3 shadow rounded">
+          <div class="col text-break">
+            <div id="viewer"></div>
+          </div>
+          <div class="col-auto">
+            <div class="wiki-toc-container d-none d-md-block" v-if="showToc">
+              <div class="row">
+                <div class="col">
+                  <button type="button" class="toc-close" @click="showToc = false">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <div class="wiki-toc">
+                    <ul id="wiki-toc"></ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+
   </div>
 </div>
 <%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>

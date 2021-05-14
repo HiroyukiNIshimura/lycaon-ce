@@ -70,7 +70,7 @@ module.exports = {
       response.records = await Thread.count().where(whereClause);
       response.data = await sails.helpers.findThread.with({
         whereClause: whereClause,
-        sort: 'accessCount DESC',
+        sort: [{ accessCount: 'DESC' }, { id: 'ASC' }],
         pagination: pagination,
       });
     } catch (err) {

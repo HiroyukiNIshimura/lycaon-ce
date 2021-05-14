@@ -12,9 +12,13 @@
       <div class="modal-body">
         <div v-if="noResults">{{ getServerMessage }}</div>
         <div v-else>
-          <canvas id="burndown-chart"></canvas>
-          <canvas id="resource-chart"></canvas>
-          <div class="row mt-3">
+          <div class="mt-1">
+            <canvas id="burndown-chart"></canvas>
+          </div>
+          <div class="mt-5">
+            <canvas id="resource-chart"></canvas>
+          </div>
+          <div class="row mt-5">
             <div class="col-sm-7">
               <div class="values-gauge">
                 <vue-svg-gauge

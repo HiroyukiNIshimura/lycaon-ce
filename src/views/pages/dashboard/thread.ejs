@@ -134,7 +134,7 @@
                 <!-- appendix -->
                 <editor-file :appendix="appendix" :organization="organization" mode="update" :delete-appendix="deleteAppendix" :download-appendix="downloadAppendix" :whitelist="witeListOfExts"
                   :add-image="addImageBlobHook" :is-uploading="isUploading" :planlimitation="planlimitation" title="thread" :is-demosite="isDemosite"
-                  :hidden-upload="thread.locked">
+                  :hidden-upload="thread.locked" :parent="thread.id">
                 </editor-file>
 
                 <div class="row mt-1">
@@ -265,7 +265,7 @@
             <!-- appendix -->
             <editor-file :appendix="appendix" :organization="organization" mode="update" :delete-appendix="deleteAppendix" :download-appendix="downloadAppendix" :whitelist="witeListOfExts"
               :add-image="addImageBlobHook" :is-uploading="isUploading" :planlimitation="planlimitation" title="thread" :is-demosite="isDemosite"
-              :hidden-upload="thread.locked">
+              :hidden-upload="thread.locked" :parent="thread.id" :show-query="true">
             </editor-file>
             <div class="row mt-5 mb-5 p-3 shadow rounded" v-show="thread.body">
               <div class="col">

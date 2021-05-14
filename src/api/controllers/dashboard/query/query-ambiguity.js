@@ -5,6 +5,7 @@ module.exports = {
     word: {
       type: 'string',
       description: 'query word',
+      maxLength: 50,
       required: true,
     },
     id: {
@@ -218,17 +219,17 @@ module.exports = {
                 `;
 
     var NATIVE_WHERE = `WHERE "thread"."team" = $1 
-AND ("thread"."subject" like $2 OR "thread"."body" like $3
- OR "thread"."id" in (SELECT "thread" FROM "sneeze" WHERE "comment" like $4)
- OR "thread"."id" in (SELECT "thread" FROM "reply" WHERE "comment" like $5)
+AND ("thread"."subject" ilike $2 OR "thread"."body" ilike $3
+ OR "thread"."id" in (SELECT "thread" FROM "sneeze" WHERE "comment" ilike $4)
+ OR "thread"."id" in (SELECT "thread" FROM "reply" WHERE "comment" ilike $5)
  OR "thread"."id" = $6
       )
 `;
 
     var NATIVE_WHERE2 = `WHERE "thread"."team" IN (SELECT "id" FROM "team" WHERE "organization" = $1)  
-AND ("thread"."subject" like $2 OR "thread"."body" like $3
- OR "thread"."id" in (SELECT "thread" FROM "sneeze" WHERE "comment" like $4)
- OR "thread"."id" in (SELECT "thread" FROM "reply" WHERE "comment" like $5)
+AND ("thread"."subject" ilike $2 OR "thread"."body" ilike $3
+ OR "thread"."id" in (SELECT "thread" FROM "sneeze" WHERE "comment" ilike $4)
+ OR "thread"."id" in (SELECT "thread" FROM "reply" WHERE "comment" ilike $5)
  OR "thread"."id" = $6
       )
 `;

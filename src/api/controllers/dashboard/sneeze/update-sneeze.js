@@ -1,4 +1,3 @@
-const Agenda = require('agenda');
 module.exports = {
   friendlyName: 'Update Sneeze',
   description: 'Update the Sneeze for the logged-in user.',
@@ -23,14 +22,6 @@ module.exports = {
   },
 
   fn: async function (inputs) {
-    var agenda = new Agenda({
-      db: {
-        address: sails.config.custom.agenda.mongoUrl,
-        collection: sails.config.custom.agenda.collection,
-        options: sails.config.custom.agenda.options,
-      },
-    });
-
     var current = await Sneeze.findOne({
       id: inputs.id,
     }).populate('thread');

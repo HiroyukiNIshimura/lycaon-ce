@@ -34,7 +34,7 @@ module.exports = {
     response.records = await User.count({ organization: this.req.organization.id });
     response.users = await User.find({
       where: { organization: this.req.organization.id },
-      sort: 'fullName ASC',
+      sort: [{ fullName: 'ASC' }, { id: 'ASC' }],
       limit: pagination.limit,
       skip: pagination.skip,
     });

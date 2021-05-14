@@ -41,7 +41,7 @@ module.exports = {
 
     try {
       var team = await Team.findOne({ id: response.team.id }).populate('users', {
-        sort: 'lastSeenAt DESC',
+        sort: [{ lastSeenAt: 'DESC' }, { id: 'ASC' }],
         limit: pagination.limit,
         skip: pagination.skip,
       });

@@ -172,45 +172,45 @@ module.exports = {
         });
       }
 
-      var sort = 'updatedAt DESC';
+      var sort = [{ updatedAt: 'DESC' }, { id: 'ASC' }];
       if (inputs.sort) {
         switch (inputs.sort) {
           case 1:
-            sort = 'updatedAt ASC';
+            sort = [{ updatedAt: 'ASC' }, { id: 'ASC' }];
             break;
           case 2:
-            sort = 'createdAt DESC';
+            sort = [{ createdAt: 'DESC' }, { id: 'ASC' }];
             break;
           case 3:
-            sort = 'createdAt ASC';
+            sort = [{ createdAt: 'ASC' }, { id: 'ASC' }];
             break;
           case 4:
-            sort = 'priority DESC';
+            sort = [{ priority: 'DESC' }, { id: 'ASC' }];
             whereClause.priority = { '!=': null };
             break;
           case 5:
-            sort = 'priority ASC';
+            sort = [{ priority: 'ASC' }, { id: 'ASC' }];
             whereClause.priority = { '!=': null };
             break;
           case 6:
-            sort = 'dueDateAt DESC';
+            sort = [{ dueDateAt: 'DESC' }, { id: 'ASC' }];
             whereClause.dueDateAt = { '!=': null };
             break;
           case 7:
-            sort = 'dueDateAt ASC';
+            sort = [{ dueDateAt: 'ASC' }, { id: 'ASC' }];
             whereClause.dueDateAt = { '!=': null };
             break;
           case 8:
-            sort = 'urgency DESC';
+            sort = [{ urgency: 'DESC' }, { id: 'ASC' }];
             whereClause.priority = { '!=': null };
             break;
           case 9:
-            sort = 'urgency ASC';
+            sort = [{ urgency: 'ASC' }, { id: 'ASC' }];
             whereClause.priority = { '!=': null };
             break;
           case 0:
           default:
-            sort = 'updatedAt DESC';
+            sort = [{ updatedAt: 'DESC' }, { id: 'ASC' }];
             break;
         }
       }

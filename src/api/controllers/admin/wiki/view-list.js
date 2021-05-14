@@ -51,7 +51,7 @@ module.exports = {
           }),
         },
       },
-      sort: 'createdAt DESC',
+      sort: [{ createdAt: 'DESC' }, { id: 'ASC' }],
       limit: pagination.limit,
       skip: pagination.skip,
     })

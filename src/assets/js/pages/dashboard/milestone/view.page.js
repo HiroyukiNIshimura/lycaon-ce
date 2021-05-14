@@ -408,6 +408,7 @@ parasails.registerPage('milestone-view', {
               return config;
             };
 
+            var self = this;
             var buildResource = function () {
               var labels = _.map(response.data.openClose.members, (o) => {
                 return o.fullName;
@@ -415,13 +416,18 @@ parasails.registerPage('milestone-view', {
 
               var datasets = [
                 {
-                  axis: 'y',
-                  fill: false,
                   data: _.map(response.data.openClose.members, (o) => {
                     return o.burden;
                   }),
                 },
               ];
+
+              var aspectRatio = 2 / response.data.openClose.members.length;
+              if (self.isMobile) {
+                aspectRatio = aspectRatio * 4;
+              } else {
+                aspectRatio = aspectRatio * 10;
+              }
 
               var config = {
                 type: 'bar',
@@ -432,6 +438,7 @@ parasails.registerPage('milestone-view', {
                 options: {
                   indexAxis: 'y',
                   responsive: true,
+                  aspectRatio: aspectRatio,
                   scales: {
                     xAxes: [{ ticks: { beginAtZero: true } }],
                   },

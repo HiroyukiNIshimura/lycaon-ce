@@ -53,7 +53,7 @@ module.exports = {
     response.records = await Message.count().where(whereClause);
     response.data = await Message.find({
       where: whereClause,
-      sort: 'createdAt DESC',
+      sort: [{ createdAt: 'DESC' }, { id: 'ASC' }],
       limit: pagination.limit,
       skip: pagination.skip,
     });

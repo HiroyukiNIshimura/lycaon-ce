@@ -78,6 +78,10 @@ module.exports = {
       description: 'ファイルのMimeType',
       example: 'application/pdf',
     },
+    qWords: {
+      type: 'string',
+      description: '検索用わかちデータ',
+    },
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
     //  ╚═╝╩ ╩╚═╝╚═╝═╩╝╚═╝
@@ -90,5 +94,9 @@ module.exports = {
     owner: {
       model: 'user',
     },
+  },
+  customToJSON: function () {
+    // Return a shallow copy of this record with the password and ssn removed.
+    return _.omit(this, ['qWords']);
   },
 };

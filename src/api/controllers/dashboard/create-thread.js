@@ -1,5 +1,3 @@
-const Agenda = require('agenda');
-
 module.exports = {
   friendlyName: 'Create thread',
   description: 'Create the thread for the logged-in user.',
@@ -50,14 +48,6 @@ module.exports = {
   },
 
   fn: async function (inputs) {
-    var agenda = new Agenda({
-      db: {
-        address: sails.config.custom.agenda.mongoUrl,
-        collection: sails.config.custom.agenda.collection,
-        options: sails.config.custom.agenda.options,
-      },
-    });
-
     const team = await sails.helpers.validateMembership.with({
       id: inputs.team,
       user: this.req.me,
@@ -164,12 +154,15 @@ module.exports = {
         });
       });
 
-      var ttl = Date.now() + sails.config.custom.bot.tweetTTL;
-      await agenda.schedule(ttl, 'similarity-bot', {
-        id: created.id,
-        team: created.team,
-        subject: created.subject,
-        body: created.body,
+      await sails.helpers.agendaSchedule.with({
+        ttl: Date.now() + sails.config.custom.bot.tweetTTL,
+        job: 'similarity-bot',
+        data: {
+          id: created.id,
+          team: created.team,
+          subject: created.subject,
+          body: created.body,
+        },
       });
 
       sails.sockets.broadcast(

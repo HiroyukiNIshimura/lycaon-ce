@@ -94,7 +94,15 @@ module.exports = {
     }
 
     if (inputs.useGit) {
-      var res = await sails.helpers.gitRepositoryCheck.with(inputs);
+      var res = await sails.helpers.gitRepositoryCheck.with({
+        connectType: inputs.connectType,
+        gitRepository: inputs.gitRepository,
+        gitUser: inputs.gitUser,
+        gitPassword: inputs.gitPassword,
+        gitlabApi: inputs.gitlabApi,
+        gitlabToken: inputs.gitlabToken,
+        gitlabProjectId: inputs.gitlabProjectId,
+      });
       if (res) {
         return res;
       }

@@ -16,7 +16,7 @@ module.exports = {
 
     var list = await Message.find({
       where: { sendTo: inputs.me.id, readAt: null },
-      sort: 'createdAt DESC',
+      sort: [{ createdAt: 'DESC' }, { id: 'ASC' }],
       limit: 50,
     }).populate('sendFrom');
 

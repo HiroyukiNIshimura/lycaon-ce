@@ -1,6 +1,5 @@
 const moment = require('moment');
 const url = require('url');
-const Agenda = require('agenda');
 
 module.exports = {
   friendlyName: 'Send Thread mail utility',
@@ -48,14 +47,6 @@ module.exports = {
     },
   },
   fn: async function (inputs) {
-    var agenda = new Agenda({
-      db: {
-        address: sails.config.custom.agenda.mongoUrl,
-        collection: sails.config.custom.agenda.collection,
-        options: sails.config.custom.agenda.options,
-      },
-    });
-
     var thread = await Thread.findOne({ id: inputs.thread })
       .populate('team')
       .populate('category')
@@ -344,8 +335,11 @@ module.exports = {
           templateData: templateData,
         };
 
-        var dt = Date.now() + sails.config.custom.mailSendTTL;
-        await agenda.schedule(dt, 'send-email', data);
+        await sails.helpers.agendaSchedule.with({
+          ttl: Date.now() + sails.config.custom.mailSendTTL,
+          job: 'send-email',
+          data: data,
+        });
       }
     }
 

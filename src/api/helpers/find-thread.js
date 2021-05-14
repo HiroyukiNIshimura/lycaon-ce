@@ -6,7 +6,7 @@ module.exports = {
       type: 'ref',
     },
     sort: {
-      type: 'string',
+      type: 'ref',
     },
     pagination: {
       type: 'ref',
@@ -20,7 +20,7 @@ module.exports = {
   fn: async function (inputs) {
     var sort = inputs.sort;
     if (!inputs.sort) {
-      sort = 'updatedAt DESC';
+      sort = [{ updatedAt: 'DESC' }, { id: 'ASC' }];
     }
 
     var response = await Thread.find({

@@ -1,5 +1,3 @@
-const Agenda = require('agenda');
-
 module.exports = {
   friendlyName: 'update vote',
 
@@ -171,14 +169,6 @@ module.exports = {
       });
 
       if (updated.circulationFrom <= Date.now()) {
-        var agenda = new Agenda({
-          db: {
-            address: sails.config.custom.agenda.mongoUrl,
-            collection: sails.config.custom.agenda.collection,
-            options: sails.config.custom.agenda.options,
-          },
-        });
-
         var formail = await Vote.findOne({ id: updated.id }).populate('users').populate('author');
         for (let entry of formail.users) {
           var data = await sails.helpers.createVoteMail.with({
@@ -189,8 +179,11 @@ module.exports = {
             user: entry,
           });
 
-          var dt = Date.now() + sails.config.custom.mailSendTTL;
-          await agenda.schedule(dt, 'send-email', data);
+          await sails.helpers.agendaSchedule.with({
+            ttl: Date.now() + sails.config.custom.mailSendTTL,
+            job: 'send-email',
+            data: data,
+          });
         }
 
         await Vote.updateOne({ id: formail.id }).set({ mailSended: true });

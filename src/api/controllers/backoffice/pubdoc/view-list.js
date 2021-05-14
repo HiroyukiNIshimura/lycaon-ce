@@ -27,7 +27,7 @@ module.exports = {
     response.records = await Wiki.count({ concept: 1 });
     response.wikis = await Wiki.find({
       where: { concept: 1 },
-      sort: 'createdAt DESC',
+      sort: [{ createdAt: 'DESC' }, { id: 'ASC' }],
       limit: pagination.limit,
       skip: pagination.skip,
     })

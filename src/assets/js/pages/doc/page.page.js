@@ -7,6 +7,7 @@ parasails.registerPage('pubdoc-page', {
     dateAgo: $lycaon.formatter.dateAgo,
     viewer: {},
     appendix: [],
+    showToc: true,
     // Main syncing/loading state for this page.
     syncing: false,
     // Form data
@@ -31,12 +32,35 @@ parasails.registerPage('pubdoc-page', {
   mounted: async function () {
     //https://nhn.github.io/tui.editor
     this.viewer = $lycaon.markdown.createViewer('#viewer', this.wiki.body, '100%');
+
+    this.buildToc();
   },
 
   //  ╦╔╗╔╔╦╗╔═╗╦═╗╔═╗╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
+    buildToc: function () {
+      this.showToc = true;
+      this.$nextTick(() => {
+        $('#wiki-toc').toc({ content: 'div.container', headings: 'h1,h2,h3' });
+        var nodes = $('#wiki-toc').find('a');
+        if (nodes.length < 1) {
+          this.showToc = false;
+        } else {
+          $(window).scroll(function () {
+            $('h1,h2,h3').each(function () {
+              if (document.documentElement.scrollTop >= this.offsetTop) {
+                var id = this.getAttribute('id');
+                nodes.removeClass('toc-active');
+                var active = $('#wiki-toc').find('a[href="#' + id + '"]');
+                active.addClass('toc-active');
+              }
+            });
+          });
+        }
+      });
+    },
     fileLinksTarget: function (item) {
       if (item.mimeType.startsWith('application')) {
         return '';

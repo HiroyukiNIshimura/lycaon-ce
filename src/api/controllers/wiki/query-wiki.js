@@ -93,7 +93,7 @@ module.exports = {
       response.records = await Wiki.count().where(whereClause);
       response.data = await Wiki.find({
         where: whereClause,
-        sort: 'createdAt DESC',
+        sort: [{ createdAt: 'DESC' }, { id: 'ASC' }],
         limit: pagination.limit,
         skip: pagination.skip,
       })

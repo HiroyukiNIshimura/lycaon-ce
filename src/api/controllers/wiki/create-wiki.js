@@ -1,5 +1,4 @@
 const path = require('path');
-const Agenda = require('agenda');
 
 module.exports = {
   friendlyName: 'Create wiki',
@@ -107,14 +106,6 @@ module.exports = {
         created = await Wiki.create(wiki).fetch().usingConnection(db);
 
         if (inputs.concept === 0) {
-          var agenda = new Agenda({
-            db: {
-              address: sails.config.custom.agenda.mongoUrl,
-              collection: sails.config.custom.agenda.collection,
-              options: sails.config.custom.agenda.options,
-            },
-          });
-
           team = await Team.findOne({ id: created.team }).populate('users');
           for (let entry of team.users) {
             var data = await sails.helpers.createWikiMail.with({
@@ -125,8 +116,11 @@ module.exports = {
               user: entry,
             });
 
-            var dt = Date.now() + sails.config.custom.mailSendTTL;
-            await agenda.schedule(dt, 'send-email', data);
+            await sails.helpers.agendaSchedule.with({
+              ttl: Date.now() + sails.config.custom.mailSendTTL,
+              job: 'send-email',
+              data: data,
+            });
           }
         }
       });
