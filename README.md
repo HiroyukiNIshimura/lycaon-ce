@@ -77,3 +77,4 @@ User: demoo@example.com
 Password: lycaon4321
 
 > The data on this site will be deleted with each version upgrade.
+
