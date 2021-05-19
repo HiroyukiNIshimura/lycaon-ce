@@ -222,7 +222,8 @@ module.exports = {
 AND ("thread"."subject" ilike $2 OR "thread"."body" ilike $3
  OR "thread"."id" in (SELECT "thread" FROM "sneeze" WHERE "comment" ilike $4)
  OR "thread"."id" in (SELECT "thread" FROM "reply" WHERE "comment" ilike $5)
- OR "thread"."id" = $6
+ OR "thread"."id" in (SELECT "thread" FROM "thread_item" WHERE "qWords" ilike $6)
+ OR "thread"."id" = $7
       )
 `;
 
@@ -230,12 +231,33 @@ AND ("thread"."subject" ilike $2 OR "thread"."body" ilike $3
 AND ("thread"."subject" ilike $2 OR "thread"."body" ilike $3
  OR "thread"."id" in (SELECT "thread" FROM "sneeze" WHERE "comment" ilike $4)
  OR "thread"."id" in (SELECT "thread" FROM "reply" WHERE "comment" ilike $5)
- OR "thread"."id" = $6
+ OR "thread"."id" in (SELECT "thread" FROM "thread_item" WHERE "qWords" ilike $6)
+ OR "thread"."id" = $7
       )
 `;
 
-    var NATIVE_ORDER = `ORDER BY "thread"."updatedAt" DESC LIMIT $7 OFFSET $8
+    var NATIVE_ORDER = `ORDER BY "thread"."updatedAt" DESC, "thread"."id" ASC LIMIT $8 OFFSET $9
         `;
+
+    var NATIVE_SNEEZE = `
+SELECT "id", "comment", "thread"                  
+  FROM "public"."sneeze"
+ WHERE "comment" ilike $1
+   AND "thread" = $2
+    `;
+    var NATIVE_REPLY = `
+SELECT "id", "comment", "thread", "sneeze"                  
+  FROM "public"."reply"
+ WHERE "comment" ilike $1
+   AND "thread" = $2
+`;
+
+    var NATIVE_ITEM = `
+SELECT "id", "name", "virtualPath", "thread"                             
+  FROM "public"."thread_item"
+ WHERE "qWords" ilike $1
+   AND "thread" = $2
+    `;
 
     var pagination = await sails.helpers.pagination.with({
       page: inputs.page,
@@ -272,7 +294,7 @@ AND ("thread"."subject" ilike $2 OR "thread"."body" ilike $3
     var word = `%${inputs.word}%`;
 
     var _ = require('lodash');
-    params = _.concat(params, [word, word, word, word]);
+    params = _.concat(params, [word, word, word, word, word]);
 
     if (!isNaN(inputs.word)) {
       params.push(inputs.word);
@@ -320,9 +342,6 @@ AND ("thread"."subject" ilike $2 OR "thread"."body" ilike $3
             thread.milestone[col] = val;
           } else if (key.startsWith('owner__')) {
             let col = key.replace('owner__', '');
-            thread.category[col] = val;
-          } else if (key.startsWith('owner__')) {
-            let col = key.replace('owner__', '');
             thread.owner[col] = val;
           } else if (key.startsWith('responsible__')) {
             let col = key.replace('responsible__', '');
@@ -351,8 +370,55 @@ AND ("thread"."subject" ilike $2 OR "thread"."body" ilike $3
         thread.tags.push(o.tag_threads);
       });
 
+      thread.sneezeHits = [];
       thread.sneezeQty = await Sneeze.count({ thread: thread.id });
+      if (thread.sneezeQty > 0) {
+        let rawResult = await sails.sendNativeQuery(NATIVE_SNEEZE, [word, thread.id]);
+        for (let row of rawResult.rows) {
+          sails.log.info(row);
+          let matches = row.comment.matchAll(re);
+          for (let match of matches) {
+            //
+            var index = match.index - 10;
+            if (index < 0) {
+              index = 0;
+            }
+
+            thread.sneezeHits.push({
+              id: row.id,
+              sentence: row.comment.substr(index, inputs.word.length + 10),
+            });
+          }
+        }
+      }
+
+      thread.replyHits = [];
       thread.replyQty = await Reply.count({ thread: thread.id });
+      if (thread.replyQty > 0) {
+        let rawResult = await sails.sendNativeQuery(NATIVE_REPLY, [word, thread.id]);
+        for (let row of rawResult.rows) {
+          let matches = row.comment.matchAll(re);
+          for (let match of matches) {
+            //
+            var index = match.index - 10;
+            if (index < 0) {
+              index = 0;
+            }
+
+            thread.replyHits.push({
+              id: row.id,
+              sentence: row.comment.substr(index, inputs.word.length + 10),
+            });
+          }
+        }
+      }
+
+      thread.itemHits = [];
+      let rawResult = await sails.sendNativeQuery(NATIVE_ITEM, [word, thread.id]);
+      for (let row of rawResult.rows) {
+        thread.itemHits.push(row);
+      }
+
       thread.hits = true;
 
       if (thread.body) {

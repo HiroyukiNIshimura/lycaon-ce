@@ -62,7 +62,6 @@ parasails.registerPage('thread', {
     rightSidebar: 'noactive',
     sidebarCollapse: 'active',
     mainContents: 'active',
-
     // Main syncing/loading state for this page.
     syncing: false,
     // Form data
@@ -1508,6 +1507,41 @@ parasails.registerPage('thread', {
     },
     updateSneezTranslator: function (val) {
       return this.i18n('Updated the comment at {0}', [val]);
+    },
+    copyNo: function () {
+      $(this.$refs.clipper).tooltip('hide');
+
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(this.thread.no).then(this.notifyCopy);
+      } else {
+        var tmp = document.createElement('div');
+        var pre = document.createElement('pre');
+
+        pre.style.webkitUserSelect = 'auto';
+        pre.style.userSelect = 'auto';
+        tmp.appendChild(pre).textContent = this.thread.no;
+
+        var s = tmp.style;
+        s.position = 'fixed';
+        s.right = '200%';
+
+        document.body.appendChild(tmp);
+        document.getSelection().selectAllChildren(tmp);
+        document.execCommand('copy');
+
+        document.body.removeChild(tmp);
+
+        this.notifyCopy();
+      }
+    },
+    notifyCopy: function () {
+      var $action = $(this.$refs.clipperAction);
+      $action.attr('title', i18next.t('Copy completed'));
+      $action.tooltip('show');
+      setTimeout(function () {
+        $action.removeAttr('title');
+        $action.tooltip('dispose');
+      }, 1000);
     },
   },
   computed: {

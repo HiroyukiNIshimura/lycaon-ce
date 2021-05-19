@@ -166,7 +166,7 @@
             <div id="thread-results" class="mt-3" v-if="queryResults.length > 0">
               <div class="row">
                 <div class="col-auto mb-2 ml-1" v-for="item in queryResults" v-inview:parent="'animate'">
-                  <thread-card :thread="item" :selected-tags="selectedTags" :organization="organization" class="thread-card">
+                  <thread-card :thread="item" :selected-tags="selectedTags" :organization="organization" :word="query.word" class="thread-card">
                   </thread-card>
                 </div>
               </div>

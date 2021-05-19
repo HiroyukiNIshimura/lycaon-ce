@@ -1,1 +1,1 @@
-const lycaon_lang_work_delete = {"Log not found":""};
+const lycaon_lang_work_delete = {"The comment or reply contains a word":""};

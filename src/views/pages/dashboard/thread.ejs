@@ -189,7 +189,7 @@
               <div class="col">
                 <div class="row">
                   <div class="col">
-                    <span class="h6 text-muted mr-3"><%= __("Thread") %> #{{ thread.no }}</span>
+                    <span ref="clipper" class="h6 text-info text-muted mr-3" data-toggle="tooltip" :title="i18n('Copy thread No')"><a ref="clipperAction" href="javascript:void(0)" @click="copyNo"><%= __("Thread") %> #{{ thread.no }}</a></span>
                     <span class="badge badge-success" v-if="thread.working"><%= __("Working") %></span>
                     <span style="color: Tomato" class="mr-1" v-if="isFan">
                       <i class="fas fa-flag"></i>

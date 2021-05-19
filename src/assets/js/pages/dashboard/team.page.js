@@ -462,26 +462,21 @@ parasails.registerPage('team', {
       if (this.queryPatern === 1) {
         this.$nextTick(() => {
           var word = $('#query-word').val();
-          var re = new RegExp($lycaon.regexEscape(word), 'g');
+          var re = new RegExp($lycaon.regexEscape(word), 'ig');
 
           $.each($('.thread-subject'), function () {
             var text = $(this).text();
-            var newtext = text.replace(re, `<span class="query-hits">${word}</span>`);
-            $(this).text('');
-            $(this).append(newtext);
-          });
-
-          $.each($('.card[title]'), function () {
-            var text = $(this).prop('title');
-            var newtext = text.replace(re, `<span class="query-hits">${word}</span>`);
-            if (newtext) {
-              newtext = `${i18next.t('Thread body')}<br>...${newtext}...`;
-            } else {
-              newtext = i18next.t('The comment or reply contains a word');
+            var matches = text.matchAll(re);
+            for (let match of matches) {
+              var newtext = text.replaceAll(
+                match[0],
+                `<span class="query-hits">${match[0]}</span>`
+              );
+              $(this).text('');
+              $(this).append(newtext);
+              break;
             }
-            $(this).prop('title', newtext);
           });
-          $('.card[data-toggle="tooltip"]').tooltip();
         });
       }
 

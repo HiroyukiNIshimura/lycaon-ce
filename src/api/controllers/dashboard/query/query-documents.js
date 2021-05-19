@@ -37,6 +37,10 @@ module.exports = {
       throw 'notFound';
     }
 
+    if (!inputs.word) {
+      throw 'notFound';
+    }
+
     var NATIVE_SQL = `
  SELECT "id", "createdAt", "updatedAt", "name", "virtualPath", "virtualPathMid", "virtualPathSmall", "virtualUrl", "virtualUrlMid", "virtualUrlSmall", "hashName", "size", "mimeType", "qWords", "thread", "owner"
    FROM "public"."thread_item"

@@ -12,7 +12,7 @@ parasails.registerComponent('threadCard', {
   //  ╔═╗╦═╗╔═╗╔═╗╔═╗
   //  ╠═╝╠╦╝║ ║╠═╝╚═╗
   //  ╩  ╩╚═╚═╝╩  ╚═╝
-  props: ['thread', 'selectedTags', 'team', 'organization'],
+  props: ['thread', 'selectedTags', 'team', 'organization', 'word'],
 
   //  ╦╔╗╔╦╔╦╗╦╔═╗╦    ╔═╗╔╦╗╔═╗╔╦╗╔═╗
   //  ║║║║║ ║ ║╠═╣║    ╚═╗ ║ ╠═╣ ║ ║╣
@@ -29,7 +29,7 @@ parasails.registerComponent('threadCard', {
   //  ╠═╣ ║ ║║║║
   //  ╩ ╩ ╩ ╩ ╩╩═╝
   template: `
-<div class="card h-100" data-html="true" data-toggle="tooltip" data-placement="top" :title="hitsBody">
+<div class="card h-100">
   <div class="thread-priority-bar" data-toggle="tooltip" data-placement="bottom" :title="i18n('Importance: High')" v-show="thread.priority === 2"></div>
   <div class="thread-urgency-bar" data-toggle="tooltip" data-placement="bottom" :title="i18n('Urgency')" :class="urgencyBarColor" v-show="thread.urgency > 0"></div>
   <div class="card-body">
@@ -57,33 +57,36 @@ parasails.registerComponent('threadCard', {
         <span class="badge badge-danger mr-1" v-if="thread.locked">{{ i18n('Archive') }}</span>
         <span class="badge badge-primary mr-1" v-if="thread.local">{{ i18n('Private') }}</span>
     </div>
-    <div class="card-text">{{ i18n('Deadline') }}：
-      <span v-if="thread.dueDateAt">{{ formatDate(thread.dueDateAt) }}</span>
-      <span v-else>{{ i18n('unspecified') }}</span>
-    </div>
-    <div class="card-text mb-2">{{ i18n('Person in charge') }}：
-      <span v-if="thread.responsible">
-        <user-identity :user="thread.responsible" :organization="organization" size="sm"></user-identity>
-      </span>
-      <span v-else>{{ i18n('unspecified') }}</span>
-    </div>
-    <div class="card-text mb-1">
-      <small>
-        <user-identity :user="thread.owner" :organization="organization" size="sm"></user-identity>
-        <lycaon-timestamp :at="thread.createdAt" format="timeago" :translator="createTranslator" short="true"></lycaon-timestamp>
-      </small>
-    </div>
-    <div class="card-text mb-1" v-if="thread.lastUpdateUser">
-      <small>
-        <user-identity :user="thread.lastUpdateUser" :organization="organization" size="sm"></user-identity>
-        <lycaon-timestamp :at="thread.updatedAt" format="timeago" :translator="updateTranslator" short="true"></lycaon-timestamp>
-      </small>
-    </div>
-    <div class="card-text mb-1" v-if="thread.working">
-      <small>
-        <user-identity :user="thread.workingUser" :organization="organization" size="sm"></user-identity>
-        {{ i18n('{0} is working').format('') }}
-      </small>
+    <div class="card-section">
+      <div class="card-text">{{ i18n('Deadline') }}：
+        <span v-if="thread.dueDateAt">{{ formatDate(thread.dueDateAt) }}</span>
+        <span v-else>{{ i18n('unspecified') }}</span>
+      </div>
+      <div class="card-text mb-2">{{ i18n('Person in charge') }}：
+        <span v-if="thread.responsible">
+          <user-identity :user="thread.responsible" :organization="organization" size="sm"></user-identity>
+        </span>
+        <span v-else>{{ i18n('unspecified') }}</span>
+      </div>
+      <div class="card-text mb-1">
+        <small>
+          <user-identity :user="thread.owner" :organization="organization" size="sm"></user-identity>
+          <lycaon-timestamp :at="thread.createdAt" format="timeago" :translator="createTranslator" short="true"></lycaon-timestamp>
+        </small>
+      </div>
+      <div class="card-text mb-1" v-if="thread.lastUpdateUser">
+        <small>
+          <user-identity :user="thread.lastUpdateUser" :organization="organization" size="sm"></user-identity>
+          <lycaon-timestamp :at="thread.updatedAt" format="timeago" :translator="updateTranslator" short="true"></lycaon-timestamp>
+        </small>
+      </div>
+      <div class="card-text mb-1" v-if="thread.working">
+        <small>
+          <user-identity :user="thread.workingUser" :organization="organization" size="sm"></user-identity>
+          {{ i18n('{0} is working').format('') }}
+        </small>
+      </div>
+      <div class="card-section-overlay" v-if="hitContent" v-html="hitContent"></div>
     </div>
   </div>
   <div class="card-footer">
@@ -162,11 +165,82 @@ parasails.registerComponent('threadCard', {
       }
       return 'badge badge-pill badge-dark';
     },
-    hitsBody: function () {
-      if (this.thread.hits && this.thread.hitsBody) {
-        return this.thread.hitsBody;
+    hitContent: function () {
+      if (!this.thread.hits) {
+        return '';
       }
-      return '';
+      if (!this.word) {
+        return '';
+      }
+
+      var content = '';
+      var re = new RegExp($lycaon.regexEscape(this.word), 'ig');
+
+      if (this.thread.hitsBody) {
+        let matches = this.thread.hitsBody.matchAll(re);
+        for (let match of matches) {
+          let replaced = this.thread.hitsBody.replaceAll(
+            match[0],
+            `<span class="query-hits">${match[0]}</span>`
+          );
+          content += `<div class="card-text"><span class="query-hits-title">${i18next.t(
+            'Thread body'
+          )}</span><br>...${replaced}...</div>`;
+          break;
+        }
+      }
+
+      var inner = [];
+
+      _.each(this.thread.sneezeHits, (o) => {
+        let matches = o.sentence.matchAll(re);
+        for (let match of matches) {
+          let replaced = o.sentence.replaceAll(
+            match[0],
+            `<span class="query-hits">${match[0]}</span>`
+          );
+          inner.push(replaced);
+          break;
+        }
+      });
+
+      if (inner.length > 0) {
+        content += `<div class="card-text"><span class="query-hits-title">${i18next.t(
+          'comment'
+        )}</span><br>...${inner.join('<br>')}...</div>`;
+      }
+
+      inner = [];
+
+      _.each(this.thread.replyHits, (o) => {
+        let matches = o.sentence.matchAll(re);
+        for (let match of matches) {
+          let replaced = o.sentence.replaceAll(
+            match[0],
+            `<span class="query-hits">${match[0]}</span>`
+          );
+          inner.push(replaced);
+          break;
+        }
+      });
+
+      if (inner.length > 0) {
+        content += `<div class="card-text"><span class="query-hits-title">${i18next.t(
+          'reply'
+        )}</span><br>...${inner.join('<br>')}...</div>`;
+      }
+
+      inner = this.thread.itemHits.map((o) => {
+        return '* ' + o.name;
+      });
+
+      if (inner.length > 0) {
+        content += `<div class="card-text"><span class="query-hits-title">${i18next.t(
+          'attachment'
+        )}</span></div>${inner.join('<br>')}`;
+      }
+
+      return content;
     },
     urgencyBarColor: function () {
       return `thread-urgency-bar-color${this.thread.urgency}`;
