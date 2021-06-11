@@ -190,7 +190,7 @@ parasails.registerPage('wiki', {
       return argins;
     },
     tagLink: function (tag) {
-      return `/${this.organization.handleId}/team/${this.team.id}?target=wiki&tag=${tag.id}`;
+      return `/${this.organization.handleId}/team/${this.team.id}/wiki/${tag.id}`;
     },
     downloadAppendix: function (item, index) {
       return `/download/wiki/${this.wiki.id}/${item.id}`;

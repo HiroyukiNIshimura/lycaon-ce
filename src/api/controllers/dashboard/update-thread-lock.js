@@ -41,7 +41,11 @@ module.exports = {
       throw 'notFound';
     }
 
-    var valueSet = { locked: inputs.locked, lastUpdateUser: this.req.me.id };
+    var valueSet = {
+      locked: inputs.locked,
+      lastUpdateUser: this.req.me.id,
+      lastHumanUpdateAt: Date.now(),
+    };
     var updated = {};
 
     try {

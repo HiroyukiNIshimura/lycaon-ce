@@ -20,6 +20,7 @@ parasails.registerPage('edit-wiki', {
     showConflictModal: false,
     isUploading: false,
     viewerBlock: {},
+    showImageListModal: false,
     // Main syncing/loading state for this page.
     syncing: false,
     // Form data
@@ -88,6 +89,11 @@ parasails.registerPage('edit-wiki', {
       i18next.t('Feel free to enter ...'),
       this.addImageBlobHook.bind(this)
     );
+    $lycaon.markdown.addToolberImageList(this.wikiEditor, function () {
+      self.wikiEditor.eventManager.emit('closeAllPopup');
+      self.$refs.imagelist.load();
+      self.showImageListModal = true;
+    });
     this.wikiEditor.mdEditor.setValue(this.wiki.body);
 
     $lycaon.socket.post('/ws/v1/wiki-edit-in', { id: this.wiki.id }, (res) => {
@@ -121,21 +127,14 @@ parasails.registerPage('edit-wiki', {
 
     $lycaon.invalidEnterKey();
 
-    this.$refs.tagify.addTags(this.cloudTags);
+    this.selectedTags = _.extend([], this.cloudTags);
   },
 
   //  ╦╔╗╔╔╦╗╔═╗╦═╗╔═╗╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
-    onAddTagify: function (e) {
-      this.selectedTags.push(e.detail.data);
-    },
-    onRemoveTagify: function (e) {
-      this.selectedTags = _.reject(this.selectedTags, (entry) => {
-        return entry.value === e.detail.data.value;
-      });
-    },
+    onChangeTags: function (e) {},
     onEditCancelClick: function (event) {
       location.href = `/${this.organization.handleId}/wiki/${this.wiki.no}`;
     },
@@ -263,6 +262,10 @@ parasails.registerPage('edit-wiki', {
         this.formErrors.subject = true;
       }
 
+      if (argins.body && new TextEncoder().encode(argins.body).length >= 107374180) {
+        this.formErrors.bodyLength = true;
+      }
+
       if (Object.keys(this.formErrors).length > 0) {
         $lycaon.errorToast('There is an error in the input value');
         return;
@@ -271,6 +274,13 @@ parasails.registerPage('edit-wiki', {
       argins.tags = this.selectedTags;
 
       return argins;
+    },
+    hideImageListModal: function () {
+      this.showImageListModal = false;
+    },
+    selectedImageList: function (image) {
+      this.showImageListModal = false;
+      this.wikiEditor.insertText(`![](${image.virtualUrl})`);
     },
   },
   computed: {

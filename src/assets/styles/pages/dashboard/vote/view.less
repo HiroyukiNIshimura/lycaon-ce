@@ -3,6 +3,64 @@
     background-color: #f5f4f15b;
   }
 
+  .edit-active {
+    background-color: #ff00ec0d;
+  }
+
+  .fade-enter-active,
+  .fade-leave-active {
+    will-change: opacity;
+    -webkit-transition: opacity 0.5s;
+    -moz-transition: opacity 0.5s;
+    -ms-transition: opacity 0.5s;
+    -o-transition: opacity 0.5s;
+    transition: opacity 0.5s;
+  }
+
+  .fade-enter,
+  .fade-leave-to {
+    opacity: 0;
+  }
+
+  .sneeze-enter-active {
+    will-change: opacity;
+    -webkit-transition: all 0.3s cubic-bezier(1, 0.5, 0.8, 1);
+    -moz-transition: all 0.3s cubic-bezier(1, 0.5, 0.8, 1);
+    -ms-transition: all 0.3s cubic-bezier(1, 0.5, 0.8, 1);
+    -o-transition: all 0.3s cubic-bezier(1, 0.5, 0.8, 1);
+    transition: all 0.3s cubic-bezier(1, 0.5, 0.8, 1);
+  }
+
+  .sneeze-leave-active {
+    will-change: opacity;
+    -webkit-transition: all 0.1s ease;
+    -moz-transition: all 0.1s ease;
+    -ms-transition: all 0.1s ease;
+    -o-transition: all 0.1s ease;
+    transition: all 0.1s ease;
+  }
+
+  .sneeze-enter,
+  .sneeze-leave-to {
+    transform: translateX(10px);
+    opacity: 0;
+  }
+
+  .sneeze-card {
+    padding-left: 30px;
+  }
+  .sneeze-card::before {
+    content: '';
+    display: inline-block;
+    width: 3px;
+    height: 100%;
+    background-color: #0056a7;
+    position: absolute;
+    top: 0px;
+    left: -30px;
+    margin-right: 1rem;
+  }
+
   .tui-editor-contents {
     .markdown-styles;
   }

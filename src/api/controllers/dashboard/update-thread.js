@@ -10,10 +10,17 @@ module.exports = {
     },
     subject: {
       type: 'string',
+      maxLength: 200,
       required: true,
     },
     body: {
       type: 'string',
+      custom: function (value) {
+        if (!value) {
+          return true;
+        }
+        return Buffer.byteLength(value, 'utf8') < 107374180;
+      },
     },
     local: {
       type: 'boolean',
@@ -78,6 +85,7 @@ module.exports = {
     var thread = _.clone(inputs);
     thread.tags = [];
     thread.lastUpdateUser = this.req.me.id;
+    thread.lastHumanUpdateAt = Date.now();
     thread.responsible = inputs.responsible ? inputs.responsible : null;
     thread.milestone = inputs.milestone ? inputs.milestone : null;
 
@@ -108,6 +116,8 @@ module.exports = {
     }
 
     var updated = {};
+
+    //メール送信する場合true
     var effected = false;
 
     try {
@@ -229,6 +239,17 @@ module.exports = {
           await sails.helpers.createThreadActivity.with({
             db: db,
             type: 'responsible',
+            user: this.req.me,
+            thread: updated,
+          });
+
+          effected = true;
+        }
+
+        if (current.milestone !== updated.milestone) {
+          await sails.helpers.createThreadActivity.with({
+            db: db,
+            type: 'milestone',
             user: this.req.me,
             thread: updated,
           });

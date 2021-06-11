@@ -8,6 +8,12 @@ module.exports = {
     },
     comment: {
       type: 'string',
+      custom: function (value) {
+        if (!value) {
+          return true;
+        }
+        return Buffer.byteLength(value, 'utf8') < 107374180;
+      },
       required: true,
     },
   },
@@ -76,6 +82,19 @@ module.exports = {
       sails.log.error(err);
       throw err;
     }
+
+    var rooms = [`room-${this.req.organization.id}-thread-${sneeze.thread.id}`];
+    var message = {
+      key: 'a comment has arrived from {0}',
+      params: [this.req.me.fullName],
+    };
+    sails.sockets.broadcast(rooms, 'comment-notify', {
+      message: message,
+      user: this.req.me,
+      comment: await sails.helpers.sanitizeDescription.with({ markdown: inputs.comment, max: 120 }),
+      timespan: Date.now(),
+      id: sneeze.thread.id,
+    });
 
     this.req.session.effectMessage = sails.__('Created a reply');
 

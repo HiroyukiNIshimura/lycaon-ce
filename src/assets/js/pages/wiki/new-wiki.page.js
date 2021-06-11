@@ -11,7 +11,7 @@ parasails.registerPage('new-wiki', {
     wikiEditor: {},
     tagifySettings: {},
     isUploading: false,
-
+    showImageListModal: false,
     // Main syncing/loading state for this page.
     syncing: false,
     // Form data
@@ -66,6 +66,12 @@ parasails.registerPage('new-wiki', {
       i18next.t('Feel free to enter ...'),
       this.addImageBlobHook.bind(this)
     );
+    var self = this;
+    $lycaon.markdown.addToolberImageList(this.wikiEditor, function () {
+      self.wikiEditor.eventManager.emit('closeAllPopup');
+      self.$refs.imagelist.load();
+      self.showImageListModal = true;
+    });
 
     if (this.thread) {
       this.formData.subject = this.thread.subject;
@@ -94,14 +100,7 @@ parasails.registerPage('new-wiki', {
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
-    onAddTagify: function (e) {
-      this.selectedTags.push(e.detail.data);
-    },
-    onRemoveTagify: function (e) {
-      this.selectedTags = _.reject(this.selectedTags, (entry) => {
-        return entry.value === e.detail.data.value;
-      });
-    },
+    onChangeTags: function (e) {},
     onEditCancelClick: function (event) {
       if (this.backToUrl) {
         location.href = this.backToUrl;
@@ -199,6 +198,10 @@ parasails.registerPage('new-wiki', {
         this.formErrors.subject = true;
       }
 
+      if (argins.body && new TextEncoder().encode(argins.body).length >= 107374180) {
+        this.formErrors.bodyLength = true;
+      }
+
       if (Object.keys(this.formErrors).length > 0) {
         $lycaon.errorToast('There is an error in the input value');
         return;
@@ -206,6 +209,13 @@ parasails.registerPage('new-wiki', {
       argins.tags = this.selectedTags;
 
       return argins;
+    },
+    hideImageListModal: function () {
+      this.showImageListModal = false;
+    },
+    selectedImageList: function (image) {
+      this.showImageListModal = false;
+      this.wikiEditor.insertText(`![](${image.virtualUrl})`);
     },
   },
   computed: {

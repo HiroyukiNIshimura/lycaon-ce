@@ -198,7 +198,7 @@ module.exports = {
 
     var getTempData = async function (settings, thread, updater, action, team) {
       var userName = updater.fullName;
-      var updatedAt = moment(Number(thread.updatedAt)).format('llll') + ' <JST>';
+      var updatedAt = moment(Number(thread.lastHumanUpdateAt)).format('llll') + ' <JST>';
 
       if (action.activity === 'sneeze') {
         userName = action.sneeze.owner.fullName;
@@ -228,11 +228,11 @@ module.exports = {
             : '',
           tags: tags.length > 0 ? tags.join(', ') : '',
         },
-        title: `[#${thread.id}] ${thread.subject}`,
+        title: `[#${thread.no}] ${thread.subject}`,
         threadBody: await sails.helpers.mdToHtml.with({
           markdown: thread.body,
         }),
-        markdown: thread.body,
+        //markdown: thread.body,
         updater: userName,
         updatedAt: updatedAt,
         action: action.action,

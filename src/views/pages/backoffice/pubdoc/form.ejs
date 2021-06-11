@@ -25,9 +25,12 @@
       <div class="row mt-3">
         <div class="col">
           <label for="wiki-tags"><%= __("Tags") %><small class="text-muted ml-3"><%= __("You can tag up to {0}").format(10) %></small></label>
-          <v-tagify ref="tagify" id="wiki-tags" :settings="tagifySettings" @add="onAddTagify" @remove="onRemoveTagify">
-          </v-tagify>
+          <v-tagify-select id="wiki-tags" :values="selectedTags" :settings="tagifySettings" @change="onChangeTags"></v-tagify-select>
         </div>
+      </div>
+
+      <div class="text-danger" v-if="formErrors.bodyLength">
+        <%= __("Body size is too large") %>
       </div>
       <div class="row mt-3">
         <div class="col">

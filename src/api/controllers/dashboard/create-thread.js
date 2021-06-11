@@ -4,10 +4,17 @@ module.exports = {
   inputs: {
     subject: {
       type: 'string',
+      maxLength: 200,
       required: true,
     },
     body: {
       type: 'string',
+      custom: function (value) {
+        if (!value) {
+          return true;
+        }
+        return Buffer.byteLength(value, 'utf8') < 107374180;
+      },
     },
     local: {
       type: 'boolean',
@@ -75,6 +82,7 @@ module.exports = {
       tags: [],
       accessCount: 0,
       emotional: JSON.stringify(emotional),
+      lastHumanUpdateAt: Date.now(),
     };
 
     if (inputs.milestone) {
@@ -86,8 +94,9 @@ module.exports = {
       }
     }
 
+    var parent;
     if (inputs.fork) {
-      var parent = await Thread.findOne({
+      parent = await Thread.findOne({
         id: inputs.fork,
       });
       if (!parent) {
@@ -152,6 +161,16 @@ module.exports = {
           user: user,
           thread: created,
         });
+
+        if (inputs.fork) {
+          await sails.helpers.createThreadActivity.with({
+            db: db,
+            type: 'fork',
+            user: this.req.me,
+            thread: parent,
+            refId: created.id,
+          });
+        }
       });
 
       await sails.helpers.agendaSchedule.with({

@@ -37,6 +37,12 @@ module.exports = {
     },
     templateBody: {
       type: 'string',
+      custom: function (value) {
+        if (!value) {
+          return true;
+        }
+        return Buffer.byteLength(value, 'utf8') < 107374180;
+      },
       description: '本文のテンプレートMarkdown',
       example: '# 課題○○○○○',
     },

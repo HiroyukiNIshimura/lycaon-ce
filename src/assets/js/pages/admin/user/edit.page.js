@@ -65,21 +65,14 @@ parasails.registerPage('admin-user-edit', {
       $lycaon.cloudSuccessToast(this.effectMessage);
     }
 
-    this.$refs.tagify.addTags(this.cloudTags);
+    this.selectedTeams = _.extend([], this.cloudTags);
   },
 
   //  ╦╔╗╔╔╦╗╔═╗╦═╗╔═╗╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
-    onAddTagify: function (e) {
-      this.selectedTeams.push(e.detail.data);
-    },
-    onRemoveTagify: function (e) {
-      this.selectedTeams = _.reject(this.selectedTeams, (entry) => {
-        return entry.value === e.detail.data.value;
-      });
-    },
+    onChangeTeam: function (e) {},
     submittedForm: async function (response) {
       this.cloudSuccess = true;
       this.syncing = true;

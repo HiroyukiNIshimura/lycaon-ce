@@ -41,7 +41,11 @@ module.exports = {
       throw 'notFound';
     }
 
-    var valueSet = { priority: inputs.priority, lastUpdateUser: this.req.me.id };
+    var valueSet = {
+      priority: inputs.priority,
+      lastUpdateUser: this.req.me.id,
+      lastHumanUpdateAt: Date.now(),
+    };
     var updated = {};
 
     try {

@@ -96,8 +96,8 @@ parasails.registerPage('admin-team-edit', {
       $lycaon.cloudSuccessToast(this.effectMessage);
     }
 
-    this.$refs.userTagify.addTags(this.cloudUsers);
-    this.$refs.categoryTagify.addTags(this.cloudCategories);
+    this.selectedUsers = _.extend([], this.cloudUsers);
+    this.selectedCategories = _.extend([], this.cloudCategories);
 
     if (!this.isDemosite && this.planlimitation.allowUseGit) {
       if (this.team.connectType === 0) {
@@ -126,23 +126,8 @@ parasails.registerPage('admin-team-edit', {
         this.$set(this.formData, 'gitlabProjectId', this.team.gitlabProjectId);
       }
     },
-    onAddUserTagify: function (e) {
-      this.selectedUsers.push(e.detail.data);
-    },
-    onRemoveUserTagify: function (e) {
-      this.selectedUsers = _.reject(this.selectedUsers, (entry) => {
-        return entry.value === e.detail.data.value;
-      });
-    },
-    onAddcategoryTagify: function (e) {
-      this.selectedCategories.push(e.detail.data);
-    },
-    onRemovecategoryTagify: function (e) {
-      this.selectedCategories = _.reject(this.selectedCategories, (entry) => {
-        return entry.value === e.detail.data.value;
-      });
-    },
-
+    onChangeUserTagify: function (e) {},
+    onChangeCategoryTagify: function (e) {},
     submittedForm: async function (response) {
       this.cloudSuccess = true;
       this.syncing = true;

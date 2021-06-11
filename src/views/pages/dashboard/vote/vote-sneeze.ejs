@@ -1,0 +1,72 @@
+<div class="row">
+  <div class="col ml-1 ml-md-3 mt-3 w-100">
+    <div class="card sneeze-card" :id="getSneezeIdentity(sneeze)">
+      <div class="card-body">
+        <div class="row d-none d-sm-block">
+          <div class="col">
+            <user-identity :user="sneeze.owner" :organization="organization" size=""></user-identity>
+            <small class="card-subtitle ml-2 text-muted">[ <a :href="sneezeAnker(sneeze)">comment-{{ sneeze.serialNumber }}</a> ]</small>
+            <small class="card-subtitle text-muted">
+              - <lycaon-timestamp :at="sneeze.createdAt" format="timeago" :translator="commentTranslator"></lycaon-timestamp></small>
+            <clipboard class="ml-2" :data="sneeze.comment"></clipboard>
+          </div>
+        </div>
+        <div class="row d-block d-sm-none">
+          <div class="col">
+            <user-identity :user="sneeze.owner" :organization="organization" size="">
+            </user-identity>
+          </div>
+        </div>
+        <div class="row d-block d-sm-none">
+          <div class="col">
+            <small class="card-subtitle ml-2 text-muted">[ <a :href="sneezeAnker(sneeze)">comment-{{ sneeze.serialNumber }}</a> ]</small>
+            <small class="card-subtitle text-muted">
+              - <lycaon-timestamp :at="sneeze.createdAt" format="timeago" :translator="commentTranslator"></lycaon-timestamp></small>
+            <clipboard class="ml-2" :data="sneeze.comment"></clipboard>
+          </div>
+        </div>
+        <!-- Sneeze-view -->
+        <transition name="sneeze">
+          <div class="sneeze-view" v-show="showSneezeView(sneeze)">
+            <div class="row mt-2">
+              <div class="col-auto">
+                <div class="card-text" :id="getCommentIdentity(sneeze)"></div>
+              </div>
+            </div>
+            <div class="row mt-3">
+              <div class="col text-right">
+                <button type="button" class="btn btn-outline-indigo btn-sm" @click="onCommentEditClick(sneeze)" v-if="sneeze.owner && sneeze.owner.id === me.id">
+                  <i class="far fa-edit"></i> <%= __("Edit") %>
+                </button>
+              </div>
+            </div>
+          </div>
+        </transition>
+        <!-- Sneeze-editor -->
+        <div class="text-danger" v-if="formErrors.commentLength">
+          <%= __("Comment size is too large") %>
+        </div>
+        <div :id="getCommentEditorIdentityWrapper(sneeze)" class="sneeze-editor" style="display: none" v-show="showSneezeEditor(sneeze)">
+          <ajax-form action="updateVoteSneeze" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedSneezeUpdateForm" @rejected="onCloudError"
+            :handle-parsing="handleParsingSneezeUpdateForm">
+            <div class="row mt-2">
+              <div class="col">
+                <div :id="getCommentEditorIdentity(sneeze)"></div>
+              </div>
+            </div>
+            <div class="row mt-3">
+              <div class="col text-right">
+                <button type="button" class="btn btn-light btn-sm" @click="onCommentEditCancelClick(sneeze)">
+                  <i class="fas fa-window-close"></i> <%= __("Cancel") %>
+                </button>
+                <button type="submit" class="btn btn-primary btn-sm">
+                  <i class="far fa-save"></i> <%= __("Save") %>
+                </button>
+              </div>
+            </div>
+          </ajax-form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -41,6 +41,7 @@ module.exports = {
     language: {
       type: 'string',
       required: true,
+      maxLength: 5,
     },
   },
 

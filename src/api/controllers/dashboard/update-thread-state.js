@@ -41,7 +41,11 @@ module.exports = {
       throw 'notFound';
     }
 
-    var valueSet = { status: inputs.status, lastUpdateUser: this.req.me.id };
+    var valueSet = {
+      status: inputs.status,
+      lastUpdateUser: this.req.me.id,
+      lastHumanUpdateAt: Date.now(),
+    };
     if (inputs.status === 1) {
       valueSet.working = false;
       valueSet.workingUser = null;

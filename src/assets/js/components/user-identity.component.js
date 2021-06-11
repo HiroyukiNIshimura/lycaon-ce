@@ -38,7 +38,7 @@ parasails.registerComponent('userIdentity', {
       v-else-if="user.avatarType === 'user-avatar'"
   />
   <svg :class="sizeClass" :data-jdenticon-value="user.emailAddress" v-else></svg>
-  <a :id="parseUserId" class="ml-1" :href="menberInfoLink" v-if="showUserName == true">{{ user.fullName }}</a>
+  <a :id="parseUserId" class="ml-1 comment-tip" :href="menberInfoLink" v-if="showUserName == true">{{ user.fullName }}</a>
 </span>
 <span class="ml-1" v-else>
 {{ i18n('Anonymous account') }}

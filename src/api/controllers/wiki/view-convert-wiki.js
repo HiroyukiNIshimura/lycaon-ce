@@ -39,7 +39,7 @@ module.exports = {
     }
 
     response.team = await sails.helpers.validateMembership.with({
-      id: thread.team,
+      id: response.thread.team,
       user: this.req.me,
     });
     if (!response.team) {

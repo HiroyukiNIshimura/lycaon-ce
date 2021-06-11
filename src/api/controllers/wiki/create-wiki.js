@@ -15,6 +15,12 @@ module.exports = {
     },
     body: {
       type: 'string',
+      custom: function (value) {
+        if (!value) {
+          return true;
+        }
+        return Buffer.byteLength(value, 'utf8') < 107374180;
+      },
       example: 'これはMarkdownのままのデータ',
     },
     concept: {
@@ -125,6 +131,8 @@ module.exports = {
         }
       });
 
+      //メール配信データ作成時にsails.hooks.i18n.localeが変更されているので
+      sails.hooks.i18n.setLocale(this.req.me.languagePreference);
       this.req.session.effectMessage = sails.__('Created a Wiki');
       return {
         id: created.id,

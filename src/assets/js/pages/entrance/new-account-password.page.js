@@ -27,7 +27,9 @@ parasails.registerPage('new-account-password', {
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
   //  ║  ║╠╣ ║╣ ║  ╚╦╝║  ║  ║╣
   //  ╩═╝╩╚  ╚═╝╚═╝ ╩ ╚═╝╩═╝╚═╝
-  beforeMount: function () {},
+  beforeMount: function () {
+    this.formData.language = SAILS_LOCALS.language;
+  },
   mounted: async function () {
     //…
   },
@@ -72,15 +74,15 @@ parasails.registerPage('new-account-password', {
       // Validate password:
       if (!argins.password) {
         this.formErrors.password = true;
-      }
+      } else {
+        if (argins.password.length < 6 || argins.password.length > 100) {
+          this.formErrors.passwordLength = true;
+        }
 
-      if (argins.password.length < 6 || argins.password.length > 100) {
-        this.formErrors.passwordLength = true;
-      }
-
-      // Validate password confirmation:
-      if (argins.password && argins.password !== argins.confirmPassword) {
-        this.formErrors.confirmPassword = true;
+        // Validate password confirmation:
+        if (argins.password !== argins.confirmPassword) {
+          this.formErrors.confirmPassword = true;
+        }
       }
 
       // If there were any issues, they've already now been communicated to the user,

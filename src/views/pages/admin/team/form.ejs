@@ -15,19 +15,15 @@
 </div>
 
 <div class="row mt-3">
-  <div class="col-auto">
+  <div class="col">
     <label for="user-selector"><%= __("Participating users") %></label>
-    <v-tagify ref="userTagify" id="user-selector" :settings="userTagifySettings" @add="onAddUserTagify"
-      @remove="onRemoveUserTagify">
-    </v-tagify>
+    <v-tagify-select id="user-selector" :values="selectedUsers" :settings="userTagifySettings" @change="onChangeUserTagify"></v-tagify-select>
   </div>
 </div>
 <div class="row mt-3">
-  <div class="col-auto">
+  <div class="col">
     <label for="category-selector"><%= __("Category to use") %></label>
-    <v-tagify ref="categoryTagify" id="category-selector" :settings="categoryTagifySettings" @add="onAddcategoryTagify"
-      @remove="onRemovecategoryTagify" :class="[formErrors.category ? 'is-invalid' : '']">
-    </v-tagify>
+    <v-tagify-select id="category-selector" :values="selectedCategories" :settings="categoryTagifySettings" @change="onChangeCategoryTagify" :class="[formErrors.category ? 'is-invalid' : '']"></v-tagify-select>
     <div class="invalid-feedback" v-if="formErrors.category">
       <%= __("Please select at least one category") %>
     </div>
@@ -35,7 +31,7 @@
 </div>
 
 <% if(!isDemosite && planlimitation.allowUseGit) { %>
-<div class="custom-control custom-checkbox">
+<div class="custom-control custom-checkbox mt-5">
   <input type="checkbox" class="custom-control-input" id="form-use-git" v-model="useGit" />
   <label class="custom-control-label" for="form-use-git"><%= __("Work with git") %></label>
 </div>

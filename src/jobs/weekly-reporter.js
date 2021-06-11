@@ -5,12 +5,7 @@ module.exports = {
     var dt = new Date();
     dt.setHours(0, 0, 0, 0);
 
-    var bot = await User.findOne({
-      emailAddress: 'lycaonbot@example.com',
-      fullName: 'lycaonbot',
-      isNologin: true,
-      isSandbox: true,
-    });
+    var bot = await sails.helpers.getBot();
 
     try {
       var organizations = await Organization.find();
@@ -80,7 +75,7 @@ SELECT a.*
    AND a."status" = 0
    AND a."team" = $3
    AND a."local" = false
- ORDER BY a."updatedAt" ASC
+ ORDER BY a."lastHumanUpdateAt" ASC
           `;
 
           //1ヶ月更新のないもの
@@ -93,7 +88,7 @@ SELECT a.*
           team.leaveAlones = results.rows;
 
           for (let leaveAlones of team.leaveAlones) {
-            leaveAlones.updatedAtFormated = moment(Number(leaveAlones.updatedAt)).format(
+            leaveAlones.updatedAtFormated = moment(Number(leaveAlones.lastHumanUpdateAt)).format(
               'YYYY/MM/DD'
             );
 

@@ -77,6 +77,14 @@ module.exports = {
         if (!ref) {
           await ThreadRef.create({ left: parent.id, right: current.id }).usingConnection(db);
         }
+
+        await sails.helpers.createThreadActivity.with({
+          db: db,
+          type: 'relationship',
+          user: this.req.me,
+          thread: current,
+          refId: parent.id,
+        });
       });
     } catch (err) {
       sails.log.error(err);

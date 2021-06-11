@@ -27,6 +27,12 @@ module.exports = {
 
     var valueSets = [];
 
+    var NATIVE_SQL = `
+DELETE FROM "git_log"
+ WHERE "id" NOT IN (SELECT "min_id" from (SELECT MIN("id") "min_id" FROM "git_log" WHERE "team" = $1 GROUP BY "hash") tmp)
+   AND "team" = $2
+`;
+
     for (let team of await Team.find({ deleted: false })) {
       if (!team.useGit) {
         await GitLog.destroy({
@@ -267,6 +273,7 @@ module.exports = {
 
         if (valueSets.length > 0) {
           await GitLog.createEach(valueSets.reverse());
+          await sails.sendNativeQuery(NATIVE_SQL, [team.id, team.id]);
           sails.log.info(`チーム[${team.id}]のgitログを更新しました`);
         }
       } catch (err) {

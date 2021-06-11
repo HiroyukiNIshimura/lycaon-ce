@@ -21,11 +21,9 @@
 </div>
 
 <div class="row mt-3 mb-5">
-  <div class="col-auto">
+  <div class="col">
     <label for="team-selector"><%= __('Teams to participate') %></label>
-    <v-tagify ref="tagify" id="team-selector" :settings="tagifySettings" @add="onAddTagify" @remove="onRemoveTagify"
-      :class="[formErrors.teams ? 'is-invalid' : '']">
-    </v-tagify>
+    <v-tagify-select id="team-selector" :values="selectedTeams" :settings="tagifySettings" @change="onChangeTeam" :class="[formErrors.teams ? 'is-invalid' : '']"></v-tagify-select>
     <div class="invalid-feedback" v-if="formErrors.teams">
       <%= __('Please select at least one team to join') %>
     </div>

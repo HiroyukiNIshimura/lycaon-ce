@@ -19,6 +19,12 @@ module.exports = {
     },
     body: {
       type: 'string',
+      custom: function (value) {
+        if (!value) {
+          return true;
+        }
+        return Buffer.byteLength(value, 'utf8') < 107374180;
+      },
       description: '本文',
     },
     isQuestionnaireFormat: {
@@ -79,6 +85,10 @@ module.exports = {
     },
     answers: {
       collection: 'voteAnswer',
+      via: 'vote',
+    },
+    sneezes: {
+      collection: 'voteSneeze',
       via: 'vote',
     },
   },

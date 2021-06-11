@@ -27,27 +27,31 @@
     <ajax-form id="query-vote-form" action="queryVote" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedQueryForm"
       @rejected="onCloudError" :handle-parsing="handleParsingQueryVoteForm">
     </ajax-form>
-
+    <ajax-form id="query-my-team-form" action="queryTeam" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedQueryForm"
+      @rejected="onCloudError" :handle-parsing="handleParsingQueryForm">
+    </ajax-form>
     <ajax-form id="query-counter-form" action="queryCounter" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedCounterForm"
       @rejected="onCloudError" :handle-parsing="handleParsingCounterForm">
     </ajax-form>
+    <ajax-form id="query-ambiguity-wiki-form" action="queryAmbiguityWiki" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedQueryForm"
+      @rejected="onCloudError" :handle-parsing="handleParsingAmbiguityWikiForm">
+    </ajax-form>
 
-    <div v-if="teams.length < 1">
+    <div v-if="records < 1">
       <h4><%= __('You do not belong to any team') %></h4>
       <h4 v-if="me.isSuperAdmin"><%= __('Only admin features are available') %></h4>
       <h4 v-else>
         <%= __("If you are not part of any team, you will not be able to take advantage of Lycaon's features") %>
       </h4>
     </div>
-   
     <v-tabs v-else :panel-id="panelId" :options="{ useUrlFragment: false, defaultTabHash: 'tab-team' }" @changed="tabChanged">
       <v-tab :name="i18n('Teams')" id="tab-team">
         <div class="row">
           <div class="col">
             <h5 class="mb-3"><%= __('Participating team') %></h5>
-            <div class="row">
-              <div class="col-auto mb-2 ml-1" v-for="item in teams">
-                <div class="card team-card h-100">
+            <div class="row" v-if="selectedTab.tab && selectedTab.tab.id === 'tab-team'">
+              <div class="col-auto mb-2 ml-1" v-for="item in queryResults">
+                <div class="card team-card h-100 card-selectable">
                   <div class="card-body">
                     <div class="card-title">
                       <a class="h5" :href="teamLink(item)">{{ item.name }}</a>
@@ -67,7 +71,9 @@
                   </div>
                 </div>
               </div>
+              <infinite-loading spinner="waveDots" @infinite="teamHandler"></infinite-loading>
             </div>
+            
           </div>
         </div>
       </v-tab>
@@ -254,10 +260,16 @@
                 {{ formatter.format(queryCount) }} {{ i18nformatN('Item', 'Items', queryCount) }}</small>
             </h5>
             <div class="row">
-              <div class="col-auto">
+              <div class="col-sm-3 col-md-2 mb-3">
                 <div class="custom-control custom-checkbox">
                   <input type="checkbox" class="custom-control-input" id="query-wikiflag" v-model="wikiflags" />
                   <label class="custom-control-label" for="query-wikiflag"><small><%= __('With flag') %></small></label>
+                </div>
+              </div>
+              <div class="col form-group">
+                <div class="row">
+                  <div class="col-auto"><small><label for="query-word-wiki"></label><%= __('Word search') %></label></small></div>
+                  <div class="col-auto"><input type="text" maxlength="30" class="form-control form-control-sm" id="query-word-wiki" v-model="query.wordWiki" v-on:keyup.enter="queryAmbiguityWiki" /></div>
                 </div>
               </div>
             </div>
@@ -268,8 +280,7 @@
             </div>
             <div class="row">
               <div class="col">
-                <v-tagify ref="wikitagify" :settings="tagifySettings" @add="onAddWikiTagify" @remove="onRemoveWikiTagify">
-                </v-tagify>
+                <v-tagify-select :values="selectedWikiTags" :settings="tagifySettings" @change="onChangeWikiTags"></v-tagify-select>                
               </div>
             </div>
             <div class="row mt-3" v-if="queryResults.length > 0">
@@ -306,7 +317,7 @@
                   </label>
                   <label class="btn btn-light-blue btn-sm" for="vote-open" :class="openVoteActive">
                     <input type="radio" id="vote-open" v-model="voteState" value="1" />
-                    <%= __('Circulating') %>
+                    <%= __('Circulating') %> <span class="badge badge-warning" v-if="openVoteQty > 0">{{ openVoteQty }}</span>
                   </label>
                   <label class="btn btn-light-blue btn-sm" for="vote-close" :class="closeVoteActive">
                     <input type="radio" id="vote-close" v-model="voteState" value="2" />
@@ -333,6 +344,11 @@
         </div>
       </v-tab>
     </v-tabs>
+    <div class="row justify-content-end">
+      <div class="col-auto" :aria-label="i18n('To access with a smartphone, use this QR code')" data-microtip-position="top" data-microtip-size="medium" role="tooltip">
+        <canvas id="qrcode"></canvas>
+      </div>
+    </div>
   </div>
 </div>
 <%- /* Expose locals as `window.SAILS_LOCALS` :: */ exposeLocalsToBrowser() %>

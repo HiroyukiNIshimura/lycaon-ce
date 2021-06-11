@@ -63,21 +63,14 @@ parasails.registerPage('admin-settings-edit', {
     if (this.effectMessage) {
       $lycaon.cloudSuccessToast(this.effectMessage);
     }
-    this.$refs.tagify.addTags(this.cloudTags);
+    this.selectedExts = _.extend([], this.cloudTags);
   },
 
   //  ╦╔╗╔╔╦╗╔═╗╦═╗╔═╗╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
-    onAddTagify: function (e) {
-      this.selectedExts.push(e.detail.data);
-    },
-    onRemoveTagify: function (e) {
-      this.selectedExts = _.reject(this.selectedExts, (entry) => {
-        return entry.value === e.detail.data.value;
-      });
-    },
+    onChangeExtSelector: function (e) {},
     submittedForm: async function (response) {
       this.cloudSuccess = true;
       this.syncing = true;

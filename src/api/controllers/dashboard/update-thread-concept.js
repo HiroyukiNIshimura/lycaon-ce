@@ -41,7 +41,11 @@ module.exports = {
       throw 'notFound';
     }
 
-    var valueSet = { concept: inputs.concept, lastUpdateUser: this.req.me.id };
+    var valueSet = {
+      concept: inputs.concept,
+      lastUpdateUser: this.req.me.id,
+      lastHumanUpdateAt: Date.now(),
+    };
     var updated = {};
 
     try {

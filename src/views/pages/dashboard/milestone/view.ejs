@@ -75,8 +75,7 @@
         <div class="col">
           <div class="row">
             <div class="col">
-              <a :href="editLink(item.entity)" style="color:#0077c0;" data-toggle="tooltip" data-placement="bottom"
-                :title="i18n('Edit')">{{ item.entity.name }}</a>
+              <a :href="editLink(item.entity)" style="color:#0077c0;" :aria-label="i18n('Edit')" data-microtip-position="bottom" role="tooltip">{{ item.entity.name }}</a>
             </div>
           </div>
           <div class="row">

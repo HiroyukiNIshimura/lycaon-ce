@@ -47,10 +47,11 @@ module.exports = {
       }
     }
 
-    var valueSet = { responsible: null, lastUpdateUser: this.req.me.id };
-    if (inputs.responsible) {
-      valueSet = { responsible: inputs.responsible, lastUpdateUser: this.req.me.id };
-    }
+    var valueSet = {
+      responsible: inputs.responsible ? inputs.responsible : null,
+      lastUpdateUser: this.req.me.id,
+      lastHumanUpdateAt: Date.now(),
+    };
 
     var updated = {};
 

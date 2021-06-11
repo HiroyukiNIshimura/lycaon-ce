@@ -189,6 +189,8 @@ module.exports = {
         await Vote.updateOne({ id: formail.id }).set({ mailSended: true });
       }
 
+      //メール配信データ作成時にsails.hooks.i18n.localeが変更されているので
+      sails.hooks.i18n.setLocale(this.req.me.languagePreference);
       this.req.session.effectMessage = sails.__('The circulate notice has been updated');
       return {
         id: updated.id,

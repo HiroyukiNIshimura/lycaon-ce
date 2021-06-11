@@ -35,6 +35,13 @@ module.exports = {
         var model = sails.models[identity];
         model.customToJSON = undefined;
 
+        try {
+          await model.count();
+        } catch (err) {
+          sails.log.info(err);
+          continue;
+        }
+
         await model
           .stream()
           .meta({
@@ -147,7 +154,48 @@ module.exports = {
             await sails.sendNativeQuery(seqSql, [current]).usingConnection(db);
           }
         }
+        //
       });
+
+      var orgs = await Organization.find();
+      for (let org of orgs) {
+        await sails.sendNativeQuery(`DROP SEQUENCE IF EXISTS "org_thread_${org.handleId}";`);
+        await sails.sendNativeQuery(`DROP SEQUENCE IF EXISTS "org_wiki_${org.handleId}";`);
+
+        let thread = await Thread.find({
+          where: { handleId: org.handleId },
+          sort: 'no DESC',
+          limit: 1,
+          skip: 0,
+        });
+
+        if (thread.length > 0) {
+          await sails.sendNativeQuery(
+            `CREATE SEQUENCE IF NOT EXISTS "org_thread_${org.handleId}" START ${thread[0].no + 1};`
+          );
+        } else {
+          await sails.sendNativeQuery(
+            `CREATE SEQUENCE IF NOT EXISTS "org_thread_${org.handleId}" START 1;`
+          );
+        }
+
+        let wiki = await Wiki.find({
+          where: { handleId: org.handleId },
+          sort: 'no DESC',
+          limit: 1,
+          skip: 0,
+        });
+
+        if (wiki.length > 0) {
+          await sails.sendNativeQuery(
+            `CREATE SEQUENCE IF NOT EXISTS "org_wiki_${org.handleId}" START ${wiki[0].no + 1};`
+          );
+        } else {
+          await sails.sendNativeQuery(
+            `CREATE SEQUENCE IF NOT EXISTS "org_wiki_${org.handleId}" START 1;`
+          );
+        }
+      }
 
       utility.rmdir(workdir);
 

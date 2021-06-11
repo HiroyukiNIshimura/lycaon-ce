@@ -1,6 +1,6 @@
 module.exports = {
   friendlyName: 'timeMeasurement',
-  description: 'tim measurement.',
+  description: 'time measurement.',
   inputs: {
     db: {
       type: 'ref',

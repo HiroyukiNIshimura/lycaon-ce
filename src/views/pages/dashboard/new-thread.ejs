@@ -84,17 +84,18 @@
               <div class="custom-control custom-checkbox">
                 <input type="checkbox" class="form-check-input" id="thread-local" v-model="local" />
                 <label class="form-check-label" for="thread-local"><%= __("Private thread") %> </label>
-                <span class="ml-3" style="color: Dodgerblue" data-toggle="tooltip" data-placement="bottom"
-                  :title="i18n('Check if you want to create your own thread that is invisible to others')">
-                  <i class="far fa-question-circle"></i>
-                </span>
               </div>
+            </div>
+            <div class="col">
+              <span class="ml-3" style="color: rgb(137, 173, 209)" :aria-label="i18n('Check if you want to create your own thread that is invisible to others')" data-microtip-position="bottom" data-microtip-size="medium" role="tooltip">
+                <i class="far fa-question-circle"></i>
+              </span>
             </div>
           </div>
           <div class="row mt-3">
             <div class="col">
               <label for="thread-tags"><%= __("Tags") %><small class="text-muted ml-3"><%= __("You can tag up to {0}").format(10) %></small></label>
-              <v-tagify ref="tagify" id="thread-tags" :settings="tagifySettings" @add="onAddTagify" @remove="onRemoveTagify"></v-tagify>
+              <v-tagify-select id="thread-tags" :values="selectedTags" :settings="tagifySettings" @change="onChangeTags"></v-tagify-select>        
             </div>
           </div>
           <div class="row mt-3">
@@ -122,5 +123,7 @@
     </editor-file>
 
   </div>
+
+  <image-list ref="imagelist" :show="showImageListModal" :on-hide="hideImageListModal" v-on:selected="selectedImageList"></image-list>
 </div>
 <%- /* Expose locals as `window.SAILS_LOCALS` :: */ exposeLocalsToBrowser() %>

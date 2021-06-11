@@ -10,7 +10,7 @@
           <span class="text-danger" v-if="filtered"><%= __('Narrowing filter is running') %></span>
         </small>
       </div>
-      <div id="collapse-query" class="collapse" aria-labelledby="heading-query" data-parent="#wrapper-accordion">
+      <div id="collapse-query" class="collapse" :class="isShow" aria-labelledby="heading-query" data-parent="#wrapper-accordion">
         <div class="card-body">
           <div class="row">
             <div class="col-auto mb-1">
@@ -110,14 +110,13 @@
                 </div>
               </div>
             </div>
-            <div class="col-auto">
+            <div class="col">
               <div class="row">
                 <div class="col-auto">
                   <small><label for="query-tags"><%= __('Tags') %></label></small>
                 </div>
                 <div class="col">
-                  <v-tagify ref="tagify" id="query-tags" :settings="tagifySettings" @add="onAddTagify"
-                    @remove="onRemoveTagify"></v-tagify>
+                  <v-tagify-select id="query-tags" :values="selectedTags" :settings="tagifySettings" @change="onChangeTags"></v-tagify-select>
                 </div>
               </div>
             </div>

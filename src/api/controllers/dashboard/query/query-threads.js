@@ -158,11 +158,11 @@ module.exports = {
         var user = await User.findOne({
           id: this.req.me.id,
         }).populate('flags', { where: { team: inputs.id } });
-        if (user.flags.length > 0) {
-          whereClause.id = user.flags.map((o) => {
+        whereClause.id = {
+          in: user.flags.map((o) => {
             return o.id;
-          });
-        }
+          }),
+        };
       }
 
       if (inputs.tags) {
@@ -172,11 +172,11 @@ module.exports = {
         });
       }
 
-      var sort = [{ updatedAt: 'DESC' }, { id: 'ASC' }];
+      var sort = [{ lastHumanUpdateAt: 'DESC' }, { id: 'ASC' }];
       if (inputs.sort) {
         switch (inputs.sort) {
           case 1:
-            sort = [{ updatedAt: 'ASC' }, { id: 'ASC' }];
+            sort = [{ lastHumanUpdateAt: 'ASC' }, { id: 'ASC' }];
             break;
           case 2:
             sort = [{ createdAt: 'DESC' }, { id: 'ASC' }];
@@ -210,7 +210,7 @@ module.exports = {
             break;
           case 0:
           default:
-            sort = [{ updatedAt: 'DESC' }, { id: 'ASC' }];
+            sort = [{ lastHumanUpdateAt: 'DESC' }, { id: 'ASC' }];
             break;
         }
       }

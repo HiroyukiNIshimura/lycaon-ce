@@ -46,6 +46,7 @@ module.exports = {
         "thread"."concept",
         "thread"."status",
         "thread"."responsibleAt",
+        "thread"."lastHumanUpdateAt",
         "thread"."tagToken",
         "thread"."dueDateAt",
         "thread"."priority",
@@ -223,7 +224,7 @@ AND ("thread"."subject" ilike $2 OR "thread"."body" ilike $3
  OR "thread"."id" in (SELECT "thread" FROM "sneeze" WHERE "comment" ilike $4)
  OR "thread"."id" in (SELECT "thread" FROM "reply" WHERE "comment" ilike $5)
  OR "thread"."id" in (SELECT "thread" FROM "thread_item" WHERE "qWords" ilike $6)
- OR "thread"."id" = $7
+ OR "thread"."no" = $7
       )
 `;
 
@@ -232,31 +233,31 @@ AND ("thread"."subject" ilike $2 OR "thread"."body" ilike $3
  OR "thread"."id" in (SELECT "thread" FROM "sneeze" WHERE "comment" ilike $4)
  OR "thread"."id" in (SELECT "thread" FROM "reply" WHERE "comment" ilike $5)
  OR "thread"."id" in (SELECT "thread" FROM "thread_item" WHERE "qWords" ilike $6)
- OR "thread"."id" = $7
+ OR "thread"."no" = $7
       )
 `;
 
-    var NATIVE_ORDER = `ORDER BY "thread"."updatedAt" DESC, "thread"."id" ASC LIMIT $8 OFFSET $9
+    var NATIVE_ORDER = `ORDER BY "thread"."lastHumanUpdateAt" DESC, "thread"."id" DESC LIMIT $8 OFFSET $9
         `;
 
     var NATIVE_SNEEZE = `
 SELECT "id", "comment", "thread"                  
   FROM "public"."sneeze"
- WHERE "comment" ilike $1
-   AND "thread" = $2
+ WHERE "thread" = $1
+   AND "comment" ilike $2
     `;
     var NATIVE_REPLY = `
 SELECT "id", "comment", "thread", "sneeze"                  
   FROM "public"."reply"
- WHERE "comment" ilike $1
-   AND "thread" = $2
+ WHERE "thread" = $1
+   AND "comment" ilike $2
 `;
 
     var NATIVE_ITEM = `
 SELECT "id", "name", "virtualPath", "thread"                             
   FROM "public"."thread_item"
- WHERE "qWords" ilike $1
-   AND "thread" = $2
+ WHERE "thread" = $1
+   AND "qWords" ilike $2
     `;
 
     var pagination = await sails.helpers.pagination.with({
@@ -373,7 +374,7 @@ SELECT "id", "name", "virtualPath", "thread"
       thread.sneezeHits = [];
       thread.sneezeQty = await Sneeze.count({ thread: thread.id });
       if (thread.sneezeQty > 0) {
-        let rawResult = await sails.sendNativeQuery(NATIVE_SNEEZE, [word, thread.id]);
+        let rawResult = await sails.sendNativeQuery(NATIVE_SNEEZE, [thread.id, word]);
         for (let row of rawResult.rows) {
           sails.log.info(row);
           let matches = row.comment.matchAll(re);
@@ -395,7 +396,7 @@ SELECT "id", "name", "virtualPath", "thread"
       thread.replyHits = [];
       thread.replyQty = await Reply.count({ thread: thread.id });
       if (thread.replyQty > 0) {
-        let rawResult = await sails.sendNativeQuery(NATIVE_REPLY, [word, thread.id]);
+        let rawResult = await sails.sendNativeQuery(NATIVE_REPLY, [thread.id, word]);
         for (let row of rawResult.rows) {
           let matches = row.comment.matchAll(re);
           for (let match of matches) {
@@ -414,7 +415,7 @@ SELECT "id", "name", "virtualPath", "thread"
       }
 
       thread.itemHits = [];
-      let rawResult = await sails.sendNativeQuery(NATIVE_ITEM, [word, thread.id]);
+      let rawResult = await sails.sendNativeQuery(NATIVE_ITEM, [thread.id, word]);
       for (let row of rawResult.rows) {
         thread.itemHits.push(row);
       }

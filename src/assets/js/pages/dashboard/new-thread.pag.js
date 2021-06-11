@@ -16,6 +16,8 @@ parasails.registerPage('new-thread', {
     local: false,
     responsible: '',
     selectedMilestone: '',
+    showImageListModal: false,
+
     // Main syncing/loading state for this page.
     syncing: false,
     // Form data
@@ -107,9 +109,15 @@ parasails.registerPage('new-thread', {
       i18next.t('Feel free to enter ...'),
       this.addImageBlobHook.bind(this)
     );
+    $lycaon.markdown.addToolberImageList(self.threadEditor, function () {
+      self.threadEditor.eventManager.emit('closeAllPopup');
+      self.$refs.imagelist.load();
+      self.showImageListModal = true;
+    });
     this.threadEditor.mdEditor.setValue('');
 
     $lycaon.invalidEnterKey();
+    $lycaon.scrollTop();
   },
   watch: {
     appendix: function (val) {
@@ -174,14 +182,7 @@ parasails.registerPage('new-thread', {
       this.$set(this.formData, 'subject', subject);
       $('#thread-subject').focus();
     },
-    onAddTagify: function (e) {
-      this.selectedTags.push(e.detail.data);
-    },
-    onRemoveTagify: function (e) {
-      this.selectedTags = _.reject(this.selectedTags, (entry) => {
-        return entry.value === e.detail.data.value;
-      });
-    },
+    onChangeTags: function (e) {},
     onEditCancelClick: function (event) {
       location.href = this.backToUrl;
     },
@@ -306,6 +307,13 @@ parasails.registerPage('new-thread', {
       argins.tags = this.selectedTags;
 
       return argins;
+    },
+    hideImageListModal: function () {
+      this.showImageListModal = false;
+    },
+    selectedImageList: function (image) {
+      this.showImageListModal = false;
+      this.threadEditor.insertText(`![](${image.virtualUrl})`);
     },
   },
   computed: {

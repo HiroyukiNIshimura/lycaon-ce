@@ -89,6 +89,7 @@ SELECT t.* FROM "thread" t
       for (let entry of rawResult.rows) {
         response.results.push({
           id: entry.id,
+          no: entry.no,
           text: `[#${entry.no}]${entry.subject}`,
           entity: entry,
           disabled: entry.id === inputs.thread,

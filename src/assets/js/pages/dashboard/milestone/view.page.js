@@ -305,10 +305,10 @@ parasails.registerPage('milestone-view', {
       location.href = `/${this.organization.handleId}/milestone/sort/${this.team.id}`;
     },
     clickThreads: function (data) {
-      location.href = `/${this.organization.handleId}/team/${this.team.id}?milestone=${data.milestoneId}`;
+      location.href = `/${this.organization.handleId}/team/${this.team.id}/milestone/${data.milestoneId}`;
     },
     clickThreadsForMobile: function (data) {
-      location.href = `/${this.organization.handleId}/team/${this.team.id}?milestone=${data.id}`;
+      location.href = `/${this.organization.handleId}/team/${this.team.id}/milestone/${data.id}`;
     },
     editLink: function (data) {
       return `/${this.organization.handleId}/milestone/edit/${data.id}`;

@@ -18,6 +18,7 @@ parasails.registerComponent('wikiCard', {
     isPublic: { type: [Boolean, String], default: false },
     showTeam: { type: [Boolean, String], default: false },
     isAnimate: { type: [Boolean, String], default: true },
+    word: '',
   },
   //  ╦╔╗╔╦╔╦╗╦╔═╗╦    ╔═╗╔╦╗╔═╗╔╦╗╔═╗
   //  ║║║║║ ║ ║╠═╣║    ╚═╗ ║ ╠═╣ ║ ║╣
@@ -34,31 +35,36 @@ parasails.registerComponent('wikiCard', {
   //  ╠═╣ ║ ║║║║
   //  ╩ ╩ ╩ ╩ ╩╩═╝
   template: `  
-<a class="card h-100" v-inview:animate="animate" :href="wikiLink" :target="target">
+<a class="card h-100 card-selectable" v-inview:animate="animate" :href="wikiLink" :target="target">
     <img :src="image"
         class="card-img-top" 
         v-if="showImage"
     />
     <div class="card-body d-flex flex-column">
         <p class="card-title" v-if="showTeam"><a :href="teamLink">{{ wiki.team.name }}</a></p>
-        <h4 class="card-title">{{ truncate(wiki.subject, 50) }}</h4>
+        <p class="card-title h4 wiki-subject">{{ truncate(wiki.subject, 50) }}</p>
         <div class="card-subtitle"><small class="text-muted">wiki-no: {{ wiki.no }}</small></div>
         <div class="card-text">
           <span :href="tagLink(item)" class="badge badge-success mr-1" v-for="(item, index) in wiki.tags" :key="index" v-if="showTeam">{{ item.name }}</span>
-          <a :href="tagLink(item)" class="badge badge-success mr-1 tag-item" data-toggle="tooltip" data-placement="top" :title="tagTooltip" v-for="(item, index) in wiki.tags" :key="index" v-if="!showTeam">{{ item.name }}</a>
+          <a :href="tagLink(item)" class="badge badge-success mr-1" :aria-label="tagTooltip" data-microtip-position="top" data-microtip-size="medium" role="tooltip" v-for="(item, index) in wiki.tags" :key="index" v-if="!showTeam">{{ item.name }}</a>
         </div>
-        <p class="card-text mt-1" v-html="wiki.sanitizeHtml"></p>
-        <div class="card-text mt-3">
-          <small>
-            <user-identity :user="wiki.owner" :organization="organization" size="sm"></user-identity>
-            <lycaon-timestamp :at="wiki.createdAt" format="timeago" :translator="translator" short="true"></lycaon-timestamp>
-          </small>
-        </div>
-        <div class="card-text mt-3">
-          <i class="far fa-thumbs-up"></i> {{ i18n('How nice!') }} × {{ formatter.format(niceCount) }}
-          <span style="color: Tomato" class="ml-3" v-if="isFan">
-            <i class="fas fa-flag"></i>
-          </span>
+        <div class="card-section">
+          <div class="mt-3">
+            <span class="card-text wiki-card-content">{{ wiki.sanitizeHtml }}</span>
+            <div class="card-section-overlay mt-3" v-if="hitContent" v-html="hitContent"></div>
+          </div>
+          <div class="card-text mt-3">
+            <small>
+              <user-identity :user="wiki.owner" :organization="organization" size="sm"></user-identity>
+              <lycaon-timestamp :at="wiki.createdAt" format="timeago" :translator="translator" short="true"></lycaon-timestamp>
+            </small>
+          </div>
+          <div class="card-text mt-3">
+            <i class="far fa-thumbs-up"></i> {{ i18n('How nice!') }} × {{ formatter.format(niceCount) }}
+            <span style="color: Tomato" class="ml-3" v-if="isFan">
+              <i class="fas fa-flag"></i>
+            </span>
+          </div>
         </div>
         <slot/>
     </div>
@@ -72,7 +78,7 @@ parasails.registerComponent('wikiCard', {
     //…
   },
   mounted: async function () {
-    $('.tag-item').tooltip();
+    //
   },
   beforeDestroy: function () {
     //…
@@ -90,7 +96,7 @@ parasails.registerComponent('wikiCard', {
     },
     tagLink: function (tag) {
       if (this.wiki.team) {
-        return `/${this.organization.handleId}/team/${this.wiki.team.id}?target=wiki&tag=${tag.id}`;
+        return `/${this.organization.handleId}/team/${this.wiki.team.id}/wiki/${tag.id}`;
       }
       return 'javascript:void(0)';
     },
@@ -165,6 +171,43 @@ parasails.registerComponent('wikiCard', {
       ];
       var index = Math.floor(Math.random() * Math.floor(types.length));
       return types[index];
+    },
+    hitContent: function () {
+      if (!this.wiki.hits) {
+        return '';
+      }
+      if (!this.word) {
+        return '';
+      }
+
+      var content = '';
+      var re = new RegExp($lycaon.regexEscape(this.word), 'ig');
+
+      if (this.wiki.hitsBody) {
+        let matches = this.wiki.hitsBody.matchAll(re);
+        for (let match of matches) {
+          let replaced = this.wiki.hitsBody.replaceAll(
+            match[0],
+            `<span class="query-hits">${match[0]}</span>`
+          );
+          content += `<div class="card-text"><span class="query-hits-title">${i18next.t(
+            'Wiki body'
+          )}</span><br>...${replaced}...</div>`;
+          break;
+        }
+      }
+
+      var inner = this.wiki.itemHits.map((o) => {
+        return '* ' + o.name;
+      });
+
+      if (inner.length > 0) {
+        content += `<div class="card-text"><span class="query-hits-title">${i18next.t(
+          'attachment'
+        )}</span></div>${inner.join('<br>')}`;
+      }
+
+      return content;
     },
   },
 });

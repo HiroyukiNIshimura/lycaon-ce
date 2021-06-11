@@ -12,7 +12,7 @@ SELECT (SELECT bigm_similarity($1, t."subject")) as "subjectScore",
  LIMIT 5;
 `;
 
-    var bot = await User.findOne({ emailAddress: 'lycaonbot@example.com' }).populate('teams');
+    var bot = await sails.helpers.getBot();
     var index = _.findIndex(bot.teams, (o) => {
       return o.id === team;
     });

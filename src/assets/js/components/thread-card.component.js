@@ -29,9 +29,9 @@ parasails.registerComponent('threadCard', {
   //  ╠═╣ ║ ║║║║
   //  ╩ ╩ ╩ ╩ ╩╩═╝
   template: `
-<div class="card h-100">
-  <div class="thread-priority-bar" data-toggle="tooltip" data-placement="bottom" :title="i18n('Importance: High')" v-show="thread.priority === 2"></div>
-  <div class="thread-urgency-bar" data-toggle="tooltip" data-placement="bottom" :title="i18n('Urgency')" :class="urgencyBarColor" v-show="thread.urgency > 0"></div>
+<div class="card h-100 card-selectable">
+  <div class="thread-priority-bar" :aria-label="i18n('Importance: High')" data-microtip-position="bottom" role="tooltip" v-show="thread.priority === 2"></div>
+  <div class="thread-urgency-bar" :aria-label="i18n('Urgency')" data-microtip-position="bottom" role="tooltip" :class="urgencyBarColor" v-show="thread.urgency > 0"></div>
   <div class="card-body">
     <div class="row">
       <div class="col h5 card-subtitle mb-2">
@@ -77,7 +77,7 @@ parasails.registerComponent('threadCard', {
       <div class="card-text mb-1" v-if="thread.lastUpdateUser">
         <small>
           <user-identity :user="thread.lastUpdateUser" :organization="organization" size="sm"></user-identity>
-          <lycaon-timestamp :at="thread.updatedAt" format="timeago" :translator="updateTranslator" short="true"></lycaon-timestamp>
+          <lycaon-timestamp :at="thread.lastHumanUpdateAt" format="timeago" :translator="updateTranslator" short="true"></lycaon-timestamp>
         </small>
       </div>
       <div class="card-text mb-1" v-if="thread.working">
@@ -94,7 +94,7 @@ parasails.registerComponent('threadCard', {
     <span class="badge badge-success mr-1" v-for="(item, index) in thread.tags" :key="index" v-if="team">
       {{ item.name }}
     </span>
-    <a :href="tagLink(item)" class="badge badge-success mr-1 tag-item" data-toggle="tooltip" data-placement="top" :title="tagTooltip" v-for="(item, index) in thread.tags" :key="index" v-if="!team">
+    <a :href="tagLink(item)" class="badge badge-success mr-1" :aria-label="tagTooltip" data-microtip-position="top" data-microtip-size="medium" role="tooltip" v-for="(item, index) in thread.tags" :key="index" v-if="!team">
       {{ item.name }}
     </a>
     <div v-if="thread.milestone">
@@ -111,7 +111,6 @@ parasails.registerComponent('threadCard', {
   //…
   mounted: async function () {
     //…
-    $('.thread-priority-bar, .thread-urgency-bar, .tag-item').tooltip();
   },
   beforeDestroy: function () {
     //…
@@ -122,7 +121,7 @@ parasails.registerComponent('threadCard', {
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
     tagLink: function (tag) {
-      return `/${this.organization.handleId}/team/${this.thread.team.id}?tag=${tag.id}`;
+      return `/${this.organization.handleId}/team/${this.thread.team.id}/thread/${tag.id}`;
     },
     createTranslator: function (val) {
       return this.i18n('{0} opened at {1}').format('', val);

@@ -132,6 +132,10 @@ select to_char(to_timestamp("commitAt"/1000), 'D') as dt, count(*) as qty
       'delete-reply',
       'attach-file',
       'delete-file',
+      //'milestone',
+      //'relationship',
+      //'delete-relationship',
+      //'fork',
     ];
 
     var dt = new Date();

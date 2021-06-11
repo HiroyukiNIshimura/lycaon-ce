@@ -18,7 +18,8 @@ parasails.registerComponent('clipboard', {
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
   data: function () {
     return {
-      tooltip: '',
+      message: '',
+      role: 'tooltip',
     };
   },
 
@@ -26,15 +27,17 @@ parasails.registerComponent('clipboard', {
   //  ╠═╣ ║ ║║║║
   //  ╩ ╩ ╩ ╩ ╩╩═╝
   template: `
-<span ref="clipper" data-toggle="tooltip" :title="i18n('Copy Markdown to clipboard')">
-    <a ref="clipperAction" class="text-info" href="javascript:void(0)" @click="copy"><i class="far fa-clipboard"></i></a>
+<span ref="clipper" :aria-label="message" data-microtip-position="bottom" data-microtip-size="medium" :role="role">
+  <a ref="clipperAction" class="text-info" href="javascript:void(0)" @click="copy"><i class="far fa-clipboard"></i></a>
 </span>
 `,
 
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
   //  ║  ║╠╣ ║╣ ║  ╚╦╝║  ║  ║╣
   //  ╩═╝╩╚  ╚═╝╚═╝ ╩ ╚═╝╩═╝╚═╝
-  beforeMount: function () {},
+  beforeMount: function () {
+    this.message = i18next.t('Copy Markdown to clipboard');
+  },
   mounted: async function () {},
   beforeDestroy: function () {
     //…
@@ -45,8 +48,6 @@ parasails.registerComponent('clipboard', {
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
     copy: function () {
-      $(this.$refs.clipper).tooltip('hide');
-
       if (!this.data) {
         return;
       }
@@ -75,12 +76,14 @@ parasails.registerComponent('clipboard', {
       }
     },
     notifyCopy: function () {
-      var $action = $(this.$refs.clipperAction);
-      $action.attr('title', i18next.t('Copy completed'));
-      $action.tooltip('show');
+      this.message = i18next.t('Copy completed');
+      var self = this;
       setTimeout(function () {
-        $action.removeAttr('title');
-        $action.tooltip('dispose');
+        self.role = '';
+        setTimeout(function () {
+          self.message = i18next.t('Copy Markdown to clipboard');
+          self.role = 'tooltip';
+        }, 1000);
       }, 1000);
     },
   },

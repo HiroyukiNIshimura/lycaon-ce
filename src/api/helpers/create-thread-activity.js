@@ -31,6 +31,10 @@ module.exports = {
         'delete-reply',
         'attach-file',
         'delete-file',
+        'milestone',
+        'relationship',
+        'delete-relationship',
+        'fork',
       ],
     },
     user: {
@@ -51,6 +55,10 @@ module.exports = {
       type: 'number',
       description: 'reply.id',
     },
+    refId: {
+      type: 'number',
+      description: 'ref.thread.id',
+    },
     fileName: {
       type: 'string',
     },
@@ -60,7 +68,7 @@ module.exports = {
       description: 'All done.',
     },
   },
-  fn: async function ({ db, type, user, thread, sneezeId, replyId, fileName }) {
+  fn: async function ({ db, type, user, thread, sneezeId, replyId, refId, fileName }) {
     var rawData = '';
     var dudate;
     var userName;
@@ -74,6 +82,7 @@ module.exports = {
       case 'delete-reply':
       case 'update-sneeze':
       case 'delete-sneeze':
+      case 'milestone':
         break;
       case 'update-category':
         var category = await Category.findOne({
@@ -134,6 +143,16 @@ module.exports = {
       case 'delete-file':
         if (!fileName) {
           throw flaverr('E_REQUIRED', new Error('delete-file need fullName!'));
+        }
+        break;
+      case 'relationship':
+      case 'delete-relationship':
+      case 'fork':
+        if (refId) {
+          var refThread = await Thread.findOne({ id: refId }).usingConnection(db);
+          if (refThread) {
+            stateWord = `#${refThread.no}`;
+          }
         }
         break;
       default:

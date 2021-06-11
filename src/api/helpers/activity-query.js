@@ -62,6 +62,7 @@ SELECT
     "thread__thread"."owner" as "thread__owner",
     "thread__thread"."responsible" as "thread__responsible",
     "thread__thread"."lastUpdateUser" as "thread__lastUpdateUser",
+    "thread__thread"."lastHumanUpdateAt" as "thread__lastHumanUpdateAt",
     "category__category"."id" as "category__id",
     "category__category"."name" as "category__name",
     "category__category"."displayOrder" as "category__displayOrder",

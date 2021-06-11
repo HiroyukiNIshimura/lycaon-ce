@@ -47,10 +47,9 @@
             <small class="text-muted"><%= __("Tags") %></small>
           </div>
           <div class="col">
-            <a :href="tagLink(item)" class="badge badge-success mr-1" data-toggle="tooltip" data-placement="top" :title="tagTooltip"
-              v-for="(item, index) in wiki.tags">{{
+            <h5><a :href="tagLink(item)" class="badge badge-success mr-1" :aria-label="tagTooltip" data-microtip-position="bottom" data-microtip-size="medium" role="tooltip" v-for="(item, index) in wiki.tags"><i class="fas fa-hashtag fa-xs mr-1"></i>{{
               item.name
-            }}</a>
+            }}</a></h5>
           </div>
         </div>
         <div class="row">
@@ -74,7 +73,9 @@
           <viewer-file :organization="organization" :appendix="appendix" :download-appendix="downloadAppendix"></viewer-file>
         </div>
         
-        <div class="text-right" v-show="!showToc"><span class="d-none d-md-block"><a href="javascript:void(0)" @click="buildToc" data-toggle="tooltip" title="<%= __("For posts that use Markdown notation headlines, the table of contents will be displayed") %>"><%= __("Table of contents") %></a></span></div>
+        <div class="row justify-content-end">
+          <div class="col-auto" v-show="!showToc"><span class="d-none d-md-block"><a href="javascript:void(0)" @click="buildToc" aria-label="<%= __("For posts that use Markdown notation headlines, the table of contents will be displayed") %>" data-microtip-position="bottom" data-microtip-size="medium" role="tooltip"><%= __("Table of contents") %></a></span></div>
+        </div>
 
         <div class="row mt-1 mb-3 p-3 shadow rounded">
           <div class="col text-break">

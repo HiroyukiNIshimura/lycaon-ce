@@ -222,7 +222,6 @@ module.exports = {
           return err;
         });
     }
-
     // Sometimes only log info to the console about the email that WOULD have been sent.
     // Specifically, if the "To" email address is anything "@example.com".
     //
@@ -260,10 +259,10 @@ module.exports = {
           'Body:\n' +
           htmlEmailContents +
           '\n' +
-          '-=-=-=-=-=-=-=-=-=-=-=-=-= rowtext =-=-=-=-=-=-=-=-=-=-=-=-=-\n' +
+          '-=-=-=-=-=-=-=-=-=-=-=-=-= ↓ rowtext ↓ =-=-=-=-=-=-=-=-=-=-=-=-=-\n' +
           rawText +
           '\n' +
-          '-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-'
+          '-=-=-=-=-=-=-=-=-=-=-=-=-= ↑ rowtext ↑ =-=-=-=-=-=-=-=-=-=-=-=-=-'
       );
     } else {
       // Otherwise, we'll check that all required Mailgun credentials are set up

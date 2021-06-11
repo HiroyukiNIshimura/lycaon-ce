@@ -68,9 +68,7 @@
             </div>
             <div class="row mt-3">
               <div class="col text-right">
-                <button type="button" class="btn btn-outline-indigo btn-sm" data-toggle="tooltip" data-placement="bottom"
-                  :title="i18n('Edit this reply')" :disabled="thread.locked" @click="onReplyEditClick(reply)"
-                  v-if="reply.owner && reply.owner.id === me.id">
+                <button type="button" class="btn btn-outline-indigo btn-sm" :disabled="thread.locked" @click="onReplyEditClick(reply)" v-if="reply.owner && reply.owner.id === me.id">
                   <i class="far fa-edit"></i> <%= __("Edit") %>
                 </button>
               </div>
@@ -78,6 +76,9 @@
           </div>
         </transition>
         <!-- reply-editor -->
+        <div class="text-danger" v-if="formErrors.replyLength">
+          <%= __("Comment size is too large") %>
+        </div>
         <div :id="getReplyEditorIdentityWrapper(reply)" class="wapper-coment-editor" style="display: none"
           v-show="showReplyEditor(reply)">
           <ajax-form action="updateReply" :syncing.sync="syncing" :cloud-error.sync="cloudError"

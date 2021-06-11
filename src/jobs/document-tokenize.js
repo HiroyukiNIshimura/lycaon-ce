@@ -1,10 +1,11 @@
 const path = require('path');
 const fs = require('fs');
-const xslx = require('xlsx-extract').XLSX;
+const xlsx = require('xlsx');
 const pdf = require('pdf-parse');
 const mammoth = require('mammoth');
 const kuromojin = require('kuromojin');
 const encoding = require('encoding-japanese');
+const _ = require('@sailshq/lodash');
 
 module.exports = {
   tokenize: async function (type, item) {
@@ -14,7 +15,7 @@ module.exports = {
     } else if (
       item.mimeType === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
     ) {
-      token = await this.fromExcel(item);
+      token = this.fromExcel(item);
     } else if (
       item.mimeType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
     ) {
@@ -51,27 +52,26 @@ module.exports = {
   },
   fromExcel: function (item) {
     try {
-      var file = path.resolve(sails.config.appPath, item.virtualPath);
+      var tokens = '';
 
-      return new Promise(function (resolve, reject) {
-        var tokens = [];
-        new xslx()
-          .extract(file, { sheet_all: true })
-          .on('cell', function (cell) {
-            if (cell) {
-              if (!tokens.find((el) => el == cell)) {
-                tokens.push(cell);
-              }
-            }
-          })
-          .on('error', function (err) {
-            sails.log.error(err);
-            reject(err);
-          })
-          .on('end', function (err) {
-            resolve(tokens.join('.'));
-          });
-      });
+      var file = path.resolve(sails.config.appPath, item.virtualPath);
+      var book = xlsx.readFile(file);
+      for (let sheetName of book.SheetNames) {
+        var sheet = book.Sheets[sheetName];
+        var json = xlsx.utils.sheet_to_json(sheet);
+        for (let obj of json) {
+          var vals = _.values(obj);
+          tokens += vals.join('.');
+          if (tokens.length > 5000) {
+            break;
+          }
+        }
+        if (tokens.length > 5000) {
+          break;
+        }
+      }
+
+      return tokens;
     } catch (err) {
       sails.log.error(err);
       return '';
@@ -110,6 +110,10 @@ module.exports = {
   },
   wakati: async function (tokens) {
     var buffer = [];
+    if (tokens.length > 5000) {
+      tokens = tokens.substr(0, 5000);
+    }
+
     var words = await kuromojin.tokenize(tokens);
     for (let word of words) {
       if (

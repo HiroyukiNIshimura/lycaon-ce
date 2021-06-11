@@ -19,7 +19,9 @@ module.exports = {
   },
 
   fn: async function (inputs) {
-    var milestone = await Milestone.findOne({ id: inputs.id }).populate('threads');
+    var milestone = await Milestone.findOne({ id: inputs.id }).populate('threads', {
+      where: { local: false },
+    });
     if (!milestone) {
       throw 'notFound';
     }
@@ -95,7 +97,7 @@ module.exports = {
         }).sort('updatedAt ASC');
 
         if (activites.length < 1) {
-          thread.closeFormatedAt = moment(Number(thread.updatedAt)).format('YYYY/MM/DD');
+          thread.closeFormatedAt = moment(Number(thread.lastHumanUpdateAt)).format('YYYY/MM/DD');
         } else {
           thread.closeFormatedAt = moment(Number(_.last(activites).updatedAt)).format('YYYY/MM/DD');
         }

@@ -34,7 +34,10 @@ parasails.registerPage('mindmap', {
   },
   mounted: async function () {
     $('#node-' + this.thread.id).addClass('current-node');
-    $('a').tooltip();
+    $('a').tooltip({
+      trigger: 'hover focus',
+      container: 'div.container',
+    });
   },
 
   //  ╦╔╗╔╔╦╗╔═╗╦═╗╔═╗╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
@@ -46,7 +49,10 @@ parasails.registerPage('mindmap', {
       this.$nextTick(() => {
         this.$refs.mindmap.renderMap();
         $('#node-' + this.thread.id).addClass('current-node');
-        $('a').tooltip();
+        $('a').tooltip({
+          trigger: 'hover focus',
+          container: 'div.container',
+        });
       });
     },
     onEditable: function () {
@@ -54,7 +60,10 @@ parasails.registerPage('mindmap', {
       this.$nextTick(() => {
         this.$refs.mindmap.renderMap();
         $('#node-' + this.thread.id).addClass('current-node');
-        $('a').tooltip();
+        $('a').tooltip({
+          trigger: 'hover focus',
+          container: 'div.container',
+        });
       });
     },
   },

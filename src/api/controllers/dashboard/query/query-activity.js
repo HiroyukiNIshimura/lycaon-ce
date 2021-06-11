@@ -118,7 +118,7 @@ SELECT COUNT("thread_activity".*)
           where:
             where +
             `
-ORDER BY "updatedAt" DESC
+ORDER BY "updatedAt" DESC, "id" DESC
 LIMIT $3 OFFSET $4`,
           bindParameters: [inputs.id, this.req.me.id, pagination.limit, pagination.skip],
         });
@@ -138,7 +138,7 @@ LIMIT $3 OFFSET $4`,
           where:
             where +
             `
-ORDER BY "updatedAt" DESC
+ORDER BY "updatedAt" DESC, "id" DESC
 LIMIT $3 OFFSET $4`,
           bindParameters: [this.req.me.id, this.req.me.id, pagination.limit, pagination.skip],
         });

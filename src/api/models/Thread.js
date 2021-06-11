@@ -30,6 +30,12 @@ module.exports = {
     },
     body: {
       type: 'string',
+      custom: function (value) {
+        if (!value) {
+          return true;
+        }
+        return Buffer.byteLength(value, 'utf8') < 107374180;
+      },
       description: '本文',
       example: 'これはMarkdownのままのデータ',
     },
@@ -116,6 +122,12 @@ module.exports = {
       type: 'ref',
       columnType: 'bigint',
       description: '作業中から作業リリースまたはクローズまでの経過時間の集計',
+      example: 1502844074211,
+    },
+    lastHumanUpdateAt: {
+      type: 'ref',
+      columnType: 'bigint',
+      description: 'lastUpdateUserが変更された際の日時',
       example: 1502844074211,
     },
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗

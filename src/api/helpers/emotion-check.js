@@ -49,7 +49,7 @@ module.exports = {
       },
     };
 
-    if (!inputs.contents) {
+    if (!inputs.contents || !sails.config.custom.classifier) {
       return response;
     }
 

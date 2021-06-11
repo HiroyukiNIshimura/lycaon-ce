@@ -42,6 +42,14 @@ module.exports = {
           .usingConnection(db);
 
         await ThreadRef.destroy({ left: current.parent, right: current.id }).usingConnection(db);
+
+        await sails.helpers.createThreadActivity.with({
+          db: db,
+          type: 'delete-relationship',
+          user: this.req.me,
+          thread: current,
+          refId: current.parent,
+        });
       });
     } catch (err) {
       sails.log.error(err);

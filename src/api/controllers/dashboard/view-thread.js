@@ -98,70 +98,10 @@ module.exports = {
       team_users: response.team.id,
     });
 
-    response.sneezes = await Sneeze.find({
-      where: {
-        thread: response.thread.id,
-        deleted: false,
-      },
-      sort: 'id ASC',
-    }).populate('owner');
-
-    for (let entry of response.sneezes) {
-      await User.setGravatarUrl(entry.owner);
-    }
-
-    response.replys = await Reply.find({
-      where: {
-        thread: response.thread.id,
-        deleted: false,
-      },
-      sort: 'id ASC',
-    }).populate('owner');
-
-    for (let entry of response.replys) {
-      await User.setGravatarUrl(entry.owner);
-    }
-
-    response.activities = await ThreadActivity.find({
-      where: {
-        thread: response.thread.id,
-      },
-      sort: 'id ASC',
-    }).populate('user');
-
-    for (let entry of response.activities) {
-      if (entry.sneeze) {
-        entry.sneeze = _.find(response.sneezes, {
-          id: entry.sneeze,
-        });
-      }
-
-      if (entry.reply) {
-        entry.reply = _.find(response.replys, {
-          id: entry.reply,
-        });
-      }
-      await User.setGravatarUrl(entry.user, 36);
-    }
-
-    var i = 1;
-    _.each(response.sneezes, (entry) => {
-      entry.serialNumber = i;
-      var replys = _.where(response.replys, {
-        sneeze: entry.id,
-      });
-      var j = 1;
-      _.each(replys, (entry) => {
-        var reply = _.find(response.replys, {
-          id: entry.id,
-        });
-        entry.serialNumber = j;
-        reply.serialNumber = j;
-
-        j++;
-      });
-      i++;
-    });
+    var activities = await sails.helpers.findThreadActivities.with({ id: response.thread.id });
+    response.sneezes = activities.sneezes;
+    response.replys = activities.replys;
+    response.activities = activities.activities;
 
     response.thread.items = await ThreadItem.find({
       where: {

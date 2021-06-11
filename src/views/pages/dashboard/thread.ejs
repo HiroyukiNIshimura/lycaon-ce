@@ -40,6 +40,9 @@
       <div class="col-9 col-xs-6" id="main-contents" :class="mainContents">
         <%- partial ('thread-header-actions.ejs') %>
         <!-- thread-editor -->
+        <div class="text-danger" v-if="formErrors.bodyLength">
+          <%= __("Body size is too large") %>
+        </div>
         <ajax-form id="form-update-thraed" action="updateThread" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedForm"
           @rejected="onCloudError" :handle-parsing="handleParsingForm">
           <transition name="fade">
@@ -115,15 +118,15 @@
                   <!-- 自分がオーナーの場合変更可能 -->
                   <div class="col-auto" v-if="thread.owner && thread.owner.id === me.id">
                     <div class="custom-control custom-checkbox">
-                      <input type="checkbox" class="form-check-input" id="thread-local" v-model="local" true-value="true" false-value="false" />
+                      <input type="checkbox" class="form-check-input" id="thread-local" v-model="local" />
                       <label class="form-check-label" for="thread-local"><%= __("Private thread") %></label>
                     </div>
                   </div>
                 </div>
                 <div class="row mt-3">
                   <div class="col">
-                    <label for="thread-tags"><%= __("Tags") %><small class="text-muted ml-3"><%= __("You can tag up to {0}").format(10) %></small></label>
-                    <v-tagify ref="tagify" id="thread-tags" :settings="tagifySettings" @add="onAddTagify" @remove="onRemoveTagify"></v-tagify>
+                    <label for="thread-tagfiy"><%= __("Tags") %><small class="text-muted ml-3"><%= __("You can tag up to {0}").format(10) %></small></label>
+                    <v-tagify-select id="thread-tagfiy" :values="selectedTags" :settings="tagifySettings" @change="onChangeTags"></v-tagify-select>        
                   </div>
                 </div>
                 <div class="row mt-3">
@@ -179,8 +182,7 @@
                   <small><span class="badge badge-default"><%= __("Fork source thread") %></span><a class="ml-2" :href="forkLink"
                       v-if="fork.status === 1"><del>[#{{ fork.no }}] {{ fork.subject }}</del></a>
                     <a class="ml-2" :href="forkLink" v-else>[#{{ fork.no }}] {{ fork.subject }}</a>
-                    <a class="ml-3" href="javascript:void(0)" @click="deleteParent" data-toggle="tooltip" data-placement="bottom"
-                      :title="i18n('Remove the association with the fork source')"><i class="fas fa-unlink"></i></a>
+                    <a class="ml-3" href="javascript:void(0)" @click="deleteParent" :aria-label="i18n('Remove the association with the fork source')" data-microtip-position="bottom" data-microtip-size="medium" role="tooltip"><i class="fas fa-unlink"></i></a>
                   </small>
                 </ajax-form>
               </div>
@@ -189,7 +191,7 @@
               <div class="col">
                 <div class="row">
                   <div class="col">
-                    <span ref="clipper" class="h6 text-info text-muted mr-3" data-toggle="tooltip" :title="i18n('Copy thread No')"><a ref="clipperAction" href="javascript:void(0)" @click="copyNo"><%= __("Thread") %> #{{ thread.no }}</a></span>
+                    <span ref="clipper" class="h6 text-info text-muted mr-3" :aria-label="clipperMessage" data-microtip-position="bottom" :role="role"><a ref="clipperAction" href="javascript:void(0)" @click="copyNo"><%= __("Thread") %> #{{ thread.no }}</a></span>
                     <span class="badge badge-success" v-if="thread.working"><%= __("Working") %></span>
                     <span style="color: Tomato" class="mr-1" v-if="isFan">
                       <i class="fas fa-flag"></i>
@@ -221,8 +223,7 @@
                       <del>[#{{ item.no }}] {{ item.subject }}</del>
                     </a>
                     <a :href="chiledLinks(item)" v-else> [#{{ item.no }}] {{ item.subject }} </a>
-                    <a class="ml-3" href="javascript:void(0)" @click="deleteChild(item, index)" data-toggle="tooltip" data-placement="bottom"
-                      :title="i18n('Remove the association with this thread')"><i class="fas fa-unlink"></i></a>
+                    <a class="ml-3" href="javascript:void(0)" @click="deleteChild(item, index)" :aria-label="i18n('Remove the association with this thread')" data-microtip-position="bottom" data-microtip-size="medium" role="tooltip"><i class="fas fa-unlink"></i></a>
                   </small>
                 </div>
               </div>
@@ -256,8 +257,7 @@
                 <small class="text-muted"><%= __("Tags") %></small>
               </div>
               <div class="col">
-                <a :href="tagLink(item)" class="badge badge-success mr-1" data-toggle="tooltip" data-placement="top" :title="tagTooltip"
-                  v-for="(item, index) in thread.tags">{{
+                <a :href="tagLink(item)" class="badge badge-success mr-1" :aria-label="tagTooltip" data-microtip-position="top" data-microtip-size="medium" role="tooltip" v-for="(item, index) in thread.tags">{{
                   item.name
                 }}</a>
               </div>
@@ -294,6 +294,22 @@
               <%- partial ('thread-reply.ejs') %>
             </div>
           </div>
+        </div>
+        <div v-if="isCommentArrived">
+          <div class="row">
+            <div class="col-1">
+              <div class="dot-elastic mt-3 ml-5"></div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-auto">
+              <span data-microtip-position="top" role="tooltip" :aria-label="commentArrived"><a href="javascript:void(0);" @click="reload"><%= __('Reload the page') %></a></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="text-danger" v-if="formErrors.commentLength">
+          <%= __("Comment size is too large") %>
         </div>
         <ajax-form action="createSneeze" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedSneezeCreateForm" @rejected="onCloudError"
           :handle-parsing="handleParsingSneezeCreateForm">

@@ -1,1 +1,1 @@
-const lycaon_lang_work_delete = {"The comment or reply contains a word":""};
+const lycaon_lang_work_delete = {"The associated thread has been set at {0}":"","The related thread has been released {0}":""};

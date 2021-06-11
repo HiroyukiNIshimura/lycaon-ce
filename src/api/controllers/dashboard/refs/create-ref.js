@@ -75,6 +75,14 @@ module.exports = {
       await sails.getDatastore().transaction(async (db) => {
         await ThreadRef.create({ left: current.id, right: child.id }).usingConnection(db);
         await ThreadRef.create({ left: child.id, right: current.id }).usingConnection(db);
+
+        await sails.helpers.createThreadActivity.with({
+          db: db,
+          type: 'relationship',
+          user: this.req.me,
+          thread: current,
+          refId: child.id,
+        });
       });
     } catch (err) {
       sails.log.error(err);

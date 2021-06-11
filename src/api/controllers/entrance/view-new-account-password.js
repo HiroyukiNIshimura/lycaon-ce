@@ -37,9 +37,18 @@ module.exports = {
       throw 'invalidOrExpiredToken';
     }
 
+    var locales = [];
+    for (let item of sails.config.i18n.locales) {
+      locales.push({
+        key: item,
+        text: sails.__(item),
+      });
+    }
+
     // Grab token and include it in view locals
     return {
       token: inputs.token,
+      locales: locales,
     };
   },
 };

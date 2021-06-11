@@ -53,11 +53,9 @@
         </div>
       </div>
       <div class="row mt-3 mb-5">
-        <div class="col-auto">
+        <div class="col">
           <label for="ext-selector"><%= __('Allowed extensions') %></label>
-          <v-tagify ref="tagify" id="ext-selector" :settings="tagifySettings" @add="onAddTagify"
-            @remove="onRemoveTagify">
-          </v-tagify>
+          <v-tagify-select id="ext-selector" :values="selectedExts" :settings="tagifySettings" @change="onChangeExtSelector"></v-tagify-select>
         </div>
       </div>
 

@@ -160,3 +160,35 @@
     </small>
   </div>
 </div>
+<div class="row ml-5 mt-3" v-if="isMilestone(item.type)">
+  <div class="col">
+    <button type="button" class="btn btn-light btn-circle-timeline">
+      <i class="fas fa-calendar-alt"></i></button><small class="ml-2">
+      <user-identity class="mr-1" :user="item.user" :organization="organization" size="sm"></user-identity> - <lycaon-timestamp :at="item.createdAt" format="timeago" :translator="milestoneTranslator"></lycaon-timestamp>
+    </small>
+  </div>
+</div>
+<div class="row ml-5 mt-3" v-if="isRelationship(item.type)">
+  <div class="col">
+    <button type="button" class="btn btn-light btn-circle-timeline">
+      <i class="fas fa-link"></i></button><small class="ml-2">
+      <user-identity class="mr-1" :user="item.user" :organization="organization" size="sm"></user-identity> - <lycaon-timestamp :at="item.createdAt" format="timeago" :translator="relationshipTranslator" :trans-option="item"></lycaon-timestamp>
+    </small>
+  </div>
+</div>
+<div class="row ml-5 mt-3" v-if="isDeleteRelationship(item.type)">
+  <div class="col">
+    <button type="button" class="btn btn-light btn-circle-timeline">
+      <i class="fas fa-unlink"></i></button><small class="ml-2">
+      <user-identity class="mr-1" :user="item.user" :organization="organization" size="sm"></user-identity> - <lycaon-timestamp :at="item.createdAt" format="timeago" :translator="deleteRelationshipTranslator" :trans-option="item"></lycaon-timestamp>
+    </small>
+  </div>
+</div>
+<div class="row ml-5 mt-3" v-if="isFork(item.type)">
+  <div class="col">
+    <button type="button" class="btn btn-light btn-circle-timeline">
+      <i class="fas fa-code-branch"></i></button><small class="ml-2">
+      <user-identity class="mr-1" :user="item.user" :organization="organization" size="sm"></user-identity> - <lycaon-timestamp :at="item.createdAt" format="timeago" :translator="forkTranslator" :trans-option="item"></lycaon-timestamp>
+    </small>
+  </div>
+</div>

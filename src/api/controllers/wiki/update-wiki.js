@@ -9,10 +9,17 @@ module.exports = {
     },
     subject: {
       type: 'string',
+      maxLength: 200,
       required: true,
     },
     body: {
       type: 'string',
+      custom: function (value) {
+        if (!value) {
+          return true;
+        }
+        return Buffer.byteLength(value, 'utf8') < 107374180;
+      },
       example: 'これはMarkdownのままのデータ',
     },
     concept: {

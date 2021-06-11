@@ -259,6 +259,7 @@
   <script src="/dependencies/paginate/vuejs-paginate.2.1.0.js"></script>
   <script src="/dependencies/parasails.js"></script>
   <script src="/dependencies/push.js"></script>
+  <script src="/dependencies/qrcode/qrcode.js"></script>
   <script src="/dependencies/raphael/raphael.min.js"></script>
   <script src="/dependencies/select2/0.select2.js"></script>
   <script src="/dependencies/select2/i18n/en.js"></script>
@@ -283,6 +284,7 @@
   <script src="/dependencies/toastui-editor/z_i18n/zh-cn.js"></script>
   <script src="/dependencies/toc/jquery.toc.js"></script>
   <script src="/dependencies/toc/smooth-scroll.js"></script>
+  <script src="/dependencies/twitter/widgets.js"></script>
   <script src="/dependencies/underscore-deep-extend.js"></script>
   <script src="/dependencies/v-calendar/v-calender.js"></script>
   <script src="/dependencies/vertical-timeline/vertical-timeline.js"></script>
@@ -304,6 +306,7 @@
   <script src="/js/components/drop-fileupload.component.js"></script>
   <script src="/js/components/editor-file.component.js"></script>
   <script src="/js/components/honeypot.component.js"></script>
+  <script src="/js/components/image-list.component.js"></script>
   <script src="/js/components/lycaon-timestamp.component.js"></script>
   <script src="/js/components/modal.component.js"></script>
   <script src="/js/components/thread-card.component.js"></script>
@@ -314,6 +317,7 @@
   <script src="/js/components/v-select2.component.js"></script>
   <script src="/js/components/v-tab.component.js"></script>
   <script src="/js/components/v-tabs.component.js"></script>
+  <script src="/js/components/v-tagify-select.component.js"></script>
   <script src="/js/components/v-tagify.component.js"></script>
   <script src="/js/components/viewer-file.component.js"></script>
   <script src="/js/components/vote-card.component.js"></script>
@@ -398,6 +402,7 @@
   <script src="/js/pages/entrance/new-password.page.js"></script>
   <script src="/js/pages/homepage.page.js"></script>
   <script src="/js/pages/member/info.page.js"></script>
+  <script src="/js/pages/snippets.page.js"></script>
   <script src="/js/pages/upload-error.page.js"></script>
   <script src="/js/pages/wiki/edit-wiki.page.js"></script>
   <script src="/js/pages/wiki/new-wiki.page.js"></script>
@@ -449,7 +454,7 @@
     $(function whenDomIsReady() {
       $lycaon.socket.post('/ws/v1/join-organization', {}, (res) => {
         io.socket.on('disconnect', function () {
-          location.href = '/';
+          //location.href = '/';
         });
       });
     });

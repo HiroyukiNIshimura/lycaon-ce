@@ -9,7 +9,10 @@ parasails.registerPage('vote-view', {
     viewer: {},
     appendix: [],
     conflictUser: {},
-
+    sneezeStates: [],
+    commentEditor: {},
+    sneezeEditor: {},
+    openCommentIdentity: null,
     //…
     // Main syncing/loading state for this page.
     syncing: false,
@@ -45,6 +48,19 @@ parasails.registerPage('vote-view', {
 
     this.viewer = $lycaon.markdown.createViewer('#viewer', this.vote.body, '100%');
 
+    this.commentEditor = $lycaon.markdown.createVoteSneezeEditor(
+      '#comment-editor',
+      '300px',
+      'tab',
+      i18next.t('Please enter a question or comment for the article')
+    );
+
+    this.vote.sneezes.forEach((entity, index) => {
+      var id = this.getCommentIdentity(entity);
+      this.sneezeStates.push(false);
+      $lycaon.markdown.createViewer('#' + id, entity.comment, '100%');
+    });
+
     if (this.effectMessage) {
       $lycaon.cloudSuccessToast(this.effectMessage);
     }
@@ -65,37 +81,93 @@ parasails.registerPage('vote-view', {
       var c1 = document.getElementById('vote-chart');
       if (c1) {
         var data = [];
-
-        _.each(this.vote.choices, (o) => {
-          data.push(_.filter(this.vote.answers, { voteChoices: o.id }).length);
+        var labels = this.vote.choices.map((o) => {
+          return o.choices;
         });
+        labels.push(i18next.t('Unanswered'));
 
-        new Chart(c1, {
-          type: 'pie',
-          data: {
-            datasets: [
-              {
-                data: data,
-                fill: false,
-                borderWidth: 1,
-              },
-            ],
-            labels: this.vote.choices.map((o) => {
-              return o.choices;
-            }),
-          },
-          options: {
-            responsive: true,
-            legend: {
-              position: 'left',
+        if (this.vote.multipleAnswers) {
+          var nons = _.filter(this.vote.users, (o) => {
+            return o.answered == undefined || !o.answered;
+          }).length;
+
+          var total = this.vote.users.length;
+          if (total > 0) {
+            _.each(this.vote.choices, (o) => {
+              data.push((_.filter(this.vote.answers, { voteChoices: o.id }).length / total) * 100);
+            });
+            data.push((nons / total) * 100);
+          }
+
+          new Chart(c1, {
+            type: 'bar',
+            data: {
+              datasets: [
+                {
+                  data: data,
+                },
+              ],
+              labels: labels,
             },
-            plugins: {
-              colorschemes: {
-                scheme: 'brewer.PastelOne9',
+            options: {
+              responsive: true,
+              scales: {
+                y: {
+                  suggestedMax: 100,
+                  display: true,
+                  title: {
+                    display: true,
+                    text: '%',
+                  },
+                },
+              },
+              plugins: {
+                legend: {
+                  display: false,
+                },
+                colorschemes: {
+                  scheme: 'brewer.PastelOne9',
+                },
               },
             },
-          },
-        });
+          });
+        } else {
+          _.each(this.vote.choices, (o) => {
+            data.push(_.filter(this.vote.answers, { voteChoices: o.id }).length);
+          });
+          data.push(
+            _.filter(this.vote.users, (o) => {
+              return o.answered == undefined || !o.answered;
+            }).length
+          );
+
+          new Chart(c1, {
+            type: 'pie',
+            data: {
+              datasets: [
+                {
+                  data: data,
+                  fill: false,
+                  borderWidth: 1,
+                },
+              ],
+              labels: labels,
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: true,
+              aspectRatio: 2,
+              legend: {
+                position: 'left',
+              },
+              plugins: {
+                colorschemes: {
+                  scheme: 'brewer.PastelOne9',
+                },
+              },
+            },
+          });
+        }
       }
     },
 
@@ -119,6 +191,157 @@ parasails.registerPage('vote-view', {
     handleParsingConfirmForm: function () {
       return { id: this.vote.id };
     },
+    submittedSneezeCreateForm: async function (response) {
+      this.reload();
+    },
+    handleParsingSneezeCreateForm: function () {
+      this.formErrors = {};
+      $lycaon.clearToast();
+
+      var argins = {
+        vote: this.vote.id,
+        comment: this.commentEditor.mdEditor.getValue(),
+      };
+
+      // Validate
+      if (!argins.comment || argins.comment === '') {
+        this.formErrors.comment = true;
+      } else {
+        if (new TextEncoder().encode(argins.comment).length >= 107374180) {
+          this.formErrors.commentLength = true;
+        }
+      }
+
+      if (Object.keys(this.formErrors).length > 0) {
+        $lycaon.errorToast('Please enter a comment');
+        return;
+      }
+
+      return argins;
+    },
+    submittedSneezeUpdateForm: async function (response) {
+      this.reload();
+    },
+    handleParsingSneezeUpdateForm: function () {
+      this.formErrors = {};
+      $lycaon.clearToast();
+
+      var argins = {
+        id: this.openCommentIdentity,
+        comment: this.sneezeEditor.mdEditor.getValue(),
+      };
+
+      // Validate
+      if (!argins.comment || argins.comment === '') {
+        this.formErrors.comment = true;
+      }
+
+      if (Object.keys(this.formErrors).length > 0) {
+        $lycaon.errorToast('Please enter a comment');
+        return;
+      }
+
+      return argins;
+    },
+    getCommentEditorIdentityWrapper: function (sneeze) {
+      return 'wrapper-comment-editor-' + String(sneeze.serialNumber);
+    },
+    getCommentEditorIdentity: function (sneeze) {
+      return 'comment-editor-' + String(sneeze.serialNumber);
+    },
+    getCommentIdentity: function (sneeze) {
+      return 'comment-' + String(sneeze.serialNumber);
+    },
+    getSneezeIdentity: function (sneeze) {
+      return 'sneeze-' + String(sneeze.serialNumber);
+    },
+    showSneezeEditor: function (sneeze) {
+      var index = _.findIndex(this.sneezes, {
+        id: sneeze.id,
+      });
+      return this.sneezeStates[index];
+    },
+    showSneezeView: function (sneeze) {
+      var index = _.findIndex(this.vote.sneezes, {
+        id: sneeze.id,
+      });
+      return !this.sneezeStates[index];
+    },
+    showSneezeEditor: function (sneeze) {
+      var index = _.findIndex(this.vote.sneezes, {
+        id: sneeze.id,
+      });
+      return this.sneezeStates[index];
+    },
+    onCommentEditClick: function (sneeze) {
+      if (!this.checkCommentEditing()) {
+        return;
+      }
+
+      this.openCommentIdentity = sneeze.id;
+      this.$set(
+        this.sneezeStates,
+        _.findIndex(this.vote.sneezes, {
+          id: sneeze.id,
+        }),
+        true
+      );
+
+      var self = this;
+      this.$nextTick(() => {
+        $('#' + this.getCommentEditorIdentityWrapper(sneeze))
+          .parents('.card-body')
+          .addClass('edit-active');
+
+        self.sneezeEditor = $lycaon.markdown.createVoteSneezeEditor(
+          '#' + this.getCommentEditorIdentity(sneeze),
+          '300px',
+          'tab',
+          i18next.t('Please enter a question or comment for the article')
+        );
+        self.sneezeEditor.mdEditor.setValue(sneeze.comment);
+        self.sneezeEditor.mdEditor.moveCursorToStart();
+        $lycaon.jumpTo($('#' + self.getSneezeIdentity(sneeze)));
+      });
+    },
+    onCommentEditCancelClick: function (sneeze) {
+      this.openCommentIdentity = null;
+      var editorWrapper = this.getCommentEditorIdentityWrapper(sneeze);
+
+      this.$set(
+        this.sneezeStates,
+        _.findIndex(this.vote.sneezes, {
+          id: sneeze.id,
+        }),
+        false
+      );
+
+      var self = this;
+      this.$nextTick(() => {
+        self.sneezeEditor.mdEditor.remove();
+        self.sneezeEditor = {};
+        $('#' + editorWrapper)
+          .parents('.card-body')
+          .removeClass('edit-active');
+      });
+    },
+    sneezeAnker: function (sneeze) {
+      return `/${this.organization.handleId}/vote/${this.vote.id}#${this.getSneezeIdentity(
+        sneeze
+      )}`;
+    },
+    checkCommentEditing: function () {
+      if (this.openCommentIdentity) {
+        var sneeze = _.find(this.vote.sneezes, {
+          id: this.openCommentIdentity,
+        });
+        $lycaon.jumpTo($('#' + this.getSneezeIdentity(sneeze)));
+        $lycaon.infoToast('Editing comment [{0}] ...', [sneeze.serialNumber]);
+        return false;
+      }
+      return true;
+    },
+
     getAnswers: function (user) {
       var answers = [];
       _.each(user.answers, (o) => {
@@ -134,8 +357,14 @@ parasails.registerPage('vote-view', {
     downloadAppendix: function (item, index) {
       return `/download/vote/${this.vote.id}/${item.id}`;
     },
+    reload: function () {
+      this.cloudSuccess = true;
+      this.syncing = true;
+      location.href = `/${this.organization.handleId}/vote/${this.vote.id}`;
+    },
   },
   computed: {
+    commentTranslator: function () {},
     beforeRelease: function () {
       return this.badState === 'notAnswerNotReleased';
     },

@@ -156,6 +156,23 @@ parasails.registerComponent('activityCard', {
           return this.i18n('Attached file [{0}] at {1}', [this.activity.fileName, at]);
         case 'delete-file':
           return this.i18n('Deleted file [{0}] at {1}', [this.activity.fileName, at]);
+        case 'milestone':
+          return this.i18n('Milestones have been set at {0}', [at]);
+        case 'relationship':
+          return this.i18n('The associated thread has been set [{0}] at {1}', [
+            this.activity.stateWord,
+            at,
+          ]);
+        case 'delete-relationship':
+          return this.i18n('The related thread has been released [{0}] at {1}', [
+            this.activity.stateWord,
+            at,
+          ]);
+        case 'fork':
+          return this.i18n('A fork for this thread has been created [{0}] at {1}', [
+            this.activity.stateWord,
+            at,
+          ]);
         default:
           break;
       }
@@ -247,6 +264,14 @@ parasails.registerComponent('activityCard', {
           return 'fa-folder-plus';
         case 'delete-file':
           return 'fa-folder-minus';
+        case 'milestone':
+          return 'fas fa-calendar-alt';
+        case 'relationship':
+          return 'fas fa-link';
+        case 'delete-relationship':
+          return 'fas fa-unlink';
+        case 'fork':
+          return 'fas fa-code-branch';
         case 'delete-sneeze':
           return '';
         case 'delete-reply':

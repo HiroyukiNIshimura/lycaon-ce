@@ -34,7 +34,13 @@ module.exports = {
       throw 'notFound';
     }
 
-    var response = await sails.helpers.parseGitShow.with({ gitlog: gitlog });
+    var response = {};
+
+    if (gitlog.team.connectType === 0) {
+      response = await sails.helpers.githubShow.with({ gitlog: gitlog, me: this.req.me });
+    } else {
+      response = await sails.helpers.gitlabShow.with({ gitlog: gitlog, me: this.req.me });
+    }
 
     response.messageStack = await sails.helpers.findMessage.with({ me: this.req.me });
 

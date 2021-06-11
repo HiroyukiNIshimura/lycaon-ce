@@ -49,6 +49,7 @@ module.exports = {
     var valueSet = {
       working: inputs.working,
       lastUpdateUser: this.req.me.id,
+      lastHumanUpdateAt: Date.now(),
     };
 
     var updated = {};

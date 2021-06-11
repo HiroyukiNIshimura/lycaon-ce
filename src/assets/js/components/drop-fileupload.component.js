@@ -42,7 +42,7 @@ parasails.registerComponent('dropFileupload', {
             <label class="custom-file-label text-truncate" :for="inputId"></label>
           </div>
         </div>
-        <div class="text-center mt-3" data-toggle="tooltip" data-placement="bottom" :title="i18n('Drag the upload file to this area')">
+        <div class="text-center mt-3" :aria-label="i18n('Drag the upload file to this area')" data-microtip-position="bottom" data-microtip-size="medium" role="tooltip">
           <i class="fas fa-cloud-upload-alt fa-2x"></i> {{ i18n('File upload') }}
         </div>
         <div class="text-muted text-break">{{ i18n('Files with the extension ({0}) can be attached', [whitelistStr()]) }}</div>

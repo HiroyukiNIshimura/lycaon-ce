@@ -17,9 +17,16 @@ module.exports = {
     },
     templateSubject: {
       type: 'string',
+      maxLength: 200,
     },
     templateBody: {
       type: 'string',
+      custom: function (value) {
+        if (!value) {
+          return true;
+        }
+        return Buffer.byteLength(value, 'utf8') < 107374180;
+      },
     },
     deleted: {
       type: 'boolean',

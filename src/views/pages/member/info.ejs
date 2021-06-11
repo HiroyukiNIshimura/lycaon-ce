@@ -67,7 +67,7 @@
           <div class="col">
             <div class="md-form" id="message-input">
               <i class="far fa-comment-dots prefix"></i>
-              <label for="my-message" class="md-textarea-label">{{ messegeLabel }}</label>
+              <label for="my-message" class="md-textarea-label label-color">{{ messegeLabel }}</label>
               <textarea id="my-message" class="md-textarea form-control" rows="3" maxlength="2000"
                 :class="[formErrors.contents || formErrors.contentsLength ? 'is-invalid' : '']" v-model.trim="formData.contents"></textarea>
               <div class="invalid-feedback" v-if="formErrors.contents">

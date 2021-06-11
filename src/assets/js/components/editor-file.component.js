@@ -89,7 +89,7 @@ parasails.registerComponent('editorFile', {
   <div class="collapse mt-4" :class="isShow" id="wrapper-appendix">
     <div class="row justify-content-end" v-if="showQuery">
       <div class="col-auto form-group">
-        <small><label for="query-word" data-toggle="tooltip" :title="queryTooltip">{{ i18n('Word search') }}</label></small>
+        <small><label for="query-word" :aria-label="queryTooltip" data-microtip-position="top" data-microtip-size="medium" role="tooltip">{{ i18n('Word search') }}</label></small>
         <input type="text" maxlength="30" class="form-control form-control-sm" id="query-word" v-model="queryWord" v-on:keyup.enter="fullTextSearch"/>
       </div>
     </div>
@@ -102,18 +102,18 @@ parasails.registerComponent('editorFile', {
                 <a class="mr-2" :class="[hits[item.id] ? 'hit-active': '']" :href="downloadAppendix(item, index)" rel="noopener">{{ item.name }} <i class="fas fa-cloud-download-alt fa-lg"></i></a> <lycaon-timestamp :at="item.createdAt" format="timeago" :translator="translator"></lycaon-timestamp>
                 <user-identity :user="item.owner" :organization="organization" size="sm"></user-identity>
                 {{ i18n("Attached file") }}
-                <a href="javascript:void(0)" @click="showDeleteDialog(item, index)"><i class="far fa-trash-alt"></i></a>
+                <a href="javascript:void(0)" @click="showDeleteDialog(item, index)"><i class="far fa-trash-alt" v-if="!hiddenUpload"></i></a>
             </small>
             <small v-else>
               <i class="fas fa-paperclip"></i>
               <span :class="[hits[item.id] ? 'hit-active': '']">{{ item.name }} / {{ formatter.format(item.size) }}{{ i18n("byte") }}</span>
-              <a href="javascript:void(0)" @click="showDeleteDialog(item, index)"><i class="far fa-trash-alt"></i></a>
+              <a href="javascript:void(0)" @click="showDeleteDialog(item, index)" v-if="!hiddenUpload"><i class="far fa-trash-alt"></i></a>
             </small>
           </li>
         </ul>
       </div>
     </div>
-    <div class="row mt-2">
+    <div class="row mt-2" v-if="!hiddenUpload">
       <div class="col"><small class="text-muted">{{ limitation }}</small></div>
     </div>
     <div class="row mt-3" v-if="!hiddenUpload">

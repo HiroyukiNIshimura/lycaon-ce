@@ -46,12 +46,12 @@ body {
   html,
   body {
     -webkit-overflow-scrolling: touch !important;
-    overflow: auto;
+    //overflow: auto;
     height: 100%;
   }
   body {
-    position: relative;
-    overflow-x: hidden;
+    //position: relative;
+    overflow-x: auto;
     min-height: 100%;
   }
 }
@@ -275,6 +275,7 @@ svg.user-icon-sm {
     padding: 0.5em;
     //border-radius: 0.5em;
     margin: 0 0 1em;
+    margin-top: 1.5em;
   }
   h2 {
     color: #494949;
@@ -283,6 +284,7 @@ svg.user-icon-sm {
     margin: 0 0 1em;
     padding: 0.5em 0.5em 0.5em 2.1em;
     border-bottom: 2px solid #ea5219;
+    margin-top: 1.5em;
   }
   h2:before {
     content: '□';
@@ -309,12 +311,14 @@ svg.user-icon-sm {
     padding: 0.5em 0.75em;
     background-color: #f4f4f4;
     border-left: 6px solid #ea5219;
+    margin-top: 1em;
   }
   h4 {
     color: #494949;
     padding: 0.5em 0.75em;
     background-color: #f4f4f4;
     border-radius: 6px;
+    margin-top: 0.5em;
   }
   h5 {
     color: #494949;
@@ -322,6 +326,7 @@ svg.user-icon-sm {
     border-bottom-style: dotted;
     border-bottom-color: #ea5219;
     border-bottom-width: thin;
+    margin-top: 0.5em;
   }
   table thead th {
     background: #ea5219;
@@ -363,4 +368,113 @@ svg.user-icon-sm {
 
 .hit-active {
   background-color: yellow;
+}
+
+.comment-tip .tooltip .tooltip-inner {
+  background-color: #82d9fc;
+  border: 1px solid #82d9fc;
+  color: black;
+}
+
+.comment-tip .bs-tooltip-auto[x-placement^='bottom'] .arrow::before,
+.bs-tooltip-bottom .arrow::before {
+  bottom: 0;
+  border-width: 0 0.4rem 0.4rem;
+  border-bottom-color: #82d9fc;
+}
+
+.comment-tip .tooltip.top .tooltip-arrow {
+  border-top-color: #82d9fc;
+}
+
+.dot-elastic {
+  position: relative;
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+  background-color: #9880ff;
+  color: #9880ff;
+  animation: dotElastic 1s infinite linear;
+}
+
+.dot-elastic::before,
+.dot-elastic::after {
+  content: '';
+  display: inline-block;
+  position: absolute;
+  top: 0;
+}
+
+.dot-elastic::before {
+  left: -15px;
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+  background-color: #9880ff;
+  color: #9880ff;
+  animation: dotElasticBefore 1s infinite linear;
+}
+
+.dot-elastic::after {
+  left: 15px;
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+  background-color: #9880ff;
+  color: #9880ff;
+  animation: dotElasticAfter 1s infinite linear;
+}
+
+@keyframes dotElasticBefore {
+  0% {
+    transform: scale(1, 1);
+  }
+  25% {
+    transform: scale(1, 1.5);
+  }
+  50% {
+    transform: scale(1, 0.67);
+  }
+  75% {
+    transform: scale(1, 1);
+  }
+  100% {
+    transform: scale(1, 1);
+  }
+}
+
+@keyframes dotElastic {
+  0% {
+    transform: scale(1, 1);
+  }
+  25% {
+    transform: scale(1, 1);
+  }
+  50% {
+    transform: scale(1, 1.5);
+  }
+  75% {
+    transform: scale(1, 1);
+  }
+  100% {
+    transform: scale(1, 1);
+  }
+}
+
+@keyframes dotElasticAfter {
+  0% {
+    transform: scale(1, 1);
+  }
+  25% {
+    transform: scale(1, 1);
+  }
+  50% {
+    transform: scale(1, 0.67);
+  }
+  75% {
+    transform: scale(1, 1.5);
+  }
+  100% {
+    transform: scale(1, 1);
+  }
 }

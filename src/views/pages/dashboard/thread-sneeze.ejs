@@ -35,18 +35,14 @@
             </div>
             <div class="row mt-3">
               <div class="col text-right">
-                <button type="button" class="btn btn-outline-indigo btn-sm" data-toggle="tooltip" data-placement="bottom" :title="i18n('Edit this comment')"
-                  :disabled="thread.locked" @click="onCommentEditClick(item.sneeze)" v-if="item.sneeze.owner && item.sneeze.owner.id === me.id && !isProtected">
+                <button type="button" class="btn btn-outline-indigo btn-sm"  :disabled="thread.locked" @click="onCommentEditClick(item.sneeze)" v-if="item.sneeze.owner && item.sneeze.owner.id === me.id && !isProtected">
                   <i class="far fa-edit"></i> <%= __("Edit") %>
                 </button>
 
-                <button v-show="showReplyRegister(item.sneeze)" type="button" class="btn btn-outline-indigo btn-sm" data-toggle="tooltip" data-placement="bottom"
-                  :title="i18n('Cancel edit reply')" @click="onReplyRegisterCancelClick(item.sneeze)">
+                <button v-show="showReplyRegister(item.sneeze)" type="button" class="btn btn-outline-indigo btn-sm" @click="onReplyRegisterCancelClick(item.sneeze)">
                   <i class="fas fa-window-close"></i> <%= __("Cancel") %>
                 </button>
-                <button v-show="showReplyRegister(item.sneeze) === false && !isProtected" type="button" class="btn btn-outline-indigo btn-sm"
-                  data-toggle="tooltip" data-placement="bottom" :title="i18n('Reply to this comment')" :disabled="thread.locked"
-                  @click="onReplyRegisterClick(item.sneeze)">
+                <button v-show="showReplyRegister(item.sneeze) === false && !isProtected" type="button" class="btn btn-outline-indigo btn-sm" :disabled="thread.locked" @click="onReplyRegisterClick(item.sneeze)">
                   <i class="fas fa-reply"></i> <%= __("Reply") %>
                 </button>
               </div>
@@ -54,6 +50,9 @@
           </div>
         </transition>
         <!-- Sneeze-editor -->
+        <div class="text-danger" v-if="formErrors.sneezeLength">
+          <%= __("Comment size is too large") %>
+        </div>
         <div :id="getCommentEditorIdentityWrapper(item.sneeze)" class="sneeze-editor" style="display: none" v-show="showSneezeEditor(item.sneeze)">
           <ajax-form action="updateSneeze" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedSneezeUpdateForm" @rejected="onCloudError"
             :handle-parsing="handleParsingSneezeUpdateForm">

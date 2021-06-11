@@ -14,26 +14,14 @@ module.exports = {
       required: true,
       description: 'team.id',
     },
-    milestone: {
-      type: 'number',
-    },
-    tag: {
-      type: 'number',
-    },
-    page: {
-      type: 'number',
-      description: 'For thread paginate',
-    },
-    target: {
-      type: 'string',
-      isIn: ['thread', 'wiki'],
-      defaultsTo: 'thread',
-    },
   },
   exits: {
     success: {
       viewTemplatePath: 'pages/dashboard/team',
       description: 'Display the team page for users.',
+    },
+    redirect: {
+      responseType: 'redirect',
     },
     notFound: {
       description: 'The user has accessed a team that has not joined.',
@@ -87,18 +75,25 @@ module.exports = {
     dt.setHours(0, 0, 0, 0);
 
     response.team.summary = {
-      total: await Thread.count().where({ team: inputs.id }),
-      open: await Thread.count().where({ team: inputs.id, status: 0 }),
-      working: await Thread.count().where({ team: inputs.id, status: 0, working: true }),
+      total: await Thread.count().where({ team: inputs.id, local: false }),
+      open: await Thread.count().where({ team: inputs.id, status: 0, local: false }),
+      working: await Thread.count().where({
+        team: inputs.id,
+        status: 0,
+        working: true,
+        local: false,
+      }),
       expired: await Thread.count().where({
         team: inputs.id,
         status: 0,
         dueDateAt: { '<': dt.valueOf() },
+        local: false,
       }),
       notAssignment: await Thread.count().where({
         team: inputs.id,
         status: 0,
         responsible: null,
+        local: false,
       }),
     };
 
@@ -116,28 +111,10 @@ module.exports = {
     response.currentPage = 1;
     response.isTeamPage = team.id;
 
-    if (inputs.milestone) {
-      response.query = {
-        milestone: inputs.milestone,
-        category: '',
-        responsible: '',
-        concept: '',
-        status: '',
-        owner: '',
-        locked: '',
-        priority: '',
-        working: false,
-        flag: false,
-        tags: [],
-        sustain: false,
-        sort: 0,
-        word: '',
-        resultTarget: 'thread',
-      };
-    } else if (inputs.tag) {
-      if (inputs.target === 'thread') {
+    if (this.req.cookies.teamQueryParam) {
+      if (this.req.cookies.teamQueryParam.milestone) {
         response.query = {
-          milestone: '',
+          milestone: this.req.cookies.teamQueryParam.milestone,
           category: '',
           responsible: '',
           concept: '',
@@ -151,15 +128,37 @@ module.exports = {
           sustain: false,
           sort: 0,
           word: '',
-          tagQuery: _.find(response.tags, { id: inputs.tag }),
           resultTarget: 'thread',
         };
-      } else {
-        response.wikiQuery = {
-          flag: false,
-          tagQuery: _.find(response.tags, { id: inputs.tag }),
-        };
+      } else if (this.req.cookies.teamQueryParam.tag) {
+        if (this.req.cookies.teamQueryParam.target === 'thread') {
+          response.query = {
+            milestone: '',
+            category: '',
+            responsible: '',
+            concept: '',
+            status: '',
+            owner: '',
+            locked: '',
+            priority: '',
+            working: false,
+            flag: false,
+            tags: [],
+            sustain: false,
+            sort: 0,
+            word: '',
+            tagQuery: _.find(response.tags, { id: this.req.cookies.teamQueryParam.tag }),
+            resultTarget: 'thread',
+          };
+        } else {
+          response.wikiQuery = {
+            flag: false,
+            tagQuery: _.find(response.tags, { id: this.req.cookies.teamQueryParam.tag }),
+          };
+        }
       }
+
+      this.res.clearCookie('teamQueryParam');
     }
 
     response.messageStack = await sails.helpers.findMessage.with({ me: this.req.me });

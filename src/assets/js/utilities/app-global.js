@@ -20,7 +20,7 @@ const videoPlugin = function () {
     // Avoid sanitizing iframe tag
     setTimeout(renderVideo.bind(null, wrapperId, url), 0);
 
-    return `<div id="${wrapperId}"></div>`;
+    return `<div id="${wrapperId}" class="plugin-video"></div>`;
   });
 };
 const youtubePlugin = function () {
@@ -36,7 +36,7 @@ const youtubePlugin = function () {
     // Avoid sanitizing iframe tag
     setTimeout(renderYoutube.bind(null, wrapperId, youtubeId), 0);
 
-    return `<div id="${wrapperId}"></div>`;
+    return `<div id="${wrapperId}" class="plugin-youtube"></div>`;
   });
 };
 const soundcloudPlugin = function () {
@@ -50,7 +50,7 @@ const soundcloudPlugin = function () {
     }
 
     // Indentify multiple code blocks
-    const wrapperId = `yt${Math.random().toString(36).substr(2, 10)}`;
+    const wrapperId = `sc${Math.random().toString(36).substr(2, 10)}`;
 
     var renderSoundcloud = function (wrapperId, innerHTML) {
       const el = document.querySelector(`#${wrapperId}`);
@@ -59,7 +59,7 @@ const soundcloudPlugin = function () {
     // Avoid sanitizing iframe tag
     setTimeout(renderSoundcloud.bind(null, wrapperId, innerHTML), 0);
 
-    return `<div id="${wrapperId}"></div>`;
+    return `<div id="${wrapperId}" class="plugin-soundcloud"></div>`;
   });
 };
 const googleMapPlugin = function () {
@@ -82,7 +82,22 @@ const googleMapPlugin = function () {
     // Avoid sanitizing iframe tag
     setTimeout(renderGoogleMap.bind(null, wrapperId, innerHTML), 0);
 
-    return `<div id="${wrapperId}"></div>`;
+    return `<div id="${wrapperId}" class="plugin-googlemap"></div>`;
+  });
+};
+const twitterPlugin = function () {
+  Editor.codeBlockManager.setReplacer('twitter', function (innerHTML) {
+    // Indentify multiple code blocks
+    const wrapperId = `tw${Math.random().toString(36).substr(2, 10)}`;
+
+    var renderTwitter = function (wrapperId, innerHTML) {
+      const el = document.querySelector(`#${wrapperId}`);
+      el.innerHTML = innerHTML;
+    };
+    // Avoid sanitizing iframe tag
+    setTimeout(renderTwitter.bind(null, wrapperId, innerHTML), 0);
+
+    return `<div id="${wrapperId}" class="plugin-twitter"></div>`;
   });
 };
 
@@ -578,9 +593,11 @@ const $lycaon = {
     var resources = {};
     _.each(SAILS_LOCALS.i18nlocales, function (entry) {
       var suffix = entry.replace('-', '_');
-      resources[entry] = {
-        translation: eval('lycaon_lang_' + suffix),
-      };
+      if (lang === suffix) {
+        resources[entry] = {
+          translation: eval('lycaon_lang_' + suffix),
+        };
+      }
     });
 
     i18next.init({
@@ -781,6 +798,7 @@ const $lycaon = {
       soundcloudPlugin,
       videoPlugin,
       googleMapPlugin,
+      twitterPlugin,
     ],
     /** https://nhn.github.io/tui.editor */
     createViewer: function (selector, initialValue = '', height = '100%') {
@@ -819,6 +837,76 @@ const $lycaon = {
 
       return editor;
     },
+    createVoteSneezeEditor: function (
+      selector,
+      height = '300px',
+      previewStyle = 'tab', //tab|vertical
+      placeholder = ''
+      //addImageBlobHook
+    ) {
+      var editor = new Editor({
+        el: document.querySelector(selector),
+        language: SAILS_LOCALS.language,
+        initialEditType: 'markdown',
+        height: height,
+        previewStyle: previewStyle,
+        placeholder: placeholder,
+        hooks: {
+          //addImageBlobHook: addImageBlobHook,
+        },
+        toolbarItems: [
+          'heading',
+          'bold',
+          'italic',
+          'strike',
+          'divider',
+          'hr',
+          'quote',
+          'divider',
+          'ul',
+          'ol',
+          'task',
+          'indent',
+          'outdent',
+          'divider',
+          'table',
+          'link',
+          'divider',
+          'code',
+          'codeblock',
+        ],
+        plugins: this.defaultEditorPlugin,
+        extendedAutolinks: this.extendedAutolinks,
+      });
+
+      $(selector + ' button').prop('type', 'button');
+
+      return editor;
+    },
+    addToolberImageList: function (editor, done) {
+      var toolbar = editor.getUI().getToolbar();
+      editor.eventManager.addEventType('clickCustomButton');
+      editor.eventManager.listen('clickCustomButton', done);
+
+      var createButton = function () {
+        var button = document.createElement('button');
+
+        button.className = 'image-list';
+        button.innerHTML = '<i class="far fa-images"></i>';
+
+        return button;
+      };
+
+      toolbar.addItem({
+        type: 'button',
+        options: {
+          el: createButton(),
+          event: 'clickCustomButton',
+          tooltip: i18next.t('View uploaded images in other threads and wikis'),
+          style: 'color:black;background:none;',
+        },
+      });
+    },
   },
 };
 
@@ -834,7 +922,7 @@ $(function () {
   });
   $topBtn.on('click', $lycaon.scrollTop);
 
-  $('[data-toggle="tooltip"]').tooltip();
+  $('[data-toggle="tooltip"]').tooltip({ trigger: 'hover focus' });
 
   /* https://jdenticon.com/js-api/A_data-jdenticon-value.html */
   jdenticon.config = { replaceMode: 'observe' };

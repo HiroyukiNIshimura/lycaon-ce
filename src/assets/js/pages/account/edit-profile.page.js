@@ -132,9 +132,9 @@ parasails.registerPage('edit-profile', {
     });
   },
   mounted: async function () {
-    this.$refs.tagify.addTags(this.cloudTags);
-    this.$refs.tagifyCategory.addTags(this.cloudCategoryTags);
-    this.$refs.tagifyTag.addTags(this.cloudTagTags);
+    this.selectedTeams = _.extend([], this.cloudTags);
+    this.selectedCategories = _.extend([], this.cloudCategoryTags);
+    this.selectedTags = _.extend([], this.cloudTagTags);
 
     var self = this;
     io.socket.on('message-notify', function (response) {
@@ -150,30 +150,9 @@ parasails.registerPage('edit-profile', {
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
-    onAddTagify: function (e) {
-      this.selectedTeams.push(e.detail.data);
-    },
-    onRemoveTagify: function (e) {
-      this.selectedTeams = _.reject(this.selectedTeams, (entry) => {
-        return entry.value === e.detail.data.value;
-      });
-    },
-    onAddCategoryTagify: function (e) {
-      this.selectedCategories.push(e.detail.data);
-    },
-    onRemoveCategoryTagify: function (e) {
-      this.selectedCategories = _.reject(this.selectedCategories, (entry) => {
-        return entry.value === e.detail.data.value;
-      });
-    },
-    onAddTagTagify: function (e) {
-      this.selectedTags.push(e.detail.data);
-    },
-    onRemoveTagTagify: function (e) {
-      this.selectedTags = _.reject(this.selectedTags, (entry) => {
-        return entry.value === e.detail.data.value;
-      });
-    },
+    onTeamSelectorChange: function (e) {},
+    onCategorySelectorChange: function (e) {},
+    onTagSelectorChange: function (e) {},
     submittedForm: async function () {
       // Redirect to the account page on success.
       // > (Note that we re-enable the syncing state here.  This is on purpose--

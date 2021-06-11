@@ -115,6 +115,19 @@ LIMIT $3 OFFSET $4
       var rawResult = await sails.sendNativeQuery(countSql, params);
       response.records = rawResult.rows[0].qty;
 
+      if (inputs.voteState === 1) {
+        response.openQty = response.records;
+      } else {
+        rawResult = await sails.sendNativeQuery(COUNT_SQL + NATIVE_OPEN_WHERE, [
+          this.req.me.organization.id,
+          dt.valueOf(),
+          dt.valueOf(),
+          this.req.me.id,
+          this.req.me.id,
+        ]);
+        response.openQty = rawResult.rows[0].qty;
+      }
+
       rawResult = await sails.sendNativeQuery(
         sql,
         _.concat(params, [pagination.limit, pagination.skip])

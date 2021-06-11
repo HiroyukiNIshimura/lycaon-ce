@@ -66,11 +66,25 @@ module.exports = {
       user.answers = [];
       for (let answer of answers) {
         let choice = _.find(response.vote.choices, { id: answer.voteChoices });
-        if (choice.isOther) {
+        if (choice && choice.isOther) {
           choice.otherToken = answer.otherToken;
         }
         user.answers.push(choice);
       }
+    }
+
+    response.vote.sneezes = await VoteSneeze.find({
+      where: {
+        vote: response.vote.id,
+      },
+      sort: 'id ASC',
+    }).populate('owner');
+
+    var i = 1;
+    for (let entry of response.vote.sneezes) {
+      await User.setGravatarUrl(entry.owner);
+      entry.serialNumber = i;
+      i++;
     }
 
     var dt = new Date();

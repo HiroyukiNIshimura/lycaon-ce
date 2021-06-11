@@ -33,6 +33,7 @@ parasails.registerPage('thread', {
     isThreadEditDisabled: false,
     parentSelected: {},
     childSelected: {},
+    jumpSelected: {},
     dueDate: '', //for display
     selectedDate: {},
     minDate: undefined,
@@ -51,6 +52,9 @@ parasails.registerPage('thread', {
     subjectCache: [],
     isUploading: false,
     refsUpdate: 0,
+    clipperMessage: '',
+    role: 'tooltip',
+    isCommentArrived: false,
     //dialogs
     showRefsUpdateModal: false,
     showDeleteParentModal: false,
@@ -58,6 +62,7 @@ parasails.registerPage('thread', {
     showMemberModal: false,
     showConflictModal: false,
     showEmotionsModal: false,
+    showImageListModal: false,
     emotionsRadar: {},
     rightSidebar: 'noactive',
     sidebarCollapse: 'active',
@@ -81,6 +86,7 @@ parasails.registerPage('thread', {
   //  ╩═╝╩╚  ╚═╝╚═╝ ╩ ╚═╝╩═╝╚═╝
   beforeMount: function () {
     this.refsUpdate = 0;
+    this.clipperMessage = i18next.t('Copy thread No');
 
     this.tagifySettings = _.deepExtend({}, $lycaon.tagifySettings, {
       placeholder: i18next.t('You can tag up to {0}').format(10),
@@ -156,6 +162,29 @@ parasails.registerPage('thread', {
             dueDate: data.dueDate,
           });
           self.status = self.thread.status;
+        }
+      }
+    });
+
+    io.socket.on('comment-notify', function (data) {
+      if (data.user.id !== self.me.id) {
+        $lycaon.socketToast(data.message);
+        if (self.thread.id === data.id) {
+          var id = self.parseUserId(data.user);
+          var selector = '#' + id;
+          $(selector).attr('data-toggle', 'tooltip');
+          $(selector).attr('data-trigger', 'manual');
+          $(selector).attr('data-placement', 'bottom');
+          $(selector).attr('title', data.comment);
+          $(selector).tooltip({ offset: 5, container: $(selector) });
+          $(selector).tooltip('show');
+
+          setTimeout(function () {
+            $(selector).tooltip('dispose');
+          }, 5000);
+
+          self.isCommentArrived = true;
+          //
         }
       }
     });
@@ -254,7 +283,7 @@ parasails.registerPage('thread', {
       $lycaon.cloudErrorToast(this.errorMessage);
     }
 
-    this.$refs.tagify.addTags(this.cloudTags);
+    this.selectedTags = _.extend([], this.cloudTags);
 
     this.commentEditor = $lycaon.markdown.createEditor(
       '#comment-editor',
@@ -308,44 +337,34 @@ parasails.registerPage('thread', {
 
       $(`.sneeze-view a[href^="/${this.organization.handleId}/thread/"],
       .wapper-coment a[href^="/${this.organization.handleId}/thread/"],
-      .tui-editor-contents a[href^="/${this.organization.handleId}/thread/`).hover(
+      .tui-editor-contents a[href^="/${this.organization.handleId}/thread/`).each(
         async function () {
-          $(`.sneeze-view a[href^="/${self.organization.handleId}/thread/"],
-      .wapper-coment a[href^="/${self.organization.handleId}/thread/"],
-      .tui-editor-contents a[href^="/${self.organization.handleId}/thread/`).tooltip('hide');
-
           var no = $(this).text().replace('#', '').trim();
           var regex = new RegExp('^[0-9]{1,8}');
-          if (!no.match(regex)) {
-            return;
-          }
+          if (no.match(regex)) {
+            $(this).attr('data-microtip-position', 'top');
+            $(this).attr('data-microtip-size', 'medium');
+            $(this).attr('role', 'tooltip');
 
-          var cache = _.find(self.subjectCache, { no: Number(no) });
-          if (cache) {
-            $(this).tooltip({
-              delay: 3000,
-              title: cache.subject,
-            });
-            $(this).tooltip('show');
-          } else {
-            try {
-              var response = await $lycaon.axios.get(`/api/v1/find/thread/${no}`, {});
-              if (response && response.data) {
-                self.subjectCache.push({ no: response.data.no, subject: response.data.subject });
-                $(this).tooltip({
-                  delay: 3000,
-                  title: response.data.subject,
-                });
-                $(this).tooltip('show');
+            var cache = _.find(self.subjectCache, { no: Number(no) });
+            if (cache) {
+              $(this).attr('aria-label', cache.subject);
+            } else {
+              try {
+                var response = await $lycaon.axios.get(`/api/v1/find/thread/${no}`, {});
+                if (response && response.data) {
+                  self.subjectCache.push({
+                    no: response.data.no,
+                    subject: response.data.subject,
+                  });
+                  $(this).attr('aria-label', response.data.subject);
+                }
+              } catch (error) {
+                console.log(error);
+                self.subjectCache.push({ no: Number(no), subject: '' });
               }
-            } catch (error) {
-              console.log(error);
-              self.subjectCache.push({ no: Number(no), subject: '' });
             }
           }
-        },
-        function () {
-          $(this).tooltip('hide');
         }
       );
 
@@ -427,6 +446,9 @@ parasails.registerPage('thread', {
     },
     clickMenu: function (id) {
       expiringStorage.set(this.storageKey, id, 10);
+      if (id === 'menu-jump') {
+        this.jumpSelected = {};
+      }
     },
     unSelectedClick: function () {
       this.selectedDate = '';
@@ -435,14 +457,7 @@ parasails.registerPage('thread', {
     chooseMe: function () {
       this.selectedResponsible = this.me.id;
     },
-    onAddTagify: function (e) {
-      this.selectedTags.push(e.detail.data);
-    },
-    onRemoveTagify: function (e) {
-      this.selectedTags = _.reject(this.selectedTags, (entry) => {
-        return entry.value === e.detail.data.value;
-      });
-    },
+    onChangeTags: function (e) {},
     replyCollection: function (sneeze) {
       return _.where(this.replys, {
         sneeze: sneeze.id,
@@ -521,6 +536,12 @@ parasails.registerPage('thread', {
           i18next.t('Feel free to enter ...'),
           this.addImageBlobHook.bind(this)
         );
+        $lycaon.markdown.addToolberImageList(self.threadEditor, function () {
+          self.threadEditor.eventManager.emit('closeAllPopup');
+          self.$refs.imagelist.load();
+          self.showImageListModal = true;
+        });
+
         self.threadEditor.mdEditor.setValue(self.thread.body);
         self.threadEditor.mdEditor.moveCursorToStart();
 
@@ -539,8 +560,6 @@ parasails.registerPage('thread', {
       this.threadMode = 'view';
     },
     onCommentEditClick: function (sneeze) {
-      $('.btn').tooltip('hide');
-
       if (!this.checkThreadEditing()) {
         return;
       }
@@ -782,6 +801,18 @@ parasails.registerPage('thread', {
     },
     isDeleteFile: function (type) {
       return type === 'delete-file' && this.viewActivity != 1;
+    },
+    isMilestone: function (type) {
+      return type === 'milestone' && this.viewActivity != 1;
+    },
+    isRelationship: function (type) {
+      return type === 'relationship' && this.viewActivity != 1;
+    },
+    isDeleteRelationship: function (type) {
+      return type === 'delete-relationship' && this.viewActivity != 1;
+    },
+    isFork: function (type) {
+      return type === 'fork' && this.viewActivity != 1;
     },
     getSneezeIdentity: function (sneeze) {
       return 'sneeze-' + String(sneeze.serialNumber);
@@ -1036,6 +1067,10 @@ parasails.registerPage('thread', {
         this.formErrors.subject = true;
       }
 
+      if (argins.body && new TextEncoder().encode(argins.body).length >= 107374180) {
+        this.formErrors.bodyLength = true;
+      }
+
       if (Object.keys(this.formErrors).length > 0) {
         $lycaon.errorToast('There is an error in the input value');
         return;
@@ -1167,6 +1202,10 @@ parasails.registerPage('thread', {
       // Validate
       if (!argins.comment || argins.comment === '') {
         this.formErrors.comment = true;
+      } else {
+        if (new TextEncoder().encode(argins.comment).length >= 107374180) {
+          this.formErrors.sneezeLength = true;
+        }
       }
 
       if (Object.keys(this.formErrors).length > 0) {
@@ -1191,6 +1230,10 @@ parasails.registerPage('thread', {
       // Validate
       if (!argins.comment || argins.comment === '') {
         this.formErrors.comment = true;
+      } else {
+        if (new TextEncoder().encode(argins.comment).length >= 107374180) {
+          this.formErrors.commentLength = true;
+        }
       }
 
       if (Object.keys(this.formErrors).length > 0) {
@@ -1215,6 +1258,10 @@ parasails.registerPage('thread', {
       // Validate
       if (!argins.comment || argins.comment === '') {
         this.formErrors.comment = true;
+      } else {
+        if (new TextEncoder().encode(argins.comment).length >= 107374180) {
+          this.formErrors.replyLength = true;
+        }
       }
 
       if (Object.keys(this.formErrors).length > 0) {
@@ -1239,6 +1286,10 @@ parasails.registerPage('thread', {
       // Validate
       if (!argins.comment || argins.comment === '') {
         this.formErrors.comment = true;
+      } else {
+        if (new TextEncoder().encode(argins.comment).length >= 107374180) {
+          this.formErrors.replyLength = true;
+        }
       }
 
       if (Object.keys(this.formErrors).length > 0) {
@@ -1333,6 +1384,13 @@ parasails.registerPage('thread', {
     childSelectedEvent: function (option) {
       this.childSelected = option;
     },
+    jumpSelectedEvent: function (option) {
+      if (!option || !option.no) {
+        return;
+      }
+      this.jumpSelected = option;
+      location.href = `/${this.organization.handleId}/thread/${option.no}`;
+    },
     showAllMember: function () {
       this.allMembers = [];
       this.membersPage = 1;
@@ -1374,7 +1432,7 @@ parasails.registerPage('thread', {
       form.submit();
     },
     tagLink: function (tag) {
-      return `/${this.organization.handleId}/team/${this.team.id}?tag=${tag.id}`;
+      return `/${this.organization.handleId}/team/${this.team.id}/thread/${tag.id}`;
     },
     isActivityOpen: function (item) {
       return item.stateWord === 'open';
@@ -1508,9 +1566,25 @@ parasails.registerPage('thread', {
     updateSneezTranslator: function (val) {
       return this.i18n('Updated the comment at {0}', [val]);
     },
+    milestoneTranslator: function (val) {
+      return this.i18n('Milestones have been set at {0}', [val]);
+    },
+    relationshipTranslator: function (val, option) {
+      return this.i18n('The associated thread has been set [{0}] at {1}', [option.stateWord, val]);
+    },
+    deleteRelationshipTranslator: function (val, option) {
+      return this.i18n('The related thread has been released [{0}] at {1}', [
+        option.stateWord,
+        val,
+      ]);
+    },
+    forkTranslator: function (val, option) {
+      return this.i18n('A fork for this thread has been created [{0}] at {1}', [
+        option.stateWord,
+        val,
+      ]);
+    },
     copyNo: function () {
-      $(this.$refs.clipper).tooltip('hide');
-
       if (navigator.clipboard) {
         navigator.clipboard.writeText(this.thread.no).then(this.notifyCopy);
       } else {
@@ -1535,13 +1609,22 @@ parasails.registerPage('thread', {
       }
     },
     notifyCopy: function () {
-      var $action = $(this.$refs.clipperAction);
-      $action.attr('title', i18next.t('Copy completed'));
-      $action.tooltip('show');
+      this.clipperMessage = i18next.t('Copy completed');
+      var self = this;
       setTimeout(function () {
-        $action.removeAttr('title');
-        $action.tooltip('dispose');
+        self.role = '';
+        setTimeout(function () {
+          self.clipperMessage = i18next.t('Copy thread No');
+          self.role = 'tooltip';
+        }, 1000);
       }, 1000);
+    },
+    hideImageListModal: function () {
+      this.showImageListModal = false;
+    },
+    selectedImageList: function (image) {
+      this.showImageListModal = false;
+      this.threadEditor.insertText(`![](${image.virtualUrl})`);
     },
   },
   computed: {
@@ -1582,7 +1665,10 @@ parasails.registerPage('thread', {
       return `/api/v1/thread/find/${this.team.id}/${this.thread.id}`;
     },
     select2placeholder: function () {
-      return i18next.t('Enter thread ID');
+      return i18next.t('Enter thread No');
+    },
+    select2placeholderForJump: function () {
+      return i18next.t('Enter Thread No of jump');
     },
     select2Settings: function () {
       return {
@@ -1652,6 +1738,9 @@ parasails.registerPage('thread', {
     },
     mindmapLink: function () {
       return `/${this.organization.handleId}/mindmap/${this.thread.no}`;
+    },
+    commentArrived: function () {
+      return this.i18n('a comment has arrived');
     },
   },
 });

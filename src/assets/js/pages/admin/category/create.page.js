@@ -61,6 +61,8 @@ parasails.registerPage('admin-category-create', {
       if (argins.useTemplate) {
         if (!argins.templateSubject || !argins.templateBody) {
           this.formErrors.templateBody = true;
+        } else if (new TextEncoder().encode(argins.templateBody).length >= 107374180) {
+          this.formErrors.bodyLength = true;
         }
       } else {
         delete argins.templateSubject;

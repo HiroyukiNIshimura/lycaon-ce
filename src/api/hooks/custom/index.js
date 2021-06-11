@@ -47,16 +47,16 @@ module.exports = function defineCustomHook(sails) {
       });
 
       process.on('exit', () => {
-        console.log('Got exit. ');
+        sails.log.info('Got exit. ');
       });
       process.on('SIGHUP', () => {
-        console.log('Got SIGHUP. ');
+        sails.log.info('Got SIGHUP. ');
       });
       process.on('SIGINT', () => {
-        console.log('Got SIGINT. ');
+        sails.log.info('Got SIGINT. ');
       });
       process.on('SIGTERM', () => {
-        console.log('Got SIGTERM. ');
+        sails.log.info('Got SIGTERM. ');
       });
     },
 

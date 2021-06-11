@@ -110,28 +110,10 @@ module.exports = {
         await User.setGravatarUrl(entry.owner, 36);
         await User.setGravatarUrl(entry.lastUpdateUser, 36);
 
-        var text = '';
-        var i = 0;
-        for (let row of entry.body.split(/\n/)) {
-          text += row + '\n';
-          if (text.length > 200) {
-            text = text.substring(0, 200) + '...';
-            break;
-          }
-          i++;
-          if (i >= 10) {
-            break;
-          }
-        }
-
-        entry.sanitizeHtml = sanitizeHtml(await sails.helpers.mdToHtml.with({ markdown: text }), {
-          //allowedTags: [],
-          //allowedAttributes: {},
-          exclusiveFilter: function (frame) {
-            return !frame.text.trim();
-          },
+        entry.sanitizeHtml = await sails.helpers.sanitizeDescription.with({
+          markdown: entry.body,
+          max: 200,
         });
-
         delete entry.body;
       }
     } catch (err) {

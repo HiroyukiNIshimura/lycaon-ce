@@ -29,7 +29,7 @@ parasails.registerComponent('voteCard', {
   //  ╠═╣ ║ ║║║║
   //  ╩ ╩ ╩ ╩ ╩╩═╝
   template: `
-  <div class="card" v-inview:animate="'bounceIn'">
+  <div class="card card-selectable" v-inview:animate="'bounceIn'">
     <div class="card-body">
       <div class="card-subtitle mb-2">
         <span class="badge badge-success" v-if="state.answered">{{ i18n('Answered') }}</span>

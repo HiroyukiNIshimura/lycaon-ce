@@ -62,6 +62,13 @@ module.exports = {
 
         await SysSettings.destroyOne({ organization: current.id }).usingConnection(db);
         await Organization.destroyOne({ id: current.id }).usingConnection(db);
+
+        await sails
+          .sendNativeQuery(`DROP SEQUENCE IF EXISTS "org_thread_${current.handleId}";`)
+          .usingConnection(db);
+        await sails
+          .sendNativeQuery(`DROP SEQUENCE IF EXISTS "org_wiki_${current.handleId}";`)
+          .usingConnection(db);
       });
 
       sails.log.info(

@@ -52,16 +52,16 @@ parasails.registerComponent('viewerFile', {
       </div>
     </div>
     <div>
-      <span class="align-middle" data-toggle="tooltip" data-placement="top" :title="item.name"v-for="(item, index) in appendix">
-        <a :href="item.virtualUrl" rel="noopener" :target="fileLinksTarget(item)">
+      <span class="align-middle" :aria-label="item.name" data-microtip-position="top" data-microtip-size="medium" role="tooltip" v-for="(item, index) in appendix">
+        <a href="javascript:void(0)" rel="noopener">
           <img class="img-fluid img-file-list" :src="item.virtualUrlSmall" v-if="item.mimeType.startsWith('image')">
-          <i class="far fa-file-word fa-4x mr-1" v-else-if="item.mimeType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'"></i>
-          <i class="far fa-file-excel fa-4x mr-1" v-else-if="item.mimeType === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'"></i>
-          <i class="far fa-file-powerpoint fa-4x mr-1" v-else-if="item.mimeType === 'application/vnd.openxmlformats-officedocument.presentationml.presentation'"></i>
-          <i class="far fa-file-pdf fa-4x mr-1" v-else-if="item.mimeType === 'application/pdf'"></i>
-          <i class="far fa-file-archive fa-4x mr-1" v-else-if="item.mimeType === 'application/zip'"></i>
-          <i class="far fa-file-video fa-4x mr-1" v-else-if="item.mimeType.startsWith('video')"></i>
-          <i class="far fa-file fa-4x mr-1" v-else></i>
+          <i class="far fa-file-word fa-3x mr-1" v-else-if="item.mimeType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'"></i>
+          <i class="far fa-file-excel fa-3x mr-1" v-else-if="item.mimeType === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'"></i>
+          <i class="far fa-file-powerpoint fa-3x mr-1" v-else-if="item.mimeType === 'application/vnd.openxmlformats-officedocument.presentationml.presentation'"></i>
+          <i class="far fa-file-pdf fa-3x mr-1" v-else-if="item.mimeType === 'application/pdf'"></i>
+          <i class="far fa-file-archive fa-3x mr-1" v-else-if="item.mimeType === 'application/zip'"></i>
+          <i class="far fa-file-video fa-3x mr-1" v-else-if="item.mimeType.startsWith('video')"></i>
+          <i class="far fa-file fa-3x mr-1" v-else></i>
         </a>
       </span>
     </div>
@@ -86,12 +86,6 @@ parasails.registerComponent('viewerFile', {
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
-    fileLinksTarget: function (item) {
-      if (item.mimeType.startsWith('application')) {
-        return '';
-      }
-      return '_blank';
-    },
     translator: function (val) {
       return this.i18n('At {0},', [val]);
     },

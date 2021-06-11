@@ -144,8 +144,95 @@ module.exports = {
         valuesToSet.categories = inputs.selectedCategories.map((o) => o.id);
       }
 
+      var bot = await sails.helpers.getBot();
+
       await sails.getDatastore().transaction(async (db) => {
         created = await Team.create(valuesToSet).fetch().usingConnection(db);
+
+        await Thread.create({
+          no: await sails.helpers.getNextval.with({
+            target: 'thread',
+            handleId: this.req.organization.handleId,
+          }),
+          handleId: this.req.organization.handleId,
+          subject: 'First thread',
+          body: `
+
+
+Team Project D has been created. Create threads as you come up with and communicate within the team!
+Threads can be written in Markdown. Please refer to the [help](https://lycaon.bright-l.0am.jp/doc)  for the contents unique to Lycaon.
+Close this thread at any time if you don't need it.
+
+チーム Project D が作成されました。思いつくままスレッドを作成してチーム内でのコミュニケーションを進めていきましょう！
+スレッドはMarkdownで記述できます。Lycaon独自の記述内容については[ヘルプ](https://lycaon.bright-l.0am.jp/doc)を参考にしてください。
+このスレッドが必要なければいつでもクローズしてください。
+
+## Markdown Samples
+
+\`\`\`chart
+,category1,category2
+Jan,21,23
+Feb,31,17
+
+type: column
+title: Monthly Revenue
+x.title: Amount
+y.title: Month
+y.min: 1
+y.max: 40
+y.suffix: $
+\`\`\`
+
+\`\`\`js
+console.log('foo')
+\`\`\`
+
+\`\`\`javascript
+console.log('bar')
+\`\`\`
+
+\`\`\`html
+<div id="editor"><span>baz</span></div>
+\`\`\`
+
+\`\`\`wrong
+[1 2 3]
+\`\`\`
+
+\`\`\`clojure
+[1 2 3]
+\`\`\`
+
+\`\`\`uml
+partition Conductor {
+  (*) --> "Climbs on Platform"
+  --> === S1 ===
+  --> Bows
+}
+
+partition Audience #LightSkyBlue {
+  === S1 === --> Applauds
+}
+
+partition Conductor {
+  Bows --> === S2 ===
+  --> WavesArmes
+  Applauds --> === S2 ===
+}
+
+partition Orchestra #CCCCEE {
+  WavesArmes --> Introduction
+  --> "Play music"
+}
+\`\`\`
+`,
+          concept: 0,
+          status: 0,
+          category: inputs.selectedCategories.map((o) => o.id)[0],
+          team: created.id,
+          owner: bot.id,
+        }).usingConnection(db);
+        //
       });
     } catch (err) {
       sails.log.error(err);

@@ -22,6 +22,7 @@ parasails.registerPage('team', {
       sustain: false,
       sort: 0,
       word: '',
+      wordWiki: '',
     },
     queryPatern: 0,
     currentPage: 1,
@@ -49,6 +50,7 @@ parasails.registerPage('team', {
       flag: 0,
       local: 0,
     },
+    openVoteQty: 0,
     voteState: '0',
     membersPage: 1,
     allMembers: [],
@@ -100,6 +102,7 @@ parasails.registerPage('team', {
         5
       );
     }
+
     if (this.wikiQuery) {
       expiringStorage.set(
         `vue-tabs-component.cache.${window.location.host}${window.location.pathname}`,
@@ -108,13 +111,21 @@ parasails.registerPage('team', {
       );
     }
 
-    if (!this.query && !this.wikiQuery) {
-      var query = expiringStorage.get(this.queryStorageKey);
-      this.query = query;
+    var cached = expiringStorage.get(this.queryThreadStorageKey);
+    if (cached) {
+      this.query = cached;
       this.filtered = true;
     }
   },
   mounted: async function () {
+    var canvas = document.getElementById('qrcode');
+    QRCode.toCanvas(canvas, location.href, function (error) {
+      if (error) {
+        console.error(error);
+      }
+      $(canvas).css({ width: '80px', height: '80px' });
+    });
+
     var self = this;
     window.onbeforeunload = function () {
       $lycaon.socket.post('/ws/v1/team-out', { id: self.team.id });
@@ -163,29 +174,29 @@ parasails.registerPage('team', {
       });
     });
 
-    this.$nextTick(() => {
-      if (this.query && this.$refs.tagify) {
-        if (this.query.tagQuery) {
-          this.$refs.tagify.addTags([
-            {
-              value: this.query.tagQuery.name,
-              id: this.query.tagQuery.id,
-            },
-          ]);
-        } else {
-          this.$refs.tagify.addTags(this.query.tags);
-        }
-      }
-
-      if (this.wikiQuery && this.$refs.wikitagify) {
-        this.$refs.wikitagify.addTags([
+    if (this.query) {
+      if (this.query.tagQuery) {
+        this.selectedTags = [
           {
-            value: this.wikiQuery.tagQuery.name,
-            id: this.wikiQuery.tagQuery.id,
+            value: this.query.tagQuery.name,
+            id: this.query.tagQuery.id,
           },
-        ]);
+        ];
+      } else {
+        this.selectedTags = this.query.tags;
       }
+    }
 
+    if (this.wikiQuery) {
+      this.selectedWikiTags = [
+        {
+          value: this.wikiQuery.tagQuery.name,
+          id: this.wikiQuery.tagQuery.id,
+        },
+      ];
+    }
+
+    this.$nextTick(() => {
       this.renderCharts(this.team);
     });
   },
@@ -333,8 +344,28 @@ parasails.registerPage('team', {
       this.selectedTab = selectedTab;
 
       if (selectedTab.tab.id === 'tab-team') {
+        var cached = expiringStorage.get(this.queryThreadStorageKey);
+        if (cached) {
+          this.query = cached;
+          this.filtered = true;
+        }
         this.queryPatern = 0;
         this.submitForm('#query-team-form');
+
+        this.$nextTick(() => {
+          if (this.query) {
+            if (this.query.tagQuery) {
+              this.selectedTags = [
+                {
+                  value: this.query.tagQuery.name,
+                  id: this.query.tagQuery.id,
+                },
+              ];
+            } else {
+              this.selectedTags = _.extend([], this.query.tags);
+            }
+          }
+        });
       }
       if (selectedTab.tab.id === 'tab-thread') {
         this.submitForm('#query-thread-form');
@@ -356,28 +387,18 @@ parasails.registerPage('team', {
       }
       if (selectedTab.tab.id === 'tab-wiki') {
         this.submitForm('#query-wiki-form');
+        this.$nextTick(() => {
+          this.selectedWikiTags = _.extend([], this.selectedWikiTags);
+        });
       }
       if (selectedTab.tab.id === 'tab-circular') {
         this.submitForm('#query-vote-form');
       }
     },
-    onAddTagify: function (e) {
-      this.selectedTags.push(e.detail.data);
+    onChangeTags: function (e) {
+      this.query.tags = this.selectedTags;
     },
-    onRemoveTagify: function (e) {
-      this.selectedTags = _.reject(this.selectedTags, (entry) => {
-        return entry.value === e.detail.data.value;
-      });
-    },
-    onAddWikiTagify: function (e) {
-      this.selectedWikiTags.push(e.detail.data);
-      this.clearData();
-      this.submitForm('#query-wiki-form');
-    },
-    onRemoveWikiTagify: function (e) {
-      this.selectedWikiTags = _.reject(this.selectedWikiTags, (entry) => {
-        return entry.value === e.detail.data.value;
-      });
+    onChangeWikiTags: function (e) {
       this.clearData();
       this.submitForm('#query-wiki-form');
     },
@@ -392,6 +413,14 @@ parasails.registerPage('team', {
         this.submitForm('#query-ambiguity-form');
       } else {
         this.submitForm('#query-team-form');
+      }
+    },
+    queryAmbiguityWiki: function () {
+      this.clearData();
+      if (this.query.wordWiki) {
+        this.submitForm('#query-ambiguity-wiki-form');
+      } else {
+        this.submitForm('#query-wiki-form');
       }
     },
     clickClear: function () {
@@ -410,8 +439,9 @@ parasails.registerPage('team', {
         sustain: false,
       };
 
-      this.$refs.tagify.removeAllTags();
       this.selectedTags = [];
+      expiringStorage.delete(this.queryThreadStorageKey);
+      this.filtered = false;
       this.clearData();
       this.submitForm('#query-team-form');
     },
@@ -480,6 +510,31 @@ parasails.registerPage('team', {
         });
       }
 
+      if (this.queryPatern === 2) {
+        this.$nextTick(() => {
+          var word = $('#query-word-wiki').val();
+          var re = new RegExp($lycaon.regexEscape(word), 'ig');
+
+          $.each($('.wiki-subject'), function () {
+            var text = $(this).text();
+            var matches = text.matchAll(re);
+            for (let match of matches) {
+              var newtext = text.replaceAll(
+                match[0],
+                `<span class="query-hits">${match[0]}</span>`
+              );
+              $(this).text('');
+              $(this).append(newtext);
+              break;
+            }
+          });
+        });
+      }
+
+      if (this.selectedTab.tab.id === 'tab-circular') {
+        this.openVoteQty = response.openQty;
+      }
+
       if (bowser && (bowser.mobile || bowser.tablet) && page === 1) {
         $lycaon.jumpTo($('#team-tab-panel'));
       }
@@ -546,10 +601,10 @@ parasails.registerPage('team', {
       }
 
       if (this.query.sustain) {
-        expiringStorage.set(this.queryStorageKey, this.query, 30);
+        expiringStorage.set(this.queryThreadStorageKey, this.query, 30);
         this.filtered = true;
       } else {
-        expiringStorage.delete(this.queryStorageKey);
+        expiringStorage.delete(this.queryThreadStorageKey);
         this.filtered = false;
       }
 
@@ -562,6 +617,15 @@ parasails.registerPage('team', {
 
       this.queryPatern = 1;
       var argins = { id: this.team.id, page: this.currentPage, word: this.query.word };
+      return argins;
+    },
+    handleParsingAmbiguityWikiForm: function () {
+      if (!this.query.wordWiki) {
+        return;
+      }
+
+      this.queryPatern = 2;
+      var argins = { team: this.team.id, page: this.currentPage, word: this.query.wordWiki };
       return argins;
     },
     myThreadHandler($state) {
@@ -627,10 +691,15 @@ parasails.registerPage('team', {
     handleParsingQueryWikiForm: function () {
       var argins = {
         team: this.team.id,
-        tags: this.selectedWikiTags,
         isFlags: this.wikiflags,
         page: this.currentPage,
       };
+      if (this.wikiQuery) {
+        argins.tags = [this.wikiQuery.tagQuery];
+      } else {
+        argins.tags = this.selectedWikiTags;
+      }
+
       return argins;
     },
     handleParsingQueryVoteForm: function () {
@@ -851,11 +920,37 @@ parasails.registerPage('team', {
     showGit: function () {
       return this.team.useGit;
     },
-    queryStorageKey() {
-      return `lycaon-team-query.cache.${window.location.host}${window.location.pathname}`;
+    queryThreadStorageKey() {
+      return `lycaon-team-thread-query.cache.${window.location.host}${window.location.pathname}`;
     },
+    /*
+    queryWikiStorageKey() {
+      return `lycaon-team-wiki-query.cache.${window.location.host}${window.location.pathname}`;
+    },
+     */
     infiniteId() {
       return new Date();
+    },
+    isShow() {
+      var query = _.isEqual(this.query, {
+        category: '',
+        responsible: '',
+        milestone: '',
+        concept: '',
+        status: 0,
+        owner: '',
+        locked: '',
+        priority: '',
+        working: false,
+        flag: false,
+        tags: [],
+        sustain: false,
+      });
+
+      if (query || this.selectedTags.length > 0 || this.filtered) {
+        return 'show';
+      }
+      return '';
     },
   },
 });

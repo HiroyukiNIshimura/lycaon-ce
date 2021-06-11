@@ -4,6 +4,10 @@
   <label for="vote-subject"><%= __("Please enter the title of the circulation notice") %></label>
   <div class="invalid-feedback" v-if="formErrors.subject"><%= __("Please enter a subject") %></div>
 </div>
+
+<div class="text-danger" v-if="formErrors.bodyLength">
+  <%= __("Body size is too large") %>
+</div>
 <div class="row mt-3">
   <div class="col">
     <div ref="voteEditor" id="vote-editor"></div>
@@ -39,10 +43,9 @@
 <div class="input-error-message" v-if="formErrors.period"><%= __("Please enter a circulation period") %></div>
 
 <div class="row mt-3">
-  <div class="col-auto">
+  <div class="col">
     <label for="user-selector"><%= __("Users to circulate") %></label>
-    <v-tagify ref="userTagify" id="user-selector" :settings="userTagifySettings" @add="onAddUserTagify" @remove="onRemoveUserTagify">
-    </v-tagify>
+    <v-tagify-select id="user-selector" :values="selectedUsers" :settings="userTagifySettings" @change="onChangeUserTags"></v-tagify-select>        
   </div>
 </div>
 <div class="input-error-message" v-if="formErrors.users"><%= __("Please enter the members to circulate") %></div>
@@ -88,10 +91,9 @@
   </div>
 
   <div class="row mt-3">
-    <div class="col-auto">
+    <div class="col">
       <label for="question-selector"><%= __("Choice list") %></label>
-      <v-tagify ref="questionTagify" id="question-selector" :settings="questionTagifySettings" @add="onAddQuestionTagify" @remove="onRemoveQuestionTagify">
-      </v-tagify>
+      <v-tagify-select id="question-selector" :values="selectedQuestions" :settings="questionTagifySettings" @change="onChangeQuestionTags"></v-tagify-select>        
     </div>
   </div>
   <div class="input-error-message" v-if="formErrors.choices"><%= __("Please enter the question options") %></div>
@@ -125,3 +127,4 @@
     </p>
   </div>
 </div>
+<image-list ref="imagelist" :show="showImageListModal" :on-hide="hideImageListModal" v-on:selected="selectedImageList"></image-list>

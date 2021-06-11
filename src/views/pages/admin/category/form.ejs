@@ -19,6 +19,9 @@
   </div>
 </div>
 
+<div class="text-danger" v-if="formErrors.bodyLength">
+  <%= __("Body size is too large") %>
+</div>
 <div class="row mt-3 mb-5" v-show="useTemplate">
   <div class="col">
     <div id="template-editor"></div>

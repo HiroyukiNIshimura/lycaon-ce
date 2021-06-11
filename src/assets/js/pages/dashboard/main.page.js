@@ -31,8 +31,14 @@ parasails.registerPage('main', {
       flag: 0,
       local: 0,
     },
+    openVoteQty: 0,
     voteState: '0',
     notifyStack: [],
+    chartCache: [],
+    query: {
+      wordWiki: '',
+    },
+    queryPatern: 0,
     // Main syncing/loading state for this page.
     syncing: false,
     // Form data
@@ -70,6 +76,14 @@ parasails.registerPage('main', {
     });
   },
   mounted: async function () {
+    var canvas = document.getElementById('qrcode');
+    QRCode.toCanvas(canvas, location.href, function (error) {
+      if (error) {
+        console.error(error);
+      }
+      $(canvas).css({ width: '80px', height: '80px' });
+    });
+
     $('#nav-tab a').on('click', function (e) {
       e.preventDefault();
       $(this).tab('show');
@@ -149,75 +163,89 @@ parasails.registerPage('main', {
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
     renderCharts: function () {
-      _.each(this.teams, (entry) => {
-        var c1 = document.getElementById(this.teamChartId(entry));
-        var c2 = document.getElementById(this.teamChartSubId(entry));
+      _.each(this.queryResults, (entry) => {
+        if (!this.chartCache.some((c) => c === this.teamChartId(entry))) {
+          this.chartCache.push(this.teamChartId(entry));
 
-        if (c1 && c2) {
-          var open = entry.summary.open;
-          var close = entry.summary.total - open;
-          new Chart(c1, {
-            type: 'pie',
-            data: {
-              datasets: [
-                {
-                  data: [open, close],
-                  fill: false,
-                  borderWidth: 1,
-                },
-              ],
-              labels: [
-                `${i18next.t('open')}: ${formatter.format(open)}`,
-                `${i18next.t('close')}: ${formatter.format(close)}`,
-              ],
-            },
-            options: {
-              responsive: true,
-              maintainAspectRatio: true,
-              aspectRatio: 2,
-              plugins: {
-                legend: {
-                  position: 'left',
-                },
-                title: { display: false, text: i18next.t('Open : Closed'), padding: 0 },
-                colorschemes: {
-                  scheme: 'brewer.PastelOne9',
+          var c1 = document.getElementById(this.teamChartId(entry));
+          var c2 = document.getElementById(this.teamChartSubId(entry));
+
+          if (c1 && c2) {
+            var open = entry.summary.open;
+            var close = entry.summary.total - open;
+            new Chart(c1, {
+              type: 'pie',
+              data: {
+                datasets: [
+                  {
+                    data: [open, close],
+                    fill: false,
+                    borderWidth: 1,
+                  },
+                ],
+                labels: [
+                  `${i18next.t('open')}: ${formatter.format(open)}`,
+                  `${i18next.t('close')}: ${formatter.format(close)}`,
+                ],
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                aspectRatio: 2,
+                plugins: {
+                  legend: {
+                    position: 'left',
+                  },
+                  title: { display: false, text: i18next.t('Open : Closed'), padding: 0 },
+                  colorschemes: {
+                    scheme: 'brewer.PastelOne9',
+                  },
                 },
               },
-            },
-          });
+            });
 
-          new Chart(c2, {
-            type: 'pie',
-            data: {
-              datasets: [
-                {
-                  data: [entry.summary.working, entry.summary.expired, entry.summary.notAssignment],
-                  fill: false,
-                  borderWidth: 1,
-                },
-              ],
-              labels: [
-                `${i18next.t('Working')}: ${formatter.format(entry.summary.working)}`,
-                `${i18next.t('Expired')}: ${formatter.format(entry.summary.expired)}`,
-                `${i18next.t('Not in charge_2')}: ${formatter.format(entry.summary.notAssignment)}`,
-              ],
-            },
-            options: {
-              responsive: true,
-              maintainAspectRatio: true,
-              aspectRatio: 2,
-              plugins: {
-                legend: {
-                  position: 'left',
-                },
-                title: { display: false, text: i18next.t('Details of the open'), padding: 0 },
-                colorschemes: {
-                  scheme: 'brewer.SetThree9',
+            new Chart(c2, {
+              type: 'pie',
+              data: {
+                datasets: [
+                  {
+                    data: [
+                      entry.summary.working,
+                      entry.summary.expired,
+                      entry.summary.notAssignment,
+                    ],
+                    fill: false,
+                    borderWidth: 1,
+                  },
+                ],
+                labels: [
+                  `${i18next.t('Working')}: ${formatter.format(entry.summary.working)}`,
+                  `${i18next.t('Expired')}: ${formatter.format(entry.summary.expired)}`,
+                  `${i18next.t('Not in charge_2')}: ${formatter.format(
+                    entry.summary.notAssignment
+                  )}`,
+                ],
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                aspectRatio: 2,
+                plugins: {
+                  legend: {
+                    position: 'left',
+                  },
+                  title: {
+                    display: false,
+                    text: i18next.t('Details of the open'),
+                    padding: 0,
+                  },
+                  colorschemes: {
+                    scheme: 'brewer.SetThree9',
+                  },
                 },
               },
-            },
-          });
+            });
+          }
         }
       });
     },
@@ -225,16 +253,14 @@ parasails.registerPage('main', {
       this.queryResults = [];
       this.queryCount = 0;
       this.currentPage = 1;
+      this.chartCache = [];
     },
     tabChanged: function (selectedTab) {
       this.clearData();
       this.selectedTab = selectedTab;
 
       if (selectedTab.tab.id === 'tab-team') {
-        this.$nextTick(() => {
-          this.renderCharts();
-          this.submitForm('#query-counter-form');
-        });
+        this.submitForm('#query-my-team-form');
       }
       if (selectedTab.tab.id === 'tab-thread') {
         this.submitForm('#query-thread-form');
@@ -256,20 +282,15 @@ parasails.registerPage('main', {
       }
       if (selectedTab.tab.id === 'tab-wiki') {
         this.submitForm('#query-wiki-form');
+        this.$nextTick(() => {
+          this.selectedWikiTags = _.extend([], this.selectedWikiTags);
+        });
       }
       if (selectedTab.tab.id === 'tab-circular') {
         this.submitForm('#query-vote-form');
       }
     },
-    onAddWikiTagify: function (e) {
-      this.selectedWikiTags.push(e.detail.data);
-      this.clearData();
-      this.submitForm('#query-wiki-form');
-    },
-    onRemoveWikiTagify: function (e) {
-      this.selectedWikiTags = _.reject(this.selectedWikiTags, (entry) => {
-        return entry.value === e.detail.data.value;
-      });
+    onChangeWikiTags: function (e) {
       this.clearData();
       this.submitForm('#query-wiki-form');
     },
@@ -309,16 +330,46 @@ parasails.registerPage('main', {
       }
       this.cloudSuccess = true;
 
+      if (this.selectedTab.tab.id === 'tab-circular') {
+        this.openVoteQty = response.openQty;
+      }
+
       if (bowser && (bowser.mobile || bowser.tablet) && page === 1) {
         $lycaon.jumpTo($('#main-tab-panel'));
       }
 
+      if (this.queryPatern === 2) {
+        this.$nextTick(() => {
+          var word = $('#query-word-wiki').val();
+          var re = new RegExp($lycaon.regexEscape(word), 'ig');
+
+          $.each($('.wiki-subject'), function () {
+            var text = $(this).text();
+            var matches = text.matchAll(re);
+            for (let match of matches) {
+              var newtext = text.replaceAll(
+                match[0],
+                `<span class="query-hits">${match[0]}</span>`
+              );
+              $(this).text('');
+              $(this).append(newtext);
+              break;
+            }
+          });
+        });
+      }
+
       this.$nextTick(() => {
-        var option = { animate: 'slide' };
-        if (bowser && bowser.mobile) {
-          option = {};
+        if (this.selectedTab.tab.id === 'tab-team') {
+          this.renderCharts();
         }
-        $('#activity-timeline').verticalTimeline(option);
+        if (this.selectedTab.tab.id === 'tab-activity') {
+          var option = { animate: 'slide' };
+          if (bowser && bowser.mobile) {
+            option = {};
+          }
+          $('#activity-timeline').verticalTimeline(option);
+        }
 
         this.submitForm('#query-counter-form');
       });
@@ -347,12 +398,25 @@ parasails.registerPage('main', {
       };
       return argins;
     },
+    handleParsingAmbiguityWikiForm: function () {
+      if (!this.query.wordWiki) {
+        return;
+      }
+
+      this.queryPatern = 2;
+      var argins = { page: this.currentPage, word: this.query.wordWiki };
+      return argins;
+    },
     handleParsingQueryVoteForm: function () {
       var argins = {
         page: this.currentPage,
         voteState: Number(this.voteState),
       };
       return argins;
+    },
+    teamHandler($state) {
+      this.infiniteState = $state;
+      this.submitForm('#query-my-team-form');
     },
     threadHandler($state) {
       this.infiniteState = $state;
@@ -389,6 +453,14 @@ parasails.registerPage('main', {
     circularHandler($state) {
       this.infiniteState = $state;
       this.submitForm('#query-wiki-form');
+    },
+    queryAmbiguityWiki: function () {
+      this.clearData();
+      if (this.query.wordWiki) {
+        this.submitForm('#query-ambiguity-wiki-form');
+      } else {
+        this.submitForm('#query-wiki-form');
+      }
     },
     submittedCounterForm: function (response) {
       this.cloudSuccess = true;

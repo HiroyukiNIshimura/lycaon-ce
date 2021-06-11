@@ -40,6 +40,10 @@ module.exports = {
       target = target + '.' + inputs.ext;
     }
 
+    if (!fs.existsSync(target)) {
+      throw 'notFound';
+    }
+
     try {
       return fs.createReadStream(target);
     } catch (err) {

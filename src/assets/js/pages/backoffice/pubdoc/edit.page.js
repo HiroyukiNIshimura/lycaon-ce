@@ -100,21 +100,14 @@ parasails.registerPage('backoffice-pubdoc-edit', {
     );
     this.wikiEditor.mdEditor.setValue(this.wiki.body);
 
-    this.$refs.tagify.addTags(this.cloudTags);
+    this.selectedTags = _.extend([], this.cloudTags);
   },
 
   //  ╦╔╗╔╔╦╗╔═╗╦═╗╔═╗╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
-    onAddTagify: function (e) {
-      this.selectedTags.push(e.detail.data);
-    },
-    onRemoveTagify: function (e) {
-      this.selectedTags = _.reject(this.selectedTags, (entry) => {
-        return entry.value === e.detail.data.value;
-      });
-    },
+    onChangeTags: function (e) {},
     onEditCancelClick: function (event) {
       location.href = `/admin/pubdocs`;
     },
@@ -251,6 +244,10 @@ parasails.registerPage('backoffice-pubdoc-edit', {
       // Validate
       if (!argins.subject) {
         this.formErrors.subject = true;
+      }
+
+      if (argins.body && new TextEncoder().encode(argins.body).length >= 107374180) {
+        this.formErrors.bodyLength = true;
       }
 
       if (Object.keys(this.formErrors).length > 0) {

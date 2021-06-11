@@ -48,6 +48,14 @@ module.exports = {
         if (child && child.parent === current.id) {
           await Thread.updateOne({ id: child.id }).set({ parent: null });
         }
+
+        await sails.helpers.createThreadActivity.with({
+          db: db,
+          type: 'delete-relationship',
+          user: this.req.me,
+          thread: current,
+          refId: inputs.child,
+        });
       });
     } catch (err) {
       sails.log.error(err);

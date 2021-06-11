@@ -91,25 +91,19 @@
         <div class="col-sm-6">
           <hr />
           <label for="team-selector"><%= __('The selected team does not receive thread emails') %></label>
-          <v-tagify ref="tagify" id="team-selector" :settings="tagifySettings" @add="onAddTagify"
-            @remove="onRemoveTagify">
-          </v-tagify>
+          <v-tagify-select id="team-selector" :values="selectedTeams" :settings="tagifySettings" @change="onTeamSelectorChange"></v-tagify-select>
         </div>
       </div>
       <div class="row mt-3">
         <div class="col-sm-6">
           <label for="category"><%= __('Receive thread emails for selected categories') %></label>
-          <v-tagify ref="tagifyCategory" id="category-selector" :settings="categoryTagifySettings"
-            @add="onAddCategoryTagify" @remove="onRemoveCategoryTagify">
-          </v-tagify>
+          <v-tagify-select id="category-selector" :values="selectedCategories" :settings="categoryTagifySettings" @change="onCategorySelectorChange"></v-tagify-select>
         </div>
       </div>
       <div class="row mt-3">
         <div class="col-sm-6">
           <label for="tag-selector"><%= __('Receive thread emails about selected tags') %></label>
-          <v-tagify ref="tagifyTag" id="tag-selector" :settings="tagTagifySettings" @add="onAddTagTagify"
-            @remove="onRemoveTagTagify">
-          </v-tagify>
+          <v-tagify-select id="tag-selector" :values="selectedTags" :settings="tagTagifySettings" @change="onTagSelectorChange"></v-tagify-select>
         </div>
       </div>
       <div class="row mt-3">

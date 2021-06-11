@@ -68,8 +68,7 @@
           <a class="dropdown-item" href="javascript:void(0)" @click="onConvertToWikiCkick"><%= __('Convert to Wiki') %></a>
         </div>
         <div v-if="!isProtected">
-          <button :disabled="isThreadEditDisabled || threadMode === 'edit'" type="button" class="btn btn-info btn-sm" @click="onEditClick" data-toggle="tooltip"
-            data-placement="bottom" :title="i18n('Edit this thread')">
+          <button :disabled="isThreadEditDisabled || threadMode === 'edit'" type="button" class="btn btn-info btn-sm" @click="onEditClick">
             <i class="far fa-edit"></i> <%= __("Edit") %>
           </button>
         </div>
@@ -97,8 +96,7 @@
         </div>
       </div>
       <div v-if="!isProtected">
-        <button :disabled="isThreadEditDisabled || threadMode === 'edit'" type="button" class="btn btn-info btn-sm" @click="onEditClick" data-toggle="tooltip"
-          data-placement="bottom" :title="i18n('Edit this thread')">
+        <button :disabled="isThreadEditDisabled || threadMode === 'edit'" type="button" class="btn btn-info btn-sm" @click="onEditClick">
           <i class="far fa-edit"></i> <%= __("Edit") %>
         </button>
       </div>
@@ -127,8 +125,7 @@
         </div>
       </div>
       <div class="mt-1" v-if="!isProtected">
-        <button :disabled="isThreadEditDisabled || threadMode === 'edit'" type="button" class="btn btn-info btn-sm btn-block" @click="onEditClick"
-          data-toggle="tooltip" data-placement="bottom" :title="i18n('Edit this thread')">
+        <button :disabled="isThreadEditDisabled || threadMode === 'edit'" type="button" class="btn btn-info btn-sm btn-block" @click="onEditClick">
           <i class="far fa-edit"></i> <%= __("Edit") %>
         </button>
       </div>
@@ -144,7 +141,7 @@
   <div class="col-3" v-if="thread.dueDateAt">
     <div class="review-rating-progress">
       <small class="review-rating-level"><%= __("Urgency") %>: </small>
-      <div class="progress">
+      <div class="progress ml-1">
         <div class="progress-bar progress-bar-striped bg-danger" :style="urgencyRate" role="progressbar" :aria-valuenow="thread.urgency" aria-valuemin="0"
           aria-valuemax="100">
         </div>

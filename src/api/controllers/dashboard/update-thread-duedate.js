@@ -70,7 +70,12 @@ module.exports = {
       }
     }
 
-    var valueSet = { dueDateAt: inputs.dueDate, urgency: urgency, lastUpdateUser: this.req.me.id };
+    var valueSet = {
+      dueDateAt: inputs.dueDate,
+      urgency: urgency,
+      lastUpdateUser: this.req.me.id,
+      lastHumanUpdateAt: Date.now(),
+    };
     var updated = {};
 
     try {

@@ -1,0 +1,14 @@
+<div id="snippets" v-cloak>
+
+  <h1>Snippets</h1>
+
+  <v-tagify-select id="test-tagify" :values="values" :settings="settings" v-on:add="onChange" v-on:remove="onChange" v-on:change="onChange"></v-tagify-select>
+
+  <div>
+    {{ values }}
+  </div>
+
+  <button type="button" @click="add">追加</button>
+  <button type="button" @click="del">削除</button>
+</div>
+<%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>

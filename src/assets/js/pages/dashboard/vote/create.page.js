@@ -18,6 +18,7 @@ parasails.registerPage('vote-create', {
     questionTagifySettings: {},
     selectedQuestions: [],
     isUploading: false,
+    showImageListModal: false,
     //…
     // Main syncing/loading state for this page.
     syncing: false,
@@ -98,6 +99,12 @@ parasails.registerPage('vote-create', {
       i18next.t('Feel free to enter ...'),
       this.addImageBlobHook.bind(this)
     );
+    var self = this;
+    $lycaon.markdown.addToolberImageList(this.voteEditor, function () {
+      self.voteEditor.eventManager.emit('closeAllPopup');
+      self.$refs.imagelist.load();
+      self.showImageListModal = true;
+    });
 
     this.voteEditor.mdEditor.setValue('');
 
@@ -141,24 +148,9 @@ parasails.registerPage('vote-create', {
     },
     clearAll: function () {
       this.selectedUsers = [];
-      this.$refs.userTagify.removeAllTags();
     },
-    onAddUserTagify: function (e) {
-      this.selectedUsers.push(e.detail.data);
-    },
-    onRemoveUserTagify: function (e) {
-      this.selectedUsers = _.reject(this.selectedUsers, (entry) => {
-        return entry.value === e.detail.data.value;
-      });
-    },
-    onAddQuestionTagify: function (e) {
-      this.selectedQuestions.push(e.detail.data);
-    },
-    onRemoveQuestionTagify: function (e) {
-      this.selectedQuestions = _.reject(this.selectedQuestions, (entry) => {
-        return entry.value === e.detail.data.value;
-      });
-    },
+    onChangeUserTags: function (e) {},
+    onChangeQuestionTags: function (e) {},
     addImageBlobHook: function (blob, callback) {
       var blobUrl = window.URL.createObjectURL(blob);
       blob.blobUrl = blobUrl;
@@ -260,7 +252,12 @@ parasails.registerPage('vote-create', {
       }
       if (!argins.body) {
         this.formErrors.body = true;
+      } else {
+        if (new TextEncoder().encode(argins.body).length >= 107374180) {
+          this.formErrors.bodyLength = true;
+        }
       }
+
       if (argins.users.length < 1) {
         this.formErrors.users = true;
       }
@@ -280,6 +277,13 @@ parasails.registerPage('vote-create', {
       }
 
       return argins;
+    },
+    hideImageListModal: function () {
+      this.showImageListModal = false;
+    },
+    selectedImageList: function (image) {
+      this.showImageListModal = false;
+      this.voteEditor.insertText(`![](${image.virtualUrl})`);
     },
   },
   computed: {

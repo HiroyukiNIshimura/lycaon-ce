@@ -18,6 +18,11 @@ module.exports = {
       example: 'gwa8gs8hgw9h2g9hg29hgwh9asdgh9q34$$$$$asdgasdggds',
       required: true,
     },
+    language: {
+      type: 'string',
+      required: true,
+      maxLength: 5,
+    },
     honeypot: {
       type: 'string',
       maxLength: 10,
@@ -68,6 +73,7 @@ module.exports = {
       password: hashed,
       passwordResetToken: '',
       passwordResetTokenExpiresAt: 0,
+      languagePreference: inputs.language,
     });
 
     // Log the user in.

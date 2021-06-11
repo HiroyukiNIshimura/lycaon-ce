@@ -194,6 +194,21 @@
           </ajax-form>
         </li>
       </ul>
+      <li class="nav-item mt-3">
+        <a class="text-warning" data-toggle="collapse" href="#menu-jump" aria-controls="#menu-jump" aria-expanded="false" @click="clickMenu('menu-jump')">
+          <i class="fas fa-frog fa-fw"></i> <%= __('Jump') %>
+        </a>
+      </li>
+      <ul id="menu-jump" class="nav flex-column list-style-icons collapse" data-parent="#accordion_menu">
+        <li class="nav-item">
+          <div class="row mt-2">
+            <div class="col">
+              <v-ajax-select2 class="thread-search ml-2" v-model="jumpSelected" :url="select2Url" @select="jumpSelectedEvent"
+                :placeholder="select2placeholderForJump" :settings="select2Settings" />
+            </div>
+          </div>
+        </li>
+      </ul>
     </ul>
   </nav>
 </div>
