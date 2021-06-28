@@ -50,7 +50,7 @@ parasails.registerPage('admin-user-list', {
       this.selectedUser = user;
       this.showResetModal = true;
     },
-    doResetPassword: function (user) {
+    doResetPassword: function () {
       var form = _.find(this.$children, {
         $el: $('#reset-password-form')[0],
       });
@@ -84,7 +84,7 @@ parasails.registerPage('admin-user-list', {
       });
       form.submit();
     },
-    submittedDeleteForm: async function (response) {
+    submittedDeleteForm: async function () {
       this.cloudSuccess = true;
       location.reload();
     },

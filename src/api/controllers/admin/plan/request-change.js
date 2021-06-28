@@ -65,8 +65,6 @@ module.exports = {
     }
 
     var backoffice = await Organization.findOne({ handleId: 'brightl' });
-    const settings = await SysSettings.findOne({ organization: backoffice.id });
-
     var grade = inputs.grade === 'upgrade' ? 'Upgrade' : 'Downgrade';
 
     var getReasons = function (reasons, lang) {
@@ -81,7 +79,7 @@ module.exports = {
         sails.__(
           'I want to reduce the number of accounts because the number of users has decreased'
         ),
-        sails.__("I'm not using the file capacity more than I expected"),
+        sails.__(`I'm not using the file capacity more than I expected`),
         sails.__('Because I rarely use the functions of the paid plan'),
         sails.__('Other'),
       ];

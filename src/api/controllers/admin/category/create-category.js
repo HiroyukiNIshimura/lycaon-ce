@@ -43,14 +43,16 @@ module.exports = {
     }
 
     var created = {};
+
+    var valuesToSet = {
+      name: inputs.name,
+      useTemplate: inputs.useTemplate,
+      templateSubject: inputs.templateSubject,
+      templateBody: inputs.templateBody,
+      organization: this.req.organization.id,
+    };
+
     try {
-      var valuesToSet = {
-        name: inputs.name,
-        useTemplate: inputs.useTemplate,
-        templateSubject: inputs.templateSubject,
-        templateBody: inputs.templateBody,
-        organization: this.req.organization.id,
-      };
 
       await sails.getDatastore().transaction(async (db) => {
         var max = await Category.find({

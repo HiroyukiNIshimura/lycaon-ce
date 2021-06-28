@@ -41,6 +41,7 @@ module.exports = {
       where: {
         deleted: false,
         postingAt: { '<': notification.postingAt },
+        // eslint-disable-next-line no-dupe-keys
         postingAt: { '<': dt.valueOf() },
         id: { '<': notification.id },
       },
@@ -56,6 +57,7 @@ module.exports = {
       where: {
         deleted: false,
         postingAt: { '>': notification.postingAt },
+        // eslint-disable-next-line no-dupe-keys
         postingAt: { '<': dt.valueOf() },
         id: { '>': notification.id },
       },
@@ -72,7 +74,9 @@ module.exports = {
       await sails.getDatastore().transaction(async (db) => {
         await sails.models['sysnotification_users__user_sysnotifications']
           .destroyOne({
+            // eslint-disable-next-line camelcase
             sysnotification_users: notification.id,
+            // eslint-disable-next-line camelcase
             user_sysNotifications: this.req.me.id,
           })
           .usingConnection(db);

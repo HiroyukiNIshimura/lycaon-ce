@@ -12,7 +12,7 @@ module.exports = {
   },
   exits: {
     success: {
-      description: "Thread's status successfully updated.",
+      description: `Thread's status successfully updated.`,
     },
     notFound: {
       responseType: 'notfound',

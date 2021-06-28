@@ -21,7 +21,7 @@ SELECT "organization", MAX("lastSeenAt") as "lastSeenAt"
           continue;
         }
 
-        if (entry.lastSeenAt == 0) {
+        if (entry.lastSeenAt === 0) {
           if (organization.createdAt < expier) {
             targets.push(organization);
           }
@@ -49,6 +49,7 @@ SELECT "organization", MAX("lastSeenAt") as "lastSeenAt"
           organization: organization,
           to: representative.emailAddress,
           toName: representative.fullName,
+          // eslint-disable-next-line quotes
           subject: sails.__("It seems that you haven't used Lycaon for a while ..."),
           template: 'email-freeplan-recommendation',
           templateData: {
@@ -59,9 +60,7 @@ SELECT "organization", MAX("lastSeenAt") as "lastSeenAt"
         };
         await sails.helpers.sendTemplateEmail.with(data);
 
-        sails.log.info(
-          `${organization.handleId} ${organization.name} 宛に退会勧告メールを送信しました。`
-        );
+        sails.log.info(`${organization.handleId} ${organization.name} 宛に退会勧告メールを送信しました。`);
       }
     } catch (err) {
       sails.log.error(err);

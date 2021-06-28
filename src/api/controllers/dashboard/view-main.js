@@ -15,8 +15,16 @@ module.exports = {
       viewTemplatePath: 'pages/dashboard/main',
       description: 'Display the main page for users.',
     },
+    notFound: {
+      description: 'The user has accessed a organization that has not joined.',
+      responseType: 'notfound',
+    },
   },
   fn: async function (inputs) {
+    if (this.req.me.organization.handleId !== inputs.handleId) {
+      throw 'notFound';
+    }
+
     var response = {
       categories: [],
       tags: [],

@@ -15,19 +15,17 @@
   //
   // (See .eslintrc in the root directory of this Sails app for more context.)
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  "extends": ["../.eslintrc"],
-
+  "extends": [
+    "../.eslintrc"
+  ],
   "env": {
     "browser": true,
     "node": false
   },
-
   "parserOptions": {
     "ecmaVersion": 8
     //^ If you are not using a transpiler like Babel, change this to `5`.
   },
-
   "globals": {
     // Allow any window globals you're relying on here; e.g.
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -45,12 +43,70 @@
     "moment": true,
     // "google": true,
     // ...etc.
+    "$lycaon": true,
+    "formatter": true,
+    "floatFormatter": true,
+    "percentFormatter": true,
+    "VueUploadComponent": true,
+    "Cropper": true,
+    "Uint8Array": true,
+    "i18next": true,
+    "expiringStorage": true,
+    "Tagify": true,
+    "Chart": true,
+    "QRCode": true,
+    "Raphael": true,
+    "linkify": true,
+    "VueToast": true,
+    "VuejsPaginate": true,
+    "Header": true,
+    "GanttElastic": true,
+    "VueLoading": true,
+    "VueMindmap": true,
+    "vueCheetahGrid": true,
+    "VueSvgGauge": true,
+    "toastui": true,
+    "underscoreDeepExtend": true,
+    "Push": true,
+    "Diff": true,
+    "zxcvbn": true,
+    "axios": true,
+    "SmoothScroll": true,
+    "jdenticon": true,
+    "PR": true,
+    "dayjs":true,
+    "draggable": true,
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
     // Make sure backend globals aren't indadvertently tolerated in our client-side JS:
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     "sails": false,
-    "User": false
+    "Billing": false,
+    "Category": false,
+    "GitLog": false,
+    "JobLog": false,
+    "Message": false,
+    "Milestone": false,
+    "Organization": false,
+    "Policy": false,
+    "Reply": false,
+    "Sneeze": false,
+    "SysNotification": false,
+    "SysSettings": false,
+    "SysStatus": false,
+    "Tag": false,
+    "Team": false,
+    "Thread": false,
+    "ThreadActivity": false,
+    "ThreadItem": false,
+    "ThreadRef": false,
+    "User": false,
+    "Vote": false,
+    "VoteAnswer": false,
+    "VoteChoices": false,
+    "VoteItem": false,
+    "VoteSneeze": false,
+    "Wiki": false,
+    "WikiItem": false
     // ...and any other backend globals (e.g. `"Organization": false`)
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   }

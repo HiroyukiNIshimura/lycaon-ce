@@ -219,7 +219,8 @@ module.exports = {
         LEFT OUTER JOIN "user" as "user__lastUpdateUser" on "thread"."lastUpdateUser" = "user__lastUpdateUser"."id" 
                 `;
 
-    var NATIVE_WHERE = `WHERE "thread"."team" = $1 
+    var NATIVE_WHERE = `WHERE "thread"."team" = $1
+AND "thread"."local" = false
 AND ("thread"."subject" ilike $2 OR "thread"."body" ilike $3
  OR "thread"."id" in (SELECT "thread" FROM "sneeze" WHERE "comment" ilike $4)
  OR "thread"."id" in (SELECT "thread" FROM "reply" WHERE "comment" ilike $5)
@@ -229,6 +230,7 @@ AND ("thread"."subject" ilike $2 OR "thread"."body" ilike $3
 `;
 
     var NATIVE_WHERE2 = `WHERE "thread"."team" IN (SELECT "id" FROM "team" WHERE "organization" = $1)  
+AND "thread"."local" = false
 AND ("thread"."subject" ilike $2 OR "thread"."body" ilike $3
  OR "thread"."id" in (SELECT "thread" FROM "sneeze" WHERE "comment" ilike $4)
  OR "thread"."id" in (SELECT "thread" FROM "reply" WHERE "comment" ilike $5)
@@ -365,6 +367,7 @@ SELECT "id", "name", "virtualPath", "thread"
       await User.setGravatarUrl(thread.lastUpdateUser, 36);
 
       var tags = await sails.models['tag_threads__thread_tags']
+        // eslint-disable-next-line camelcase
         .find({ thread_tags: thread.id })
         .populate('tag_threads');
       _.each(tags, (o) => {
@@ -380,7 +383,7 @@ SELECT "id", "name", "virtualPath", "thread"
           let matches = row.comment.matchAll(re);
           for (let match of matches) {
             //
-            var index = match.index - 10;
+            let index = match.index - 10;
             if (index < 0) {
               index = 0;
             }
@@ -401,7 +404,7 @@ SELECT "id", "name", "virtualPath", "thread"
           let matches = row.comment.matchAll(re);
           for (let match of matches) {
             //
-            var index = match.index - 10;
+            let index = match.index - 10;
             if (index < 0) {
               index = 0;
             }

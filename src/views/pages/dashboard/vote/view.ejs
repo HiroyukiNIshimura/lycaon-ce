@@ -35,7 +35,7 @@
         <div class="row mt-2">
           <div class="col-auto">
             <span><%= __("Author") %>: </span>
-            <user-identity :user="vote.author" :organization="organization" size="sm"></user-identity>
+            <user-identity :user="vote.author" :organization="organization" size="sm" ></user-identity>
           </div>
         </div>
         <div class="row mt-3">
@@ -51,7 +51,7 @@
         </div>
 
         <!-- appendix -->
-        <viewer-file :organization="organization" :appendix="appendix" :download-appendix="downloadAppendix"></viewer-file>
+        <viewer-file :organization="organization" :appendix="appendix" :download-appendix="downloadAppendix" ></viewer-file>
         <div class="row mt-5 mb-5 p-3 shadow rounded">
           <div class="col text-break" id="viewer"></div>
         </div>
@@ -131,7 +131,7 @@
             <span class="badge badge-success" v-if="item.answered"><%= __("Answered") %></span>
             <span class="badge badge-light" v-else><%= __("Unanswered") %></span>
 
-            <user-identity class="ml-1" :user="item" :organization="organization" size="sm"></user-identity>
+            <user-identity class="ml-1" :user="item" :organization="organization" size="sm" ></user-identity>
             <span v-if="item.answered">
               {{ getAnswers(item) }}
             </span>

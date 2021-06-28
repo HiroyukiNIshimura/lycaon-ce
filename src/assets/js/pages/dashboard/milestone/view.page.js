@@ -78,11 +78,6 @@ parasails.registerPage('milestone-view', {
       times: {
         timeZoom: 23, //*
       },
-      calendar: {
-        hour: {
-          display: false,
-        },
-      },
       chart: {
         progress: {
           bar: false,
@@ -118,7 +113,7 @@ parasails.registerPage('milestone-view', {
             expander: false,
             html: true,
             events: {
-              click({ data, column }) {
+              click({ data /*column*/ }) {
                 self.clickThreads(data);
               },
             },
@@ -153,7 +148,7 @@ parasails.registerPage('milestone-view', {
             },
             html: true,
             events: {
-              click({ data, column }) {
+              click({ data /*column*/ }) {
                 self.showBurndownDialog(data);
               },
             },
@@ -164,6 +159,7 @@ parasails.registerPage('milestone-view', {
         workingDays: [1, 2, 3, 4, 5], //*
         gap: 6, //*
         hour: {
+          display: false,
           format: {
             //*
             long(date) {
@@ -212,9 +208,7 @@ parasails.registerPage('milestone-view', {
         weekdaysShort: i18next.t('Sun_Mon_Tue_Wed_Thu_Fri_Sat').split('_'), // OPTIONAL, short weekdays Array, use first three letters if not provided
         weekdaysMin: i18next.t('Sun_Mon_Tue_Wed_Thu_Fri_Sat').split('_'), // OPTIONAL, min weekdays Array, use first two letters if not provided
         months: i18next
-          .t(
-            'January_February_March_April_May_June_July_August_September_October_November_December'
-          )
+          .t('January_February_March_April_May_June_July_August_September_October_November_December')
           .split('_'), // months Array
         monthsShort: i18next.t('Jan_Feb_Mar_Apr_May_Jun_Jul_Aug_Sep_Oct_Nov_Dec').split('_'), // OPTIONAL, short months Array, use first three letters if not provided
         ordinal: (n) => `${n}`, // ordinal Function (number) => return number + output
@@ -244,7 +238,7 @@ parasails.registerPage('milestone-view', {
       },
     };
 
-    _.each(this.milestone, function (entry) {
+    _.each(this.milestone, (entry) => {
       let user = '';
       if (entry.user) {
         user = `<a href="/member/${entry.user.id}" target="_blank" style="color:#0077c0;">${entry.user.fullName}</a>`;
@@ -260,9 +254,9 @@ parasails.registerPage('milestone-view', {
         id: entry.viewLineNo,
         label: `<a href="/${self.organization.handleId}/milestone/edit/${
           entry.id
-        }" style="color:#0077c0;" data-toggle="tooltip" data-placement="bottom" title="${i18next.t(
-          'Edit'
-        )}">${entry.name}</a>`,
+        }" style="color:#0077c0;" data-toggle="tooltip" data-placement="bottom" title="${i18next.t('Edit')}">${
+          entry.name
+        }</a>`,
         user: user,
         thread: `<a href="javascript:void(0)" data-toggle="tooltip" data-placement="bottom" title="${i18next.t(
           'Related thread'
@@ -285,7 +279,7 @@ parasails.registerPage('milestone-view', {
     }
 
     var self = this;
-    io.socket.on('message-notify', function (response) {
+    io.socket.on('message-notify', (response) => {
       if (response.data.sendTo === self.me.id) {
         $lycaon.stackMessage(response, self.messageStack, self.me.organization.handleId);
         $lycaon.socketToast(response.message);
@@ -361,7 +355,7 @@ parasails.registerPage('milestone-view', {
               var ideal = [];
               var plan = [];
               var achievement = [];
-              _.mapKeys(response.data.burndown, (value, key) => {
+              _.mapKeys(response.data.burndown, (value) => {
                 ideal.push(value.ideal);
                 plan.push(value.plan);
                 achievement.push(value.achievement);
@@ -478,7 +472,7 @@ parasails.registerPage('milestone-view', {
         if (burndownConfig) {
           new Chart(document.getElementById('burndown-chart'), burndownConfig);
         }
-        if (buildResource) {
+        if (resouceConfig) {
           new Chart(document.getElementById('resource-chart'), resouceConfig);
         }
       });

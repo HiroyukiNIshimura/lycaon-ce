@@ -20,10 +20,10 @@ parasails.registerPage('backoffice-status-view', {
     var self = this;
     this.$nextTick(() => {
       var i = 0;
-      for (let item of self.top.cpus) {
+      _.forEach(self.top.cpus, () => {
         self.renderCpuload(i);
         i++;
-      }
+      });
       self.renderLoadAvg();
     });
   },
@@ -46,7 +46,7 @@ parasails.registerPage('backoffice-status-view', {
 
       var self = this;
       var i = 0;
-      for (let d of data) {
+      _.forEach(data, () => {
         var mt = moment(dt)
           .add(i * span, 'm')
           .format('LT');
@@ -62,7 +62,7 @@ parasails.registerPage('backoffice-status-view', {
           .add(i * span, 'm')
           .format('MM/DD HH:mm');
 
-        var target = _.find(self.loadavg, function (o) {
+        var target = _.find(self.loadavg, (o) => {
           return o.hour === hour;
         });
 
@@ -77,7 +77,7 @@ parasails.registerPage('backoffice-status-view', {
         }
 
         i++;
-      }
+      });
 
       var c1 = document.getElementById('load-average');
       if (c1) {

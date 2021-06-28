@@ -10,9 +10,7 @@ module.exports = {
     var list = await Thread.find({
       where: {
         status: 0,
-        dueDateAt: { '!=': null },
-        dueDateAt: { '>': target.valueOf() },
-        dueDateAt: { '<=': last.valueOf() },
+        dueDateAt: { '!=': null, '>': target.valueOf(), '<=': last.valueOf() },
       },
     });
 

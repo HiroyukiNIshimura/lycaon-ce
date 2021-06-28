@@ -24,11 +24,11 @@ module.exports = function notfound() {
   var req = this.req;
   var res = this.res;
 
-  sails.log.verbose("Ran custom response: res.notfound()");
+  sails.log.verbose('Ran custom response: res.notfound()');
 
   if (req.wantsJSON) {
-    return res.status(404).send("Token NotFound");
+    return res.status(404).send('Token NotFound');
   } else {
-    return res.status(404).view("404");
+    return res.status(404).view('404');
   }
 };

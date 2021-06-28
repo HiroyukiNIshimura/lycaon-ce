@@ -1,5 +1,3 @@
-const moment = require('moment');
-
 module.exports = {
   friendlyName: 'Update thread',
   description: 'Update the thread',
@@ -123,7 +121,7 @@ module.exports = {
     try {
       await sails.getDatastore().transaction(async (db) => {
         for (let entry of inputs.tags) {
-          var tags = await Tag.find()
+          let tags = await Tag.find()
             .where({
               name: entry.value.toLowerCase(),
               organization: this.req.me.organization.id,
@@ -131,7 +129,7 @@ module.exports = {
             .usingConnection(db);
 
           if (tags.length < 1) {
-            tag = await Tag.create({
+            let tag = await Tag.create({
               name: entry.value.toLowerCase(),
               organization: this.req.me.organization.id,
             })
@@ -154,11 +152,7 @@ module.exports = {
           .set(thread)
           .usingConnection(db);
 
-        if (
-          updated.milestone &&
-          current.milestone !== updated.milestone &&
-          inputs.refsUpdate === 1
-        ) {
+        if (updated.milestone && current.milestone !== updated.milestone && inputs.refsUpdate === 1) {
           var refs = await ThreadRef.find({ left: updated.id });
           for (let ref of refs) {
             var vals = {
@@ -187,15 +181,11 @@ module.exports = {
           };
 
           //
-          sails.sockets.broadcast(
-            `room-${this.req.organization.id}-thread-${updated.id}`,
-            'thread-update',
-            {
-              message: message,
-              user: this.req.me,
-              thread: updated,
-            }
-          );
+          sails.sockets.broadcast(`room-${this.req.organization.id}-thread-${updated.id}`, 'thread-update', {
+            message: message,
+            user: this.req.me,
+            thread: updated,
+          });
 
           effected = true;
         }
@@ -275,19 +265,18 @@ module.exports = {
       params: [this.req.me.fullName, updated.no, updated.subject],
     };
 
-    sails.sockets.broadcast(
-      [
-        `room-${this.req.organization.id}-lycaon`,
-        `room-${this.req.organization.id}-team-${updated.team}`,
-      ],
-      'thread-notify',
-      {
-        message: message,
-        user: this.req.me,
-        thread: updated,
-        timespan: Date.now(),
-      }
-    );
+    if (!updated.local) {
+      sails.sockets.broadcast(
+        [`room-${this.req.organization.id}-lycaon`, `room-${this.req.organization.id}-team-${updated.team}`],
+        'thread-notify',
+        {
+          message: message,
+          user: this.req.me,
+          thread: updated,
+          timespan: Date.now(),
+        }
+      );
+    }
 
     this.req.session.effectMessage = sails.__('The thread has been updated');
 

@@ -107,9 +107,7 @@ module.exports = {
       throw err;
     }
 
-    sails.log.info(
-      `チーム参照のなくなったスレッド：${threadQty}件、Wiki：${wikiQty}件を削除しました。`
-    );
+    sails.log.info(`チーム参照のなくなったスレッド：${threadQty}件、Wiki：${wikiQty}件を削除しました。`);
 
     sails.log.info(`組織参照のなくなった回覧：${voteQty}件を削除しました。`);
 
@@ -135,6 +133,7 @@ module.exports = {
         for (let notify of list) {
           await sails.models['sysnotification_users__user_sysnotifications']
             .destroy({
+              // eslint-disable-next-line camelcase
               sysnotification_users: notify.id,
             })
             .usingConnection(db);

@@ -19,7 +19,7 @@ module.exports = {
     dt.setHours(0, 0, 0, 0);
     dt.setDate(dt.getDate() - 1);
 
-    logs = _.reject(logs, function (m) {
+    logs = _.reject(logs, (m) => {
       return m.timestamp < dt.valueOf();
     });
 

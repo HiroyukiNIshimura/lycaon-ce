@@ -58,7 +58,7 @@ module.exports = {
       throw err;
     }
 
-    var vote = await Vote.findOne({ id: vote.id }).populate('users').populate('author');
+    vote = await Vote.findOne({ id: vote.id }).populate('users').populate('author');
     var formail = await VoteSneeze.findOne({ id: created.id }).populate('owner');
 
     for (let entry of vote.users) {

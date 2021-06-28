@@ -118,23 +118,23 @@ module.exports = {
       throw 'nameAlreadyInUse';
     }
 
-    try {
-      var valuesToSet = {
-        name: inputs.name,
-        description: inputs.description,
-        deleted: inputs.deleted,
-        useGit: inputs.useGit,
-        gitOrigin: inputs.gitOrigin,
-        connectType: inputs.connectType,
-        defaultConcept: inputs.defaultConcept,
-        gitRepository: '',
-        gitUser: '',
-        gitPassword: '',
-        gitlabApi: '',
-        gitlabToken: '',
-        gitlabProjectId: '',
-      };
+    var valuesToSet = {
+      name: inputs.name,
+      description: inputs.description,
+      deleted: inputs.deleted,
+      useGit: inputs.useGit,
+      gitOrigin: inputs.gitOrigin,
+      connectType: inputs.connectType,
+      defaultConcept: inputs.defaultConcept,
+      gitRepository: '',
+      gitUser: '',
+      gitPassword: '',
+      gitlabApi: '',
+      gitlabToken: '',
+      gitlabProjectId: '',
+    };
 
+    try {
       if (valuesToSet.connectType === 0) {
         valuesToSet.gitRepository = inputs.gitRepository;
         valuesToSet.gitUser = inputs.gitUser;

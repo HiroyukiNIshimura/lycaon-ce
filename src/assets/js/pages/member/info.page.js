@@ -12,6 +12,7 @@ parasails.registerPage('member-info', {
     selectedMessage: {},
     currentPage: 1,
     selectedTab: {},
+    isEditArrived: false,
     // Main syncing/loading state for this page.
     syncing: false,
     // Form data
@@ -34,16 +35,16 @@ parasails.registerPage('member-info', {
   mounted: async function () {
     //…
     var self = this;
-    io.socket.on('message-notify', function (response) {
+    io.socket.on('message-notify', (response) => {
       if (response.data.sendTo === self.me.id) {
         $lycaon.socketToast(response.message);
 
         if (self.selectedTab.tab.id === 'tab-message') {
-          var entry = _.find(self.queryResults, function (o) {
+          var entry = _.find(self.queryResults, (o) => {
             return o.id === response.data.id;
           });
           if (!entry) {
-            _.each(self.queryResults, function (o) {
+            _.each(self.queryResults, (o) => {
               delete o.fresh;
             });
             response.data.fresh = true;
@@ -53,10 +54,10 @@ parasails.registerPage('member-info', {
       }
     });
 
-    io.socket.on('message-read', function (response) {
+    io.socket.on('message-read', (response) => {
       if (response.data.sendFrom === self.me.id) {
         if (self.selectedTab.tab.id === 'tab-message') {
-          var index = _.findIndex(self.queryResults, function (o) {
+          var index = _.findIndex(self.queryResults, (o) => {
             return o.id === response.data.id;
           });
           if (index > -1) {
@@ -70,6 +71,17 @@ parasails.registerPage('member-info', {
       }
     });
 
+    io.socket.on('message-edit-in', (response) => {
+      if (response.me.id === self.user.id && response.partner === self.me.id) {
+        self.isEditArrived = true;
+      }
+    });
+    io.socket.on('message-edit-out', (response) => {
+      if (response.me.id === self.user.id && response.partner === self.me.id) {
+        self.isEditArrived = false;
+      }
+    });
+
     if (this.tab) {
       this.$refs.menberInfo.selectTab('#' + this.tab);
     }
@@ -79,6 +91,12 @@ parasails.registerPage('member-info', {
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
+    onEditorFocus: function () {
+      $lycaon.socket.post('/ws/v1/message-edit-in', { partner: this.user.id });
+    },
+    onEditorBlur: function () {
+      $lycaon.socket.post('/ws/v1/message-edit-out', { partner: this.user.id });
+    },
     renderMonthlyCharts: function () {
       var c1 = document.getElementById('monthly-chart');
       if (c1) {
@@ -330,13 +348,13 @@ parasails.registerPage('member-info', {
       this.labels = response.labels;
 
       var self = this;
-      _.forEach(response.summary, function (values, key) {
+      _.forEach(response.summary, (values, key) => {
         var data = Array(13);
         data.fill(0);
 
-        _.forEach(values, function (val) {
-          var index = _.findIndex(self.labels, function (entry) {
-            return entry == val.dt;
+        _.forEach(values, (val) => {
+          var index = _.findIndex(self.labels, (entry) => {
+            return entry === val.dt;
           });
           if (index > -1) {
             data[index] = val.qty;
@@ -379,13 +397,13 @@ parasails.registerPage('member-info', {
       this.labels = response.labels;
 
       var self = this;
-      _.forEach(response.summary, function (values, key) {
+      _.forEach(response.summary, (values, key) => {
         var data = Array(31);
         data.fill(0);
 
-        _.forEach(values, function (val) {
-          var index = _.findIndex(self.labels, function (entry) {
-            return entry == val.dt;
+        _.forEach(values, (val) => {
+          var index = _.findIndex(self.labels, (entry) => {
+            return entry === val.dt;
           });
           if (index > -1) {
             data[index] = val.qty;
@@ -428,13 +446,13 @@ parasails.registerPage('member-info', {
       this.labels = response.labels;
 
       var self = this;
-      _.forEach(response.summary, function (values, key) {
+      _.forEach(response.summary, (values, key) => {
         var data = Array(24);
         data.fill(0);
 
-        _.forEach(values, function (val) {
-          var index = _.findIndex(self.labels, function (entry) {
-            return entry == val.dt;
+        _.forEach(values, (val) => {
+          var index = _.findIndex(self.labels, (entry) => {
+            return entry === val.dt;
           });
           if (index > -1) {
             data[index] = val.qty;
@@ -476,11 +494,11 @@ parasails.registerPage('member-info', {
       this.datasets = [];
       this.labels = response.labels;
       var self = this;
-      _.forEach(response.summary, function (values, key) {
+      _.forEach(response.summary, (values, key) => {
         var data = Array(7);
         data.fill(0);
 
-        _.forEach(values, function (val) {
+        _.forEach(values, (val) => {
           data[val.dt - 1] = val.qty;
         });
 
@@ -533,9 +551,13 @@ parasails.registerPage('member-info', {
       if (response.data.length) {
         this.currentPage += 1;
         this.queryResults.push(...response.data);
-        if (this.infiniteState) this.infiniteState.loaded();
+        if (this.infiniteState) {
+          this.infiniteState.loaded();
+        }
       } else {
-        if (this.infiniteState) this.infiniteState.complete();
+        if (this.infiniteState) {
+          this.infiniteState.complete();
+        }
       }
       this.cloudSuccess = true;
       this.syncing = false;
@@ -614,17 +636,25 @@ parasails.registerPage('member-info', {
           await $lycaon.axios.put(`/api/v1/member/messages/read/${id}`, {});
 
           el.id = `readed-${id}`;
-        } catch (err) {}
+        } catch (err) {
+          console.log(err);
+        }
       }
     },
     normalize: function (contents) {
       var matchs = linkify.match(contents);
-      _.each(matchs, function (match) {
+      _.each(matchs, (match) => {
         var el = `<a href="${match.url}">${match.text}</a>`;
         var re = new RegExp(match.text.trim());
         contents = contents.replace(re, el);
       });
-      return contents;
+
+      var result = '';
+      var data = contents.split('\n');
+      _.each(data, (line) => {
+        result = result + `<p class="message-content">${line}</p>`;
+      });
+      return result;
     },
   },
   computed: {

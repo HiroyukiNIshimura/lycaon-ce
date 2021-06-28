@@ -78,7 +78,7 @@ module.exports = {
     try {
       await sails.getDatastore().transaction(async (db) => {
         for (let entry of inputs.tags) {
-          var tags = await Tag.find()
+          let tags = await Tag.find()
             .where({
               name: entry.value.toLowerCase(),
               organization: this.req.me.organization.id,
@@ -86,7 +86,7 @@ module.exports = {
             .usingConnection(db);
 
           if (tags.length < 1) {
-            tag = await Tag.create({
+            let tag = await Tag.create({
               name: entry.value.toLowerCase(),
               organization: this.req.me.organization.id,
             })

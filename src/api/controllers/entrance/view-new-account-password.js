@@ -45,6 +45,9 @@ module.exports = {
       });
     }
 
+    if (this.req.me) {
+      delete this.req.session.userId;
+    }
     // Grab token and include it in view locals
     return {
       token: inputs.token,

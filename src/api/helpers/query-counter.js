@@ -135,7 +135,7 @@ SELECT COUNT("vote".*) as "qty"
         counter.flag = await query.queryFlag.usingConnection(inputs.db);
         counter.local = await query.queryLocal.usingConnection(inputs.db);
 
-        var rawResult = await sails
+        let rawResult = await sails
           .sendNativeQuery(NATIVE_NEW_VOTE_SQL, params)
           .usingConnection(inputs.db);
         counter.votes = rawResult.rows[0].qty;
@@ -145,7 +145,7 @@ SELECT COUNT("vote".*) as "qty"
         counter.flag = await query.queryFlag;
         counter.local = await query.queryLocal;
 
-        var rawResult = await sails.sendNativeQuery(NATIVE_NEW_VOTE_SQL, params);
+        let rawResult = await sails.sendNativeQuery(NATIVE_NEW_VOTE_SQL, params);
         counter.votes = rawResult.rows[0].qty;
       }
     } catch (err) {

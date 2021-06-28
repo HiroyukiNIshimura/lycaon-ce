@@ -9,7 +9,7 @@ module.exports = {
   },
   exits: {
     success: {
-      description: "Wiki's status successfully updated.",
+      description: `Wiki's status successfully updated.`,
     },
     notFound: {
       responseType: 'notfound',

@@ -97,18 +97,22 @@ module.exports = {
           break;
         case 'status':
           if (thread.status === 0) {
+            // eslint-disable-next-line quotes
             action = sails.__("The thread state has changed to 'open'");
             shortAction = sails.__('(open)');
           } else {
+            // eslint-disable-next-line quotes
             action = sails.__("The thread state has changed to 'closed'");
             shortAction = sails.__('(closed)');
           }
           break;
         case 'concept':
           if (thread.concept === 0) {
+            // eslint-disable-next-line quotes
             action = sails.__("The thread concept has been changed to 'draft'");
             shortAction = sails.__('(draft)');
           } else {
+            // eslint-disable-next-line quotes
             action = sails.__("The thread concept has changed to 'public'");
             shortAction = sails.__('(published)');
           }
@@ -120,15 +124,18 @@ module.exports = {
               .format(thread.responsible.fullName);
             shortAction = sails.__('(responsible)');
           } else {
+            // eslint-disable-next-line quotes
             action = sails.__("The person in charge of the thread has been changed to 'Not set'");
             shortAction = sails.__('(Release of charge)');
           }
           break;
         case 'archive':
           if (thread.locked) {
+            // eslint-disable-next-line quotes
             action = sails.__("The thread is now an 'archive'");
             shortAction = sails.__('(archive)');
           } else {
+            // eslint-disable-next-line quotes
             action = sails.__("The thread has been 'unarchived'");
             shortAction = sails.__('(unarchive)');
           }
@@ -136,20 +143,25 @@ module.exports = {
         case 'priority':
           shortAction = sails.__('(importance)');
           if (thread.priority === 0) {
+            // eslint-disable-next-line quotes
             action = sails.__("Thread importance changed to 'Low'");
           } else if (thread.priority === 1) {
+            // eslint-disable-next-line quotes
             action = sails.__("Thread importance changed to 'Normally'");
           } else {
+            // eslint-disable-next-line quotes
             action = sails.__("Thread importance changed to 'High'");
           }
           break;
         case 'dueDate':
           if (thread.dueDateAt) {
             action = sails
+              // eslint-disable-next-line quotes
               .__("The thread deadline has been changed to '{0}'")
               .format(moment(Number(thread.dueDateAt)).format('YYYY/MM/DD'));
             shortAction = sails.__('(Deadline)');
           } else {
+            // eslint-disable-next-line quotes
             action = sails.__("The thread deadline has been changed to 'Not set'");
             shortAction = sails.__('(Cancellation of deadline)');
           }
@@ -159,6 +171,7 @@ module.exports = {
             action = sails.__('The thread is working with {0}').format(thread.workingUser.fullName);
             shortAction = sails.__('(working)');
           } else {
+            // eslint-disable-next-line quotes
             action = sails.__("The thread's Working has been released");
             shortAction = sails.__('(Cancellation of work)');
           }
@@ -232,11 +245,19 @@ module.exports = {
         threadBody: await sails.helpers.mdToHtml.with({
           markdown: thread.body,
         }),
+        safeThreadBody: await sails.helpers.mdToSanitize.with({
+          markdown: thread.body,
+        }),
         //markdown: thread.body,
         updater: userName,
         updatedAt: updatedAt,
         action: action.action,
-        comment: action.comment,
+        comment: await sails.helpers.mdToHtml.with({
+          markdown: action.comment,
+        }),
+        safeComment: await sails.helpers.mdToSanitize.with({
+          markdown: action.comment,
+        }),
         hashTag: inputs.hashTag,
         fromName: settings.fromName,
         threadLink: url.resolve(
@@ -328,7 +349,7 @@ module.exports = {
         var data = {
           organization: team.organization,
           template: 'email-thread-notify',
-          subject: `${thread.team.name} | [#${thread.id}] ${act.shortAction} ${thread.subject}`,
+          subject: `${thread.team.name} | [#${thread.no}] ${act.shortAction} ${thread.subject}`,
           to: user.emailAddress,
           toName: user.fullName,
           headers: mailHeaders,

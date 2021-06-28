@@ -24,7 +24,7 @@ module.exports = {
       type: 'string',
       isIn: ['unconfirmed', 'change-requested', 'confirmed'],
       defaultsTo: 'confirmed',
-      description: "The confirmation status of the user's email address.",
+      description: `The confirmation status of the user's email address.`,
       extendedDescription: `Users might be created as "unconfirmed" (e.g. normal signup) or as "confirmed" (e.g. hard-coded
 admin users).  When the email verification feature is enabled, new users created via the
 signup form have \`emailStatus: 'unconfirmed'\` until they click the link in the confirmation email.
@@ -42,7 +42,7 @@ email status until they click the link in the confirmation email.`,
     password: {
       type: 'string',
       required: true,
-      description: "Securely hashed representation of the user's login password.",
+      description: `Securely hashed representation of the user's login password.`,
       protect: true,
       example: '2$28a8eabna301089103-13948134nad',
     },
@@ -50,7 +50,7 @@ email status until they click the link in the confirmation email.`,
     fullName: {
       type: 'string',
       required: true,
-      description: "Full representation of the user's name.",
+      description: `Full representation of the user's name.`,
       maxLength: 120,
       example: 'Mary Sue van der McHenst',
     },
@@ -82,6 +82,7 @@ So, while this \`isSuperAdmin\` demarcation might not be the right approach fore
     passwordResetToken: {
       type: 'string',
       description:
+        // eslint-disable-next-line quotes
         "A unique token used to verify the user's identity when recovering a password.  Expires after 1 use, or after a set amount of time has elapsed.",
     },
 
@@ -89,6 +90,7 @@ So, while this \`isSuperAdmin\` demarcation might not be the right approach fore
       type: 'ref',
       columnType: 'bigint',
       description:
+        // eslint-disable-next-line quotes
         "A JS timestamp (epoch ms) representing the moment when this user's `passwordResetToken` will expire (or 0 if the user currently has no such token).",
       example: 1502844074211,
     },
@@ -103,6 +105,7 @@ So, while this \`isSuperAdmin\` demarcation might not be the right approach fore
       type: 'ref',
       columnType: 'bigint',
       description:
+        // eslint-disable-next-line quotes
         "A JS timestamp (epoch ms) representing the moment when this user's `emailProofToken` will expire (or 0 if the user currently has no such token).",
       example: 1502844074211,
     },

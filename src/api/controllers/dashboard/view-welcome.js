@@ -18,7 +18,7 @@ module.exports = {
     },
   },
 
-  fn: async function (inputs) {
+  fn: async function () {
     return {};
   },
 };

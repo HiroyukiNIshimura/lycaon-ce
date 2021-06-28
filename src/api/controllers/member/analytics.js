@@ -233,7 +233,7 @@ select to_char(to_timestamp("commitAt"/1000), 'D') as dt, count(*) as qty
       git: [],
     };
 
-    _.forEach(response.analytics, function (values, key) {
+    _.forEach(response.analytics, (values, key) => {
       if (key.endsWith('-sneeze')) {
         _.merge(summary.sneeze, values);
       } else if (key.endsWith('-reply')) {
@@ -255,7 +255,7 @@ select to_char(to_timestamp("commitAt"/1000), 'D') as dt, count(*) as qty
       }
     });
 
-    _.forEach(summary, function (values, prop) {
+    _.forEach(summary, (values, prop) => {
       response.summary[prop] = _(values)
         .groupBy((x) => x.dt)
         .map((value, key) => ({ dt: key, qty: _.sum(value, 'qty') }))

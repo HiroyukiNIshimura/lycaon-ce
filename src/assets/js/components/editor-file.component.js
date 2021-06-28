@@ -98,13 +98,16 @@ parasails.registerComponent('editorFile', {
         <ul class="file-list">
           <li v-for="(item, index) in appendix">
             <small v-if="mode === 'update'">
-                <i class="fas fa-paperclip"></i>
-                <a class="mr-2" :class="[hits[item.id] ? 'hit-active': '']" :href="downloadAppendix(item, index)" rel="noopener">{{ item.name }} <i class="fas fa-cloud-download-alt fa-lg"></i></a> <lycaon-timestamp :at="item.createdAt" format="timeago" :translator="translator"></lycaon-timestamp>
-                <user-identity :user="item.owner" :organization="organization" size="sm"></user-identity>
-                {{ i18n("Attached file") }}
-                <a href="javascript:void(0)" @click="showDeleteDialog(item, index)"><i class="far fa-trash-alt" v-if="!hiddenUpload"></i></a>
+              <a class="mr-1 hyper-link-icon" href="javascript:void(0)" data-toggle="popover" data-placement="top" :data-content="hyperLink(item)"><i class="fas fa-external-link-alt"></i></a>
+              <i class="fas fa-paperclip"></i>
+              <a class="mr-2" :class="[hits[item.id] ? 'hit-active': '']" :href="downloadAppendix(item, index)" rel="noopener">{{ item.name }} <i class="fas fa-cloud-download-alt fa-lg"></i></a> <lycaon-timestamp :at="item.createdAt" format="timeago" :translator="translator"></lycaon-timestamp>
+              <user-identity :user="item.owner" :organization="organization" size="sm"></user-identity>
+              {{ i18n("Attached file") }}
+              <a href="javascript:void(0)" @click="showDeleteDialog(item, index)"><i class="far fa-trash-alt" v-if="!hiddenUpload"></i></a>
             </small>
             <small v-else>
+              <a class="mr-1 hyper-link-icon" href="javascript:void(0)" data-toggle="popover" data-placement="top" :data-content="hyperLink(item)"><i class="fas fa-external-link-alt"></i></a>
+              <i class="fas fa-paperclip"></i>
               <i class="fas fa-paperclip"></i>
               <span :class="[hits[item.id] ? 'hit-active': '']">{{ item.name }} / {{ formatter.format(item.size) }}{{ i18n("byte") }}</span>
               <a href="javascript:void(0)" @click="showDeleteDialog(item, index)" v-if="!hiddenUpload"><i class="far fa-trash-alt"></i></a>
@@ -130,6 +133,7 @@ parasails.registerComponent('editorFile', {
   },
   mounted: async function () {
     //
+    $('[data-toggle="popover"]').popover();
   },
   beforeDestroy: function () {
     //…
@@ -170,7 +174,7 @@ parasails.registerComponent('editorFile', {
         if (response.data && response.data.length > 0) {
           for (let entry of response.data) {
             var target = _.find(this.appendix, (o) => {
-              return o.id == entry.id;
+              return o.id === entry.id;
             });
             if (target) {
               this.hits[target.id] = true;
@@ -186,6 +190,9 @@ parasails.registerComponent('editorFile', {
       } catch (err) {
         console.log(err);
       }
+    },
+    hyperLink: function (item) {
+      return item.virtualUrl;
     },
   },
   computed: {
@@ -286,6 +293,7 @@ parasails.registerComponent('editorFile', {
       }
 
       var mainKey =
+        // eslint-disable-next-line quotes
         "With the contract plan, you can upload attachments of '{1} to one {0}' and '{2} for the entire organization'";
 
       var docName = '';

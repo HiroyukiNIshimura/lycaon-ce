@@ -13,7 +13,7 @@ module.exports = {
   },
   exits: {
     success: {
-      description: "Thread's status successfully updated.",
+      description: `Thread's status successfully updated.`,
     },
     notFound: {
       responseType: 'notfound',
@@ -91,12 +91,15 @@ module.exports = {
       };
     }
 
-    sails.sockets.broadcast(rooms, 'thread-notify', {
-      message: message,
-      user: this.req.me,
-      thread: updated,
-      timespan: Date.now(),
-    });
+    if (!updated.local) {
+      sails.sockets.broadcast(rooms, 'thread-notify', {
+        message: message,
+        user: this.req.me,
+        thread: updated,
+        timespan: Date.now(),
+      });
+    }
+
     //
     this.req.session.effectMessage = sails.__('Updated the concept');
 

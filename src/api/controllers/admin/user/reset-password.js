@@ -46,7 +46,7 @@ module.exports = {
       // 新規ユーザー登録確認メール送信
       await sails.helpers.sendTemplateEmail.with({
         organization: this.req.organization,
-        to: created.emailAddress,
+        to: current.emailAddress,
         subject: sails.__('Welcome! To Lycaon (Send user registration confirmation URL)'),
         template: 'email-new-user-reset-password',
         templateData: {

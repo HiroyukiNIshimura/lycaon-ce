@@ -59,7 +59,7 @@ parasails.registerPage('admin-user-create', {
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
-    onChangeTeam: function (e) {},
+    onChangeTeam: function () {},
     submittedForm: async function (response) {
       this.cloudSuccess = true;
       this.syncing = true;
@@ -89,7 +89,7 @@ parasails.registerPage('admin-user-create', {
         return;
       }
 
-      argins.isSuperAdmin = argins.role == '1' ? true : false;
+      argins.isSuperAdmin = argins.role === '1' ? true : false;
 
       return argins;
     },

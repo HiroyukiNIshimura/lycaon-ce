@@ -41,7 +41,7 @@ module.exports = {
         return 'badRequest';
       }
 
-      var url = new URL(`https://api.github.com/repos/${inputs.gitUser}/${inputs.gitRepository}`);
+      let url = new URL(`https://api.github.com/repos/${inputs.gitUser}/${inputs.gitRepository}`);
 
       var headers = {
         Accept: 'application/vnd.github.v3+json',
@@ -66,7 +66,7 @@ module.exports = {
         return 'badRequest';
       }
 
-      var url = new URL(`${inputs.gitlabApi}/projects/${inputs.gitlabProjectId}`);
+      let url = new URL(`${inputs.gitlabApi}/projects/${inputs.gitlabProjectId}`);
       if (inputs.gitlabToken) {
         url.search = `private_token=${inputs.gitlabToken}`;
       }

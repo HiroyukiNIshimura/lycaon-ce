@@ -13,8 +13,8 @@ module.exports = {
   },
   fn: async function (inputs) {
     try {
-      var reRegExp = /[\\^$.*+?()[\]{}|]/g,
-        reHasRegExp = new RegExp(reRegExp.source);
+      var reRegExp = /[\\^$.*+?()[\]{}|]/g;
+      var reHasRegExp = new RegExp(reRegExp.source);
 
       return inputs.str && reHasRegExp.test(inputs.str)
         ? inputs.str.replace(reRegExp, '\\$&')

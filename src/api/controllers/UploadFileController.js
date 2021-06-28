@@ -4,9 +4,9 @@
  * from Ajax
  */
 //https://github.com/sailshq/machine-as-action#customizing-the-response
-const path = require('path'),
-  fs = require('fs'),
-  jimp = require('jimp');
+const path = require('path');
+const fs = require('fs');
+const jimp = require('jimp');
 
 module.exports = {
   /**
@@ -33,6 +33,7 @@ module.exports = {
     var thread = {};
     var wiki = {};
     var vote = {};
+    var team = {};
 
     if (req.params.type === 'thread' || req.params.type === 'createthread') {
       thread = await Thread.findOne({
@@ -42,7 +43,7 @@ module.exports = {
         return res.notFound();
       }
 
-      var team = await sails.helpers.validateMembership.with({
+      team = await sails.helpers.validateMembership.with({
         id: thread.team,
         user: req.me,
       });
@@ -73,7 +74,7 @@ module.exports = {
       }
 
       if (wiki.concept === 0) {
-        var team = await sails.helpers.validateMembership.with({
+        team = await sails.helpers.validateMembership.with({
           id: wiki.team,
           user: req.me,
         });
@@ -138,7 +139,7 @@ module.exports = {
         dirname: path.resolve(sails.config.appPath, virtualDir),
         maxBytes: req.sysSettings.maxUploadFileSize,
       },
-      async function (err, uploadedFiles) {
+      async function afterUpload(err, uploadedFiles) {
         //
         var renameBolburl = async function (bloburl, url, db) {
           var escaped = await sails.helpers.regexEscape.with({ str: bloburl });
@@ -181,10 +182,7 @@ module.exports = {
         };
 
         if (err) {
-          if (
-            err.code &&
-            (err.code === 'E_EXCEEDS_UPLOAD_LIMIT' || err.code === 'E_EXCEEDS_FILE_SIZE_LIMIT')
-          ) {
+          if (err.code && (err.code === 'E_EXCEEDS_UPLOAD_LIMIT' || err.code === 'E_EXCEEDS_FILE_SIZE_LIMIT')) {
             //size error
             await sails.getDatastore().transaction(async (db) => {
               await renameBolburl(bloburl, sails.__('Upload error'), db);
@@ -244,7 +242,7 @@ module.exports = {
           owner: user.id,
         };
 
-        var mimes = ['image/bmp', 'image/jpeg', 'image/png', 'image/gif', 'image/tiff'];
+        var mimes = ['image/bmp', 'image/jpeg', 'image/png'];
         if (_.indexOf(mimes, item.mimeType) > -1) {
           try {
             var mDir = path.join(virtualDir, 'thum_m');
@@ -256,12 +254,20 @@ module.exports = {
               fs.mkdirSync(sDir);
             }
 
-            let image = await jimp.read(path.resolve(sails.config.appPath, item.virtualPath));
-            await image.resize(880, jimp.AUTO);
-            await image.writeAsync(path.resolve(sails.config.appPath, item.virtualPathMid));
+            const mSizeWidth = sails.config.custom.thumbnail.mSizeWidth;
+            const sSizeWidth = sails.config.custom.thumbnail.sSizeWidth;
 
-            await image.resize(340, jimp.AUTO);
-            await image.writeAsync(path.resolve(sails.config.appPath, item.virtualPathSmall));
+            let image = await jimp.read(path.resolve(sails.config.appPath, item.virtualPath));
+            let width = image.bitmap.width;
+            if (width > mSizeWidth) {
+              await image.resize(mSizeWidth, jimp.AUTO);
+              await image.writeAsync(path.resolve(sails.config.appPath, item.virtualPathMid));
+            }
+
+            if (width > sSizeWidth) {
+              await image.resize(sSizeWidth, jimp.AUTO);
+              await image.writeAsync(path.resolve(sails.config.appPath, item.virtualPathSmall));
+            }
           } catch (err) {
             sails.log.error(err);
           }
@@ -344,6 +350,7 @@ module.exports = {
     }
 
     var item = {};
+    var team = {};
 
     if (req.params.type === 'thread') {
       var thread = await Thread.findOne({
@@ -353,7 +360,7 @@ module.exports = {
         return res.notFound();
       }
 
-      var team = await sails.helpers.validateMembership.with({
+      team = await sails.helpers.validateMembership.with({
         id: thread.team,
         user: req.me,
       });
@@ -389,7 +396,7 @@ module.exports = {
       }
 
       if (wiki.concept === 0) {
-        var team = await sails.helpers.validateMembership.with({
+        team = await sails.helpers.validateMembership.with({
           id: wiki.team,
           user: req.me,
         });

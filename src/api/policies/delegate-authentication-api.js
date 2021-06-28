@@ -6,8 +6,9 @@ module.exports = async function (req, res, proceed) {
     return res.forbidden();
   }
 
+  var url = new URL(`${sails.config.custom.backoffice.authServer}/api/v1/management/auth`);
+
   try {
-    var url = new URL(`${sails.config.custom.backoffice.authServer}/api/v1/management/auth`);
     await axios.post(url.href, { secret: secret });
   } catch (err) {
     sails.log.debug({ url: url.href, error: err });

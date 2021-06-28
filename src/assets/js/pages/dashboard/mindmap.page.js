@@ -16,13 +16,13 @@ parasails.registerPage('mindmap', {
     if (this.simulation) {
       this.editable = true;
     } else {
-      var initialRadius = 180,
-        initialAngle = Math.PI * (3 - Math.sqrt(5));
+      var initialRadius = 180;
+      var initialAngle = Math.PI * (3 - Math.sqrt(5));
 
       for (var i = 0, n = this.nodes.length, node; i < n; ++i) {
         node = this.nodes[i];
-        var radius = initialRadius * Math.sqrt(i),
-          angle = i * initialAngle;
+        var radius = initialRadius * Math.sqrt(i);
+        var angle = i * initialAngle;
         node.fx = radius * Math.cos(angle);
         node.fy = radius * Math.sin(angle);
       }

@@ -101,6 +101,8 @@ SELECT COUNT("thread_activity".*)
    AND "thread_activity"."user" != $2
 `;
 
+    var rawResult = {};
+
     try {
       if (inputs.id) {
         let where = NATIVE_WHERE_MAIN_SQL;
@@ -108,7 +110,7 @@ SELECT COUNT("thread_activity".*)
           where = NATIVE_WHERE_MAIN_NONMYOWN_SQL;
         }
 
-        var rawResult = await sails.sendNativeQuery(NATIVE_COUNT_SQL + where, [
+        rawResult = await sails.sendNativeQuery(NATIVE_COUNT_SQL + where, [
           inputs.id,
           this.req.me.id,
         ]);
@@ -128,7 +130,7 @@ LIMIT $3 OFFSET $4`,
           where = NATIVE_WHERE_TEAM_NONMYOWN_SQL;
         }
 
-        var rawResult = await sails.sendNativeQuery(NATIVE_COUNT_SQL + where, [
+        rawResult = await sails.sendNativeQuery(NATIVE_COUNT_SQL + where, [
           this.req.me.id,
           this.req.me.id,
         ]);

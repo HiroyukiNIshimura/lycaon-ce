@@ -1,5 +1,4 @@
 const nodemailer = require('nodemailer');
-const sanitizeHtml = require('sanitize-html');
 
 module.exports = {
   friendlyName: 'Send template email',
@@ -148,9 +147,12 @@ module.exports = {
           '`emails/` or `views/` -- but that part is supposed to be omitted.  Instead, please\n' +
           'just specify the path to the desired email template relative from `views/emails/`.\n' +
           'For example:\n' +
+          // eslint-disable-next-line quotes
           "  template: 'email-reset-password'\n" +
           'Or:\n' +
+          // eslint-disable-next-line quotes
           "  template: 'admin/email-contact-form'\n" +
+          // eslint-disable-next-line quotes
           " [?] If you're unsure or need advice, see https://sailsjs.com/support"
       );
     } //•
@@ -301,7 +303,7 @@ module.exports = {
         attachments: attachments,
       };
 
-      var sendBackoffice = function (messageData) {
+      var sendBackoffice = function (messageData, transporter) {
         if (settings.notSendBackoffice) {
           sails.log.debug(
             'Skipped sending email, SysSettings is set to "notSendBackoffice === true".\n' +
@@ -327,7 +329,7 @@ module.exports = {
         messageData.to.address = settings.internalEmailAddress;
         messageData.to.name = '';
         messageData.subject = `【メール配信不可 <${toName}>${to}】${messageData.subject}`;
-        transporter.sendMail(messageData, function (error, info) {
+        transporter.sendMail(messageData, (error, info) => {
           if (error) {
             sails.log.error(error);
             //エラーでも無視する
@@ -338,15 +340,15 @@ module.exports = {
       };
 
       var transporter = nodemailer.createTransport(sails.config.custom.smtpSettings);
-      transporter.verify(function (error, success) {
+      transporter.verify((error) => {
         if (error) {
           sails.log.error(error);
-          sendBackoffice(messageData);
+          sendBackoffice(messageData, transporter);
         } else {
-          transporter.sendMail(messageData, function (error, info) {
+          transporter.sendMail(messageData, (error, info) => {
             if (error) {
               sails.log.error(error);
-              sendBackoffice(messageData);
+              sendBackoffice(messageData, transporter);
             } else {
               sails.log.info('Email sent: ' + info.response + ':' + messageData.to.address);
             }

@@ -129,7 +129,7 @@ parasails.registerComponent('avatarUpload', {
     alert(message) {
       alert(message);
     },
-    inputFile(newFile, oldFile, prevent) {
+    inputFile(newFile, oldFile, /*prevent*/) {
       if (newFile && !oldFile) {
         this.$nextTick(function () {
           this.edit = true;
@@ -154,7 +154,7 @@ parasails.registerComponent('avatarUpload', {
         }
       }
     },
-    uploadAction: async function (blob, component) {
+    uploadAction: async function (blob, /*component*/) {
       var data = new FormData();
       data.append('avatar', blob.file);
 

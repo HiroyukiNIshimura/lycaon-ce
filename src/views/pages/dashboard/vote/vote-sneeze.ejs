@@ -4,7 +4,7 @@
       <div class="card-body">
         <div class="row d-none d-sm-block">
           <div class="col">
-            <user-identity :user="sneeze.owner" :organization="organization" size=""></user-identity>
+            <user-identity :user="sneeze.owner" :organization="organization" size="" ></user-identity>
             <small class="card-subtitle ml-2 text-muted">[ <a :href="sneezeAnker(sneeze)">comment-{{ sneeze.serialNumber }}</a> ]</small>
             <small class="card-subtitle text-muted">
               - <lycaon-timestamp :at="sneeze.createdAt" format="timeago" :translator="commentTranslator"></lycaon-timestamp></small>
@@ -13,7 +13,7 @@
         </div>
         <div class="row d-block d-sm-none">
           <div class="col">
-            <user-identity :user="sneeze.owner" :organization="organization" size="">
+            <user-identity :user="sneeze.owner" :organization="organization" size="" >
             </user-identity>
           </div>
         </div>

@@ -38,7 +38,7 @@ parasails.registerPage('contact-confirm', {
     ];
     var buff = [];
     if (this.formData.categories && this.formData.categories.length > 0) {
-      _.each(this.formData.categories, function (val) {
+      _.each(this.formData.categories, (val) => {
         buff.push(i18next.t(categories[val]));
       });
 
@@ -62,11 +62,11 @@ parasails.registerPage('contact-confirm', {
   methods: {
     //…
     submittedForm: async function (response) {
-      if (response.invalidToken) { 
+      if (response.invalidToken) {
         this.formErrors.captchaToken = true;
         return;
       }
-      
+
       this.cloudSuccess = true;
       this.syncing = true;
       location.href = `/contact/complete`;
@@ -80,7 +80,7 @@ parasails.registerPage('contact-confirm', {
       if (!argins.captchaToken) {
         this.formErrors.captchaToken = true;
       }
-      
+
       if (Object.keys(this.formErrors).length > 0) {
         $lycaon.errorToast('There is an error in the input value');
         return;

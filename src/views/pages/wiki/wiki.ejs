@@ -47,7 +47,7 @@
             <small class="text-muted"><%= __("Tags") %></small>
           </div>
           <div class="col">
-            <h5><a :href="tagLink(item)" class="badge badge-success mr-1" :aria-label="tagTooltip" data-microtip-position="bottom" data-microtip-size="medium" role="tooltip" v-for="(item, index) in wiki.tags"><i class="fas fa-hashtag fa-xs mr-1"></i>{{
+            <h5><a :href="tagLink(item)" class="badge badge-success mr-1" :aria-label="tagTooltip" data-microtip-position="bottom" data-microtip-size="medium" role="tooltip" v-for="(item, index) in wiki.tags">{{
               item.name
             }}</a></h5>
           </div>
@@ -70,7 +70,7 @@
         </div>
         <!-- appendix -->
         <div class="mb-3">
-          <viewer-file :organization="organization" :appendix="appendix" :download-appendix="downloadAppendix"></viewer-file>
+          <viewer-file :organization="organization" :appendix="appendix" :download-appendix="downloadAppendix" ></viewer-file>
         </div>
         
         <div class="row justify-content-end">

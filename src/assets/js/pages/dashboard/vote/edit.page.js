@@ -20,14 +20,13 @@ parasails.registerPage('vote-edit', {
     isUploading: false,
     viewerBlock: {},
     showImageListModal: false,
+    isQuestionnaireFormat: false,
 
     //…
     // Main syncing/loading state for this page.
     syncing: false,
     // Form data
     formData: {
-      isQuestionnaireFormat: false,
-
       /* … */
     },
     // For tracking client-side validation errors in our form.
@@ -79,7 +78,7 @@ parasails.registerPage('vote-edit', {
     });
 
     _.each(this.vote.choices, (entry) => {
-      if (!entry.isOther) {
+      if (!entry.isOther && entry.choices !== 'Browsed') {
         self.questionTagifySettings.whitelist.push({
           value: entry.choices,
           id: entry.id,
@@ -95,11 +94,12 @@ parasails.registerPage('vote-edit', {
 
     this.formData = {
       subject: this.vote.subject,
-      isQuestionnaireFormat: this.vote.isQuestionnaireFormat,
       hasOther: this.vote.hasOther,
       multipleAnswers: this.vote.multipleAnswers,
       question: this.vote.question,
     };
+    this.isQuestionnaireFormat = this.vote.isQuestionnaireFormat;
+
     this.appendix = _.clone(this.vote.items);
 
     if (this.vote.circulationFrom) {
@@ -110,7 +110,8 @@ parasails.registerPage('vote-edit', {
     }
   },
   mounted: async function () {
-    io.socket.on('message-notify', function (response) {
+    var self = this;
+    io.socket.on('message-notify', (response) => {
       if (response.data.sendTo === self.me.id) {
         $lycaon.stackMessage(response, self.messageStack, self.me.organization.handleId);
         $lycaon.socketToast(response.data.message);
@@ -134,8 +135,7 @@ parasails.registerPage('vote-edit', {
       i18next.t('Feel free to enter ...'),
       this.addImageBlobHook.bind(this)
     );
-    var self = this;
-    $lycaon.markdown.addToolberImageList(this.voteEditor, function () {
+    $lycaon.markdown.addToolberImageList(this.voteEditor, () => {
       self.voteEditor.eventManager.emit('closeAllPopup');
       self.$refs.imagelist.load();
       self.showImageListModal = true;
@@ -152,27 +152,29 @@ parasails.registerPage('vote-edit', {
   methods: {
     //…
     addOrganizationAll: function () {
-      this.$refs.userTagify.addTags(this.cloudUsers);
+      this.selectedUsers = _.extend([], this.cloudUsers);
     },
     addTeamAll: function () {
       if (!this.selectedTeam) {
         return;
       }
 
+      // eslint-disable-next-line camelcase
       var users = _.filter(this.teamUsers, { team_users: this.selectedTeam });
-      var targets = _.filter(this.cloudUsers, function (o) {
+      var targets = _.filter(this.cloudUsers, (o) => {
+        // eslint-disable-next-line camelcase
         if (_.findIndex(users, { user_teams: o.id }) > -1) {
           return true;
         }
         return false;
       });
-      this.$refs.userTagify.addTags(targets);
+      this.selectedUsers = _.extend([], targets);
     },
     clearAll: function () {
       this.selectedUsers = [];
     },
-    onChangeUserTags: function (e) {},
-    onChangeQuestionTags: function (e) {},
+    onChangeUserTags: function () {},
+    onChangeQuestionTags: function () {},
     blockEditor: function (label) {
       this.viewerBlock = Vue.$loading.show(
         {
@@ -242,12 +244,12 @@ parasails.registerPage('vote-edit', {
           }
 
           if (_.isFunction(callback)) {
-            callback(i18next.t('Upload error'), blob.name);
+            return callback(i18next.t('Upload error'), blob.name);
           }
         } else {
           self.appendix.push(response.data.item);
           if (_.isFunction(callback)) {
-            callback(response.data.url, response.data.item.name);
+            return callback(response.data.urlMid, response.data.item.name);
           }
         }
       } catch (error) {
@@ -258,7 +260,7 @@ parasails.registerPage('vote-edit', {
         );
 
         if (_.isFunction(callback)) {
-          callback(i18next.t('Upload error'), blob.name);
+          return callback(i18next.t('Upload error'), blob.name);
         }
       } finally {
         self.isUploading = false;
@@ -275,7 +277,7 @@ parasails.registerPage('vote-edit', {
         console.log(error);
       }
     },
-    downloadAppendix: function (item, index) {
+    downloadAppendix: function (item) {
       return `/download/vote/${this.vote.id}/${item.id}`;
     },
     doForceUpdate: function () {
@@ -305,6 +307,7 @@ parasails.registerPage('vote-edit', {
       argins.body = this.voteEditor.mdEditor.getValue();
       argins.users = this.selectedUsers;
       argins.choices = this.selectedQuestions;
+      argins.isQuestionnaireFormat = this.isQuestionnaireFormat;
 
       if (this.selectedDateRang && this.selectedDateRang.start) {
         this.selectedDateRang.start.setHours(0, 0, 0, 0);
@@ -352,7 +355,7 @@ parasails.registerPage('vote-edit', {
     },
     selectedImageList: function (image) {
       this.showImageListModal = false;
-      this.voteEditor.insertText(`![](${image.virtualUrl})`);
+      this.voteEditor.insertText(`![](${image.virtualUrlMid})`);
     },
   },
   computed: {

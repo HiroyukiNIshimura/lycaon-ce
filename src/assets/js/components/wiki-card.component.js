@@ -35,14 +35,14 @@ parasails.registerComponent('wikiCard', {
   //  ╠═╣ ║ ║║║║
   //  ╩ ╩ ╩ ╩ ╩╩═╝
   template: `  
-<a class="card h-100 card-selectable" v-inview:animate="animate" :href="wikiLink" :target="target">
+<div class="card h-100 card-selectable" v-inview:animate="animate" @click="onCardClick">
     <img :src="image"
         class="card-img-top" 
         v-if="showImage"
     />
     <div class="card-body d-flex flex-column">
         <p class="card-title" v-if="showTeam"><a :href="teamLink">{{ wiki.team.name }}</a></p>
-        <p class="card-title h4 wiki-subject">{{ truncate(wiki.subject, 50) }}</p>
+        <a class="card-title h4 wiki-subject" :href="wikiLink" :target="target">{{ truncate(wiki.subject, 50) }}</a>
         <div class="card-subtitle"><small class="text-muted">wiki-no: {{ wiki.no }}</small></div>
         <div class="card-text">
           <span :href="tagLink(item)" class="badge badge-success mr-1" v-for="(item, index) in wiki.tags" :key="index" v-if="showTeam">{{ item.name }}</span>
@@ -68,7 +68,7 @@ parasails.registerComponent('wikiCard', {
         </div>
         <slot/>
     </div>
-</a>
+</div>
   `,
 
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
@@ -103,19 +103,24 @@ parasails.registerComponent('wikiCard', {
     translator: function (val) {
       return this.i18n('{0} posted at {1}').format('', val);
     },
+    onCardClick: function () {
+      if (this.isPublic) {
+        var url = `/doc/${this.wiki.id}`;
+        window.open(url, '_blank');
+      } else {
+        location.href = `/${this.organization.handleId}/wiki/${this.wiki.no}`;
+      }
+    },
   },
   computed: {
-    wikiLink: function () {
-      if (this.isPublic) {
-        return `/doc/${this.wiki.id}`;
-      }
-      return `/${this.organization.handleId}/wiki/${this.wiki.no}`;
-    },
     teamLink: function () {
       if (this.wiki.team) {
         return `/${this.organization.handleId}/team/${this.wiki.team.id}`;
       }
       return '#';
+    },
+    wikiLink: function () {
+      return `/${this.organization.handleId}/wiki/${this.wiki.no}`;
     },
     target: function () {
       if (this.isPublic) {
@@ -186,10 +191,7 @@ parasails.registerComponent('wikiCard', {
       if (this.wiki.hitsBody) {
         let matches = this.wiki.hitsBody.matchAll(re);
         for (let match of matches) {
-          let replaced = this.wiki.hitsBody.replaceAll(
-            match[0],
-            `<span class="query-hits">${match[0]}</span>`
-          );
+          let replaced = this.wiki.hitsBody.replaceAll(match[0], `<span class="query-hits">${match[0]}</span>`);
           content += `<div class="card-text"><span class="query-hits-title">${i18next.t(
             'Wiki body'
           )}</span><br>...${replaced}...</div>`;

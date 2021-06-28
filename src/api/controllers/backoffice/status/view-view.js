@@ -17,7 +17,7 @@ module.exports = {
   fn: async function () {
     function diskspacePromise() {
       return new Promise((resolve, reject) => {
-        df(function (error, response) {
+        df((error, response) => {
           if (error) {
             reject(error);
           } else {
@@ -37,8 +37,7 @@ module.exports = {
       version: process.version,
     };
 
-    var NATIVE_SQL =
-      "SELECT datname, pg_size_pretty(pg_database_size(datname)) as size FROM pg_database WHERE datname = 'lycaondb'";
+    var NATIVE_SQL = `SELECT datname, pg_size_pretty(pg_database_size(datname)) as size FROM pg_database WHERE datname = 'lycaondb'`;
     var rawResult = await sails.sendNativeQuery(NATIVE_SQL);
     response.dbSize = {
       dbname: 'lycaondb',
@@ -48,14 +47,14 @@ module.exports = {
     var cpus = os.cpus();
     var loads = [];
     for (var i = 0, len = cpus.length; i < len; i++) {
-      var cpu = cpus[i],
-        total = 0;
-      for (var type in cpu.times) {
+      var cpu = cpus[i];
+      var total = 0;
+      for (let type in cpu.times) {
         total += cpu.times[type];
       }
 
       var load = {};
-      for (var type in cpu.times) {
+      for (let type in cpu.times) {
         load[type] = cpu.times[type] / total;
       }
       loads[i] = load;

@@ -25,7 +25,7 @@
 
     <div class="row">
       <div class="col-auto">
-        <user-identity :user="user" :organization="organization" size=""></user-identity>
+        <user-identity :user="user" :organization="organization" size="" ></user-identity>
       </div>
       <div class="col text-right">
         <a class="btn btn-light btn-sm" :href="returnLink"><i class="far fa-arrow-alt-circle-left"></i>
@@ -69,7 +69,7 @@
               <i class="far fa-comment-dots prefix"></i>
               <label for="my-message" class="md-textarea-label label-color">{{ messegeLabel }}</label>
               <textarea id="my-message" class="md-textarea form-control" rows="3" maxlength="2000"
-                :class="[formErrors.contents || formErrors.contentsLength ? 'is-invalid' : '']" v-model.trim="formData.contents"></textarea>
+                :class="[formErrors.contents || formErrors.contentsLength ? 'is-invalid' : '']" v-model.trim="formData.contents" @focus="onEditorFocus" @blur="onEditorBlur"></textarea>
               <div class="invalid-feedback" v-if="formErrors.contents">
                 <%= __('Please enter a message') %>
               </div>
@@ -84,29 +84,40 @@
             <button type="button" class="btn btn-primary btn-sm" @click="sendMessage"><%= __('Send') %></button>
           </div>
         </div>
-        <div class="border border-light rounded py-3 px-3 mt-3" v-if="queryResults.length > 0">
-          <div v-inview:enter="onRead" :id="getId(item)" :class="messageStyle(item)" v-for="(item, index) in queryResults" :key="index"
-            v-inview:animate="'zoomInDown'">
-            <div class="row">
-              <div class="col-auto">
-                <span class="date-ago"><lycaon-timestamp :at="item.createdAt" format="timeago"></lycaon-timestamp></span>
-              </div>
-              <div class="col-auto" v-if="isMyMessage(item)">
-                <span v-if="item.readAt" v-inview:animate="'fadeInLeft'">
-                  <small class="badge badge-pill badge-success">{{ i18n('Already read') }}
-                  </small><small class="ml-3"><lycaon-timestamp :at="item.readAt" format="timeago"></lycaon-timestamp></small>
-                </span>
-                <span v-else v-inview:animate="'fadeInLeft'">
-                  <small class="badge badge-pill badge-warning">{{ i18n('not yet read') }}</small>
-                </span>
+        <div class="border border-light rounded py-3 px-3 mt-3">
+          <transition name="slide-fade">
+            <div v-if="isEditArrived">
+              <div class="row mb-3">
+                <div class="col-1">
+                  <div class="dot-elastic ml-5"></div>
+                </div>
               </div>
             </div>
-            <p v-html="normalize(item.contents)"></p>
+          </transition>
+
+          <div v-if="queryResults.length > 0">
+            <div v-inview:enter="onRead" :id="getId(item)" :class="messageStyle(item)" v-for="(item, index) in queryResults" :key="index" v-inview:animate="'zoomInDown'">
+              <div class="row">
+                <div class="col-auto">
+                  <span class="date-ago"><lycaon-timestamp :at="item.createdAt" format="timeago"></lycaon-timestamp></span>
+                </div>
+                <div class="col-auto" v-if="isMyMessage(item)">
+                  <span v-if="item.readAt" v-inview:animate="'fadeInLeft'">
+                    <small class="badge badge-pill badge-success">{{ i18n('Already read') }}
+                    </small><small class="ml-3"><lycaon-timestamp :at="item.readAt" format="timeago"></lycaon-timestamp></small>
+                  </span>
+                  <span v-else v-inview:animate="'fadeInLeft'">
+                    <small class="badge badge-pill badge-warning">{{ i18n('not yet read') }}</small>
+                  </span>
+                </div>
+              </div>
+              <p v-html="normalize(item.contents)"></p>
+            </div>
+            <infinite-loading spinner="waveDots" @infinite="messageHandler"></infinite-loading>
           </div>
-          <infinite-loading spinner="waveDots" @infinite="messageHandler"></infinite-loading>
-        </div>
-        <div class="border border-light rounded py-3 px-3" v-else>
-          <small><%= __('No messages') %> <i class="far fa-grin-beam-sweat"></i></small>
+          <div class="border border-light rounded py-3 px-3" v-else>
+            <small><%= __('No messages') %> <i class="far fa-grin-beam-sweat"></i></small>
+          </div>
         </div>
       </v-tab>
       <v-tab :name="i18n('Analysis (monthly)')" id="tab-monthly">

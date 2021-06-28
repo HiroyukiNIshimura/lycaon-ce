@@ -1,4 +1,3 @@
-const fs = require('fs');
 const moment = require('moment');
 const axios = require('axios');
 
@@ -47,20 +46,6 @@ module.exports = {
     };
 
     moment.locale(inputs.me.languagePreference);
-
-    var exeistDir = function (workdir) {
-      try {
-        fs.statSync(workdir);
-        return true;
-      } catch (error) {
-        if (error.code === 'ENOENT') {
-          return false;
-        } else {
-          sails.log.error(err);
-          throw err;
-        }
-      }
-    };
 
     var getDiffs = async function (team, hash) {
       let url = new URL(

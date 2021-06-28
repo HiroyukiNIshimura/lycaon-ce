@@ -1,3 +1,5 @@
+const draggable = window['vuedraggable'];
+
 const { Editor } = toastui;
 const { chart, codeSyntaxHighlight, colorSyntax, uml, tableMergedCell } = Editor.plugin;
 const chartOptions = {
@@ -8,7 +10,7 @@ const chartOptions = {
 };
 
 const videoPlugin = function () {
-  Editor.codeBlockManager.setReplacer('video', function (url) {
+  Editor.codeBlockManager.setReplacer('video', (url) => {
     // Indentify multiple code blocks
     const wrapperId = `yt${Math.random().toString(36).substr(2, 10)}`;
 
@@ -24,7 +26,7 @@ const videoPlugin = function () {
   });
 };
 const youtubePlugin = function () {
-  Editor.codeBlockManager.setReplacer('youtube', function (youtubeId) {
+  Editor.codeBlockManager.setReplacer('youtube', (youtubeId) => {
     // Indentify multiple code blocks
     const wrapperId = `yt${Math.random().toString(36).substr(2, 10)}`;
 
@@ -40,7 +42,7 @@ const youtubePlugin = function () {
   });
 };
 const soundcloudPlugin = function () {
-  Editor.codeBlockManager.setReplacer('soundcloud', function (innerHTML) {
+  Editor.codeBlockManager.setReplacer('soundcloud', (innerHTML) => {
     var iframe = $(innerHTML)[0];
     if (!iframe) {
       return '';
@@ -63,7 +65,7 @@ const soundcloudPlugin = function () {
   });
 };
 const googleMapPlugin = function () {
-  Editor.codeBlockManager.setReplacer('googlemap', function (innerHTML) {
+  Editor.codeBlockManager.setReplacer('googlemap', (innerHTML) => {
     var iframe = $(innerHTML)[0];
     if (!iframe) {
       return '';
@@ -86,7 +88,7 @@ const googleMapPlugin = function () {
   });
 };
 const twitterPlugin = function () {
-  Editor.codeBlockManager.setReplacer('twitter', function (innerHTML) {
+  Editor.codeBlockManager.setReplacer('twitter', (innerHTML) => {
     // Indentify multiple code blocks
     const wrapperId = `tw${Math.random().toString(36).substr(2, 10)}`;
 
@@ -136,8 +138,7 @@ linkify.add('#', {
     return 0;
   },
   normalize: function (match) {
-    match.url =
-      `/${SAILS_LOCALS.me.organization.handleId}/thread/` + match.text.trim().replace(/^#/, '');
+    match.url = `/${SAILS_LOCALS.me.organization.handleId}/thread/` + match.text.trim().replace(/^#/, '');
     match.text = match.text.trim() + ' ';
   },
 });
@@ -158,14 +159,16 @@ linkify.add('wiki', {
     return 0;
   },
   normalize: function (match) {
-    match.url =
-      `/${SAILS_LOCALS.me.organization.handleId}/wiki/` + match.text.trim().replace(/^wiki/, '');
+    match.url = `/${SAILS_LOCALS.me.organization.handleId}/wiki/` + match.text.trim().replace(/^wiki/, '');
     match.text = match.text.trim() + ' ';
   },
 });
 linkify.add('git/', {
   validate: function (text, pos, self) {
     if (!SAILS_LOCALS.me || !SAILS_LOCALS.me.organization || !SAILS_LOCALS.team) {
+      return 0;
+    }
+    if (!SAILS_LOCALS.team.useGit) {
       return 0;
     }
 
@@ -191,6 +194,9 @@ linkify.add('コミット:', {
     if (!SAILS_LOCALS.me || !SAILS_LOCALS.me.organization || !SAILS_LOCALS.team) {
       return 0;
     }
+    if (!SAILS_LOCALS.team.useGit) {
+      return 0;
+    }
 
     var tail = text.slice(pos);
 
@@ -212,6 +218,9 @@ linkify.add('コミット:', {
 linkify.add('commit:', {
   validate: function (text, pos, self) {
     if (!SAILS_LOCALS.me || !SAILS_LOCALS.me.organization || !SAILS_LOCALS.team) {
+      return 0;
+    }
+    if (!SAILS_LOCALS.team.useGit) {
       return 0;
     }
 
@@ -289,10 +298,11 @@ const expiringStorage = new ExpiringStorage();
 
 _.mixin({ deepExtend: underscoreDeepExtend(_) });
 
+// eslint-disable-next-line no-redeclare
 const $lycaon = {
   formatter: {
     formatCalender: function (at, isShort) {
-      if (!at || at == 0) {
+      if (!at || at === 0) {
         return '';
       }
       if (SAILS_LOCALS) {
@@ -320,7 +330,7 @@ const $lycaon = {
       return moment(Number(at)).format('LLL');
     },
     formatTimeago: function (at, isShort) {
-      if (!at || at == 0) {
+      if (!at || at === 0) {
         return '';
       }
       var now = new Date().getTime();
@@ -469,11 +479,13 @@ const $lycaon = {
   },
   createUuid: function (myStrong) {
     let strong = 1000;
-    if (myStrong) strong = myStrong;
+    if (myStrong) {
+      strong = myStrong;
+    }
     return new Date().getTime().toString(16) + Math.floor(strong * Math.random()).toString(16);
   },
   invalidEnterKey: function () {
-    $(':checkbox, :text, :password, :radio').on('keydown', function (e) {
+    $(':checkbox, :text, :password, :radio').on('keydown', (e) => {
       if ((e.which && e.which === 13) || (e.keyCode && e.keyCode === 13)) {
         return false;
       } else {
@@ -484,7 +496,7 @@ const $lycaon = {
   diff: function (oldVal, newVal, onlyDiffline = false) {
     var marks = [];
     var result = Diff.diffLines(oldVal, newVal);
-    result.forEach(function (part) {
+    result.forEach((part) => {
       var prefix = part.added ? '+' : part.removed ? '-' : ' ';
       if (!onlyDiffline) {
         marks.push({ prefix: prefix, value: part.value });
@@ -497,8 +509,8 @@ const $lycaon = {
     return marks;
   },
   regexEscape: function (str) {
-    var reRegExp = /[\\^$.*+?()[\]{}|]/g,
-      reHasRegExp = new RegExp(reRegExp.source);
+    var reRegExp = /[\\^$.*+?()[\]{}|]/g;
+    var reHasRegExp = new RegExp(reRegExp.source);
 
     return str && reHasRegExp.test(str) ? str.replace(reRegExp, '\\$&') : str;
   },
@@ -509,14 +521,14 @@ const $lycaon = {
       'Repeats like "aaa" are easy to guess': '「aaa」のような繰り返しは簡単に推測できます',
       'Repeats like "abcabcabc" are only slightly harder to guess than "abc"':
         '「abcabcabc」のような繰り返しは、「abc」よりも推測が少しだけ難しいです。',
-      'Sequences like abc or 6543 are easy to guess':
-        'abcや6543のようなシーケンスは簡単に推測できます',
+      'Sequences like abc or 6543 are easy to guess': 'abcや6543のようなシーケンスは簡単に推測できます',
       'Recent years are easy to guess': '年号は推測しやすいです',
       'Dates are often easy to guess': '多くの場合、日付は簡単に推測できます',
       'This is similar to a commonly used password': 'これはよくあるパスワードに似ています',
       'This is a top-10 common password': 'これはトップ10のよくあるパスワードです',
       'This is a top-100 common password': 'これはトップ100のよくあるパスワードです',
       'This is a very common password': 'これは非常によくあるパスワードです',
+      // eslint-disable-next-line quotes
       "Capitalization doesn't help very much": '大文字はあまり役に立ちません',
       'All-uppercase is almost as easy to guess as all-lowercase':
         'すべて大文字は、すべて小文字と同じくらい簡単に推測できます',
@@ -543,6 +555,7 @@ const $lycaon = {
         score.scoreClass = 'score-color-1';
         break;
       case 2:
+        // eslint-disable-next-line quotes
         score.crackScore = this.i18n("It's a good password");
         score.scoreClass = 'score-color-2';
         break;
@@ -591,7 +604,7 @@ const $lycaon = {
     }
 
     var resources = {};
-    _.each(SAILS_LOCALS.i18nlocales, function (entry) {
+    _.each(SAILS_LOCALS.i18nlocales, (entry) => {
       var suffix = entry.replace('-', '_');
       if (lang === suffix) {
         resources[entry] = {
@@ -615,8 +628,8 @@ const $lycaon = {
     if (!parames || parames.length < 1) {
       return message;
     }
-    return message.replace(/{(\d+)}/g, function (match, number) {
-      return typeof parames[number] != 'undefined' ? parames[number] : match;
+    return message.replace(/{(\d+)}/g, (match, number) => {
+      return typeof parames[number] !== undefined ? parames[number] : match;
     });
   },
   i18nformatN: function (singular, plural, count) {
@@ -627,8 +640,8 @@ const $lycaon = {
       message = i18next.t(plural);
     }
     var parames = [count];
-    return message.replace(/{(\d+)}/g, function (match, number) {
-      return typeof parames[number] != 'undefined' ? parames[number] : match;
+    return message.replace(/{(\d+)}/g, (match, number) => {
+      return typeof parames[number] !== undefined ? parames[number] : match;
     });
   },
   stackExchange: function (data, stack, handleId) {
@@ -640,7 +653,7 @@ const $lycaon = {
     $('#stack-exchange-list').empty();
     var self = this;
     var i = 0;
-    _.each(stack, function (entry) {
+    _.each(stack, (entry) => {
       var ref = `/${handleId}/thread/${entry.thread.no}`;
 
       if (i > 0) {
@@ -670,7 +683,7 @@ const $lycaon = {
     $('#stack-message-list').empty();
     var self = this;
     var i = 0;
-    _.each(stack, function (entry) {
+    _.each(stack, (entry) => {
       var ref = `/${handleId}/member/${entry.data.sendFrom.id}?tab=tab-message`;
 
       if (i > 0) {
@@ -760,14 +773,14 @@ const $lycaon = {
             'x-csrf-token': SAILS_LOCALS._csrf,
           },
         },
-        function (res, jwres) {
+        (res, jwres) => {
           console.log(jwres.statusCode);
           if (jwres.error) {
             console.log(jwres.error);
             return;
           }
           if (_.isFunction(callback)) {
-            callback(res);
+            return callback(res);
           }
         }
       );
@@ -910,7 +923,7 @@ const $lycaon = {
   },
 };
 
-$(function () {
+$(() => {
   var $topBtn = $('.scrollTop-btn');
   $topBtn.hide();
   $(window).scroll(function () {
@@ -932,9 +945,13 @@ $(function () {
     header: 'header',
   });
 
+  $(document).bind('drop dragover', (e) => {
+    e.preventDefault();
+  });
+
   var lycaonLoad = function () {
     var url = $(location).attr('href');
-    if (url.indexOf('#') != -1) {
+    if (url.indexOf('#') !== -1) {
       var anchor = url.split('#');
       if (anchor.length > 1) {
         var ref = anchor[anchor.length - 1];
@@ -953,7 +970,20 @@ $(function () {
     }
 
     $('#new-notification').show();
+
+    $('body').on('click', (e) => {
+      $('.user-avater-icon, .hyper-link-icon').each(function () {
+        if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
+          $(this).popover('hide');
+        }
+      });
+    });
+
+    $(window).scroll(() => {
+      $('.popover').popover('hide');
+    });
   };
+
   $(document).ready(lycaonLoad);
   document.addEventListener('DOMContentLoaded', lycaonLoad, false);
   document.addEventListener('deviceready', lycaonLoad, false);
@@ -971,9 +1001,7 @@ $(function () {
     },
     theme: 'edgeless',
     content: {
-      message: $lycaon.i18n(
-        'This website uses cookies to ensure you get the best experience on our website'
-      ),
+      message: $lycaon.i18n('This website uses cookies to ensure you get the best experience on our website'),
       dismiss: $lycaon.i18n('Got it!'),
       link: $lycaon.i18n('Learn more'),
       href: '/doc/policy?tab=privacy',

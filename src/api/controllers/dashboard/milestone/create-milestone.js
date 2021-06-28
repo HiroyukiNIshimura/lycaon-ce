@@ -63,15 +63,15 @@ module.exports = {
 
     var created = {};
 
-    try {
-      var valuesToSet = {
-        team: inputs.team,
-        name: inputs.name,
-        startAt: startAt,
-        duration: duration,
-        progress: 0,
-      };
+    var valuesToSet = {
+      team: inputs.team,
+      name: inputs.name,
+      startAt: startAt,
+      duration: duration,
+      progress: 0,
+    };
 
+    try {
       if (inputs.user) {
         valuesToSet.user = inputs.user;
       }

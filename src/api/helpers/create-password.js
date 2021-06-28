@@ -14,11 +14,11 @@ module.exports = {
   },
   fn: async function (inputs) {
     var length = inputs.passwordLength ? inputs.passwordLength : 10;
-    var password_base =
+    var passwordBase =
       '1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!"#$%&()=~|@[];:+-*<>?_>.,\'';
     var password = '';
     for (let i = 0; i < length; i++) {
-      password += password_base.charAt(Math.floor(Math.random() * password_base.length));
+      password += passwordBase.charAt(Math.floor(Math.random() * passwordBase.length));
     }
     return password;
   },

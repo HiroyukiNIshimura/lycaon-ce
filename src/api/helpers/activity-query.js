@@ -1,5 +1,3 @@
-const parser = require('machinepack-postgresql');
-
 module.exports = {
   friendlyName: 'activity sql helper',
   description: 'activity sql helper utility.',
@@ -32,7 +30,7 @@ SELECT
     "thread_activity"."user",
     "thread_activity"."sneeze",
     "thread_activity"."reply",
-    "user__user"."id" as "owner__id",
+    "user__user"."id" as "user__id",
     "user__user"."createdAt" as "user__createdAt",
     "user__user"."updatedAt" as "user__updatedAt",
     "user__user"."emailAddress" as "user__emailAddress",

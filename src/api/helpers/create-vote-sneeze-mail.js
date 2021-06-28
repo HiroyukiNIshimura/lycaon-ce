@@ -62,6 +62,9 @@ module.exports = {
           commentBody: await sails.helpers.mdToHtml.with({
             markdown: inputs.sneeze.comment,
           }),
+          safeCommentBody: await sails.helpers.mdToSanitize.with({
+            markdown: inputs.sneeze.comment,
+          }),
           commentAt: moment(Number(inputs.sneeze.updatedAt)).format('llll') + ' <JST>',
           commenter: inputs.sneeze.owner,
           hashTag: inputs.hashTag,

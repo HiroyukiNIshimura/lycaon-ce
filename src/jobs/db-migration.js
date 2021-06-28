@@ -46,13 +46,14 @@ module.exports = {
               throw new Error(
                 'An attribute in the model definition: `' +
                   wlsAttrName +
+                  // eslint-disable-next-line quotes
                   "` is missing an `autoMigrations` property. When running the `alter` migration, each attribute must have an autoMigrations key so that you don't end up with an invalid data schema."
               );
             }
 
             tableDDLSpec[columnName] = wlsAttrDef.autoMigrations;
           });
-        } catch (e) {
+        } catch (err) {
           sails.log.error(err);
           return;
         }

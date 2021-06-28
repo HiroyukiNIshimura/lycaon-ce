@@ -58,14 +58,15 @@ module.exports = {
       throw 'nameAlreadyInUse';
     }
 
+    var valuesToSet = {
+      name: inputs.name,
+      useTemplate: inputs.useTemplate,
+      templateSubject: inputs.templateSubject,
+      templateBody: inputs.templateBody,
+      deleted: inputs.deleted,
+    };
+
     try {
-      var valuesToSet = {
-        name: inputs.name,
-        useTemplate: inputs.useTemplate,
-        templateSubject: inputs.templateSubject,
-        templateBody: inputs.templateBody,
-        deleted: inputs.deleted,
-      };
 
       await sails.getDatastore().transaction(async (db) => {
         await Category.updateOne({

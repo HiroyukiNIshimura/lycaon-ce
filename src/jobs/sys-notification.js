@@ -29,6 +29,7 @@ module.exports = {
 
     for (let user of list) {
       var qty = await sails.models['sysnotification_users__user_sysnotifications'].count({
+        // eslint-disable-next-line camelcase
         user_sysNotifications: user.id,
       });
       if (qty < 1) {

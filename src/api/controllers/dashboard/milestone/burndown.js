@@ -129,7 +129,7 @@ module.exports = {
     //理想値
     var remaining = tasks;
     var i = 0;
-    _.mapKeys(days, function (value, key) {
+    _.mapKeys(days, (value) => {
       value.ideal = remaining;
       remaining -= qtyOfDay;
       i++;
@@ -140,7 +140,7 @@ module.exports = {
 
     //計画値
     remaining = tasks;
-    _.mapKeys(days, function (value, key) {
+    _.mapKeys(days, (value, key) => {
       remaining -= _.filter(milestone.threads, (o) => {
         return o.dueDateFormatedAt === key;
       }).length;
@@ -149,7 +149,7 @@ module.exports = {
 
     //実績値
     remaining = tasks;
-    _.mapKeys(days, function (value, key) {
+    _.mapKeys(days, (value, key) => {
       remaining -= _.filter(milestone.threads, (o) => {
         return o.closeFormatedAt === key;
       }).length;

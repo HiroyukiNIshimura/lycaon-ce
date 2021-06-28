@@ -12,7 +12,7 @@ parasails.registerComponent('voteCard', {
   //  ╔═╗╦═╗╔═╗╔═╗╔═╗
   //  ╠═╝╠╦╝║ ║╠═╝╚═╗
   //  ╩  ╩╚═╚═╝╩  ╚═╝
-  props: ['vote', 'organization', 'state', 'user'],
+  props: ['vote', 'organization', 'state'],
 
   //  ╦╔╗╔╦╔╦╗╦╔═╗╦    ╔═╗╔╦╗╔═╗╔╦╗╔═╗
   //  ║║║║║ ║ ║╠═╣║    ╚═╗ ║ ╠═╣ ║ ║╣
@@ -50,7 +50,7 @@ parasails.registerComponent('voteCard', {
         <user-identity :user="vote.author" :organization="organization" size="sm"></user-identity>
       </div>
       <div class="text-center mt-3">
-        <span class="" v-if="!state.after && vote.author && vote.author.id === user.id"><a class="btn btn-info btn-sm" :href="editLink">{{ i18n('Edit') }}</a></span>
+        <span class="" v-if="!state.after && vote.author && vote.author.id === me.id"><a class="btn btn-info btn-sm" :href="editLink">{{ i18n('Edit') }}</a></span>
       </div>
     </div>
   </div>

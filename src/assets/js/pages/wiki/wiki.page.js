@@ -38,7 +38,7 @@ parasails.registerPage('wiki', {
       $lycaon.socket.post('/ws/v1/wiki-out', { id: self.wiki.id });
     };
 
-    io.socket.on('message-notify', function (response) {
+    io.socket.on('message-notify', (response) => {
       if (response.data.sendTo === self.me.id) {
         $lycaon.stackMessage(response, self.messageStack, self.me.organization.handleId);
         $lycaon.socketToast(response.message);
@@ -49,9 +49,9 @@ parasails.registerPage('wiki', {
     //https://nhn.github.io/tui.editor
     this.viewer = $lycaon.markdown.createViewer('#viewer', this.wiki.body, '100%');
 
-    $lycaon.socket.post('/ws/v1/wiki-in', { id: self.wiki.id }, (res) => {
+    $lycaon.socket.post('/ws/v1/wiki-in', { id: self.wiki.id }, () => {
       //
-      io.socket.on('wiki-edit-in', function (data) {
+      io.socket.on('wiki-edit-in', (data) => {
         if (data.queryUser && data.queryUser.id === self.me.id) {
           $lycaon.socketToast(data.message);
           self.isWikiEditDisabled = 'disabled';
@@ -62,14 +62,14 @@ parasails.registerPage('wiki', {
           self.conflictUser = data.user;
         }
       });
-      io.socket.on('wiki-edit-out', function (data) {
+      io.socket.on('wiki-edit-out', (data) => {
         if (data.user.id !== self.me.id) {
           $lycaon.socketToast(data.message);
           self.isWikiEditDisabled = '';
           self.conflictUser = {};
         }
       });
-      io.socket.on('wiki-update', function (data) {
+      io.socket.on('wiki-update', (data) => {
         if (data.user.id !== self.me.id && self.wiki.id === data.wiki.id) {
           $lycaon.infoKeepToast(data.message.key, data.message.params);
           self.wiki = Object.assign({}, self.wiki, {
@@ -78,9 +78,6 @@ parasails.registerPage('wiki', {
           });
           self.viewer.setMarkdown(data.wiki.body);
         }
-      });
-      io.socket.on('disconnect', function () {
-        location.href = '/';
       });
     });
 
@@ -106,8 +103,8 @@ parasails.registerPage('wiki', {
         if (nodes.length < 1) {
           this.showToc = false;
         } else {
-          $(window).scroll(function () {
-            $('h1,h2,h3').each(function () {
+          $(window).scroll(() => {
+            $('h1,h2,h3').each(() => {
               if (document.documentElement.scrollTop >= this.offsetTop) {
                 var id = this.getAttribute('id');
                 nodes.removeClass('toc-active');
@@ -192,7 +189,7 @@ parasails.registerPage('wiki', {
     tagLink: function (tag) {
       return `/${this.organization.handleId}/team/${this.team.id}/wiki/${tag.id}`;
     },
-    downloadAppendix: function (item, index) {
+    downloadAppendix: function (item) {
       return `/download/wiki/${this.wiki.id}/${item.id}`;
     },
     translator: function (val) {

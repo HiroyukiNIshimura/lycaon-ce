@@ -141,7 +141,7 @@ parasails.registerComponent('vTabs', {
       if (tab.isActive) {
         // If tab is active, set a different one as active.
         tab.isActive = visible;
-        this.tabs.every((tab, index, array) => {
+        this.tabs.every((tab, /*index, array*/) => {
           if (tab.isVisible) {
             tab.isActive = true;
             return false;

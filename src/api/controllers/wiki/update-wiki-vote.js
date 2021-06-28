@@ -1,5 +1,3 @@
-const moment = require('moment');
-
 module.exports = {
   friendlyName: 'Update wiki vote',
   description: 'Update the wiki vote.',
@@ -15,7 +13,7 @@ module.exports = {
   },
   exits: {
     success: {
-      description: "Wiki's status successfully updated.",
+      description: `Wiki's status successfully updated.`,
     },
     notFound: {
       responseType: 'notfound',

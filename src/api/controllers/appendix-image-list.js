@@ -1,6 +1,3 @@
-const path = require('path'),
-  fs = require('fs');
-
 module.exports = {
   friendlyName: 'List Appendix images',
   description: 'List Appendix images.',

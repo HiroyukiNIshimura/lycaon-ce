@@ -68,8 +68,8 @@ parasails.registerPage('backoffice-pubdoc-edit', {
     window.onbeforeunload = function () {
       $lycaon.socket.post('/ws/v1/wiki-edit-out', { id: self.wiki.id });
     };
-    $lycaon.socket.post('/ws/v1/wiki-edit-in', { id: this.wiki.id }, (res) => {
-      io.socket.on('wiki-update', function (data) {
+    $lycaon.socket.post('/ws/v1/wiki-edit-in', { id: this.wiki.id }, () => {
+      io.socket.on('wiki-update', (data) => {
         if (data.user.id !== self.me.id && self.wiki.id === data.wiki.id) {
           self.newSubject = data.wiki.subject;
           self.newBody = data.wiki.body;
@@ -107,8 +107,8 @@ parasails.registerPage('backoffice-pubdoc-edit', {
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
-    onChangeTags: function (e) {},
-    onEditCancelClick: function (event) {
+    onChangeTags: function () {},
+    onEditCancelClick: function () {
       location.href = `/admin/pubdocs`;
     },
     blockEditor: function (label) {
@@ -185,12 +185,12 @@ parasails.registerPage('backoffice-pubdoc-edit', {
           }
 
           if (_.isFunction(callback)) {
-            callback(i18next.t('Upload error'), blob.name);
+            return callback(i18next.t('Upload error'), blob.name);
           }
         } else {
           self.appendix.push(response.data.item);
           if (_.isFunction(callback)) {
-            callback(response.data.url, response.data.item.name);
+            return callback(response.data.urlMid, response.data.item.name);
           }
         }
       } catch (error) {
@@ -201,7 +201,7 @@ parasails.registerPage('backoffice-pubdoc-edit', {
         );
 
         if (_.isFunction(callback)) {
-          callback(i18next.t('Upload error'), blob.name);
+          return callback(i18next.t('Upload error'), blob.name);
         }
       } finally {
         self.isUploading = false;
@@ -218,7 +218,7 @@ parasails.registerPage('backoffice-pubdoc-edit', {
         console.log(error);
       }
     },
-    downloadAppendix: function (item, index) {
+    downloadAppendix: function (item) {
       return `/download/wiki/${this.wiki.id}/${item.id}`;
     },
     fileLinksTarget: function (item) {
@@ -227,7 +227,7 @@ parasails.registerPage('backoffice-pubdoc-edit', {
       }
       return '_blank';
     },
-    submittedForm: async function (response) {
+    submittedForm: async function () {
       this.cloudSuccess = true;
       this.syncing = true;
       location.href = '/admin/pubdoc/edit/' + this.wiki.id;

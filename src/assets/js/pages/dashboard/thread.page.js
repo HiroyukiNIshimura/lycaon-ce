@@ -142,14 +142,14 @@ parasails.registerPage('thread', {
     var self = this;
     window.onbeforeunload = function () {
       if (self.threadMode === 'edit') {
-        $lycaon.socket.post('/ws/v1/thread-edit-out', { id: self.thread.id }, (res) => {
+        $lycaon.socket.post('/ws/v1/thread-edit-out', { id: self.thread.id }, () => {
           $lycaon.socket.post('/ws/v1/thread-out', { id: self.thread.id });
         });
       }
       $lycaon.socket.post('/ws/v1/thread-out', { id: self.thread.id });
     };
 
-    io.socket.on('thread-notify', function (data) {
+    io.socket.on('thread-notify', (data) => {
       if (data.user.id !== self.me.id && data.message) {
         $lycaon.socketToast(data.message);
         if (self.thread.id === data.thread.id) {
@@ -166,7 +166,7 @@ parasails.registerPage('thread', {
       }
     });
 
-    io.socket.on('comment-notify', function (data) {
+    io.socket.on('comment-notify', (data) => {
       if (data.user.id !== self.me.id) {
         $lycaon.socketToast(data.message);
         if (self.thread.id === data.id) {
@@ -179,7 +179,7 @@ parasails.registerPage('thread', {
           $(selector).tooltip({ offset: 5, container: $(selector) });
           $(selector).tooltip('show');
 
-          setTimeout(function () {
+          setTimeout(() => {
             $(selector).tooltip('dispose');
           }, 5000);
 
@@ -189,7 +189,7 @@ parasails.registerPage('thread', {
       }
     });
 
-    io.socket.on('message-notify', function (response) {
+    io.socket.on('message-notify', (response) => {
       if (response.data.sendTo === self.me.id) {
         $lycaon.stackMessage(response, self.messageStack, self.me.organization.handleId);
         $lycaon.socketToast(response.message);
@@ -197,9 +197,9 @@ parasails.registerPage('thread', {
     });
     $lycaon.stackMessage(false, this.messageStack, this.me.organization.handleId);
 
-    $lycaon.socket.post('/ws/v1/thread-in', { id: this.thread.id }, (res) => {
-      $lycaon.socket.post('/ws/v1/thread-edit-query', { id: self.thread.id }, (res) => {
-        io.socket.on('thread-edit-query', function (data) {
+    $lycaon.socket.post('/ws/v1/thread-in', { id: this.thread.id }, () => {
+      $lycaon.socket.post('/ws/v1/thread-edit-query', { id: self.thread.id }, () => {
+        io.socket.on('thread-edit-query', (data) => {
           if (data.user.id !== self.me.id && self.threadMode === 'edit') {
             $lycaon.socket.post('/ws/v1/thread-edit-in', {
               id: self.thread.id,
@@ -209,7 +209,7 @@ parasails.registerPage('thread', {
           }
         });
       });
-      io.socket.on('thread-in', function (data) {
+      io.socket.on('thread-in', (data) => {
         var id = self.parseUserId(data.user);
         $('#' + id).addClass('blink');
         if (data.user.id !== self.me.id) {
@@ -217,42 +217,38 @@ parasails.registerPage('thread', {
         }
         $lycaon.socket.post('/ws/v1/thread-pon', { id: self.thread.id, user: self.me });
       });
-      io.socket.on('thread-out', function (data) {
+      io.socket.on('thread-out', (data) => {
         var id = self.parseUserId(data.user);
         $('#' + id).removeClass('blink');
         if (data.user.id !== self.me.id) {
           $lycaon.socketToast(data.message);
         }
       });
-      io.socket.on('thread-pon', function (data) {
+      io.socket.on('thread-pon', (data) => {
         if (data.user.id !== self.me.id) {
           var id = self.parseUserId(data.user);
           $('#' + id).addClass('blink');
         }
       });
-      io.socket.on('thread-edit-in', function (data) {
+      io.socket.on('thread-edit-in', (data) => {
         if (data.queryUser && data.queryUser.id === self.me.id) {
           $lycaon.socketToast(data.message);
           self.isThreadEditDisabled = true;
-          self.blockViewer(
-            i18next.t('This thread is being edited by {0} ...').format(data.user.fullName)
-          );
+          self.blockViewer(i18next.t('This thread is being edited by {0} ...').format(data.user.fullName));
         } else if (!data.queryUser && data.user.id !== self.me.id) {
           $lycaon.socketToast(data.message);
           self.isThreadEditDisabled = true;
-          self.blockViewer(
-            i18next.t('This thread is being edited by {0} ...').format(data.user.fullName)
-          );
+          self.blockViewer(i18next.t('This thread is being edited by {0} ...').format(data.user.fullName));
         }
       });
-      io.socket.on('thread-edit-out', function (data) {
+      io.socket.on('thread-edit-out', (data) => {
         if (data.user.id !== self.me.id) {
           $lycaon.socketToast(data.message);
           self.isThreadEditDisabled = false;
           self.hideBlock();
         }
       });
-      io.socket.on('thread-update', function (data) {
+      io.socket.on('thread-update', (data) => {
         if (data.user.id !== self.me.id && self.thread.id === data.thread.id) {
           if (self.threadMode === 'edit') {
             self.newSubject = data.thread.subject;
@@ -270,9 +266,6 @@ parasails.registerPage('thread', {
             self.viewer.setMarkdown(data.thread.body);
           }
         }
-      });
-      io.socket.on('disconnect', function () {
-        location.href = '/';
       });
     });
 
@@ -293,7 +286,7 @@ parasails.registerPage('thread', {
       this.addImageBlobHook.bind(this)
     );
 
-    this.sneezes.forEach((entity, index) => {
+    this.sneezes.forEach((entity) => {
       var id = this.getCommentIdentity(entity);
       this.sneezeStates.push(false);
       this.replyRegisterStates.push(false);
@@ -312,7 +305,7 @@ parasails.registerPage('thread', {
 
     this.$nextTick(() => {
       var self = this;
-      $(window).on('load resize', function () {
+      $(window).on('load resize', () => {
         if (window.matchMedia('(max-width:480px)').matches) {
           if (self.sidebarCollapse === '') {
             self.toggleRightMenu();
@@ -337,36 +330,34 @@ parasails.registerPage('thread', {
 
       $(`.sneeze-view a[href^="/${this.organization.handleId}/thread/"],
       .wapper-coment a[href^="/${this.organization.handleId}/thread/"],
-      .tui-editor-contents a[href^="/${this.organization.handleId}/thread/`).each(
-        async function () {
-          var no = $(this).text().replace('#', '').trim();
-          var regex = new RegExp('^[0-9]{1,8}');
-          if (no.match(regex)) {
-            $(this).attr('data-microtip-position', 'top');
-            $(this).attr('data-microtip-size', 'medium');
-            $(this).attr('role', 'tooltip');
+      .tui-editor-contents a[href^="/${this.organization.handleId}/thread/`).each(async function () {
+        var no = $(this).text().replace('#', '').trim();
+        var regex = new RegExp('^[0-9]{1,8}');
+        if (no.match(regex)) {
+          $(this).attr('data-microtip-position', 'top');
+          $(this).attr('data-microtip-size', 'medium');
+          $(this).attr('role', 'tooltip');
 
-            var cache = _.find(self.subjectCache, { no: Number(no) });
-            if (cache) {
-              $(this).attr('aria-label', cache.subject);
-            } else {
-              try {
-                var response = await $lycaon.axios.get(`/api/v1/find/thread/${no}`, {});
-                if (response && response.data) {
-                  self.subjectCache.push({
-                    no: response.data.no,
-                    subject: response.data.subject,
-                  });
-                  $(this).attr('aria-label', response.data.subject);
-                }
-              } catch (error) {
-                console.log(error);
-                self.subjectCache.push({ no: Number(no), subject: '' });
+          var cache = _.find(self.subjectCache, { no: Number(no) });
+          if (cache) {
+            $(this).attr('aria-label', cache.subject);
+          } else {
+            try {
+              var response = await $lycaon.axios.get(`/api/v1/find/thread/${no}`, {});
+              if (response && response.data) {
+                self.subjectCache.push({
+                  no: response.data.no,
+                  subject: response.data.subject,
+                });
+                $(this).attr('aria-label', response.data.subject);
               }
+            } catch (error) {
+              console.log(error);
+              self.subjectCache.push({ no: Number(no), subject: '' });
             }
           }
         }
-      );
+      });
 
       //
     });
@@ -382,7 +373,7 @@ parasails.registerPage('thread', {
     selectedMilestone: function (val) {
       if (val) {
         var milestone = _.find(this.milestone, (o) => {
-          return o.id == val;
+          return o.id === val;
         });
         if (milestone && milestone.startAt && milestone.duration) {
           var start = moment(Number(milestone.startAt)).startOf('day').valueOf();
@@ -457,7 +448,7 @@ parasails.registerPage('thread', {
     chooseMe: function () {
       this.selectedResponsible = this.me.id;
     },
-    onChangeTags: function (e) {},
+    onChangeTags: function () {},
     replyCollection: function (sneeze) {
       return _.where(this.replys, {
         sneeze: sneeze.id,
@@ -513,7 +504,7 @@ parasails.registerPage('thread', {
       }
       return true;
     },
-    onEditClick: function (event) {
+    onEditClick: function () {
       $('.btn').tooltip('hide');
 
       if (!this.checkSubEditing()) {
@@ -536,7 +527,7 @@ parasails.registerPage('thread', {
           i18next.t('Feel free to enter ...'),
           this.addImageBlobHook.bind(this)
         );
-        $lycaon.markdown.addToolberImageList(self.threadEditor, function () {
+        $lycaon.markdown.addToolberImageList(self.threadEditor, () => {
           self.threadEditor.eventManager.emit('closeAllPopup');
           self.$refs.imagelist.load();
           self.showImageListModal = true;
@@ -555,7 +546,7 @@ parasails.registerPage('thread', {
         //$lycaon.scrollTop();
       });
     },
-    onEditCancelClick: function (event) {
+    onEditCancelClick: function () {
       $lycaon.socket.post('/ws/v1/thread-edit-out', { id: this.thread.id });
       this.threadMode = 'view';
     },
@@ -755,64 +746,64 @@ parasails.registerPage('thread', {
       return type === 'create';
     },
     isUpdateThread: function (type) {
-      return type === 'update' && this.viewActivity != 1;
+      return type === 'update' && this.viewActivity !== 1;
     },
     isLocal: function (type) {
-      return type === 'local' && this.viewActivity != 1;
+      return type === 'local' && this.viewActivity !== 1;
     },
     isUpdateConcept: function (type) {
-      return type === 'update-concept' && this.viewActivity != 1;
+      return type === 'update-concept' && this.viewActivity !== 1;
     },
     isUpdateStatus: function (type) {
-      return type === 'update-status' && this.viewActivity != 1;
+      return type === 'update-status' && this.viewActivity !== 1;
     },
     isUpdateDuedate: function (type) {
-      return type === 'update-duedate' && this.viewActivity != 1;
+      return type === 'update-duedate' && this.viewActivity !== 1;
     },
     isUpdatePriority: function (type) {
-      return type === 'update-priority' && this.viewActivity != 1;
+      return type === 'update-priority' && this.viewActivity !== 1;
     },
     isUpdateLock: function (type) {
-      return type === 'update-lock' && this.viewActivity != 1;
+      return type === 'update-lock' && this.viewActivity !== 1;
     },
     isUpdateWorking: function (type) {
-      return type === 'update-working' && this.viewActivity != 1;
+      return type === 'update-working' && this.viewActivity !== 1;
     },
     isUpdateCategory: function (type) {
-      return type === 'update-category' && this.viewActivity != 1;
+      return type === 'update-category' && this.viewActivity !== 1;
     },
     isResponsible: function (type) {
-      return type === 'responsible' && this.viewActivity != 1;
+      return type === 'responsible' && this.viewActivity !== 1;
     },
     isCreateSneeze: function (type) {
       return type === 'create-sneeze';
     },
     isUpdateSneeze: function (type) {
-      return type === 'update-sneeze' && this.viewActivity != 1;
+      return type === 'update-sneeze' && this.viewActivity !== 1;
     },
     isCreateReply: function (type) {
       return type === 'create-reply';
     },
     isUpdateReply: function (type) {
-      return type === 'update-reply' && this.viewActivity != 1;
+      return type === 'update-reply' && this.viewActivity !== 1;
     },
     isAttachFile: function (type) {
-      return type === 'attach-file' && this.viewActivity != 1;
+      return type === 'attach-file' && this.viewActivity !== 1;
     },
     isDeleteFile: function (type) {
-      return type === 'delete-file' && this.viewActivity != 1;
+      return type === 'delete-file' && this.viewActivity !== 1;
     },
     isMilestone: function (type) {
-      return type === 'milestone' && this.viewActivity != 1;
+      return type === 'milestone' && this.viewActivity !== 1;
     },
     isRelationship: function (type) {
-      return type === 'relationship' && this.viewActivity != 1;
+      return type === 'relationship' && this.viewActivity !== 1;
     },
     isDeleteRelationship: function (type) {
-      return type === 'delete-relationship' && this.viewActivity != 1;
+      return type === 'delete-relationship' && this.viewActivity !== 1;
     },
     isFork: function (type) {
-      return type === 'fork' && this.viewActivity != 1;
+      return type === 'fork' && this.viewActivity !== 1;
     },
     getSneezeIdentity: function (sneeze) {
       return 'sneeze-' + String(sneeze.serialNumber);
@@ -821,14 +812,10 @@ parasails.registerPage('thread', {
       return 'comment-' + String(sneeze.serialNumber);
     },
     sneezeAnker: function (sneeze) {
-      return `/${this.organization.handleId}/thread/${this.thread.no}#${this.getSneezeIdentity(
-        sneeze
-      )}`;
+      return `/${this.organization.handleId}/thread/${this.thread.no}#${this.getSneezeIdentity(sneeze)}`;
     },
     replyAnker: function (reply) {
-      return `/${this.organization.handleId}/thread/${this.thread.no}#${this.getSneezeReplyIdentity(
-        reply
-      )}`;
+      return `/${this.organization.handleId}/thread/${this.thread.no}#${this.getSneezeReplyIdentity(reply)}`;
     },
     getCommentEditorIdentity: function (sneeze) {
       return 'comment-editor-' + String(sneeze.serialNumber);
@@ -843,18 +830,16 @@ parasails.registerPage('thread', {
       return 'wrapper-sneeze-reply-register-' + String(sneeze.serialNumber);
     },
     getSneezeReplyIdentity: function (reply) {
-      return 'sneeze-' + String(reply.sneeze) + '-reply-' + String(reply.serialNumber);
+      return 'sneeze-' + String(reply.parentSerialNumber) + '-reply-' + String(reply.serialNumber);
     },
     getReplyIdentity: function (reply) {
-      return 'sneeze-' + String(reply.sneeze) + '-reply-view-' + String(reply.serialNumber);
+      return 'sneeze-' + String(reply.parentSerialNumber) + '-reply-view-' + String(reply.serialNumber);
     },
     getReplyEditorIdentity: function (reply) {
-      return 'sneeze-' + String(reply.sneeze) + '-reply-editor-' + String(reply.serialNumber);
+      return 'sneeze-' + String(reply.parentSerialNumber) + '-reply-editor-' + String(reply.serialNumber);
     },
     getReplyEditorIdentityWrapper: function (reply) {
-      return (
-        'sneeze-' + String(reply.sneeze) + '-wrapper-reply-editor-' + String(reply.serialNumber)
-      );
+      return 'sneeze-' + String(reply.parentSerialNumber) + '-wrapper-reply-editor-' + String(reply.serialNumber);
     },
     parseUserId: function (user) {
       return 'member-' + user.id;
@@ -928,12 +913,12 @@ parasails.registerPage('thread', {
           }
 
           if (_.isFunction(callback)) {
-            callback(i18next.t('Upload error'), blob.name);
+            return callback(i18next.t('Upload error'), blob.name);
           }
         } else {
           self.appendix.push(response.data.item);
           if (_.isFunction(callback)) {
-            callback(response.data.url, response.data.item.name);
+            return callback(response.data.urlMid, response.data.item.name);
           }
         }
       } catch (error) {
@@ -944,7 +929,7 @@ parasails.registerPage('thread', {
         );
 
         if (_.isFunction(callback)) {
-          callback(i18next.t('Upload error'), blob.name);
+          return callback(i18next.t('Upload error'), blob.name);
         }
       } finally {
         self.isUploading = false;
@@ -961,24 +946,24 @@ parasails.registerPage('thread', {
         console.log(error);
       }
     },
-    downloadAppendix: function (item, index) {
+    downloadAppendix: function (item) {
       return `/download/thread/${this.thread.id}/${item.id}`;
     },
     deleteParent: function (item) {
       this.parentSelected = item;
       this.showDeleteParentModal = true;
     },
-    onDeleteParent: function (item) {
+    onDeleteParent: function () {
       var form = _.find(this.$children, {
         $el: $('#delete-parent-form')[0],
       });
       form.submit();
     },
-    deleteChild: function (item, index) {
+    deleteChild: function (item) {
       this.childSelected = item;
       this.showDeleteChildModal = true;
     },
-    onDeleteChild: function (item, index) {
+    onDeleteChild: function () {
       var form = _.find(this.$children, {
         $el: $('#delete-child-form')[0],
       });
@@ -1026,7 +1011,7 @@ parasails.registerPage('thread', {
       });
       form.submit();
     },
-    submittedForm: async function (response) {
+    submittedForm: async function () {
       this.reload();
     },
     handleParsingForm: function () {
@@ -1080,7 +1065,7 @@ parasails.registerPage('thread', {
 
       return argins;
     },
-    submittedStatusForm: async function (response) {
+    submittedStatusForm: async function () {
       this.reload();
     },
     handleParsingStatusForm: function () {
@@ -1093,7 +1078,7 @@ parasails.registerPage('thread', {
       };
       return argins;
     },
-    submittedFlagForm: async function (response) {
+    submittedFlagForm: async function () {
       this.reload();
     },
     handleParsingFlagForm: function () {
@@ -1106,7 +1091,7 @@ parasails.registerPage('thread', {
       };
       return argins;
     },
-    submittedDuedateForm: async function (response) {
+    submittedDuedateForm: async function () {
       this.reload();
     },
     handleParsingDuedateForm: function () {
@@ -1119,7 +1104,7 @@ parasails.registerPage('thread', {
       };
       return argins;
     },
-    submittedResponsibleForm: async function (response) {
+    submittedResponsibleForm: async function () {
       this.reload();
     },
     handleParsingResponsibleForm: function () {
@@ -1135,7 +1120,7 @@ parasails.registerPage('thread', {
 
       return argins;
     },
-    submittedPriorityForm: async function (response) {
+    submittedPriorityForm: async function () {
       this.reload();
     },
     handleParsingPriorityForm: function () {
@@ -1148,7 +1133,7 @@ parasails.registerPage('thread', {
       };
       return argins;
     },
-    submittedLockForm: async function (response) {
+    submittedLockForm: async function () {
       this.reload();
     },
     handleParsingLockForm: function () {
@@ -1161,7 +1146,7 @@ parasails.registerPage('thread', {
       };
       return argins;
     },
-    submittedWorkingForm: async function (response) {
+    submittedWorkingForm: async function () {
       this.reload();
     },
     handleParsingWorkingForm: function () {
@@ -1174,7 +1159,7 @@ parasails.registerPage('thread', {
       };
       return argins;
     },
-    submittedConceptForm: async function (response) {
+    submittedConceptForm: async function () {
       this.reload();
     },
     handleParsingConceptForm: function () {
@@ -1187,7 +1172,7 @@ parasails.registerPage('thread', {
       };
       return argins;
     },
-    submittedSneezeUpdateForm: async function (response) {
+    submittedSneezeUpdateForm: async function () {
       this.reload();
     },
     handleParsingSneezeUpdateForm: function () {
@@ -1215,7 +1200,7 @@ parasails.registerPage('thread', {
 
       return argins;
     },
-    submittedSneezeCreateForm: async function (response) {
+    submittedSneezeCreateForm: async function () {
       this.reload();
     },
     handleParsingSneezeCreateForm: function () {
@@ -1243,7 +1228,7 @@ parasails.registerPage('thread', {
 
       return argins;
     },
-    submittedReplyUpdateForm: async function (response) {
+    submittedReplyUpdateForm: async function () {
       this.reload();
     },
     handleParsingReplyUpdateForm: function () {
@@ -1271,7 +1256,7 @@ parasails.registerPage('thread', {
 
       return argins;
     },
-    submittedReplyCreateForm: async function (response) {
+    submittedReplyCreateForm: async function () {
       this.reload();
     },
     handleParsingReplyCreateForm: function () {
@@ -1299,7 +1284,7 @@ parasails.registerPage('thread', {
 
       return argins;
     },
-    submittedParentForm: async function (response) {
+    submittedParentForm: async function () {
       this.reload();
     },
     handleParsingParentForm: function () {
@@ -1322,7 +1307,7 @@ parasails.registerPage('thread', {
       };
       return argins;
     },
-    submittedChildForm: async function (response) {
+    submittedChildForm: async function () {
       this.reload();
     },
     handleParsingChildForm: function () {
@@ -1414,9 +1399,13 @@ parasails.registerPage('thread', {
       if (response.members.length) {
         this.membersPage += 1;
         this.allMembers.push(...response.members);
-        if (this.memberInfiniteState) this.memberInfiniteState.loaded();
+        if (this.memberInfiniteState) {
+          this.memberInfiniteState.loaded();
+        }
       } else {
-        if (this.memberInfiniteState) this.memberInfiniteState.complete();
+        if (this.memberInfiniteState) {
+          this.memberInfiniteState.complete();
+        }
       }
       this.cloudSuccess = true;
     },
@@ -1522,10 +1511,7 @@ parasails.registerPage('thread', {
     },
     duedateTranslator: function (val, option) {
       return option.targetDate
-        ? this.i18n('Changed the deadline to [ {0} ] at {1}', [
-            this.formatDate(option.targetDate),
-            val,
-          ])
+        ? this.i18n('Changed the deadline to [ {0} ] at {1}', [this.formatDate(option.targetDate), val])
         : this.i18n('Changed the deadline to [ No setting ] at {0}', [val]);
     },
     priorityTranslator: function (val, option) {
@@ -1573,16 +1559,10 @@ parasails.registerPage('thread', {
       return this.i18n('The associated thread has been set [{0}] at {1}', [option.stateWord, val]);
     },
     deleteRelationshipTranslator: function (val, option) {
-      return this.i18n('The related thread has been released [{0}] at {1}', [
-        option.stateWord,
-        val,
-      ]);
+      return this.i18n('The related thread has been released [{0}] at {1}', [option.stateWord, val]);
     },
     forkTranslator: function (val, option) {
-      return this.i18n('A fork for this thread has been created [{0}] at {1}', [
-        option.stateWord,
-        val,
-      ]);
+      return this.i18n('A fork for this thread has been created [{0}] at {1}', [option.stateWord, val]);
     },
     copyNo: function () {
       if (navigator.clipboard) {
@@ -1611,9 +1591,9 @@ parasails.registerPage('thread', {
     notifyCopy: function () {
       this.clipperMessage = i18next.t('Copy completed');
       var self = this;
-      setTimeout(function () {
+      setTimeout(() => {
         self.role = '';
-        setTimeout(function () {
+        setTimeout(() => {
           self.clipperMessage = i18next.t('Copy thread No');
           self.role = 'tooltip';
         }, 1000);
@@ -1624,7 +1604,7 @@ parasails.registerPage('thread', {
     },
     selectedImageList: function (image) {
       this.showImageListModal = false;
-      this.threadEditor.insertText(`![](${image.virtualUrl})`);
+      this.threadEditor.insertText(`![](${image.virtualUrlMid})`);
     },
   },
   computed: {
@@ -1652,8 +1632,7 @@ parasails.registerPage('thread', {
     teamLink: function () {
       if (this.query) {
         return (
-          `/${this.organization.handleId}/team/${this.team.id}?query=` +
-          encodeURIComponent(JSON.stringify(this.query))
+          `/${this.organization.handleId}/team/${this.team.id}?query=` + encodeURIComponent(JSON.stringify(this.query))
         );
       }
       return `/${this.organization.handleId}/team/${this.team.id}`;
@@ -1741,6 +1720,9 @@ parasails.registerPage('thread', {
     },
     commentArrived: function () {
       return this.i18n('a comment has arrived');
+    },
+    myTeams: function () {
+      return this.me.teams;
     },
   },
 });

@@ -56,14 +56,14 @@ select sum("size") as "size"
     }
 
     if (plan.maxSizePerWiki) {
-      var current = await WikiItem.sum('size').where({ wiki: inputs.wiki.id });
+      let current = await WikiItem.sum('size').where({ wiki: inputs.wiki.id });
       if (plan.maxSizePerWiki <= current + inputs.appendSize) {
         return { valid: false, error: 'maxSizePerWiki' };
       }
     }
 
     if (plan.maxFilePerWiki) {
-      var current = await WikiItem.count({ wiki: inputs.wiki.id });
+      let current = await WikiItem.count({ wiki: inputs.wiki.id });
       if (plan.maxFilePerWiki <= current) {
         return { valid: false, error: 'maxFilePerWiki' };
       }

@@ -10,13 +10,13 @@
  * -----------------------------------------------------------------------------
  */
 
-const vil_STATUS = {
+const VIL_STATUS = {
   READY: 0,
   LOADING: 1,
   COMPLETE: 2,
   ERROR: 3,
 };
-const vil_SPINNERS = {
+const VIL_SPINNERS = {
   BUBBLES: {
     render(createElement) {
       return createElement(
@@ -129,7 +129,7 @@ parasails.registerComponent('infiniteLoading', {
       scrollParent: null,
       scrollHandler: null,
       isFirstLoad: true, // save the current loading whether it is the first loading
-      status: vil_STATUS.READY,
+      status: VIL_STATUS.READY,
       slots: {
         noResults: '',
         noMore: this.i18n('No more data'),
@@ -213,7 +213,7 @@ parasails.registerComponent('infiniteLoading', {
         remove(elm) {
           if (elm[this.key] !== undefined) {
             // remove scroll height
-            delete elm[this.key]; // eslint-disable-line no-param-reassign
+            delete elm[this.key];
           }
         },
       },
@@ -282,8 +282,8 @@ parasails.registerComponent('infiniteLoading', {
    */
   deactivated() {
     /* istanbul ignore else */
-    if (this.status === vil_STATUS.LOADING) {
-      this.status = vil_STATUS.READY;
+    if (this.status === VIL_STATUS.LOADING) {
+      this.status = VIL_STATUS.READY;
     }
     this.scrollParent.removeEventListener('scroll', this.scrollHandler, this.evt3rdArg);
   },
@@ -300,7 +300,7 @@ parasails.registerComponent('infiniteLoading', {
       { immediate: true }
     );
     this.scrollHandler = (ev) => {
-      if (this.status === vil_STATUS.READY) {
+      if (this.status === VIL_STATUS.READY) {
         if (ev && ev.constructor === Event && this.isVisible(this.$el)) {
           this.throttleer.throttle(this.attemptLoad);
         } else {
@@ -320,7 +320,7 @@ parasails.registerComponent('infiniteLoading', {
           this.scrollBarStorage.restore(this.scrollParent);
         });
       }
-      if (this.status === vil_STATUS.LOADING) {
+      if (this.status === VIL_STATUS.LOADING) {
         this.$nextTick(this.attemptLoad.bind(null, true));
       }
       if (!ev || ev.target !== this) {
@@ -328,7 +328,7 @@ parasails.registerComponent('infiniteLoading', {
       }
     });
     this.$on('$InfiniteLoading:complete', (ev) => {
-      this.status = vil_STATUS.COMPLETE;
+      this.status = VIL_STATUS.COMPLETE;
       // force re-complation computed properties to fix the problem of get slot text delay
       this.$nextTick(() => {
         this.$forceUpdate();
@@ -339,7 +339,7 @@ parasails.registerComponent('infiniteLoading', {
       }
     });
     this.$on('$InfiniteLoading:reset', (ev) => {
-      this.status = vil_STATUS.READY;
+      this.status = VIL_STATUS.READY;
       this.isFirstLoad = true;
       this.scrollBarStorage.remove(this.scrollParent);
       this.scrollParent.addEventListener('scroll', this.scrollHandler, this.evt3rdArg);
@@ -366,7 +366,7 @@ parasails.registerComponent('infiniteLoading', {
         this.$emit('$InfiniteLoading:reset', { target: this });
       },
       error: () => {
-        this.status = vil_STATUS.ERROR;
+        this.status = VIL_STATUS.ERROR;
         this.throttleer.reset();
       },
     };
@@ -376,7 +376,7 @@ parasails.registerComponent('infiniteLoading', {
   },
   beforeDestroy: function () {
     /* istanbul ignore else */
-    if (!this.status !== vil_STATUS.COMPLETE) {
+    if (!this.status !== VIL_STATUS.COMPLETE) {
       this.throttleer.reset();
       this.scrollBarStorage.remove(this.scrollParent);
       this.scrollParent.removeEventListener('scroll', this.scrollHandler, this.evt3rdArg);
@@ -394,11 +394,11 @@ parasails.registerComponent('infiniteLoading', {
      */
     attemptLoad(isContinuousCall) {
       if (
-        this.status !== vil_STATUS.COMPLETE &&
+        this.status !== VIL_STATUS.COMPLETE &&
         this.isVisible(this.$el) &&
         this.getCurrentDistance() <= this.distance
       ) {
-        this.status = vil_STATUS.LOADING;
+        this.status = VIL_STATUS.LOADING;
         if (this.direction === 'top') {
           // wait for spinner display
           this.$nextTick(() => {
@@ -415,8 +415,8 @@ parasails.registerComponent('infiniteLoading', {
           // more details: https://github.com/PeachScript/vue-infinite-loading/issues/55#issuecomment-316934169
           this.loopTracker.track();
         }
-      } else if (this.status === vil_STATUS.LOADING) {
-        this.status = vil_STATUS.READY;
+      } else if (this.status === VIL_STATUS.LOADING) {
+        this.status = VIL_STATUS.READY;
       }
     },
     /**
@@ -427,15 +427,11 @@ parasails.registerComponent('infiniteLoading', {
       let distance;
       if (this.direction === 'top') {
         distance =
-          typeof this.scrollParent.scrollTop === 'number'
-            ? this.scrollParent.scrollTop
-            : this.scrollParent.pageYOffset;
+          typeof this.scrollParent.scrollTop === 'number' ? this.scrollParent.scrollTop : this.scrollParent.pageYOffset;
       } else {
         const infiniteElmOffsetTopFromBottom = this.$el.getBoundingClientRect().top;
         const scrollElmOffsetTopFromBottom =
-          this.scrollParent === window
-            ? window.innerHeight
-            : this.scrollParent.getBoundingClientRect().bottom;
+          this.scrollParent === window ? window.innerHeight : this.scrollParent.getBoundingClientRect().bottom;
         distance = infiniteElmOffsetTopFromBottom - scrollElmOffsetTopFromBottom;
       }
       return distance;
@@ -453,15 +449,9 @@ parasails.registerComponent('infiniteLoading', {
       if (!result) {
         if (elm.tagName === 'BODY') {
           result = window;
-        } else if (
-          !this.forceUseInfiniteWrapper &&
-          ['scroll', 'auto'].indexOf(getComputedStyle(elm).overflowY) > -1
-        ) {
+        } else if (!this.forceUseInfiniteWrapper && ['scroll', 'auto'].indexOf(getComputedStyle(elm).overflowY) > -1) {
           result = elm;
-        } else if (
-          elm.hasAttribute('infinite-wrapper') ||
-          elm.hasAttribute('data-infinite-wrapper')
-        ) {
+        } else if (elm.hasAttribute('infinite-wrapper') || elm.hasAttribute('data-infinite-wrapper')) {
           result = elm;
         }
       }
@@ -481,7 +471,7 @@ parasails.registerComponent('infiniteLoading', {
         window.addEventListener('testpassive', arg, arg);
         window.remove('testpassive', arg, arg);
       } catch (e) {
-        /* */
+        console.log(e);
       }
 
       return result;
@@ -500,16 +490,16 @@ parasails.registerComponent('infiniteLoading', {
   },
   computed: {
     isShowSpinner() {
-      return this.status === vil_STATUS.LOADING;
+      return this.status === VIL_STATUS.LOADING;
     },
     isShowError() {
-      return this.status === vil_STATUS.ERROR;
+      return this.status === VIL_STATUS.ERROR;
     },
     isShowNoResults() {
-      return this.status === vil_STATUS.COMPLETE && this.isFirstLoad;
+      return this.status === VIL_STATUS.COMPLETE && this.isFirstLoad;
     },
     isShowNoMore() {
-      return this.status === vil_STATUS.COMPLETE && !this.isFirstLoad;
+      return this.status === VIL_STATUS.COMPLETE && !this.isFirstLoad;
     },
     slotStyles() {
       var self = this;
@@ -533,7 +523,7 @@ parasails.registerComponent('infiniteLoading', {
       return styles;
     },
     spinnerView() {
-      return vil_SPINNERS[(this.$attrs.spinner || '').toUpperCase()];
+      return VIL_SPINNERS[(this.$attrs.spinner || '').toUpperCase()];
     },
   },
 });

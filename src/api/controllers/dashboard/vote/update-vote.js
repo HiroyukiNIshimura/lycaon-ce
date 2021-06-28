@@ -96,32 +96,34 @@ module.exports = {
     if (inputs.forceUpdate) {
       isDeleteAnswers = true;
     } else {
-      if (!inputs.isQuestionnaireFormat && current.isQuestionnaireFormat) {
-        isDeleteAnswers = true;
-      }
+      if (inputs.isQuestionnaireFormat) {
+        if (inputs.question !== current.question) {
+          isDeleteAnswers = true;
+        }
+        if (inputs.multipleAnswers !== current.multipleAnswers) {
+          isDeleteAnswers = true;
+        }
+        if (inputs.hasOther !== current.hasOther) {
+          isDeleteAnswers = true;
+        }
 
-      if (inputs.question !== current.question) {
-        isDeleteAnswers = true;
-      }
-      if (inputs.multipleAnswers !== current.multipleAnswers) {
-        isDeleteAnswers = true;
-      }
-      if (inputs.hasOther !== current.hasOther) {
-        isDeleteAnswers = true;
-      }
-
-      var clouds = _.filter(current.choices, { isOther: false });
-      if (inputs.choices.length !== clouds.length) {
-        isDeleteAnswers = true;
-      } else {
-        for (let entry of clouds) {
-          let index = _.findIndex(inputs.choices, (o) => {
-            return o.id === entry.id;
-          });
-          if (index < 0) {
-            isDeleteAnswers = true;
-            break;
+        var clouds = _.filter(current.choices, { isOther: false });
+        if (inputs.choices.length !== clouds.length) {
+          isDeleteAnswers = true;
+        } else {
+          for (let entry of clouds) {
+            let index = _.findIndex(inputs.choices, (o) => {
+              return o.id === entry.id;
+            });
+            if (index < 0) {
+              isDeleteAnswers = true;
+              break;
+            }
           }
+        }
+      } else {
+        if (current.isQuestionnaireFormat) {
+          isDeleteAnswers = true;
         }
       }
 

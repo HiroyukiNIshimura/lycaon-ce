@@ -19,7 +19,9 @@ parasails.registerPage('backoffice-jobs-list', {
       location.href = `/admin/jobs/log/${pageNum}`;
     },
     dateFormat: function (val) {
-      if (!val) return '';
+      if (!val) {
+        return '';
+      }
       return moment(Number(val)).format('YYYY-MM-DD HH:mm:ss');
     },
   },

@@ -78,9 +78,9 @@ parasails.registerComponent('clipboard', {
     notifyCopy: function () {
       this.message = i18next.t('Copy completed');
       var self = this;
-      setTimeout(function () {
+      setTimeout(() => {
         self.role = '';
-        setTimeout(function () {
+        setTimeout(() => {
           self.message = i18next.t('Copy Markdown to clipboard');
           self.role = 'tooltip';
         }, 1000);

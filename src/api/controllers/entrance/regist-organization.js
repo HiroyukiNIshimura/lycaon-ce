@@ -67,7 +67,7 @@ module.exports = {
       return { invalidToken: true };
     }
 
-    if (this.req.session.captchaToken != inputs.captchaToken) {
+    if (this.req.session.captchaToken !== inputs.captchaToken) {
       return { invalidToken: true };
     }
     delete this.req.session.captchaToken;
@@ -116,7 +116,7 @@ module.exports = {
 
       var token = await sails.helpers.strings.random('url-friendly');
 
-      var org = _.extend({}, inputs);
+      org = _.extend({}, inputs);
       var valuesToSet = {
         emailAddress: email,
         password: await sails.helpers.createPassword.with(),
@@ -140,11 +140,11 @@ module.exports = {
         var maxUploadFileSize = 0;
         if (inputs.plan === 'free') {
           maxUploadFileSize = 10 * 1024 * 1024; //10M
-        } else if (plan === 'pine') {
+        } else if (inputs.plan === 'pine') {
           maxUploadFileSize = 10 * 1024 * 1024; //10M
-        } else if (plan === 'bamboo') {
+        } else if (inputs.plan === 'bamboo') {
           maxUploadFileSize = 100 * 1024 * 1024; //100M
-        } else if (plan === 'plum') {
+        } else if (inputs.plan === 'plum') {
           maxUploadFileSize = 100 * 1024 * 1024; //100M
         }
 

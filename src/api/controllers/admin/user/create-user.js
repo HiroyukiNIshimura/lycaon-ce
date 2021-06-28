@@ -66,19 +66,19 @@ module.exports = {
     var token = await sails.helpers.strings.random('url-friendly');
 
     var created = {};
-    try {
-      var valuesToSet = {
-        emailAddress: email,
-        password: await sails.helpers.createPassword.with(),
-        fullName: inputs.name,
-        isSuperAdmin: inputs.isSuperAdmin,
-        deleted: inputs.deleted,
-        passwordResetToken: token,
-        passwordResetTokenExpiresAt: Date.now() + sails.config.custom.passwordResetTokenTTL,
-        teams: inputs.selectedTeams.map((o) => o.id),
-        organization: this.req.organization.id,
-      };
+    var valuesToSet = {
+      emailAddress: email,
+      password: await sails.helpers.createPassword.with(),
+      fullName: inputs.name,
+      isSuperAdmin: inputs.isSuperAdmin,
+      deleted: inputs.deleted,
+      passwordResetToken: token,
+      passwordResetTokenExpiresAt: Date.now() + sails.config.custom.passwordResetTokenTTL,
+      teams: inputs.selectedTeams.map((o) => o.id),
+      organization: this.req.organization.id,
+    };
 
+    try {
       await sails.getDatastore().transaction(async (db) => {
         created = await User.create(valuesToSet).fetch().usingConnection(db);
       });

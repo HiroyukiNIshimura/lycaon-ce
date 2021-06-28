@@ -95,6 +95,7 @@ module.exports = {
     response.categories = team.categories;
 
     response.memberQty = await sails.models['team_users__user_teams'].count({
+      // eslint-disable-next-line camelcase
       team_users: response.team.id,
     });
 
@@ -126,6 +127,16 @@ module.exports = {
       }
       response.children.push(ref.right);
     }
+
+    response.children.sort((a, b) => {
+      if (a.no < b.no) {
+        return -1;
+      }
+      if (a.no > b.no) {
+        return 1;
+      }
+      return 0;
+    });
 
     response.witeListOfExts = [];
     if (this.req.sysSettings.witeListOfExts) {

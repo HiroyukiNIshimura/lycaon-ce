@@ -25,7 +25,7 @@ module.exports = {
       }
       return false;
     });
-    list = _.reject(list, function (e) {
+    list = _.reject(list, (e) => {
       return !e;
     });
     list.sort((a, b) => a.mtime - b.mtime);

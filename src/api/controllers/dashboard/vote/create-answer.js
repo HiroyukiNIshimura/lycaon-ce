@@ -11,7 +11,7 @@ module.exports = {
     },
     answers: {
       type: 'ref',
-      description: "voteChoices.id's array",
+      description: `voteChoices.id's array`,
     },
     otherId: {
       type: 'number',

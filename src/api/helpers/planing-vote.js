@@ -53,14 +53,14 @@ module.exports = {
     }
 
     if (plan.maxSizePerVote) {
-      var current = await VoteItem.sum('size').where({ vote: inputs.vote.id });
+      let current = await VoteItem.sum('size').where({ vote: inputs.vote.id });
       if (plan.maxSizePerWiki <= current + inputs.appendSize) {
         return { valid: false, error: 'maxSizePerVote' };
       }
     }
 
     if (plan.maxFilePerVote) {
-      var current = await VoteItem.count({ vote: inputs.vote.id });
+      let current = await VoteItem.count({ vote: inputs.vote.id });
       if (plan.maxFilePerWiki <= current) {
         return { valid: false, error: 'maxFilePerVote' };
       }

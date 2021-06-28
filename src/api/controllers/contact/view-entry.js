@@ -15,19 +15,16 @@ module.exports = {
   },
 
   fn: async function (inputs) {
-
     if (this.req.session.inquery) {
-        var inquery = this.req.session.inquery;
-        delete this.req.session.inquery;
+      var inquery = this.req.session.inquery;
+      delete this.req.session.inquery;
       return {
-        formData: inquery
+        formData: inquery,
       };
     }
 
-
     if (inputs.isQuote) {
       /**
-       * 
       以下の配列から見積もりのインデックスをセット
       var categories = [
         'Questions about application',

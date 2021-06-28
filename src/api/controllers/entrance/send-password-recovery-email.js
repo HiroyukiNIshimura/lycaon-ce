@@ -41,7 +41,7 @@ module.exports = {
       return { invalidToken: true };
     }
 
-    if (this.req.session.captchaToken != inputs.captchaToken) {
+    if (this.req.session.captchaToken !== inputs.captchaToken) {
       return { invalidToken: true };
     }
 

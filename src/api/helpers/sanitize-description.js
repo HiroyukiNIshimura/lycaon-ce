@@ -2,7 +2,7 @@ const sanitizeHtml = require('sanitize-html');
 
 module.exports = {
   friendlyName: 'sanitizeDescription',
-  description: 'sanitizeed wiki description.',
+  description: 'sanitized wiki description.',
   inputs: {
     markdown: {
       type: 'string',

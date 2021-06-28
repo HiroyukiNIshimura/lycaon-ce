@@ -64,17 +64,13 @@ module.exports = {
     var i = 1;
     _.each(response.sneezes, (entry) => {
       entry.serialNumber = i;
-      var replys = _.where(response.replys, {
+      var children = _.where(response.replys, {
         sneeze: entry.id,
       });
       var j = 1;
-      _.each(replys, (entry) => {
-        var reply = _.find(response.replys, {
-          id: entry.id,
-        });
-        entry.serialNumber = j;
+      _.each(children, (reply) => {
         reply.serialNumber = j;
-
+        reply.parentSerialNumber = i;
         j++;
       });
       i++;

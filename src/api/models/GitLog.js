@@ -13,9 +13,11 @@ module.exports = {
     //  ╔═╗╦═╗╦╔╦╗╦╔╦╗╦╦  ╦╔═╗╔═╗
     //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
     //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
+    // eslint-disable-next-line camelcase
     author_email: {
       type: 'string',
     },
+    // eslint-disable-next-line camelcase
     author_name: {
       type: 'string',
     },

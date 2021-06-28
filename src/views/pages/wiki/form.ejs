@@ -64,11 +64,11 @@
 <!-- appendix -->
 <% if(action === 'updateWiki') { %>
 <editor-file :appendix="appendix" :organization="organization" mode="update" :delete-appendix="deleteAppendix" :download-appendix="downloadAppendix" :whitelist="witeListOfExts"
-  :add-image="addImageBlobHook" :is-uploading="isUploading" :planlimitation="planlimitation" title="wiki" :is-demosite="isDemosite">
+  :add-image="addImageBlobHook" :is-uploading="isUploading" :planlimitation="planlimitation" title="wiki" :is-demosite="isDemosite" >
 </editor-file>
 <% } else { %>
 <editor-file :appendix="appendix" :organization="organization" mode="create" :delete-appendix="deleteAppendix" :download-appendix="downloadAppendix" :whitelist="witeListOfExts"
-  :add-image="addImageBlobHook" :is-uploading="isUploading" :planlimitation="planlimitation" title="wiki" :is-demosite="isDemosite">
+  :add-image="addImageBlobHook" :is-uploading="isUploading" :planlimitation="planlimitation" title="wiki" :is-demosite="isDemosite" >
 </editor-file>
 <% } %>
 

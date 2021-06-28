@@ -1,4 +1,3 @@
-const draggable = window['vuedraggable'];
 parasails.registerPage('admin-category-list', {
   //  ╦╔╗╔╦╔╦╗╦╔═╗╦    ╔═╗╔╦╗╔═╗╔╦╗╔═╗
   //  ║║║║║ ║ ║╠═╣║    ╚═╗ ║ ╠═╣ ║ ║╣

@@ -64,6 +64,7 @@ parasails.registerPage('new-thread', {
         if (!store) {
           expiringStorage.set(this.storageKey, true, 60 * 24 * 5);
           $lycaon.infoToast(
+            // eslint-disable-next-line quotes
             "Starting today's date, we have set milestone candidates for this thread"
           );
         }
@@ -90,7 +91,7 @@ parasails.registerPage('new-thread', {
     }
 
     var self = this;
-    io.socket.on('message-notify', function (response) {
+    io.socket.on('message-notify', (response) => {
       if (response.data.sendTo === self.me.id) {
         $lycaon.stackMessage(response, self.messageStack, self.me.organization.handleId);
         $lycaon.socketToast(response.message);
@@ -109,7 +110,7 @@ parasails.registerPage('new-thread', {
       i18next.t('Feel free to enter ...'),
       this.addImageBlobHook.bind(this)
     );
-    $lycaon.markdown.addToolberImageList(self.threadEditor, function () {
+    $lycaon.markdown.addToolberImageList(self.threadEditor, () => {
       self.threadEditor.eventManager.emit('closeAllPopup');
       self.$refs.imagelist.load();
       self.showImageListModal = true;
@@ -120,9 +121,9 @@ parasails.registerPage('new-thread', {
     $lycaon.scrollTop();
   },
   watch: {
-    appendix: function (val) {
+    appendix: function () {
       var totalsize = 0;
-      _.each(this.appendix, function (entry) {
+      _.each(this.appendix, (entry) => {
         totalsize += entry.size;
       });
       if (this.sysSettings.maxUploadFileSize < totalsize) {
@@ -153,7 +154,7 @@ parasails.registerPage('new-thread', {
         var dt = new Date();
         dt.setHours(0, 0, 0, 0);
 
-        var hit = _.find(milestone, function (entry) {
+        var hit = _.find(milestone, (entry) => {
           if (entry.startAt && entry.duration) {
             var endAt = Number(entry.startAt) + Number(entry.duration);
             if (entry.startAt <= dt && endAt >= dt) {
@@ -182,8 +183,8 @@ parasails.registerPage('new-thread', {
       this.$set(this.formData, 'subject', subject);
       $('#thread-subject').focus();
     },
-    onChangeTags: function (e) {},
-    onEditCancelClick: function (event) {
+    onChangeTags: function () {},
+    onEditCancelClick: function () {
       location.href = this.backToUrl;
     },
     addImageBlobHook: function (blob, callback) {
@@ -191,7 +192,7 @@ parasails.registerPage('new-thread', {
       blob.blobUrl = blobUrl;
       this.appendix.push(blob);
       if (_.isFunction(callback)) {
-        callback(blobUrl, blob.name);
+        return callback(blobUrl, blob.name);
       }
     },
     deleteAppendix: function (item, index) {
@@ -199,7 +200,7 @@ parasails.registerPage('new-thread', {
       this.threadEditor.mdEditor.setValue(val.replace(item.blobUrl, ''));
       this.appendix.splice(index, 1);
     },
-    downloadAppendix: function (item, index) {
+    downloadAppendix: function () {
       return 'javascript:void(0)';
     },
     parseAppendixUrl: function (item) {
@@ -263,11 +264,7 @@ parasails.registerPage('new-thread', {
 
       await this.sendMail(response.id);
       if (errors.length > 0) {
-        if (
-          errors.includes('maxQuota') ||
-          errors.includes('maxSizePerThread') ||
-          errors.includes('maxFilePerThread')
-        ) {
+        if (errors.includes('maxQuota') || errors.includes('maxSizePerThread') || errors.includes('maxFilePerThread')) {
           location.href = `/uploaderror/thread/${response.id}?plan=invalid`;
         } else {
           location.href = `/uploaderror/thread/${response.id}`;
@@ -313,7 +310,7 @@ parasails.registerPage('new-thread', {
     },
     selectedImageList: function (image) {
       this.showImageListModal = false;
-      this.threadEditor.insertText(`![](${image.virtualUrl})`);
+      this.threadEditor.insertText(`![](${image.virtualUrlMid})`);
     },
   },
   computed: {

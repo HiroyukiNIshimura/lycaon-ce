@@ -93,8 +93,8 @@ parasails.registerPage('admin-team-create', {
         this.connectType = 1;
       }
     },
-    onChangeUserTagify: function (e) {},
-    onChangeCategoryTagify: function (e) {},
+    onChangeUserTagify: function () {},
+    onChangeCategoryTagify: function () {},
     submittedForm: async function (response) {
       this.cloudSuccess = true;
       this.syncing = true;

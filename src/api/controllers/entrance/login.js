@@ -22,7 +22,7 @@ password attempt.`,
     },
 
     rememberMe: {
-      description: "Whether to extend the lifetime of the user's session.",
+      description: `Whether to extend the lifetime of the user's session.`,
       extendedDescription: `Note that this is NOT SUPPORTED when using virtual requests (e.g. sending
 requests over WebSockets instead of HTTP).`,
       type: 'boolean',
@@ -113,6 +113,7 @@ and exposed as \`req.me\`.)`,
       if (this.req.isSocket) {
         sails.log.warn(
           'Received `rememberMe: true` from a virtual request, but it was ignored\n' +
+            // eslint-disable-next-line quotes
             "because a browser's session cookie cannot be reset over sockets.\n" +
             'Please use a traditional HTTP request instead.'
         );

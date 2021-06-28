@@ -31,7 +31,7 @@ module.exports = {
 
       var startElement = _.find(activites, { type: 'create' });
       if (startElement) {
-        var closeElement = _.findLast(activites, function (element) {
+        var closeElement = _.findLast(activites, (element) => {
           return element.type === 'update-status' && element.stateWord === 'close';
         });
         if (closeElement) {

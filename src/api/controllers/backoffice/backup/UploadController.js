@@ -16,7 +16,7 @@ module.exports = {
       {
         dirname: backupDir,
       },
-      async function (err, uploadedFiles) {
+      async function afterUpload(err, uploadedFiles) {
         if (err) {
           if (
             err.code &&

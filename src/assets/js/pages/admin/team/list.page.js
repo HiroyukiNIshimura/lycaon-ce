@@ -51,7 +51,7 @@ parasails.registerPage('admin-team-list', {
       });
       form.submit();
     },
-    submittedDeleteForm: async function (response) {
+    submittedDeleteForm: async function () {
       this.cloudSuccess = true;
       location.reload();
     },

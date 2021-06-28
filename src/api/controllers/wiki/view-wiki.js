@@ -1,5 +1,3 @@
-const { access } = require('fs-extra');
-
 module.exports = {
   friendlyName: 'View wiki',
   description: 'Display "Wiki" page.',

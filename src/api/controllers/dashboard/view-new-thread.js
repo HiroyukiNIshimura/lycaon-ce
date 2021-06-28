@@ -65,7 +65,7 @@ module.exports = {
     }
 
     //コンボ用
-    team = await Team.findOne({ id: response.team.id })
+    var team = await Team.findOne({ id: response.team.id })
       .populate('users', {
         where: { isNologin: false },
         sort: 'lastSeenAt DESC',

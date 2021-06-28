@@ -82,7 +82,7 @@ module.exports = {
       return { invalidToken: true };
     }
 
-    if (this.req.session.captchaToken != inputs.captchaToken) {
+    if (this.req.session.captchaToken !== inputs.captchaToken) {
       return { invalidToken: true };
     }
     delete this.req.session.captchaToken;
@@ -104,7 +104,7 @@ module.exports = {
     sails.hooks.i18n.setLocale('ja');
     var buffja = [];
     if (inputs.categories && inputs.categories.length > 0) {
-      _.each(inputs.categories, function (val) {
+      _.each(inputs.categories, (val) => {
         buffja.push(sails.__(categories[val]));
       });
     }
@@ -125,7 +125,7 @@ module.exports = {
     sails.hooks.i18n.setLocale(this.req.getLocale());
     var buff = [];
     if (inputs.categories && inputs.categories.length > 0) {
-      _.each(inputs.categories, function (val) {
+      _.each(inputs.categories, (val) => {
         buff.push(sails.__(categories[val]));
       });
     }

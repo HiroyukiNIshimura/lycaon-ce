@@ -166,6 +166,7 @@ parasails.registerComponent('ajaxForm', {
               throw new Error(
                 '<ajax-form> does not support that client-side validation rule (`' +
                   ruleName +
+                  // eslint-disable-next-line quotes
                   "`).\n [?] If you're unsure, visit https://sailsjs.com/support"
               );
             }
@@ -316,6 +317,7 @@ parasails.registerComponent('ajaxForm', {
               throw new Error(
                 'Cannot interpret client-side validation rule (`' +
                   ruleName +
+                  // eslint-disable-next-line quotes
                   "`) because the configuration provided for it is not recognized by <ajax-form>.\n [?] If you're unsure, visit https://sailsjs.com/support"
               );
             }

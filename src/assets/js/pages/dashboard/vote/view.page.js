@@ -38,7 +38,7 @@ parasails.registerPage('vote-view', {
   mounted: async function () {
     var self = this;
 
-    io.socket.on('message-notify', function (response) {
+    io.socket.on('message-notify', (response) => {
       if (response.data.sendTo === self.me.id) {
         $lycaon.stackMessage(response, self.messageStack, self.me.organization.handleId);
         $lycaon.socketToast(response.message);
@@ -55,7 +55,7 @@ parasails.registerPage('vote-view', {
       i18next.t('Please enter a question or comment for the article')
     );
 
-    this.vote.sneezes.forEach((entity, index) => {
+    this.vote.sneezes.forEach((entity) => {
       var id = this.getCommentIdentity(entity);
       this.sneezeStates.push(false);
       $lycaon.markdown.createViewer('#' + id, entity.comment, '100%');
@@ -88,7 +88,7 @@ parasails.registerPage('vote-view', {
 
         if (this.vote.multipleAnswers) {
           var nons = _.filter(this.vote.users, (o) => {
-            return o.answered == undefined || !o.answered;
+            return o.answered === undefined || !o.answered;
           }).length;
 
           var total = this.vote.users.length;
@@ -137,7 +137,7 @@ parasails.registerPage('vote-view', {
           });
           data.push(
             _.filter(this.vote.users, (o) => {
-              return o.answered == undefined || !o.answered;
+              return o.answered === undefined || !o.answered;
             }).length
           );
 
@@ -191,7 +191,7 @@ parasails.registerPage('vote-view', {
     handleParsingConfirmForm: function () {
       return { id: this.vote.id };
     },
-    submittedSneezeCreateForm: async function (response) {
+    submittedSneezeCreateForm: async function () {
       this.reload();
     },
     handleParsingSneezeCreateForm: function () {
@@ -219,7 +219,7 @@ parasails.registerPage('vote-view', {
 
       return argins;
     },
-    submittedSneezeUpdateForm: async function (response) {
+    submittedSneezeUpdateForm: async function () {
       this.reload();
     },
     handleParsingSneezeUpdateForm: function () {
@@ -254,12 +254,6 @@ parasails.registerPage('vote-view', {
     },
     getSneezeIdentity: function (sneeze) {
       return 'sneeze-' + String(sneeze.serialNumber);
-    },
-    showSneezeEditor: function (sneeze) {
-      var index = _.findIndex(this.sneezes, {
-        id: sneeze.id,
-      });
-      return this.sneezeStates[index];
     },
     showSneezeView: function (sneeze) {
       var index = _.findIndex(this.vote.sneezes, {
@@ -326,9 +320,7 @@ parasails.registerPage('vote-view', {
       });
     },
     sneezeAnker: function (sneeze) {
-      return `/${this.organization.handleId}/vote/${this.vote.id}#${this.getSneezeIdentity(
-        sneeze
-      )}`;
+      return `/${this.organization.handleId}/vote/${this.vote.id}#${this.getSneezeIdentity(sneeze)}`;
     },
     checkCommentEditing: function () {
       if (this.openCommentIdentity) {
@@ -354,7 +346,7 @@ parasails.registerPage('vote-view', {
 
       return answers.join(',');
     },
-    downloadAppendix: function (item, index) {
+    downloadAppendix: function (item) {
       return `/download/vote/${this.vote.id}/${item.id}`;
     },
     reload: function () {
@@ -373,10 +365,7 @@ parasails.registerPage('vote-view', {
       if (!myUser) {
         return false;
       }
-      if (
-        this.badState === 'notAnswerNotReleased' ||
-        this.badState === 'notConfirmPassedDeadline'
-      ) {
+      if (this.badState === 'notAnswerNotReleased' || this.badState === 'notConfirmPassedDeadline') {
         return false;
       }
       return !this.vote.isQuestionnaireFormat && !myUser.answered;
@@ -400,10 +389,7 @@ parasails.registerPage('vote-view', {
       if (!myUser) {
         return false;
       }
-      if (
-        this.badState === 'notAnswerNotReleased' ||
-        this.badState === 'notConfirmPassedDeadline'
-      ) {
+      if (this.badState === 'notAnswerNotReleased' || this.badState === 'notConfirmPassedDeadline') {
         return false;
       }
       return true;

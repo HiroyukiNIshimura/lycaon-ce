@@ -49,7 +49,6 @@ module.exports = {
     }
 
     var backoffice = await Organization.findOne({ handleId: 'brightl' });
-    const settings = await SysSettings.findOne({ organization: backoffice.id });
 
     // バックオフィスあて
     sails.hooks.i18n.setLocale('ja');

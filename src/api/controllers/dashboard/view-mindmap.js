@@ -69,7 +69,7 @@ module.exports = {
 
       var current = await Thread.findOne({ id: id }).populate('parent').populate('milestone');
       if (!current) {
-        return nodes;
+        throw 'notFound';
       }
 
       data.nodes.push({

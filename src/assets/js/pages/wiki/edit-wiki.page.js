@@ -70,7 +70,7 @@ parasails.registerPage('edit-wiki', {
       $lycaon.socket.post('/ws/v1/wiki-edit-out', { id: self.wiki.id });
     };
 
-    io.socket.on('message-notify', function (response) {
+    io.socket.on('message-notify', (response) => {
       if (response.data.sendTo === self.me.id) {
         $lycaon.stackMessage(response, self.messageStack, self.me.organization.handleId);
         $lycaon.socketToast(response.data.message);
@@ -89,15 +89,15 @@ parasails.registerPage('edit-wiki', {
       i18next.t('Feel free to enter ...'),
       this.addImageBlobHook.bind(this)
     );
-    $lycaon.markdown.addToolberImageList(this.wikiEditor, function () {
+    $lycaon.markdown.addToolberImageList(this.wikiEditor, () => {
       self.wikiEditor.eventManager.emit('closeAllPopup');
       self.$refs.imagelist.load();
       self.showImageListModal = true;
     });
     this.wikiEditor.mdEditor.setValue(this.wiki.body);
 
-    $lycaon.socket.post('/ws/v1/wiki-edit-in', { id: this.wiki.id }, (res) => {
-      io.socket.on('wiki-edit-query', function (data) {
+    $lycaon.socket.post('/ws/v1/wiki-edit-in', { id: this.wiki.id }, () => {
+      io.socket.on('wiki-edit-query', (data) => {
         if (data.user.id !== self.me.id) {
           $lycaon.socket.post('/ws/v1/wiki-edit-in', {
             id: self.wiki.id,
@@ -106,7 +106,7 @@ parasails.registerPage('edit-wiki', {
           });
         }
       });
-      io.socket.on('wiki-update', function (data) {
+      io.socket.on('wiki-update', (data) => {
         if (data.user.id !== self.me.id && self.wiki.id === data.wiki.id) {
           self.newSubject = data.wiki.subject;
           self.newBody = data.wiki.body;
@@ -115,9 +115,6 @@ parasails.registerPage('edit-wiki', {
           self.diff = $lycaon.diff(self.myBody, data.wiki.body);
           self.showConflictModal = true;
         }
-      });
-      io.socket.on('disconnect', function () {
-        location.href = '/';
       });
     });
 
@@ -134,8 +131,8 @@ parasails.registerPage('edit-wiki', {
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
-    onChangeTags: function (e) {},
-    onEditCancelClick: function (event) {
+    onChangeTags: function () {},
+    onEditCancelClick: function () {
       location.href = `/${this.organization.handleId}/wiki/${this.wiki.no}`;
     },
     blockEditor: function (label) {
@@ -207,12 +204,12 @@ parasails.registerPage('edit-wiki', {
           }
 
           if (_.isFunction(callback)) {
-            callback(i18next.t('Upload error'), blob.name);
+            return callback(i18next.t('Upload error'), blob.name);
           }
         } else {
           self.appendix.push(response.data.item);
           if (_.isFunction(callback)) {
-            callback(response.data.url, response.data.item.name);
+            return callback(response.data.urlMid, response.data.item.name);
           }
         }
       } catch (error) {
@@ -223,7 +220,7 @@ parasails.registerPage('edit-wiki', {
         );
 
         if (_.isFunction(callback)) {
-          callback(i18next.t('Upload error'), blob.name);
+          return callback(i18next.t('Upload error'), blob.name);
         }
       } finally {
         self.isUploading = false;
@@ -240,10 +237,10 @@ parasails.registerPage('edit-wiki', {
         console.log(error);
       }
     },
-    downloadAppendix: function (item, index) {
+    downloadAppendix: function (item) {
       return `/download/wiki/${this.wiki.id}/${item.id}`;
     },
-    submittedForm: async function (response) {
+    submittedForm: async function () {
       this.cloudSuccess = true;
       this.syncing = true;
       location.href = `/${this.organization.handleId}/wiki/${this.wiki.no}`;
@@ -280,7 +277,7 @@ parasails.registerPage('edit-wiki', {
     },
     selectedImageList: function (image) {
       this.showImageListModal = false;
-      this.wikiEditor.insertText(`![](${image.virtualUrl})`);
+      this.wikiEditor.insertText(`![](${image.virtualUrlMid})`);
     },
   },
   computed: {

@@ -1,3 +1,5 @@
+const flaverr = require('flaverr');
+
 module.exports = {
   friendlyName: 'Create Activity utility',
   description: 'Create Activity utility.',

@@ -1,5 +1,4 @@
-const path = require('path'),
-  fs = require('fs');
+const path = require('path');
 
 module.exports = {
   friendlyName: 'Download Appendix',
@@ -38,6 +37,7 @@ module.exports = {
     }
 
     var item = {};
+    var team = {};
 
     if (inputs.type === 'thread') {
       var thread = await Thread.findOne({
@@ -47,7 +47,7 @@ module.exports = {
         throw 'notFound';
       }
 
-      var team = await sails.helpers.validateMembership.with({
+      team = await sails.helpers.validateMembership.with({
         id: thread.team,
         user: this.req.me,
       });
@@ -67,7 +67,7 @@ module.exports = {
       }
 
       if (wiki.concept === 0) {
-        var team = await sails.helpers.validateMembership.with({
+        team = await sails.helpers.validateMembership.with({
           id: wiki.team,
           user: this.req.me,
         });

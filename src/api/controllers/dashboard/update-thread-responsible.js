@@ -12,7 +12,7 @@ module.exports = {
   },
   exits: {
     success: {
-      description: "Thread's responsible successfully updated.",
+      description: `Thread's responsible successfully updated.`,
     },
     notFound: {
       responseType: 'notfound',
@@ -92,12 +92,15 @@ module.exports = {
       params: [this.req.me.fullName, updated.no, updated.subject],
     };
     //
-    sails.sockets.broadcast(rooms, 'thread-notify', {
-      message: message,
-      user: this.req.me,
-      thread: updated,
-      timespan: Date.now(),
-    });
+
+    if (!updated.local) {
+      sails.sockets.broadcast(rooms, 'thread-notify', {
+        message: message,
+        user: this.req.me,
+        thread: updated,
+        timespan: Date.now(),
+      });
+    }
 
     this.req.session.effectMessage = sails.__('Updated the person in charge');
 

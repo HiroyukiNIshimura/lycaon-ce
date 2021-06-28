@@ -136,8 +136,8 @@
                 </div>
                 <!-- appendix -->
                 <editor-file :appendix="appendix" :organization="organization" mode="update" :delete-appendix="deleteAppendix" :download-appendix="downloadAppendix" :whitelist="witeListOfExts"
-                  :add-image="addImageBlobHook" :is-uploading="isUploading" :planlimitation="planlimitation" title="thread" :is-demosite="isDemosite"
-                  :hidden-upload="thread.locked" :parent="thread.id">
+                :add-image="addImageBlobHook" :is-uploading="isUploading" :planlimitation="planlimitation" title="thread" :is-demosite="isDemosite"
+                :hidden-upload="thread.locked" :parent="thread.id" >
                 </editor-file>
 
                 <div class="row mt-1">
@@ -245,7 +245,7 @@
               <div class="col-auto" v-if="thread.responsible">
                 <small class="text-muted"><%= __("Person in charge") %></small>
                 <span class="ml-2">
-                  <user-identity :user="thread.responsible" :organization="organization" size="sm"></user-identity>
+                  <user-identity :user="thread.responsible" :organization="organization" size="sm" ></user-identity>
                 </span>
               </div>
               <div class="col-auto">
@@ -264,8 +264,8 @@
             </div>
             <!-- appendix -->
             <editor-file :appendix="appendix" :organization="organization" mode="update" :delete-appendix="deleteAppendix" :download-appendix="downloadAppendix" :whitelist="witeListOfExts"
-              :add-image="addImageBlobHook" :is-uploading="isUploading" :planlimitation="planlimitation" title="thread" :is-demosite="isDemosite"
-              :hidden-upload="thread.locked" :parent="thread.id" :show-query="true">
+            :add-image="addImageBlobHook" :is-uploading="isUploading" :planlimitation="planlimitation" title="thread" :is-demosite="isDemosite"
+            :hidden-upload="thread.locked" :parent="thread.id" :show-query="true" >
             </editor-file>
             <div class="row mt-5 mb-5 p-3 shadow rounded" v-show="thread.body">
               <div class="col">

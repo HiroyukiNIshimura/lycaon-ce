@@ -77,7 +77,7 @@ parasails.registerPage('main', {
   },
   mounted: async function () {
     var canvas = document.getElementById('qrcode');
-    QRCode.toCanvas(canvas, location.href, function (error) {
+    QRCode.toCanvas(canvas, location.href, (error) => {
       if (error) {
         console.error(error);
       }
@@ -90,7 +90,7 @@ parasails.registerPage('main', {
     });
 
     var self = this;
-    io.socket.on('thread-notify', function (data) {
+    io.socket.on('thread-notify', (data) => {
       if (data.user.id !== self.me.id) {
         $lycaon.stackExchange(data, self.notifyStack, self.me.organization.handleId);
         if (!self.me.noRaiseThreadNotify) {
@@ -99,7 +99,7 @@ parasails.registerPage('main', {
         self.submitForm('#query-counter-form');
       }
     });
-    io.socket.on('message-notify', function (response) {
+    io.socket.on('message-notify', (response) => {
       if (response.data.sendTo === self.me.id) {
         $lycaon.stackMessage(response, self.messageStack, self.me.organization.handleId);
         $lycaon.socketToast(response.message);
@@ -108,12 +108,12 @@ parasails.registerPage('main', {
     $lycaon.stackMessage(false, this.messageStack, this.me.organization.handleId);
   },
   watch: {
-    selectedCategory: function (val) {
+    selectedCategory: function () {
       this.clearData();
       this.submitForm('#query-thread-form');
     },
     selectedStatus: function (val) {
-      if (val == 0) {
+      if (val === 0) {
         this.openActive = 'active';
         this.closeActive = '';
       } else {
@@ -124,17 +124,17 @@ parasails.registerPage('main', {
       this.submitForm('#query-thread-form');
     },
     voteState: function (val) {
-      if (val == '0') {
+      if (val === '0') {
         this.newVoteActive = 'active';
         this.openVoteActive = '';
         this.closeVoteActive = '';
         this.myVoteActive = '';
-      } else if (val == '1') {
+      } else if (val === '1') {
         this.newVoteActive = '';
         this.openVoteActive = 'active';
         this.closeVoteActive = '';
         this.myVoteActive = '';
-      } else if (val == '2') {
+      } else if (val === '2') {
         this.newVoteActive = '';
         this.openVoteActive = '';
         this.closeVoteActive = 'active';
@@ -148,11 +148,11 @@ parasails.registerPage('main', {
       this.clearData();
       this.submitForm('#query-vote-form');
     },
-    wikiflags: function (val) {
+    wikiflags: function () {
       this.clearData();
       this.submitForm('#query-wiki-form');
     },
-    nonmyown: function (val) {
+    nonmyown: function () {
       this.clearData();
       this.submitForm('#query-activity-form');
     },
@@ -168,52 +168,13 @@ parasails.registerPage('main', {
           this.chartCache.push(this.teamChartId(entry));
 
           var c1 = document.getElementById(this.teamChartId(entry));
-          var c2 = document.getElementById(this.teamChartSubId(entry));
-
-          if (c1 && c2) {
-            var open = entry.summary.open;
-            var close = entry.summary.total - open;
+          if (c1) {
             new Chart(c1, {
               type: 'pie',
               data: {
                 datasets: [
                   {
-                    data: [open, close],
-                    fill: false,
-                    borderWidth: 1,
-                  },
-                ],
-                labels: [
-                  `${i18next.t('open')}: ${formatter.format(open)}`,
-                  `${i18next.t('close')}: ${formatter.format(close)}`,
-                ],
-              },
-              options: {
-                responsive: true,
-                maintainAspectRatio: true,
-                aspectRatio: 2,
-                plugins: {
-                  legend: {
-                    position: 'left',
-                  },
-                  title: { display: false, text: i18next.t('Open : Closed'), padding: 0 },
-                  colorschemes: {
-                    scheme: 'brewer.PastelOne9',
-                  },
-                },
-              },
-            });
-
-            new Chart(c2, {
-              type: 'pie',
-              data: {
-                datasets: [
-                  {
-                    data: [
-                      entry.summary.working,
-                      entry.summary.expired,
-                      entry.summary.notAssignment,
-                    ],
+                    data: [entry.summary.working, entry.summary.expired, entry.summary.notAssignment],
                     fill: false,
                     borderWidth: 1,
                   },
@@ -221,9 +182,7 @@ parasails.registerPage('main', {
                 labels: [
                   `${i18next.t('Working')}: ${formatter.format(entry.summary.working)}`,
                   `${i18next.t('Expired')}: ${formatter.format(entry.summary.expired)}`,
-                  `${i18next.t('Not in charge_2')}: ${formatter.format(
-                    entry.summary.notAssignment
-                  )}`,
+                  `${i18next.t('Not in charge_2')}: ${formatter.format(entry.summary.notAssignment)}`,
                 ],
               },
               options: {
@@ -240,7 +199,7 @@ parasails.registerPage('main', {
                     padding: 0,
                   },
                   colorschemes: {
-                    scheme: 'brewer.SetThree9',
+                    scheme: 'brewer.PastelTwo8',
                   },
                 },
               },
@@ -290,7 +249,7 @@ parasails.registerPage('main', {
         this.submitForm('#query-vote-form');
       }
     },
-    onChangeWikiTags: function (e) {
+    onChangeWikiTags: function () {
       this.clearData();
       this.submitForm('#query-wiki-form');
     },
@@ -299,9 +258,6 @@ parasails.registerPage('main', {
     },
     teamChartId: function (item) {
       return 'chart-' + item.id;
-    },
-    teamChartSubId: function (item) {
-      return 'chart-sub-' + item.id;
     },
     threadLink: function (item) {
       return `/${this.organization.handleId}/thread/${item.no}`;
@@ -324,9 +280,13 @@ parasails.registerPage('main', {
       if (response.data.length) {
         this.currentPage += 1;
         this.queryResults.push(...response.data);
-        if (this.infiniteState) this.infiniteState.loaded();
+        if (this.infiniteState) {
+          this.infiniteState.loaded();
+        }
       } else {
-        if (this.infiniteState) this.infiniteState.complete();
+        if (this.infiniteState) {
+          this.infiniteState.complete();
+        }
       }
       this.cloudSuccess = true;
 
@@ -347,10 +307,7 @@ parasails.registerPage('main', {
             var text = $(this).text();
             var matches = text.matchAll(re);
             for (let match of matches) {
-              var newtext = text.replaceAll(
-                match[0],
-                `<span class="query-hits">${match[0]}</span>`
-              );
+              var newtext = text.replaceAll(match[0], `<span class="query-hits">${match[0]}</span>`);
               $(this).text('');
               $(this).append(newtext);
               break;
@@ -474,8 +431,8 @@ parasails.registerPage('main', {
           working: response.counter.working,
           myThread: response.counter.myThread,
           votes: response.counter.votes,
-          //flag: data.counter.flag,
-          //local: data.counter.local,
+          flag: response.counter.flag,
+          local: response.counter.local,
         });
       }
     },

@@ -21,7 +21,7 @@ module.exports = function (grunt) {
       grunt.verbose.warn('Destination not written because no source files were provided.');
     }
 
-    this.files.forEach(function (filePair) {
+    this.files.forEach((filePair) => {
       var locale = path.basename(filePair.dest).replace('.js', '');
       var jsonObject = JSON.parse(fs.readFileSync(filePair.src[0], 'utf8'));
       locale = locale.replace('-', '_');

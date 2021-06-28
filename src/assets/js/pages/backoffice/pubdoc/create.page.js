@@ -65,9 +65,9 @@ parasails.registerPage('backoffice-pubdoc-create', {
     $lycaon.invalidEnterKey();
   },
   watch: {
-    appendix: function (val) {
+    appendix: function () {
       var totalsize = 0;
-      _.each(this.appendix, function (entry) {
+      _.each(this.appendix, (entry) => {
         totalsize += entry.size;
       });
       if (this.sysSettings.maxUploadFileSize < totalsize) {
@@ -82,8 +82,8 @@ parasails.registerPage('backoffice-pubdoc-create', {
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
-    onChangeTags: function (e) {},
-    onEditCancelClick: function (event) {
+    onChangeTags: function () {},
+    onEditCancelClick: function () {
       location.href = '/admin/pubdocs';
     },
     addImageBlobHook: function (blob, callback) {
@@ -91,7 +91,7 @@ parasails.registerPage('backoffice-pubdoc-create', {
       blob.blobUrl = blobUrl;
       this.appendix.push(blob);
       if (_.isFunction(callback)) {
-        callback(blobUrl, blob.name);
+        return callback(blobUrl, blob.name);
       }
     },
     deleteAppendix: function (item, index) {
@@ -99,7 +99,7 @@ parasails.registerPage('backoffice-pubdoc-create', {
       this.wikiEditor.mdEditor.setValue(val.replace(item.blobUrl, ''));
       this.appendix.splice(index, 1);
     },
-    downloadAppendix: function (item, index) {
+    downloadAppendix: function () {
       return 'javascript:void(0)';
     },
     fileLinksTarget: function (item) {
@@ -140,7 +140,7 @@ parasails.registerPage('backoffice-pubdoc-create', {
       this.syncing = true;
 
       var errors = [];
-      for (blob of this.appendix) {
+      for (let blob of this.appendix) {
         this.progressMessage = i18next.t('Uploading {0} ...').format(blob.name);
         var error = await this.uploadFile(blob, response.id);
         if (error) {
@@ -149,11 +149,7 @@ parasails.registerPage('backoffice-pubdoc-create', {
       }
 
       if (errors.length > 0) {
-        if (
-          errors.includes('maxQuota') ||
-          errors.includes('maxSizePerWiki') ||
-          errors.includes('maxFilePerWiki')
-        ) {
+        if (errors.includes('maxQuota') || errors.includes('maxSizePerWiki') || errors.includes('maxFilePerWiki')) {
           location.href = `/uploaderror/wiki/${response.id}?plan=invalid`;
         } else {
           location.href = `/uploaderror/wiki/${response.id}`;

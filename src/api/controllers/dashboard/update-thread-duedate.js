@@ -15,7 +15,7 @@ module.exports = {
   },
   exits: {
     success: {
-      description: "Thread's status successfully updated.",
+      description: `Thread's status successfully updated.`,
     },
     notFound: {
       responseType: 'notfound',
@@ -35,12 +35,7 @@ module.exports = {
       return;
     }
 
-    if (
-      current.milestone &&
-      current.milestone.startAt &&
-      current.milestone.duration &&
-      inputs.dueDate
-    ) {
+    if (current.milestone && current.milestone.startAt && current.milestone.duration && inputs.dueDate) {
       var start = moment(Number(current.milestone.startAt)).startOf('day').valueOf();
       var end = Number(start) + Number(current.milestone.duration);
       if (end < inputs.dueDate || start > inputs.dueDate) {
@@ -122,13 +117,16 @@ module.exports = {
       };
     }
 
+    if (!updated.local) {
+      sails.sockets.broadcast(rooms, 'thread-notify', {
+        message: message,
+        user: this.req.me,
+        thread: updated,
+        timespan: Date.now(),
+      });
+    }
+
     //
-    sails.sockets.broadcast(rooms, 'thread-notify', {
-      message: message,
-      user: this.req.me,
-      thread: updated,
-      timespan: Date.now(),
-    });
 
     this.req.session.effectMessage = sails.__('The due date has been updated');
 

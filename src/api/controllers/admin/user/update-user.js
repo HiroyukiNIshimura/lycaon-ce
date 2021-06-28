@@ -72,19 +72,19 @@ module.exports = {
       throw 'emailAlreadyInUse';
     }
 
-    try {
-      var valuesToSet = {
-        emailAddress: email,
-        fullName: inputs.name,
-        isSuperAdmin: inputs.isSuperAdmin,
-        deleted: inputs.deleted,
-        emailChangeCandidate: '',
-        emailProofToken: '',
-        emailProofTokenExpiresAt: 0,
-        emailStatus: 'confirmed',
-        teams: inputs.selectedTeams.map((o) => o.id),
-      };
+    var valuesToSet = {
+      emailAddress: email,
+      fullName: inputs.name,
+      isSuperAdmin: inputs.isSuperAdmin,
+      deleted: inputs.deleted,
+      emailChangeCandidate: '',
+      emailProofToken: '',
+      emailProofTokenExpiresAt: 0,
+      emailStatus: 'confirmed',
+      teams: inputs.selectedTeams.map((o) => o.id),
+    };
 
+    try {
       await sails.getDatastore().transaction(async (db) => {
         await User.updateOne({
           id: current.id,

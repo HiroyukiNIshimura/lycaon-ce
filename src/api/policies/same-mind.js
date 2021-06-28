@@ -45,7 +45,7 @@ module.exports = async function (req, res, proceed) {
 
   var sameMind = false;
   for (let team of user.teams) {
-    var exists = _.findIndex(me.teams, function (entry) {
+    var exists = _.findIndex(me.teams, (entry) => {
       return entry.id === team.id;
     });
     if (exists > -1) {

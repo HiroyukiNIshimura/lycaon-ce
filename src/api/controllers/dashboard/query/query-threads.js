@@ -118,31 +118,31 @@ module.exports = {
         whereClause.local = true;
         whereClause.owner = this.req.me.id;
       } else {
-        if (inputs.owner != undefined) {
+        if (inputs.owner !== undefined) {
           whereClause.owner = inputs.owner;
         }
       }
 
-      if (inputs.concept != undefined) {
+      if (inputs.concept !== undefined) {
         whereClause.concept = inputs.concept;
       }
-      if (inputs.responsible != undefined) {
+      if (inputs.responsible !== undefined) {
         whereClause.responsible = inputs.responsible;
       }
-      if (inputs.milestone != undefined) {
+      if (inputs.milestone !== undefined) {
         whereClause.milestone = inputs.milestone;
       }
-      if (inputs.category != undefined) {
+      if (inputs.category !== undefined) {
         whereClause.category = inputs.category;
       }
-      if (inputs.status != undefined) {
+      if (inputs.status !== undefined) {
         whereClause.status = inputs.status;
       }
-      if (inputs.priority != undefined) {
+      if (inputs.priority !== undefined) {
         whereClause.priority = inputs.priority;
       }
 
-      if (inputs.locked != undefined) {
+      if (inputs.locked !== undefined) {
         if (inputs.locked === 0) {
           whereClause.locked = { '!=': true };
         } else {
@@ -155,7 +155,7 @@ module.exports = {
       }
 
       if (inputs.flag) {
-        var user = await User.findOne({
+        let user = await User.findOne({
           id: this.req.me.id,
         }).populate('flags', { where: { team: inputs.id } });
         whereClause.id = {

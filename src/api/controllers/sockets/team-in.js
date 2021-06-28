@@ -18,6 +18,9 @@ module.exports = {
     if (!this.req.isSocket) {
       return 'notFound';
     }
+    if (!this.req.me) {
+      return 'notFound';
+    }
     if (!this.req.organization) {
       return 'notFound';
     }
@@ -35,12 +38,8 @@ module.exports = {
 
     var message = {};
 
-    if (
-      !this.req.session.teamNotifyExpiresAt ||
-      this.req.session.teamNotifyExpiresAt <= Date.now()
-    ) {
-      this.req.session.teamNotifyExpiresAt =
-        Date.now() + sails.config.custom.socketMessageResetTokenTTL;
+    if (!this.req.session.teamNotifyExpiresAt || this.req.session.teamNotifyExpiresAt <= Date.now()) {
+      this.req.session.teamNotifyExpiresAt = Date.now() + sails.config.custom.socketMessageResetTokenTTL;
 
       message = {
         key: '{0} [{1}] has joined this team',

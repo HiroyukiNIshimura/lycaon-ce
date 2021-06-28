@@ -59,9 +59,13 @@ parasails.registerPage('notification-list', {
       if (response.data.length) {
         this.currentPage += 1;
         this.queryResults.push(...response.data);
-        if (this.infiniteState) this.infiniteState.loaded();
+        if (this.infiniteState) {
+          this.infiniteState.loaded();
+        }
       } else {
-        if (this.infiniteState) this.infiniteState.complete();
+        if (this.infiniteState) {
+          this.infiniteState.complete();
+        }
       }
       this.cloudSuccess = true;
     },
@@ -72,6 +76,9 @@ parasails.registerPage('notification-list', {
     },
     itemLink: function (item) {
       return `/notification/${item.id}`;
+    },
+    onCardClick: function (item) {
+      location.href = `/notification/${item.id}`;
     },
   },
   computed: {

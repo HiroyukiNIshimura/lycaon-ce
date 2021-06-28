@@ -49,7 +49,7 @@ select count("team__teams"."id") as qty
     var dt = new Date();
     dt.setHours(0, 0, 0, 0);
 
-    for (team of user.teams) {
+    for (let team of user.teams) {
       team.summary = {
         total: await Thread.count().where({ team: team.id, local: false }),
         open: await Thread.count().where({ team: team.id, status: 0, local: false }),

@@ -56,14 +56,14 @@ select sum("size") as "size"
     }
 
     if (plan.maxSizePerThread) {
-      var current = await ThreadItem.sum('size').where({ thread: inputs.thread.id });
+      let current = await ThreadItem.sum('size').where({ thread: inputs.thread.id });
       if (plan.maxSizePerThread <= current + inputs.appendSize) {
         return { valid: false, error: 'maxSizePerThread' };
       }
     }
 
     if (plan.maxFilePerThread) {
-      var current = await ThreadItem.count({ thread: inputs.thread.id });
+      let current = await ThreadItem.count({ thread: inputs.thread.id });
       if (plan.maxFilePerThread <= current) {
         return { valid: false, error: 'maxFilePerThread' };
       }

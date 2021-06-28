@@ -12,13 +12,9 @@ module.exports = {
     var token = '';
     if (item.mimeType === 'application/pdf') {
       token = await this.fromPdf(item);
-    } else if (
-      item.mimeType === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    ) {
+    } else if (item.mimeType === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
       token = this.fromExcel(item);
-    } else if (
-      item.mimeType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-    ) {
+    } else if (item.mimeType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
       token = await this.fromWord(item);
     } else if (item.mimeType === 'text/plain') {
       var buffer = fs.readFileSync(path.resolve(sails.config.appPath, item.virtualPath));
@@ -94,12 +90,12 @@ module.exports = {
       var file = path.resolve(sails.config.appPath, item.virtualPath);
       var dataBuffer = fs.readFileSync(file);
 
-      return new Promise(function (resolve, reject) {
+      return new Promise((resolve, reject) => {
         pdf(dataBuffer)
-          .then(function (data) {
+          .then((data) => {
             resolve(data.text);
           })
-          .catch(function (err) {
+          .catch((err) => {
             reject(err);
           });
       });
@@ -116,23 +112,14 @@ module.exports = {
 
     var words = await kuromojin.tokenize(tokens);
     for (let word of words) {
-      if (
-        word.pos === '名詞' ||
-        word.pos === '動詞' ||
-        word.pos === '形容詞' ||
-        word.pos === '形容動詞'
-      ) {
-        if (
-          word.pos_detail_1 !== '接尾' &&
-          word.pos_detail_1 !== '数' &&
-          word.surface_form.length <= 30
-        ) {
+      if (word.pos === '名詞' || word.pos === '動詞' || word.pos === '形容詞' || word.pos === '形容動詞') {
+        if (word.pos_detail_1 !== '接尾' && word.pos_detail_1 !== '数' && word.surface_form.length <= 30) {
           var form = word.surface_form;
           if (word.basic_form !== '*') {
             form = word.basic_form;
           }
 
-          if (!buffer.find((el) => el == form)) {
+          if (!buffer.find((el) => el === form)) {
             buffer.push(form);
           }
         }

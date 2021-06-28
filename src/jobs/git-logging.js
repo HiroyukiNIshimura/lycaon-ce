@@ -4,27 +4,12 @@
  https://www.npmjs.com/package/simple-git
  */
 
-const fs = require('fs');
 const moment = require('moment');
 const axios = require('axios');
 const crypto = require('crypto');
 
 module.exports = {
   sync: async function () {
-    var exeistDir = function (workdir) {
-      try {
-        fs.statSync(workdir);
-        return true;
-      } catch (error) {
-        if (error.code === 'ENOENT') {
-          return false;
-        } else {
-          sails.log.error(err);
-          throw err;
-        }
-      }
-    };
-
     var valueSets = [];
 
     var NATIVE_SQL = `
@@ -65,9 +50,7 @@ DELETE FROM "git_log"
 
       if (lasted.length > 0 && lasted[0].repositoryHash !== repositoryHash) {
         //リポジトリが異なっていたら洗い替え
-        sails.log.info(
-          `チーム[${team.id}]のgitリポジトリが変更されたためログをクリアし処理を続行します。`
-        );
+        sails.log.info(`チーム[${team.id}]のgitリポジトリが変更されたためログをクリアし処理を続行します。`);
         await GitLog.destroy({
           where: { team: team.id },
         });
@@ -77,10 +60,8 @@ DELETE FROM "git_log"
       try {
         if (team.connectType === 0) {
           //github
-          var resource = async function (team, page, perPage) {
-            let url = new URL(
-              `https://api.github.com/repos/${team.gitUser}/${team.gitRepository}/commits`
-            );
+          let resource = async function (team, page, perPage) {
+            let url = new URL(`https://api.github.com/repos/${team.gitUser}/${team.gitRepository}/commits`);
             url.search = `page=${page}&per_page=${perPage}`;
 
             var headers = {
@@ -105,23 +86,23 @@ DELETE FROM "git_log"
           };
 
           try {
-            var list = [];
+            let list = [];
             if (lasted.length > 0) {
-              var data = await resource(team, 1, 1);
+              let data = await resource(team, 1, 1);
               if (data.length < 1) {
                 sails.log.info(`チーム[${team.id}]のgitログは0件なので処理をスキップします！`);
                 continue;
               }
-              var headhash = data[0].sha;
-              var localhash = lasted[0].hash;
+              let headhash = data[0].sha;
+              let localhash = lasted[0].hash;
               if (headhash === localhash) {
                 //何もしない
                 sails.log.info(`チーム[${team.id}]のgitログは最新なので処理をスキップします！`);
                 continue;
               } else {
                 //差分のログを取得
-                var last = true;
-                var page = 1;
+                let last = true;
+                let page = 1;
                 while (last) {
                   data = await resource(team, page, 50);
                   if (data.length < 1) {
@@ -139,9 +120,9 @@ DELETE FROM "git_log"
               }
             } else {
               //全てのログを取得
-              var page = 1;
+              let page = 1;
               while (true) {
-                var data = await resource(team, page, 50);
+                let data = await resource(team, page, 50);
                 if (data.length < 1) {
                   break;
                 }
@@ -154,7 +135,9 @@ DELETE FROM "git_log"
 
             for (let log of list) {
               valueSets.push({
+                // eslint-disable-next-line camelcase
                 author_email: log.commit.author.email,
+                // eslint-disable-next-line camelcase
                 author_name: log.commit.author.name,
                 commitAt: moment(log.commit.author.date).valueOf(),
                 hash: log.sha,
@@ -176,10 +159,8 @@ DELETE FROM "git_log"
           //
         } else {
           //gitlab
-          var resource = async function (team, page, perPage) {
-            let url = new URL(
-              `${team.gitlabApi}/projects/${team.gitlabProjectId}/repository/commits`
-            );
+          let resource = async function (team, page, perPage) {
+            let url = new URL(`${team.gitlabApi}/projects/${team.gitlabProjectId}/repository/commits`);
 
             if (team.gitOrigin.toLowerCase() === 'master') {
               url.search = `private_token=${team.gitlabToken}&page=${page}&per_page=${perPage}`;
@@ -204,23 +185,23 @@ DELETE FROM "git_log"
           };
 
           try {
-            var list = [];
+            let list = [];
             if (lasted.length > 0) {
-              var data = await resource(team, 1, 1);
+              let data = await resource(team, 1, 1);
               if (data.length < 1) {
                 sails.log.info(`チーム[${team.id}]のgitログは0件なので処理をスキップします！`);
                 continue;
               }
-              var headhash = data[0].id;
-              var localhash = lasted[0].hash;
+              let headhash = data[0].id;
+              let localhash = lasted[0].hash;
               if (headhash === localhash) {
                 //何もしない
                 sails.log.info(`チーム[${team.id}]のgitログは最新なので処理をスキップします！`);
                 continue;
               } else {
                 //差分のログを取得
-                var last = true;
-                var page = 1;
+                let last = true;
+                let page = 1;
                 while (last) {
                   data = await resource(team, page, 50);
                   if (data.length < 1) {
@@ -238,9 +219,9 @@ DELETE FROM "git_log"
               }
             } else {
               //全てのログを取得
-              var page = 1;
+              let page = 1;
               while (true) {
-                var data = await resource(team, page, 50);
+                let data = await resource(team, page, 50);
                 if (data.length < 1) {
                   break;
                 }
@@ -253,7 +234,9 @@ DELETE FROM "git_log"
 
             for (let log of list) {
               valueSets.push({
+                // eslint-disable-next-line camelcase
                 author_email: log.author_email,
+                // eslint-disable-next-line camelcase
                 author_name: log.author_name,
                 body: log.title,
                 commitAt: moment(log.authored_date).valueOf(),

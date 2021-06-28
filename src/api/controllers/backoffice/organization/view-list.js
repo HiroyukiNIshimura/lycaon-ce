@@ -39,7 +39,7 @@ select count(*) as "qty"
       where "organization" = $1)
     `;
 
-    const NATIVE_SQL_T_item = `
+    const NATIVE_SQL_T_ITEM = `
 select sum("size") as "size" 
   from "thread_item" 
  where "thread" in 
@@ -107,7 +107,7 @@ select sum("size") as "size"
       qty = rawResult.rows[0].qty;
       organization.voteQty = qty ? qty : 0;
 
-      rawResult = await sails.sendNativeQuery(NATIVE_SQL_T_item, [organization.id]);
+      rawResult = await sails.sendNativeQuery(NATIVE_SQL_T_ITEM, [organization.id]);
       let size = rawResult.rows[0].size;
       organization.threadItemSize = size ? size : 0;
 

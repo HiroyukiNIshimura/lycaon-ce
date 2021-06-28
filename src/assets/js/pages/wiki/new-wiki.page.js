@@ -42,7 +42,7 @@ parasails.registerPage('new-wiki', {
     });
 
     var self = this;
-    io.socket.on('message-notify', function (response) {
+    io.socket.on('message-notify', (response) => {
       if (response.data.sendTo === self.me.id) {
         $lycaon.stackMessage(response, self.messageStack, self.me.organization.handleId);
         $lycaon.socketToast(response.message);
@@ -67,7 +67,7 @@ parasails.registerPage('new-wiki', {
       this.addImageBlobHook.bind(this)
     );
     var self = this;
-    $lycaon.markdown.addToolberImageList(this.wikiEditor, function () {
+    $lycaon.markdown.addToolberImageList(this.wikiEditor, () => {
       self.wikiEditor.eventManager.emit('closeAllPopup');
       self.$refs.imagelist.load();
       self.showImageListModal = true;
@@ -83,9 +83,9 @@ parasails.registerPage('new-wiki', {
     $lycaon.invalidEnterKey();
   },
   watch: {
-    appendix: function (val) {
+    appendix: function () {
       var totalsize = 0;
-      _.each(this.appendix, function (entry) {
+      _.each(this.appendix, (entry) => {
         totalsize += entry.size;
       });
       if (this.sysSettings.maxUploadFileSize < totalsize) {
@@ -100,8 +100,8 @@ parasails.registerPage('new-wiki', {
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
-    onChangeTags: function (e) {},
-    onEditCancelClick: function (event) {
+    onChangeTags: function () {},
+    onEditCancelClick: function () {
       if (this.backToUrl) {
         location.href = this.backToUrl;
       } else {
@@ -113,7 +113,7 @@ parasails.registerPage('new-wiki', {
       blob.blobUrl = blobUrl;
       this.appendix.push(blob);
       if (_.isFunction(callback)) {
-        callback(blobUrl, blob.name);
+        return callback(blobUrl, blob.name);
       }
     },
     deleteAppendix: function (item, index) {
@@ -121,7 +121,7 @@ parasails.registerPage('new-wiki', {
       this.wikiEditor.mdEditor.setValue(val.replace(item.blobUrl, ''));
       this.appendix.splice(index, 1);
     },
-    downloadAppendix: function (item, index) {
+    downloadAppendix: function () {
       return 'javascript:void(0)';
     },
     fileLinksTarget: function (item) {
@@ -135,7 +135,7 @@ parasails.registerPage('new-wiki', {
       data.append('appendix', blob);
 
       try {
-        await $lycaon.axios.post(
+        var response = await $lycaon.axios.post(
           `/api/v1/appendix/createwiki/${id}`,
           data,
           {
@@ -171,11 +171,7 @@ parasails.registerPage('new-wiki', {
       }
 
       if (errors.length > 0) {
-        if (
-          errors.includes('maxQuota') ||
-          errors.includes('maxSizePerWiki') ||
-          errors.includes('maxFilePerWiki')
-        ) {
+        if (errors.includes('maxQuota') || errors.includes('maxSizePerWiki') || errors.includes('maxFilePerWiki')) {
           location.href = `/uploaderror/wiki/${response.id}?plan=invalid`;
         } else {
           location.href = `/uploaderror/wiki/${response.id}`;
@@ -215,7 +211,7 @@ parasails.registerPage('new-wiki', {
     },
     selectedImageList: function (image) {
       this.showImageListModal = false;
-      this.wikiEditor.insertText(`![](${image.virtualUrl})`);
+      this.wikiEditor.insertText(`![](${image.virtualUrlMid})`);
     },
   },
   computed: {

@@ -178,10 +178,7 @@ parasails.registerComponent('threadCard', {
       if (this.thread.hitsBody) {
         let matches = this.thread.hitsBody.matchAll(re);
         for (let match of matches) {
-          let replaced = this.thread.hitsBody.replaceAll(
-            match[0],
-            `<span class="query-hits">${match[0]}</span>`
-          );
+          let replaced = this.thread.hitsBody.replaceAll(match[0], `<span class="query-hits">${match[0]}</span>`);
           content += `<div class="card-text"><span class="query-hits-title">${i18next.t(
             'Thread body'
           )}</span><br>...${replaced}...</div>`;
@@ -194,10 +191,7 @@ parasails.registerComponent('threadCard', {
       _.each(this.thread.sneezeHits, (o) => {
         let matches = o.sentence.matchAll(re);
         for (let match of matches) {
-          let replaced = o.sentence.replaceAll(
-            match[0],
-            `<span class="query-hits">${match[0]}</span>`
-          );
+          let replaced = o.sentence.replaceAll(match[0], `<span class="query-hits">${match[0]}</span>`);
           inner.push(replaced);
           break;
         }
@@ -214,10 +208,7 @@ parasails.registerComponent('threadCard', {
       _.each(this.thread.replyHits, (o) => {
         let matches = o.sentence.matchAll(re);
         for (let match of matches) {
-          let replaced = o.sentence.replaceAll(
-            match[0],
-            `<span class="query-hits">${match[0]}</span>`
-          );
+          let replaced = o.sentence.replaceAll(match[0], `<span class="query-hits">${match[0]}</span>`);
           inner.push(replaced);
           break;
         }

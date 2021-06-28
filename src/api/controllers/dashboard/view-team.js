@@ -64,6 +64,7 @@ module.exports = {
     response.categories = team.categories;
 
     response.memberQty = await sails.models['team_users__user_teams'].count({
+      // eslint-disable-next-line camelcase
       team_users: response.team.id,
     });
 

@@ -21,7 +21,9 @@ parasails.registerPage('backoffice-jobs-queue', {
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
     dateFormat: function (val) {
-      if (!val) return '';
+      if (!val) {
+        return '';
+      }
       return moment(val).format('YYYY-MM-DD HH:mm:ss');
     },
     toString: function (val) {

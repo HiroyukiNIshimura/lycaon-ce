@@ -19,7 +19,7 @@ module.exports = {
       for (let key of Object.keys(baseDic)) {
         url.search = `text=${baseDic[key]}&source=en&target=${target}`;
         var res = await axios.get(url.href);
-        if (res.status == 200) {
+        if (res.status === 200) {
           destDic[key] = res.data.text;
         } else {
           console.log(res);
@@ -50,7 +50,7 @@ module.exports = {
 
     if (!fs.existsSync(targetJson)) {
       baseDic = _(baseDic).toPairs().sortBy(0).fromPairs().value();
-      fs.writeFileSync(path.join(dicDir, target + '.json'), JSON.stringify(baseDic));
+      fs.writeFileSync(targetJson, JSON.stringify(baseDic));
     } else {
       var targetDic = JSON.parse(fs.readFileSync(path.join(dicDir, lang + '.json'), 'utf8'));
       for (let key of Object.keys(baseDic)) {
@@ -60,7 +60,7 @@ module.exports = {
       fs.writeFileSync(path.join(dicDir, lang + '.json'), JSON.stringify(targetDic));
     }
   },
-  deleteKey: function (lang, key) {
+  deleteKey: function (lang) {
     var targetJson = path.join(dicDir, lang + '.json');
     var baseDic = JSON.parse(fs.readFileSync(path.join(dicDir, 'work-delete.json'), 'utf8'));
     if (fs.existsSync(targetJson)) {

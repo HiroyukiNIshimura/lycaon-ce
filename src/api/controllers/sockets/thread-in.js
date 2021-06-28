@@ -18,6 +18,9 @@ module.exports = {
     if (!this.req.isSocket) {
       return 'notFound';
     }
+    if (!this.req.me) {
+      return 'notFound';
+    }
     if (!this.req.organization) {
       return 'notFound';
     }
@@ -42,12 +45,8 @@ module.exports = {
 
     var message = {};
 
-    if (
-      !this.req.session.threadNotifyExpiresAt ||
-      this.req.session.threadNotifyExpiresAt <= Date.now()
-    ) {
-      this.req.session.threadNotifyExpiresAt =
-        Date.now() + sails.config.custom.socketMessageResetTokenTTL;
+    if (!this.req.session.threadNotifyExpiresAt || this.req.session.threadNotifyExpiresAt <= Date.now()) {
+      this.req.session.threadNotifyExpiresAt = Date.now() + sails.config.custom.socketMessageResetTokenTTL;
 
       message = {
         key: '{0} [{1}] has joined this thread',

@@ -137,7 +137,7 @@ parasails.registerPage('edit-profile', {
     this.selectedTags = _.extend([], this.cloudTagTags);
 
     var self = this;
-    io.socket.on('message-notify', function (response) {
+    io.socket.on('message-notify', (response) => {
       if (response.data.sendTo === self.me.id) {
         $lycaon.stackMessage(response, self.messageStack, self.me.organization.handleId);
         $lycaon.socketToast(response.message);
@@ -150,9 +150,9 @@ parasails.registerPage('edit-profile', {
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
-    onTeamSelectorChange: function (e) {},
-    onCategorySelectorChange: function (e) {},
-    onTagSelectorChange: function (e) {},
+    onTeamSelectorChange: function () {},
+    onCategorySelectorChange: function () {},
+    onTagSelectorChange: function () {},
     submittedForm: async function () {
       // Redirect to the account page on success.
       // > (Note that we re-enable the syncing state here.  This is on purpose--

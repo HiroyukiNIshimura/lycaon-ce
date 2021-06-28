@@ -58,6 +58,9 @@ module.exports = {
       throw 'nameAlreadyInUse';
     }
 
+    var startAt;
+    var duration;
+
     if (inputs.startAt) {
       startAt = moment(Number(inputs.startAt)).startOf('day').valueOf();
     }
@@ -67,13 +70,13 @@ module.exports = {
         moment(Number(inputs.startAt)).startOf('day').valueOf();
     }
 
-    try {
-      var valuesToSet = {
-        name: inputs.name,
-        startAt: startAt,
-        duration: duration,
-      };
+    var valuesToSet = {
+      name: inputs.name,
+      startAt: startAt,
+      duration: duration,
+    };
 
+    try {
       if (inputs.user) {
         valuesToSet.user = inputs.user;
       } else {

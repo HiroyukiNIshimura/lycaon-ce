@@ -59,43 +59,27 @@ parasails.registerPage('admin-plan-change', {
         maxUser: this.plans[key].maxUser ? this.plans[key].maxUser : this.i18n('Unlimited'),
         maxTeam: this.plans[key].maxTeam ? this.plans[key].maxTeam : this.i18n('Unlimited'),
         maxSizePerThread: this.plans[key].maxSizePerThread
-          ? this.i18n('Up to {0} MB').format(
-              this.formatter.format(this.plans[key].maxSizePerThread / 1024 / 1024)
-            )
+          ? this.i18n('Up to {0} MB').format(this.formatter.format(this.plans[key].maxSizePerThread / 1024 / 1024))
           : this.i18n('Unlimited'),
         maxFilePerThread: this.plans[key].maxFilePerThread
-          ? this.i18n('Up to {0} files').format(
-              this.formatter.format(this.plans[key].maxFilePerThread)
-            )
+          ? this.i18n('Up to {0} files').format(this.formatter.format(this.plans[key].maxFilePerThread))
           : this.i18n('Unlimited'),
         maxSizePerWiki: this.plans[key].maxSizePerWiki
-          ? this.i18n('Up to {0} MB').format(
-              this.formatter.format(this.plans[key].maxSizePerWiki / 1024 / 1024)
-            )
+          ? this.i18n('Up to {0} MB').format(this.formatter.format(this.plans[key].maxSizePerWiki / 1024 / 1024))
           : this.i18n('Unlimited'),
         maxFilePerWiki: this.plans[key].maxFilePerWiki
-          ? this.i18n('Up to {0} files').format(
-              this.formatter.format(this.plans[key].maxFilePerWiki)
-            )
+          ? this.i18n('Up to {0} files').format(this.formatter.format(this.plans[key].maxFilePerWiki))
           : this.i18n('Unlimited'),
         maxSizePerVote: this.plans[key].maxSizePerVote
-          ? this.i18n('Up to {0} MB').format(
-              this.formatter.format(this.plans[key].maxSizePerVote / 1024 / 1024)
-            )
+          ? this.i18n('Up to {0} MB').format(this.formatter.format(this.plans[key].maxSizePerVote / 1024 / 1024))
           : this.i18n('Unlimited'),
         maxFilePerVote: this.plans[key].maxFilePerVote
-          ? this.i18n('Up to {0} files').format(
-              this.formatter.format(this.plans[key].maxFilePerVote)
-            )
+          ? this.i18n('Up to {0} files').format(this.formatter.format(this.plans[key].maxFilePerVote))
           : this.i18n('Unlimited'),
         maxQuota: this.plans[key].maxQuota
-          ? this.i18n('Up to {0} GB').format(
-              this.formatter.format(this.plans[key].maxQuota / 1024 / 1024 / 1024)
-            )
+          ? this.i18n('Up to {0} GB').format(this.formatter.format(this.plans[key].maxQuota / 1024 / 1024 / 1024))
           : this.i18n('Unlimited'),
-        allowUseGit: this.plans[key].allowUseGit
-          ? this.i18n('Available')
-          : this.i18n('Not available'),
+        allowUseGit: this.plans[key].allowUseGit ? this.i18n('Available') : this.i18n('Not available'),
       });
 
       i++;
@@ -135,7 +119,7 @@ parasails.registerPage('admin-plan-change', {
         return 'bg-light border-primary';
       }
 
-      var index = _.findIndex(this.billboards, function (o) {
+      var index = _.findIndex(this.billboards, (o) => {
         return o.name === plan;
       });
 
@@ -147,7 +131,7 @@ parasails.registerPage('admin-plan-change', {
     },
     isCurrent: function (index) {
       var self = this;
-      var meIndex = _.findIndex(this.billboards, function (o) {
+      var meIndex = _.findIndex(this.billboards, (o) => {
         return o.name === self.organization.plan;
       });
       return index === meIndex;
@@ -156,7 +140,7 @@ parasails.registerPage('admin-plan-change', {
   computed: {
     allowSubmit: function () {
       var self = this;
-      var index = _.findIndex(this.billboards, function (o) {
+      var index = _.findIndex(this.billboards, (o) => {
         return o.name === self.organization.plan;
       });
 

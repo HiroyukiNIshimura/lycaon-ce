@@ -1,5 +1,5 @@
-const path = require('path'),
-  fs = require('fs');
+const path = require('path');
+const fs = require('fs');
 
 /**
  * 本当は、itemのidをパラメータにするのが美しいしセキュアだが
@@ -43,7 +43,21 @@ module.exports = {
   },
 
   fn: async function (inputs) {
-    var target = '';
+    var team = {};
+
+    var getPath = function (size, type, id, fileId, ext) {
+      let target = path.resolve(sails.config.appPath, 'appendix', type, String(id), fileId);
+      if (size === 'M') {
+        target = path.resolve(sails.config.appPath, 'appendix', type, String(id), 'thum_m', fileId);
+      }
+      if (size === 'S') {
+        target = path.resolve(sails.config.appPath, 'appendix', type, String(id), 'thum_s', fileId);
+      }
+      if (ext) {
+        target = target + '.' + ext;
+      }
+      return target;
+    };
 
     if (inputs.type === 'thread') {
       var thread = await Thread.findOne({
@@ -53,7 +67,7 @@ module.exports = {
         throw 'notFound';
       }
 
-      var team = await Team.findOne({
+      team = await Team.findOne({
         id: thread.team,
       }).populate('users', {
         where: {
@@ -62,34 +76,6 @@ module.exports = {
       });
       if (team.users.length < 1) {
         throw 'notFound';
-      }
-
-      if (inputs.size === 'L') {
-        target = path.resolve(
-          sails.config.appPath,
-          'appendix',
-          'thread',
-          String(inputs.id),
-          inputs.fileId
-        );
-      } else if (inputs.size === 'S') {
-        target = path.resolve(
-          sails.config.appPath,
-          'appendix',
-          'thread',
-          String(inputs.id),
-          'thum_s',
-          inputs.fileId
-        );
-      } else {
-        target = path.resolve(
-          sails.config.appPath,
-          'appendix',
-          'thread',
-          String(inputs.id),
-          'thum_m',
-          inputs.fileId
-        );
       }
     } else if (inputs.type === 'wiki') {
       var wiki = await Wiki.findOne({
@@ -101,7 +87,7 @@ module.exports = {
         throw 'notFound';
       }
 
-      var team = await Team.findOne({
+      team = await Team.findOne({
         id: wiki.team,
       }).populate('users', {
         where: {
@@ -110,34 +96,6 @@ module.exports = {
       });
       if (team.users.length < 1) {
         throw 'notFound';
-      }
-
-      if (inputs.size === 'L') {
-        target = path.resolve(
-          sails.config.appPath,
-          'appendix',
-          'wiki',
-          String(inputs.id),
-          inputs.fileId
-        );
-      } else if (inputs.size === 'S') {
-        target = path.resolve(
-          sails.config.appPath,
-          'appendix',
-          'wiki',
-          String(inputs.id),
-          'thum_s',
-          inputs.fileId
-        );
-      } else {
-        target = path.resolve(
-          sails.config.appPath,
-          'appendix',
-          'wiki',
-          String(inputs.id),
-          'thum_m',
-          inputs.fileId
-        );
       }
     } else {
       var vote = await Vote.findOne({
@@ -150,42 +108,15 @@ module.exports = {
       if (this.req.me.organization.id !== vote.organization) {
         throw 'notFound';
       }
-
-      if (inputs.size === 'L') {
-        target = path.resolve(
-          sails.config.appPath,
-          'appendix',
-          'vote',
-          String(inputs.id),
-          inputs.fileId
-        );
-      } else if (inputs.size === 'S') {
-        target = path.resolve(
-          sails.config.appPath,
-          'appendix',
-          'vote',
-          String(inputs.id),
-          'thum_s',
-          inputs.fileId
-        );
-      } else {
-        target = path.resolve(
-          sails.config.appPath,
-          'appendix',
-          'vote',
-          String(inputs.id),
-          'thum_m',
-          inputs.fileId
-        );
-      }
     }
 
-    if (inputs.ext) {
-      target = target + '.' + inputs.ext;
-    }
+    var target = getPath(inputs.size, inputs.type, inputs.id, inputs.fileId, inputs.ext);
 
     if (!fs.existsSync(target)) {
-      throw 'notFound';
+      target = getPath('L', inputs.type, inputs.id, inputs.fileId, inputs.ext);
+      if (!fs.existsSync(target)) {
+        throw 'notFound';
+      }
     }
 
     try {

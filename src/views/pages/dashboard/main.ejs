@@ -60,13 +60,10 @@
                       {{ item.description }}
                     </div>
                     <div class="card-text"><%= __('Total number of threads') %>: {{ item.summary.total }}</div>
-                    <div class="card-text mt-3"><%= __('Open : Closed') %></div>
-                    <div class="chart-container">
-                      <canvas :id="teamChartId(item)"></canvas>
-                    </div>
+                    <div class="card-text text-success"><%= __('Number of open') %>: {{ item.summary.open }}</div>
                     <div class="card-text mt-3"><%= __('Details of the open') %></div>
                     <div class="chart-container">
-                      <canvas :id="teamChartSubId(item)"></canvas>
+                      <canvas :id="teamChartId(item)"></canvas>
                     </div>
                   </div>
                 </div>
@@ -88,7 +85,7 @@
             <div class="mt-3" v-if="queryResults.length > 0">
               <div class="row">
                 <div class="col-auto mb-2 ml-1" v-for="item in queryResults">
-                  <thread-card :thread="item" :team="item.team" :organization="organization" class="thread-card">
+                  <thread-card :thread="item" :team="item.team" :organization="organization" class="thread-card" >
                   </thread-card>
                 </div>
               </div>
@@ -137,7 +134,7 @@
             <div class="mt-3" v-if="queryResults.length > 0">
               <div class="row">
                 <div class="col-auto mb-2 ml-1" v-for="item in queryResults">
-                  <thread-card :thread="item" :team="item.team" :organization="organization" class="thread-card">
+                  <thread-card :thread="item" :team="item.team" :organization="organization" class="thread-card" >
                   </thread-card>
                 </div>
               </div>
@@ -160,7 +157,7 @@
             <div class="mt-3" v-if="queryResults.length > 0">
               <div class="row">
                 <div class="col-auto mb-2 ml-1" v-for="item in queryResults">
-                  <thread-card :thread="item" :team="item.team" :organization="organization" class="thread-card">
+                  <thread-card :thread="item" :team="item.team" :organization="organization" class="thread-card" >
                   </thread-card>
                 </div>
               </div>
@@ -183,7 +180,7 @@
             <div class="mt-3" v-if="queryResults.length > 0">
               <div class="row">
                 <div class="col-auto mb-2 ml-1" v-for="item in queryResults">
-                  <thread-card :thread="item" :team="item.team" :organization="organization" class="thread-card">
+                  <thread-card :thread="item" :team="item.team" :organization="organization" class="thread-card" >
                   </thread-card>
                 </div>
               </div>
@@ -217,7 +214,7 @@
                   <div data-vticon="true">
                     <img class="vtimeline-icon-img" src="/images/clock2.png">
                   </div>
-                  <activity-card :activity="item" :organization="organization"></activity-card>
+                  <activity-card :activity="item" :organization="organization" ></activity-card>
                 </div>
               </div>
               <infinite-loading spinner="waveDots" @infinite="activityHandler"></infinite-loading>
@@ -239,7 +236,7 @@
             <div class="mt-3" v-if="queryResults.length > 0">
               <div class="row">
                 <div class="col-auto mb-2 ml-1" v-for="item in queryResults">
-                  <thread-card :thread="item" :team="item.team" :organization="organization" class="thread-card">
+                  <thread-card :thread="item" :team="item.team" :organization="organization" class="thread-card" >
                   </thread-card>
                 </div>
               </div>
@@ -285,7 +282,7 @@
             </div>
             <div class="row mt-3" v-if="queryResults.length > 0">
               <div class="col-auto mb-2 ml-1 wiki-card" v-for="(item, index) in queryResults" :key="index" v-inview:parent="'animate'">
-                <wiki-card :wiki="item" :organization="organization" :show-team="true"></wiki-card>
+                <wiki-card :wiki="item" :organization="organization" :show-team="true" ></wiki-card>
               </div>
               <infinite-loading spinner="waveDots" @infinite="wikiHandler"></infinite-loading>
             </div>
@@ -333,7 +330,7 @@
 
             <div class="row mt-3" v-if="queryResults.length > 0">
               <div class="col-auto mb-2 vote-card" v-for="(item, index) in queryResults" :key="index" v-inview:parent="'animate'">
-                <vote-card :vote="item" :organization="organization" :state="item.answerState" :user="me"></vote-card>
+                <vote-card :vote="item" :organization="organization" :state="item.answerState" ></vote-card>
               </div>
               <infinite-loading spinner="waveDots" @infinite="circularHandler"></infinite-loading>
             </div>

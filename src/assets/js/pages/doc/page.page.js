@@ -49,7 +49,7 @@ parasails.registerPage('pubdoc-page', {
           this.showToc = false;
         } else {
           $(window).scroll(function () {
-            $('h1,h2,h3').each(function () {
+            $('h1,h2,h3').each(() => {
               if (document.documentElement.scrollTop >= this.offsetTop) {
                 var id = this.getAttribute('id');
                 nodes.removeClass('toc-active');

@@ -12,7 +12,9 @@ module.exports = {
     if (!this.req.isSocket) {
       return 'notFound';
     }
-
+    if (!this.req.me) {
+      return 'notFound';
+    }
     if (!this.req.organization) {
       return 'notFound';
     }

@@ -37,6 +37,7 @@ module.exports = {
     var teams = response.teams.map((o) => {
       return o.id;
     });
+    // eslint-disable-next-line camelcase
     response.teamUsers = await sails.models['team_users__user_teams'].find({ team_users: teams });
 
     if (inputs.team) {

@@ -7,7 +7,7 @@ module.exports = {
       var filename = path.join(dir, file);
       var stat = fs.statSync(filename);
 
-      if (filename == '.' || filename == '..') {
+      if (filename === '.' || filename === '..') {
       } else if (stat.isDirectory()) {
         this.rmdir(filename);
       } else {

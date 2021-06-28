@@ -22,7 +22,7 @@ module.exports = {
         }
 
         for (let entry of vote.users) {
-          var data = await sails.helpers.createVoteMail.with({
+          let data = await sails.helpers.createVoteMail.with({
             organization: vote.organization,
             vote: vote,
             author: vote.author,
@@ -53,7 +53,7 @@ module.exports = {
           });
 
           if (exists < 0) {
-            var data = await sails.helpers.createVoteMail.with({
+            let data = await sails.helpers.createVoteMail.with({
               organization: vote.organization,
               vote: vote,
               author: vote.author,

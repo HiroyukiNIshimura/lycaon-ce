@@ -70,8 +70,8 @@ parasails.registerPage('admin-settings-edit', {
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
-    onChangeExtSelector: function (e) {},
-    submittedForm: async function (response) {
+    onChangeExtSelector: function () {},
+    submittedForm: async function () {
       this.cloudSuccess = true;
       this.syncing = true;
       location.href = `/${this.organization.handleId}/admin/settings`;

@@ -2,7 +2,7 @@
   <div class="col">
     <button type="button" class="btn btn-light btn-circle-timeline">
       <i class="far fa-eye-slash"></i></button><small class="ml-2">
-      <user-identity class="mr-1" :user="item.user" :organization="organization" size="sm"></user-identity> - <lycaon-timestamp :at="item.createdAt" format="timeago" :translator="localTranslator"></lycaon-timestamp>
+      <user-identity class="mr-1" :user="item.user" :organization="organization" size="sm" ></user-identity> - <lycaon-timestamp :at="item.createdAt" format="timeago" :translator="localTranslator"></lycaon-timestamp>
     </small>
   </div>
 </div>
@@ -10,7 +10,7 @@
   <div class="col">
     <button type="button" class="btn btn-light btn-circle-timeline">
       <i class="fas fa-globe"></i></button><small class="ml-2">
-      <user-identity class="mr-1" :user="item.user" :organization="organization" size="sm"></user-identity> - <lycaon-timestamp :at="item.createdAt" format="timeago" :translator="conceptTranslator" :trans-option="item"></lycaon-timestamp>
+      <user-identity class="mr-1" :user="item.user" :organization="organization" size="sm" ></user-identity> - <lycaon-timestamp :at="item.createdAt" format="timeago" :translator="conceptTranslator" :trans-option="item"></lycaon-timestamp>
     </small>
   </div>
 </div>
@@ -20,7 +20,7 @@
       <i class="fas fa-exclamation-circle" v-if="isActivityOpen(item)"></i>
       <i class="fas fa-check-circle" v-else></i>
     </button><small class="ml-2">
-      <user-identity class="mr-1" :user="item.user" :organization="organization" size="sm"></user-identity> - <lycaon-timestamp :at="item.createdAt" format="timeago" :translator="statusTranslator" :trans-option="item"></lycaon-timestamp>
+      <user-identity class="mr-1" :user="item.user" :organization="organization" size="sm" ></user-identity> - <lycaon-timestamp :at="item.createdAt" format="timeago" :translator="statusTranslator" :trans-option="item"></lycaon-timestamp>
     </small>
   </div>
 </div>
@@ -28,7 +28,7 @@
   <div class="col">
     <button type="button" class="btn btn-light btn-circle-timeline">
       <i class="far fa-calendar-check"></i></button><small class="ml-2">
-      <user-identity class="mr-1" :user="item.user" :organization="organization" size="sm"></user-identity> - <lycaon-timestamp :at="item.createdAt" format="timeago" :translator="duedateTranslator" :trans-option="item"></lycaon-timestamp>
+      <user-identity class="mr-1" :user="item.user" :organization="organization" size="sm" ></user-identity> - <lycaon-timestamp :at="item.createdAt" format="timeago" :translator="duedateTranslator" :trans-option="item"></lycaon-timestamp>
     </small>
   </div>
 </div>
@@ -36,7 +36,7 @@
   <div class="col">
     <button type="button" class="btn btn-light btn-circle-timeline">
       <i class="fas fa-weight"></i></button><small class="ml-2">
-      <user-identity class="mr-1" :user="item.user" :organization="organization" size="sm"></user-identity> - <lycaon-timestamp :at="item.createdAt" format="timeago" :translator="priorityTranslator" :trans-option="item"></lycaon-timestamp>
+      <user-identity class="mr-1" :user="item.user" :organization="organization" size="sm" ></user-identity> - <lycaon-timestamp :at="item.createdAt" format="timeago" :translator="priorityTranslator" :trans-option="item"></lycaon-timestamp>
     </small>
   </div>
 </div>
@@ -44,7 +44,7 @@
   <div class="col">
     <button type="button" class="btn btn-light btn-circle-timeline">
       <i class="fas fa-lock"></i></button><small class="ml-2">
-      <user-identity class="mr-1" :user="item.user" :organization="organization" size="sm"></user-identity> - <lycaon-timestamp :at="item.createdAt" format="timeago" :translator="lockTranslator" :trans-option="item"></lycaon-timestamp>
+      <user-identity class="mr-1" :user="item.user" :organization="organization" size="sm" ></user-identity> - <lycaon-timestamp :at="item.createdAt" format="timeago" :translator="lockTranslator" :trans-option="item"></lycaon-timestamp>
     </small>
   </div>
 </div>
@@ -52,7 +52,7 @@
   <div class="col">
     <button type="button" class="btn btn-light btn-circle-timeline">
       <i class="fas fa-code-branch"></i></button><small class="ml-2">
-      <user-identity class="mr-1" :user="item.user" :organization="organization" size="sm"></user-identity> - <lycaon-timestamp :at="item.createdAt" format="timeago" :translator="workingTranslator" :trans-option="item"></lycaon-timestamp>
+      <user-identity class="mr-1" :user="item.user" :organization="organization" size="sm" ></user-identity> - <lycaon-timestamp :at="item.createdAt" format="timeago" :translator="workingTranslator" :trans-option="item"></lycaon-timestamp>
     </small>
   </div>
 </div>
@@ -60,7 +60,7 @@
   <div class="col">
     <button type="button" class="btn btn-light btn-circle-timeline">
       <i class="fas fa-tasks"></i></button><small class="ml-2">
-      <user-identity class="mr-1" :user="item.user" :organization="organization" size="sm"></user-identity> - <lycaon-timestamp :at="item.createdAt" format="timeago" :translator="categoryTranslator" :trans-option="item"></lycaon-timestamp>
+      <user-identity class="mr-1" :user="item.user" :organization="organization" size="sm" ></user-identity> - <lycaon-timestamp :at="item.createdAt" format="timeago" :translator="categoryTranslator" :trans-option="item"></lycaon-timestamp>
     </small>
   </div>
 </div>
@@ -68,7 +68,7 @@
   <div class="col">
     <button type="button" class="btn btn-light btn-circle-timeline">
       <i class="fas fa-user"></i></button><small class="ml-2">
-      <user-identity class="mr-1" :user="item.user" :organization="organization" size="sm"></user-identity> - <lycaon-timestamp :at="item.createdAt" format="timeago" :translator="responsibleTranslator" :trans-option="item"></lycaon-timestamp>
+      <user-identity class="mr-1" :user="item.user" :organization="organization" size="sm" ></user-identity> - <lycaon-timestamp :at="item.createdAt" format="timeago" :translator="responsibleTranslator" :trans-option="item"></lycaon-timestamp>
     </small>
   </div>
 </div>
@@ -76,7 +76,7 @@
   <div class="col">
     <button type="button" class="btn btn-light btn-circle-timeline">
       <i class="far fa-edit"></i></button><small class="ml-2">
-      <user-identity class="mr-1" :user="item.user" :organization="organization" size="sm"></user-identity> - <lycaon-timestamp :at="item.createdAt" format="timeago" :translator="updateTranslator"></lycaon-timestamp>
+      <user-identity class="mr-1" :user="item.user" :organization="organization" size="sm" ></user-identity> - <lycaon-timestamp :at="item.createdAt" format="timeago" :translator="updateTranslator"></lycaon-timestamp>
     </small>
   </div>
 </div>
@@ -84,7 +84,7 @@
   <div class="col">
     <button type="button" class="btn btn-light btn-circle-timeline">
       <i class="fas fa-folder-plus"></i></button><small class="ml-2 text-break">
-      <user-identity class="mr-1" :user="item.user" :organization="organization" size="sm"></user-identity> - <lycaon-timestamp :at="item.createdAt" format="timeago" :translator="attachTranslator" :trans-option="item"></lycaon-timestamp>
+      <user-identity class="mr-1" :user="item.user" :organization="organization" size="sm" ></user-identity> - <lycaon-timestamp :at="item.createdAt" format="timeago" :translator="attachTranslator" :trans-option="item"></lycaon-timestamp>
     </small>
   </div>
 </div>
@@ -92,7 +92,7 @@
   <div class="col">
     <button type="button" class="btn btn-light btn-circle-timeline">
       <i class="fas fa-folder-minus"></i></button><small class="ml-2">
-      <user-identity class="mr-1" :user="item.user" :organization="organization" size="sm"></user-identity> - <lycaon-timestamp :at="item.createdAt" format="timeago" :translator="detachTranslator" :trans-option="item"></lycaon-timestamp>
+      <user-identity class="mr-1" :user="item.user" :organization="organization" size="sm" ></user-identity> - <lycaon-timestamp :at="item.createdAt" format="timeago" :translator="detachTranslator" :trans-option="item"></lycaon-timestamp>
     </small>
   </div>
 </div>
@@ -100,7 +100,7 @@
   <div class="col">
     <button type="button" class="btn btn-light btn-circle-timeline">
       <i class="fas fa-reply"></i></button><small class="ml-2">
-      <user-identity class="mr-1" :user="item.user" :organization="organization" size="sm"></user-identity> - <lycaon-timestamp :at="item.createdAt" format="timeago" :translator="createReplyTranslator"></lycaon-timestamp> [
+      <user-identity class="mr-1" :user="item.user" :organization="organization" size="sm" ></user-identity> - <lycaon-timestamp :at="item.createdAt" format="timeago" :translator="createReplyTranslator"></lycaon-timestamp> [
       <span v-if="viewActivity === 0">
         <a href="javascript:void(0)" @click="jumpToReply(item.reply)">comment-{{ item.sneeze.serialNumber }} /
           rep-{{ item.reply.serialNumber }}</a>
@@ -117,7 +117,7 @@
   <div class="col">
     <button type="button" class="btn btn-light btn-circle-timeline">
       <i class="fas fa-reply"></i></button><small class="ml-2">
-      <user-identity class="mr-1" :user="item.user" :organization="organization" size="sm"></user-identity> - <lycaon-timestamp :at="item.createdAt" format="timeago" :translator="updateReplyTranslator"></lycaon-timestamp> [
+      <user-identity class="mr-1" :user="item.user" :organization="organization" size="sm" ></user-identity> - <lycaon-timestamp :at="item.createdAt" format="timeago" :translator="updateReplyTranslator"></lycaon-timestamp> [
       <span v-if="viewActivity === 0">
         <a href="javascript:void(0)" @click="jumpToReply(item.reply)">comment-{{ item.sneeze.serialNumber }} /
           rep-{{ item.reply.serialNumber }}</a>
@@ -134,7 +134,7 @@
   <div class="col">
     <button type="button" class="btn btn-light btn-circle-timeline">
       <i class="fas fa-comment"></i></button><small class="ml-2">
-      <user-identity class="mr-1" :user="item.user" :organization="organization" size="sm"></user-identity> - <lycaon-timestamp :at="item.createdAt" format="timeago" :translator="createSneezTranslator"></lycaon-timestamp> [
+      <user-identity class="mr-1" :user="item.user" :organization="organization" size="sm" ></user-identity> - <lycaon-timestamp :at="item.createdAt" format="timeago" :translator="createSneezTranslator"></lycaon-timestamp> [
       <span v-if="viewActivity === 0">
         <a href="javascript:void(0)" @click="jumpToSneeze(item.sneeze)">comment-{{ item.sneeze.serialNumber }}</a>
       </span>
@@ -149,7 +149,7 @@
   <div class="col">
     <button type="button" class="btn btn-light btn-circle-timeline">
       <i class="fas fa-comment"></i></button><small class="ml-2">
-      <user-identity class="mr-1" :user="item.user" :organization="organization" size="sm"></user-identity> - <lycaon-timestamp :at="item.createdAt" format="timeago" :translator="updateSneezTranslator"></lycaon-timestamp> [
+      <user-identity class="mr-1" :user="item.user" :organization="organization" size="sm" ></user-identity> - <lycaon-timestamp :at="item.createdAt" format="timeago" :translator="updateSneezTranslator"></lycaon-timestamp> [
       <span v-if="viewActivity === 0">
         <a href="javascript:void(0)" @click="jumpToSneeze(item.sneeze)">comment-{{ item.sneeze.serialNumber }}</a>
       </span>
@@ -164,7 +164,7 @@
   <div class="col">
     <button type="button" class="btn btn-light btn-circle-timeline">
       <i class="fas fa-calendar-alt"></i></button><small class="ml-2">
-      <user-identity class="mr-1" :user="item.user" :organization="organization" size="sm"></user-identity> - <lycaon-timestamp :at="item.createdAt" format="timeago" :translator="milestoneTranslator"></lycaon-timestamp>
+      <user-identity class="mr-1" :user="item.user" :organization="organization" size="sm" ></user-identity> - <lycaon-timestamp :at="item.createdAt" format="timeago" :translator="milestoneTranslator"></lycaon-timestamp>
     </small>
   </div>
 </div>
@@ -172,7 +172,7 @@
   <div class="col">
     <button type="button" class="btn btn-light btn-circle-timeline">
       <i class="fas fa-link"></i></button><small class="ml-2">
-      <user-identity class="mr-1" :user="item.user" :organization="organization" size="sm"></user-identity> - <lycaon-timestamp :at="item.createdAt" format="timeago" :translator="relationshipTranslator" :trans-option="item"></lycaon-timestamp>
+      <user-identity class="mr-1" :user="item.user" :organization="organization" size="sm" ></user-identity> - <lycaon-timestamp :at="item.createdAt" format="timeago" :translator="relationshipTranslator" :trans-option="item"></lycaon-timestamp>
     </small>
   </div>
 </div>
@@ -180,7 +180,7 @@
   <div class="col">
     <button type="button" class="btn btn-light btn-circle-timeline">
       <i class="fas fa-unlink"></i></button><small class="ml-2">
-      <user-identity class="mr-1" :user="item.user" :organization="organization" size="sm"></user-identity> - <lycaon-timestamp :at="item.createdAt" format="timeago" :translator="deleteRelationshipTranslator" :trans-option="item"></lycaon-timestamp>
+      <user-identity class="mr-1" :user="item.user" :organization="organization" size="sm" ></user-identity> - <lycaon-timestamp :at="item.createdAt" format="timeago" :translator="deleteRelationshipTranslator" :trans-option="item"></lycaon-timestamp>
     </small>
   </div>
 </div>
@@ -188,7 +188,7 @@
   <div class="col">
     <button type="button" class="btn btn-light btn-circle-timeline">
       <i class="fas fa-code-branch"></i></button><small class="ml-2">
-      <user-identity class="mr-1" :user="item.user" :organization="organization" size="sm"></user-identity> - <lycaon-timestamp :at="item.createdAt" format="timeago" :translator="forkTranslator" :trans-option="item"></lycaon-timestamp>
+      <user-identity class="mr-1" :user="item.user" :organization="organization" size="sm" ></user-identity> - <lycaon-timestamp :at="item.createdAt" format="timeago" :translator="forkTranslator" :trans-option="item"></lycaon-timestamp>
     </small>
   </div>
 </div>

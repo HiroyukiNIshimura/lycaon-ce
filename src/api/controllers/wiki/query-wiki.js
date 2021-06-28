@@ -1,5 +1,3 @@
-const sanitizeHtml = require('sanitize-html');
-
 module.exports = {
   friendlyName: 'Query wikis',
   description: 'Query wikis.',

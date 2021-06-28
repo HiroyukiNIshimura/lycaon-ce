@@ -12,7 +12,7 @@ parasails.registerComponent('activityCard', {
   //  ╔═╗╦═╗╔═╗╔═╗╔═╗
   //  ╠═╝╠╦╝║ ║╠═╝╚═╗
   //  ╩  ╩╚═╚═╝╩  ╚═╝
-  props: ['activity', 'query', 'finded', 'team', 'organization'],
+  props: ['activity', 'query', 'finded', 'team', 'organization', 'me'],
 
   //  ╦╔╗╔╦╔╦╗╦╔═╗╦    ╔═╗╔╦╗╔═╗╔╦╗╔═╗
   //  ║║║║║ ║ ║╠═╣║    ╚═╗ ║ ╠═╣ ║ ║╣
@@ -105,48 +105,24 @@ parasails.registerComponent('activityCard', {
         case 'delete-sneeze':
           return this.i18n('Deleted the comment at {0}', [at]);
         case 'update-category':
-          return this.i18n('Changed the category to [ {0} ] at {1}', [
-            this.i18n(this.activity.stateWord),
-            at,
-          ]);
+          return this.i18n('Changed the category to [ {0} ] at {1}', [this.i18n(this.activity.stateWord), at]);
         case 'update-concept':
-          return this.i18n('Changed the concept to [ {0} ] at {1}', [
-            this.i18n(this.activity.stateWord),
-            at,
-          ]);
+          return this.i18n('Changed the concept to [ {0} ] at {1}', [this.i18n(this.activity.stateWord), at]);
         case 'update-status':
-          return this.i18n('Changed the status to [ {0} ] at {1}', [
-            this.i18n(this.activity.stateWord),
-            at,
-          ]);
+          return this.i18n('Changed the status to [ {0} ] at {1}', [this.i18n(this.activity.stateWord), at]);
         case 'update-duedate':
           return this.activity.targetDate
-            ? this.i18n('Changed the deadline to [ {0} ] at {1}', [
-                this.formatDate(this.activity.targetDate),
-                at,
-              ])
+            ? this.i18n('Changed the deadline to [ {0} ] at {1}', [this.formatDate(this.activity.targetDate), at])
             : this.i18n('Changed the deadline to [ No setting ] at {0}', [at]);
         case 'update-priority':
-          return this.i18n('Changed importance to [ {0} ] at {1}', [
-            this.i18n(this.activity.stateWord),
-            at,
-          ]);
+          return this.i18n('Changed importance to [ {0} ] at {1}', [this.i18n(this.activity.stateWord), at]);
         case 'update-lock':
-          return this.i18n('Changed the thread to [ {0} ] at {1}', [
-            this.i18n(this.activity.stateWord),
-            at,
-          ]);
+          return this.i18n('Changed the thread to [ {0} ] at {1}', [this.i18n(this.activity.stateWord), at]);
         case 'update-working':
-          return this.i18n('Changed the thread to [ {0} ] at {1}', [
-            this.i18n(this.activity.stateWord),
-            at,
-          ]);
+          return this.i18n('Changed the thread to [ {0} ] at {1}', [this.i18n(this.activity.stateWord), at]);
         case 'responsible':
           return this.activity.userName
-            ? this.i18n('Changed the person in charge to [ {0} ] at {1}', [
-                this.activity.userName,
-                at,
-              ])
+            ? this.i18n('Changed the person in charge to [ {0} ] at {1}', [this.activity.userName, at])
             : this.i18n('Changed the person in charge to [ No setting ] at {0}', [at]);
         case 'create-sneeze':
           return this.i18n('Created a comment at {0}', [at]);
@@ -159,20 +135,11 @@ parasails.registerComponent('activityCard', {
         case 'milestone':
           return this.i18n('Milestones have been set at {0}', [at]);
         case 'relationship':
-          return this.i18n('The associated thread has been set [{0}] at {1}', [
-            this.activity.stateWord,
-            at,
-          ]);
+          return this.i18n('The associated thread has been set [{0}] at {1}', [this.activity.stateWord, at]);
         case 'delete-relationship':
-          return this.i18n('The related thread has been released [{0}] at {1}', [
-            this.activity.stateWord,
-            at,
-          ]);
+          return this.i18n('The related thread has been released [{0}] at {1}', [this.activity.stateWord, at]);
         case 'fork':
-          return this.i18n('A fork for this thread has been created [{0}] at {1}', [
-            this.activity.stateWord,
-            at,
-          ]);
+          return this.i18n('A fork for this thread has been created [{0}] at {1}', [this.activity.stateWord, at]);
         default:
           break;
       }

@@ -23,7 +23,7 @@ module.exports = {
         dirname: targetDir,
         maxBytes: req.sysSettings.maxUploadFileSize,
       },
-      async function (err, uploadedFiles) {
+      async function afterUpload(err, uploadedFiles) {
         if (err) {
           if (
             err.code &&

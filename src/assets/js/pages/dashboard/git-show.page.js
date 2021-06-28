@@ -15,7 +15,7 @@ parasails.registerPage('git-show', {
   beforeMount: function () {},
   mounted: async function () {
     var self = this;
-    io.socket.on('message-notify', function (response) {
+    io.socket.on('message-notify', (response) => {
       if (response.data.sendTo === self.me.id) {
         $lycaon.stackMessage(response, self.messageStack, self.me.organization.handleId);
         $lycaon.socketToast(response.message);

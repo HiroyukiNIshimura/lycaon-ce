@@ -216,6 +216,7 @@ SELECT "id", "name", "virtualPath", "wiki"
       await User.setGravatarUrl(wiki.lastUpdateUser, 36);
 
       var tags = await sails.models['tag_wikis__wiki_tags']
+        // eslint-disable-next-line camelcase
         .find({ wiki_tags: wiki.id })
         .populate('tag_wikis');
       _.each(tags, (o) => {
@@ -223,7 +224,9 @@ SELECT "id", "name", "virtualPath", "wiki"
       });
 
       var fans = await sails.models['user_wikiflags__wiki_fans'].find({
+        // eslint-disable-next-line camelcase
         wiki_fans: wiki.id,
+        // eslint-disable-next-line camelcase
         user_wikiflags: this.req.me.id,
       });
       _.each(fans, (o) => {

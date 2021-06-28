@@ -30,7 +30,7 @@ module.exports = {
     },
     gitOrigin: {
       type: 'string',
-      description: "The git's branch.",
+      description: `The git's branch.`,
       example: 'master',
       defaultsTo: 'master',
     },

@@ -38,8 +38,8 @@ module.exports = function defineCustomHook(sails) {
       Object.defineProperty(String.prototype, 'format', {
         value: function format() {
           var args = arguments;
-          return this.replace(/{(\d+)}/g, function (match, number) {
-            return typeof args[number] != 'undefined' ? args[number] : match;
+          return this.replace(/{(\d+)}/g, (match, number) => {
+            return typeof args[number] !== undefined ? args[number] : match;
           });
         },
         writable: true,
@@ -123,8 +123,7 @@ module.exports = function defineCustomHook(sails) {
             res.locals.i18nlocales = sails.config.i18n.locales;
 
             if (
-              (sails.config.environment === 'staging' ||
-                sails.config.environment === 'production') &&
+              (sails.config.environment === 'staging' || sails.config.environment === 'production') &&
               !req.isSocket &&
               req.method === 'GET' &&
               req.hostname !== configuredBaseHostname
@@ -153,16 +152,16 @@ module.exports = function defineCustomHook(sails) {
             // Otherwise, look up the logged-in user.
             var loggedInUser = await User.findOne({
               id: req.session.userId,
-            }).populate('organization');
+            })
+              .populate('organization')
+              .populate('teams');
 
             // If the logged-in user has gone missing, log a warning,
             // wipe the user id from the requesting user agent's session,
             // and then send the "unauthorized" response.
             if (!loggedInUser) {
               sails.log.warn(
-                'Somehow, the user record for the logged-in user (`' +
-                  req.session.userId +
-                  '`) has gone missing....'
+                'Somehow, the user record for the logged-in user (`' + req.session.userId + '`) has gone missing....'
               );
               delete req.session.userId;
               return res.unauthorized();
@@ -200,10 +199,7 @@ SELECT count(t.*) as qty
             dt.setDate(dt.getDate() + 1);
             dt.setHours(0, 0, 0, 0);
 
-            let rawResult = await sails.sendNativeQuery(NATIVE_SQL, [
-              loggedInUser.id,
-              dt.valueOf(),
-            ]);
+            let rawResult = await sails.sendNativeQuery(NATIVE_SQL, [loggedInUser.id, dt.valueOf()]);
 
             if (rawResult.rows[0].qty > 0) {
               loggedInUser.hasNewSystemNotifications = true;
@@ -233,9 +229,7 @@ SELECT count(t.*) as qty
                     );
                     return;
                   } //•
-                  sails.log.verbose(
-                    'Updated the `lastSeenAt` timestamp for user `' + loggedInUser.id + '`.'
-                  );
+                  sails.log.verbose('Updated the `lastSeenAt` timestamp for user `' + loggedInUser.id + '`.');
                   // Nothing else to do here.
                 }); //_∏_  (Meanwhile...)
             } //ﬁ

@@ -51,6 +51,7 @@ parasails.registerComponent('lycaonTimestamp', {
         throw new Error(
           'Unsupported `format` (' +
             this.format +
+            // eslint-disable-next-line quotes
             ") passed in to the JS timestamp component! Must be either 'calendar' or 'timeago'."
         );
       }

@@ -82,7 +82,7 @@ module.exports = {
         }
         return false;
       });
-      list = _.reject(list, function (e) {
+      list = _.reject(list, (e) => {
         return !e;
       });
       list.sort((a, b) => a.mtime - b.mtime);
@@ -125,7 +125,7 @@ module.exports = {
       var dumps = fs.readdirSync(dir);
       await sails.getDatastore().transaction(async (db) => {
         for (let identity in sails.models) {
-          var exists = _.filter(dumps, function (o) {
+          var exists = _.filter(dumps, (o) => {
             return o.startsWith(`${identity}-`);
           });
 
@@ -145,9 +145,7 @@ module.exports = {
             }
           }
 
-          var data = await sails.models[identity]
-            .find({ limit: 1, skip: 0, sort: 'id DESC' })
-            .usingConnection(db);
+          var data = await sails.models[identity].find({ limit: 1, skip: 0, sort: 'id DESC' }).usingConnection(db);
           if (data.length > 0) {
             var current = data[0].id + 1;
             var seqSql = `SELECT setval('"public"."${sails.models[identity].tableName}_id_seq"', $1, false)`;
@@ -174,9 +172,7 @@ module.exports = {
             `CREATE SEQUENCE IF NOT EXISTS "org_thread_${org.handleId}" START ${thread[0].no + 1};`
           );
         } else {
-          await sails.sendNativeQuery(
-            `CREATE SEQUENCE IF NOT EXISTS "org_thread_${org.handleId}" START 1;`
-          );
+          await sails.sendNativeQuery(`CREATE SEQUENCE IF NOT EXISTS "org_thread_${org.handleId}" START 1;`);
         }
 
         let wiki = await Wiki.find({
@@ -191,9 +187,7 @@ module.exports = {
             `CREATE SEQUENCE IF NOT EXISTS "org_wiki_${org.handleId}" START ${wiki[0].no + 1};`
           );
         } else {
-          await sails.sendNativeQuery(
-            `CREATE SEQUENCE IF NOT EXISTS "org_wiki_${org.handleId}" START 1;`
-          );
+          await sails.sendNativeQuery(`CREATE SEQUENCE IF NOT EXISTS "org_wiki_${org.handleId}" START 1;`);
         }
       }
 

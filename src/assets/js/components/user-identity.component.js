@@ -22,7 +22,10 @@ parasails.registerComponent('userIdentity', {
   //  ║║║║║ ║ ║╠═╣║    ╚═╗ ║ ╠═╣ ║ ║╣
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
   data: function () {
-    return {};
+    return {
+      uuid: '',
+      me: {},
+    };
   },
 
   //  ╦ ╦╔╦╗╔╦╗╦
@@ -30,14 +33,16 @@ parasails.registerComponent('userIdentity', {
   //  ╩ ╩ ╩ ╩ ╩╩═╝
   template: `
 <span class="ml-1" v-if="user">
-  <img :class="sizeClass" :src="user.gravatarUrl" v-if="user.avatarType === 'gravatar'" />
-  <img
-      class="rounded-circle"
-      :class="sizeClass"
-      :src="user.avatarVirtualUrl"
-      v-else-if="user.avatarType === 'user-avatar'"
-  />
-  <svg :class="sizeClass" :data-jdenticon-value="user.emailAddress" v-else></svg>
+  <span :id="parseAvaterId" class="user-avater-icon">
+    <img :class="sizeClass" :src="user.gravatarUrl" v-if="user.avatarType === 'gravatar'" />
+    <img
+        class="rounded-circle"
+        :class="sizeClass"
+        :src="user.avatarVirtualUrl"
+        v-else-if="user.avatarType === 'user-avatar'"
+    />
+    <svg :class="sizeClass" :data-jdenticon-value="user.emailAddress" v-else></svg>
+  </span>
   <a :id="parseUserId" class="ml-1 comment-tip" :href="menberInfoLink" v-if="showUserName == true">{{ user.fullName }}</a>
 </span>
 <span class="ml-1" v-else>
@@ -50,9 +55,51 @@ parasails.registerComponent('userIdentity', {
   //  ╩═╝╩╚  ╚═╝╚═╝ ╩ ╚═╝╩═╝╚═╝
   beforeMount: function () {
     //…
+    var dt = new Date();
+    this.uuid = `${this.user.id}-${dt.valueOf()}`;
+    this.me = SAILS_LOCALS.me;
   },
   mounted: async function () {
     jdenticon();
+
+    this.$nextTick(() => {
+      var self = this;
+
+      var $avater = $('#' + this.parseAvaterId);
+
+      if (this.me && this.me.id === this.user.id && this.me.teams && this.me.teams.length > 0) {
+        $avater.popover({
+          placement: 'bottom',
+          html: true,
+          trigger: 'click',
+          title: self.i18n('Move to selected team'),
+          content: function () {
+            var html = '';
+            _.each(self.me.teams, (o) => {
+              var href = `/${self.organization.handleId}/team/${o.id}`;
+              html += `<div><a href="${href}">${o.name}</a></div>`;
+            });
+            return html;
+          },
+        });
+      } else {
+        $avater.popover({
+          placement: 'bottom',
+          html: true,
+          trigger: 'click',
+          content: function () {
+            var href = `/${self.organization.handleId}/member/${self.user.id}?tab=tab-message`;
+            var html = `<div><a href="${href}"><i class="far fa-comment-dots"></i> ${self.i18n(
+              'Send a message'
+            )}</a></div>`;
+            return html;
+          },
+        });
+      }
+      $avater.on('shown.bs.popover', () => {
+        $('.user-avater-icon').not($avater).popover('hide');
+      });
+    });
   },
   beforeDestroy: function () {
     //…
@@ -70,7 +117,10 @@ parasails.registerComponent('userIdentity', {
       return 'user-icon';
     },
     parseUserId: function () {
-      return 'member-' + this.user.id;
+      return 'member-' + this.uuid;
+    },
+    parseAvaterId: function () {
+      return 'member-avater-' + this.uuid;
     },
     menberInfoLink: function () {
       return `/${this.organization.handleId}/member/${this.user.id}`;

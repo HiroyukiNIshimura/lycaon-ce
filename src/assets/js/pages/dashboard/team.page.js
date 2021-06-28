@@ -119,7 +119,7 @@ parasails.registerPage('team', {
   },
   mounted: async function () {
     var canvas = document.getElementById('qrcode');
-    QRCode.toCanvas(canvas, location.href, function (error) {
+    QRCode.toCanvas(canvas, location.href, (error) => {
       if (error) {
         console.error(error);
       }
@@ -131,7 +131,7 @@ parasails.registerPage('team', {
       $lycaon.socket.post('/ws/v1/team-out', { id: self.team.id });
     };
 
-    io.socket.on('thread-notify', function (data) {
+    io.socket.on('thread-notify', (data) => {
       if (data.user.id !== self.me.id) {
         $lycaon.stackExchange(data, self.notifyStack, self.me.organization.handleId);
         if (!self.me.noRaiseThreadNotify) {
@@ -140,7 +140,7 @@ parasails.registerPage('team', {
         self.submitForm('#query-counter-form');
       }
     });
-    io.socket.on('message-notify', function (response) {
+    io.socket.on('message-notify', (response) => {
       if (response.data.sendTo === self.me.id) {
         $lycaon.stackMessage(response, self.messageStack, self.me.organization.handleId);
         $lycaon.socketToast(response.message);
@@ -148,8 +148,8 @@ parasails.registerPage('team', {
     });
     $lycaon.stackMessage(false, this.messageStack, this.me.organization.handleId);
 
-    $lycaon.socket.post('/ws/v1/team-in', { id: this.team.id }, (res) => {
-      io.socket.on('team-in', function (data) {
+    $lycaon.socket.post('/ws/v1/team-in', { id: this.team.id }, () => {
+      io.socket.on('team-in', (data) => {
         var id = self.parseUserId(data.user);
         if (!$('#' + id).hasClass('blink')) {
           $('#' + id).addClass('blink');
@@ -159,14 +159,14 @@ parasails.registerPage('team', {
         }
         $lycaon.socket.post('/ws/v1/team-pon', { id: self.team.id, user: self.me });
       });
-      io.socket.on('team-out', function (data) {
+      io.socket.on('team-out', (data) => {
         var id = self.parseUserId(data.user);
         $('#' + id).removeClass('blink');
         if (data.user.id !== self.me.id) {
           $lycaon.socketToast(data.message);
         }
       });
-      io.socket.on('team-pon', function (data) {
+      io.socket.on('team-pon', (data) => {
         if (data.user.id !== self.me.id) {
           var id = self.parseUserId(data.user);
           $('#' + id).addClass('blink');
@@ -208,16 +208,16 @@ parasails.registerPage('team', {
         this.query.owner = '';
       }
     },
-    'query.sort': function (val) {
+    'query.sort': function () {
       this.clearData();
       this.submitForm('#query-team-form');
     },
-    selectedCategory: function (val) {
+    selectedCategory: function () {
       this.clearData();
       this.submitForm('#query-thread-form');
     },
     selectedStatus: function (val) {
-      if (val == 0) {
+      if (val === 0) {
         this.openActive = 'active';
         this.closeActive = '';
       } else {
@@ -228,17 +228,17 @@ parasails.registerPage('team', {
       this.submitForm('#query-thread-form');
     },
     voteState: function (val) {
-      if (val == '0') {
+      if (val === '0') {
         this.newVoteActive = 'active';
         this.openVoteActive = '';
         this.closeVoteActive = '';
         this.myVoteActive = '';
-      } else if (val == '1') {
+      } else if (val === '1') {
         this.newVoteActive = '';
         this.openVoteActive = 'active';
         this.closeVoteActive = '';
         this.myVoteActive = '';
-      } else if (val == '2') {
+      } else if (val === '2') {
         this.newVoteActive = '';
         this.openVoteActive = '';
         this.closeVoteActive = 'active';
@@ -252,11 +252,11 @@ parasails.registerPage('team', {
       this.clearData();
       this.submitForm('#query-vote-form');
     },
-    wikiflags: function (val) {
+    wikiflags: function () {
       this.clearData();
       this.submitForm('#query-wiki-form');
     },
-    nonmyown: function (val) {
+    nonmyown: function () {
       this.clearData();
       this.submitForm('#query-activity-form');
     },
@@ -267,42 +267,9 @@ parasails.registerPage('team', {
   methods: {
     renderCharts: function (team) {
       var c1 = document.getElementById('summary-chart');
-      var c2 = document.getElementById('summary-chart-sub');
 
-      if (c1 && c2) {
-        var open = team.summary.open;
-        var close = team.summary.total - open;
+      if (c1) {
         new Chart(c1, {
-          type: 'pie',
-          data: {
-            datasets: [
-              {
-                data: [open, close],
-                fill: false,
-                borderWidth: 1,
-              },
-            ],
-            labels: [
-              `${i18next.t('open')}: ${formatter.format(open)}`,
-              `${i18next.t('close')}: ${formatter.format(close)}`,
-            ],
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: true,
-            aspectRatio: 2,
-            plugins: {
-              legend: {
-                position: 'left',
-              },
-              colorschemes: {
-                scheme: 'brewer.PastelOne9',
-              },
-            },
-          },
-        });
-
-        new Chart(c2, {
           type: 'pie',
           data: {
             datasets: [
@@ -321,13 +288,13 @@ parasails.registerPage('team', {
           options: {
             responsive: true,
             maintainAspectRatio: true,
-            aspectRatio: 2,
+            aspectRatio: 3,
             plugins: {
               legend: {
                 position: 'left',
               },
               colorschemes: {
-                scheme: 'brewer.SetThree9',
+                scheme: 'brewer.PastelTwo8',
               },
             },
           },
@@ -395,10 +362,10 @@ parasails.registerPage('team', {
         this.submitForm('#query-vote-form');
       }
     },
-    onChangeTags: function (e) {
+    onChangeTags: function () {
       this.query.tags = this.selectedTags;
     },
-    onChangeWikiTags: function (e) {
+    onChangeWikiTags: function () {
       this.clearData();
       this.submitForm('#query-wiki-form');
     },
@@ -483,9 +450,13 @@ parasails.registerPage('team', {
       if (response.data.length) {
         this.currentPage += 1;
         this.queryResults.push(...response.data);
-        if (this.infiniteState) this.infiniteState.loaded();
+        if (this.infiniteState) {
+          this.infiniteState.loaded();
+        }
       } else {
-        if (this.infiniteState) this.infiniteState.complete();
+        if (this.infiniteState) {
+          this.infiniteState.complete();
+        }
       }
       this.cloudSuccess = true;
 
@@ -498,10 +469,7 @@ parasails.registerPage('team', {
             var text = $(this).text();
             var matches = text.matchAll(re);
             for (let match of matches) {
-              var newtext = text.replaceAll(
-                match[0],
-                `<span class="query-hits">${match[0]}</span>`
-              );
+              var newtext = text.replaceAll(match[0], `<span class="query-hits">${match[0]}</span>`);
               $(this).text('');
               $(this).append(newtext);
               break;
@@ -519,10 +487,7 @@ parasails.registerPage('team', {
             var text = $(this).text();
             var matches = text.matchAll(re);
             for (let match of matches) {
-              var newtext = text.replaceAll(
-                match[0],
-                `<span class="query-hits">${match[0]}</span>`
-              );
+              var newtext = text.replaceAll(match[0], `<span class="query-hits">${match[0]}</span>`);
               $(this).text('');
               $(this).append(newtext);
               break;
@@ -729,9 +694,13 @@ parasails.registerPage('team', {
       if (response.members.length) {
         this.membersPage += 1;
         this.allMembers.push(...response.members);
-        if (this.memberInfiniteState) this.memberInfiniteState.loaded();
+        if (this.memberInfiniteState) {
+          this.memberInfiniteState.loaded();
+        }
       } else {
-        if (this.memberInfiniteState) this.memberInfiniteState.complete();
+        if (this.memberInfiniteState) {
+          this.memberInfiniteState.complete();
+        }
       }
       this.cloudSuccess = true;
     },
@@ -767,8 +736,8 @@ parasails.registerPage('team', {
           working: response.counter.working,
           myThread: response.counter.myThread,
           votes: response.counter.votes,
-          //flag: data.counter.flag,
-          //local: data.counter.local,
+          flag: response.counter.flag,
+          local: response.counter.local,
         });
       }
     },
@@ -782,17 +751,17 @@ parasails.registerPage('team', {
       }
 
       var self = this;
-      var graph_space = 0;
+      var graphSpace = 0;
 
       var setNode = function (parent, node) {
         //
-        if (parent.space == undefined) {
+        if (parent.space === undefined) {
           parent.space = node;
         } else {
           node = parent.space;
         }
-        if (parent.space > graph_space) {
-          graph_space = parent.space;
+        if (parent.space > graphSpace) {
+          graphSpace = parent.space;
         }
 
         if (parent.refs) {
@@ -813,76 +782,72 @@ parasails.registerPage('team', {
 
       var changesets = [];
       var i = 0;
-      _.forEachRight(this.queryResults, function (commit) {
+      _.forEachRight(this.queryResults, (commit) => {
         var clone = _.extend({}, commit);
         clone.rdmid = i;
         changesets.push(clone);
         i++;
       });
 
-      var max_rdmid = changesets.length - 1;
+      var maxRdmid = changesets.length - 1;
       var XSTEP = 30;
-      var commit_table_rows = $('.changeset-container');
+      var commitTableRows = $('.changeset-container');
       var holder = document.getElementById('holder');
 
-      if (this.revisionGraph != null) {
+      if (this.revisionGraph !== null) {
         this.revisionGraph.set().clear();
       } else {
         this.revisionGraph = Raphael(holder);
       }
 
       var top = this.revisionGraph.set();
-      var graph_x_offset =
-        commit_table_rows.first().find('.card').first().position().left - $(holder).position().left;
-      var graph_y_offset = $(holder).position().top;
-      var graph_right_side = graph_x_offset + (graph_space + 1) * XSTEP;
-      var graph_bottom =
-        commit_table_rows.last().position().top +
-        commit_table_rows.last().height() -
-        graph_y_offset;
+      var graphXOffset = commitTableRows.first().find('.card').first().position().left - $(holder).position().left;
+      var graphYOffset = $(holder).position().top;
+      var graphRightSide = graphXOffset + (graphSpace + 1) * XSTEP;
+      var graphBottom = commitTableRows.last().position().top + commitTableRows.last().height() - graphYOffset;
 
-      this.revisionGraph.setSize(graph_right_side, graph_bottom);
-      $('.git-card').css({ 'margin-left': `${graph_right_side}px` });
+      this.revisionGraph.setSize(graphRightSide, graphBottom);
+      $('.git-card').css({ 'margin-left': `${graphRightSide}px` });
 
       var colorSchemes = Chart.colorschemes;
       var colors = colorSchemes.tableau.Classic10;
       Raphael.getColor.reset();
-      for (var k = 10; k <= graph_space; k++) {
+      for (var k = 10; k <= graphSpace; k++) {
         colors.push(Raphael.getColor());
       }
 
       var yForRow = function (index) {
-        var row = commit_table_rows.eq(index);
-        return row.position().top + row.height() / 2 - graph_y_offset;
+        var row = commitTableRows.eq(index);
+        return row.position().top + row.height() / 2 - graphYOffset;
       };
 
-      var parent_commit;
-      var x, y, parent_x, parent_y;
+      var parentCommit;
+      var x;
+      var y;
+      var parentX;
+      var parentY;
       var path;
 
-      _.forEach(changesets, function (commit) {
+      _.forEach(changesets, (commit) => {
         if (!commit.space) {
           commit.space = 0;
         }
-        y = yForRow(max_rdmid - commit.rdmid);
-        x = graph_x_offset + XSTEP / 2 + XSTEP * commit.space;
-        self.revisionGraph
-          .circle(x, y, 5)
-          .attr({ fill: colors[commit.space], stroke: 'none' })
-          .toFront();
+        y = yForRow(maxRdmid - commit.rdmid);
+        x = graphXOffset + XSTEP / 2 + XSTEP * commit.space;
+        self.revisionGraph.circle(x, y, 5).attr({ fill: colors[commit.space], stroke: 'none' }).toFront();
 
         if (commit.refs) {
           var refs = commit.refs.trim().split(',');
-          _.forEach(refs, function (parent_scmid) {
-            parent_commit = _.find(changesets, (o) => {
-              return o.hash === parent_scmid.trim();
+          _.forEach(refs, (parentScmid) => {
+            parentCommit = _.find(changesets, (o) => {
+              return o.hash === parentScmid.trim();
             });
-            if (parent_commit) {
-              parent_y = yForRow(max_rdmid - parent_commit.rdmid);
-              parent_x = graph_x_offset + XSTEP / 2 + XSTEP * parent_commit.space;
-              if (parent_commit.space == commit.space) {
+            if (parentCommit) {
+              parentY = yForRow(maxRdmid - parentCommit.rdmid);
+              parentX = graphXOffset + XSTEP / 2 + XSTEP * parentCommit.space;
+              if (parentCommit.space === commit.space) {
                 // vertical path
-                path = self.revisionGraph.path(['M', x, y, 'V', parent_y]);
+                path = self.revisionGraph.path(['M', x, y, 'V', parentY]);
                 path.attr({ stroke: colors[commit.space], 'stroke-width': 1.5 }).toBack();
               } else {
                 // path to a commit in a different branch (Bezier curve)
@@ -891,22 +856,22 @@ parasails.registerPage('team', {
                   x,
                   y,
                   'C',
-                  x + (parent_x - x) / 2,
-                  y + (parent_y - y) / 2,
-                  parent_x,
-                  parent_y - (parent_y - y) / 2,
-                  parent_x,
-                  parent_y,
+                  x + (parentX - x) / 2,
+                  y + (parentY - y) / 2,
+                  parentX,
+                  parentY - (parentY - y) / 2,
+                  parentX,
+                  parentY,
                 ]);
-                if (parent_commit.space > commit.space) {
-                  path.attr({ stroke: colors[parent_commit.space], 'stroke-width': 1.5 }).toBack();
+                if (parentCommit.space > commit.space) {
+                  path.attr({ stroke: colors[parentCommit.space], 'stroke-width': 1.5 }).toBack();
                 } else {
                   path.attr({ stroke: colors[commit.space], 'stroke-width': 1.5 }).toBack();
                 }
               }
             } else {
               // vertical path ending at the bottom of the revisionGraph
-              path = self.revisionGraph.path(['M', x, y, 'V', graph_bottom]);
+              path = self.revisionGraph.path(['M', x, y, 'V', graphBottom]);
               path.attr({ stroke: colors[commit.space], 'stroke-width': 1.5 }).toBack();
             }
           });

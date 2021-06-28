@@ -80,7 +80,8 @@ parasails.registerPage('vote-create', {
     });
   },
   mounted: async function () {
-    io.socket.on('message-notify', function (response) {
+    var self = this;
+    io.socket.on('message-notify', (response) => {
       if (response.data.sendTo === self.me.id) {
         $lycaon.stackMessage(response, self.messageStack, self.me.organization.handleId);
         $lycaon.socketToast(response.data.message);
@@ -99,8 +100,7 @@ parasails.registerPage('vote-create', {
       i18next.t('Feel free to enter ...'),
       this.addImageBlobHook.bind(this)
     );
-    var self = this;
-    $lycaon.markdown.addToolberImageList(this.voteEditor, function () {
+    $lycaon.markdown.addToolberImageList(this.voteEditor, () => {
       self.voteEditor.eventManager.emit('closeAllPopup');
       self.$refs.imagelist.load();
       self.showImageListModal = true;
@@ -111,9 +111,9 @@ parasails.registerPage('vote-create', {
     $lycaon.invalidEnterKey();
   },
   watch: {
-    appendix: function (val) {
+    appendix: function () {
       var totalsize = 0;
-      _.each(this.appendix, function (entry) {
+      _.each(this.appendix, (entry) => {
         totalsize += entry.size;
       });
       if (this.sysSettings.maxUploadFileSize < totalsize) {
@@ -130,33 +130,35 @@ parasails.registerPage('vote-create', {
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
     addOrganizationAll: function () {
-      this.$refs.userTagify.addTags(this.cloudUsers);
+      this.selectedUsers = _.extend([], this.cloudUsers);
     },
     addTeamAll: function () {
       if (!this.selectedTeam) {
         return;
       }
 
+      // eslint-disable-next-line camelcase
       var users = _.filter(this.teamUsers, { team_users: this.selectedTeam });
-      var targets = _.filter(this.cloudUsers, function (o) {
+      var targets = _.filter(this.cloudUsers, (o) => {
+        // eslint-disable-next-line camelcase
         if (_.findIndex(users, { user_teams: o.id }) > -1) {
           return true;
         }
         return false;
       });
-      this.$refs.userTagify.addTags(targets);
+      this.selectedUsers = _.extend([], targets);
     },
     clearAll: function () {
       this.selectedUsers = [];
     },
-    onChangeUserTags: function (e) {},
-    onChangeQuestionTags: function (e) {},
+    onChangeUserTags: function () {},
+    onChangeQuestionTags: function () {},
     addImageBlobHook: function (blob, callback) {
       var blobUrl = window.URL.createObjectURL(blob);
       blob.blobUrl = blobUrl;
       this.appendix.push(blob);
       if (_.isFunction(callback)) {
-        callback(blobUrl, blob.name);
+        return callback(blobUrl, blob.name);
       }
     },
     deleteAppendix: function (item, index) {
@@ -164,7 +166,7 @@ parasails.registerPage('vote-create', {
       this.voteEditor.mdEditor.setValue(val.replace(item.blobUrl, ''));
       this.appendix.splice(index, 1);
     },
-    downloadAppendix: function (item, index) {
+    downloadAppendix: function () {
       return 'javascript:void(0)';
     },
     fileLinksTarget: function (item) {
@@ -214,11 +216,7 @@ parasails.registerPage('vote-create', {
       }
 
       if (errors.length > 0) {
-        if (
-          errors.includes('maxQuota') ||
-          errors.includes('maxSizePerVote') ||
-          errors.includes('maxFilePerVote')
-        ) {
+        if (errors.includes('maxQuota') || errors.includes('maxSizePerVote') || errors.includes('maxFilePerVote')) {
           location.href = `/uploaderror/vote/${response.id}?plan=invalid`;
         } else {
           location.href = `/uploaderror/vote/${response.id}`;
@@ -236,6 +234,7 @@ parasails.registerPage('vote-create', {
       argins.body = this.voteEditor.mdEditor.getValue();
       argins.users = this.selectedUsers;
       argins.choices = this.selectedQuestions;
+      argins.isQuestionnaireFormat = this.isQuestionnaireFormat;
 
       if (this.selectedDateRang && this.selectedDateRang.start) {
         this.selectedDateRang.start.setHours(0, 0, 0, 0);
@@ -283,7 +282,7 @@ parasails.registerPage('vote-create', {
     },
     selectedImageList: function (image) {
       this.showImageListModal = false;
-      this.voteEditor.insertText(`![](${image.virtualUrl})`);
+      this.voteEditor.insertText(`![](${image.virtualUrlMid})`);
     },
   },
   computed: {

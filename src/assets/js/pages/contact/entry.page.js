@@ -113,19 +113,19 @@ parasails.registerPage('contact-entry', {
         $lycaon.errorToast('There is an error in the input value');
 
         if (
-          _.find(Object.keys(this.formErrors), function (key) {
+          _.find(Object.keys(this.formErrors), (key) => {
             return key.startsWith('contents');
           })
         ) {
           $lycaon.jumpTo($('#form-contents'));
         } else if (
-          _.find(Object.keys(this.formErrors), function (key) {
+          _.find(Object.keys(this.formErrors), (key) => {
             return key.startsWith('fullName');
           })
         ) {
           $lycaon.jumpTo($('#form-full-name'));
         } else if (
-          _.find(Object.keys(this.formErrors), function (key) {
+          _.find(Object.keys(this.formErrors), (key) => {
             return key.startsWith('emailAddress');
           })
         ) {

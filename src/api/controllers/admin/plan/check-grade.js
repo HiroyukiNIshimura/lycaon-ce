@@ -1,4 +1,3 @@
-const moment = require('moment');
 
 module.exports = {
   friendlyName: 'request change',
@@ -46,10 +45,10 @@ module.exports = {
     var response = {};
 
     var plans = Object.keys(sails.config.custom.plans);
-    var before = _.findIndex(plans, function (entry) {
+    var before = _.findIndex(plans, (entry) => {
       return entry === current.organization.plan;
     });
-    var after = _.findIndex(plans, function (entry) {
+    var after = _.findIndex(plans, (entry) => {
       return entry === inputs.plan;
     });
 

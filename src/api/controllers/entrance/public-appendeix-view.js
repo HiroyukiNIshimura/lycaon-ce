@@ -1,5 +1,5 @@
-const path = require('path'),
-  fs = require('fs');
+const path = require('path');
+const fs = require('fs');
 
 /**
  * 本当は、itemのidをパラメータにするのが美しいしセキュアだが
