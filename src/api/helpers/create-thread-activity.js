@@ -64,13 +64,17 @@ module.exports = {
     fileName: {
       type: 'string',
     },
+    botType: {
+      type: 'string',
+      description: 'similarity-bot | duedate-bot',
+    },
   },
   exits: {
     success: {
       description: 'All done.',
     },
   },
-  fn: async function ({ db, type, user, thread, sneezeId, replyId, refId, fileName }) {
+  fn: async function ({ db, type, user, thread, sneezeId, replyId, refId, fileName, botType }) {
     var rawData = '';
     var dudate;
     var userName;
@@ -181,6 +185,9 @@ module.exports = {
 
     if (stateWord) {
       valueSets.stateWord = stateWord;
+    }
+    if (botType) {
+      valueSets.stateWord = botType;
     }
 
     if (dudate) {

@@ -403,7 +403,7 @@ parasails.registerPage('member-info', {
 
         _.forEach(values, (val) => {
           var index = _.findIndex(self.labels, (entry) => {
-            return entry === val.dt;
+            return entry === Number(val.dt);
           });
           if (index > -1) {
             data[index] = val.qty;
@@ -452,7 +452,7 @@ parasails.registerPage('member-info', {
 
         _.forEach(values, (val) => {
           var index = _.findIndex(self.labels, (entry) => {
-            return entry === val.dt;
+            return entry === Number(val.dt);
           });
           if (index > -1) {
             data[index] = val.qty;

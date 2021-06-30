@@ -108,7 +108,6 @@ parasails.registerComponent('editorFile', {
             <small v-else>
               <a class="mr-1 hyper-link-icon" href="javascript:void(0)" data-toggle="popover" data-placement="top" :data-content="hyperLink(item)"><i class="fas fa-external-link-alt"></i></a>
               <i class="fas fa-paperclip"></i>
-              <i class="fas fa-paperclip"></i>
               <span :class="[hits[item.id] ? 'hit-active': '']">{{ item.name }} / {{ formatter.format(item.size) }}{{ i18n("byte") }}</span>
               <a href="javascript:void(0)" @click="showDeleteDialog(item, index)" v-if="!hiddenUpload"><i class="far fa-trash-alt"></i></a>
             </small>

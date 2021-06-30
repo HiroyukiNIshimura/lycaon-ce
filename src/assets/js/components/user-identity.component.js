@@ -17,6 +17,8 @@ parasails.registerComponent('userIdentity', {
     showUserName: { default: true },
     user: {},
     organization: {},
+    id: '',
+    avaterId: '',
   },
   //  ╦╔╗╔╦╔╦╗╦╔═╗╦    ╔═╗╔╦╗╔═╗╔╦╗╔═╗
   //  ║║║║║ ║ ║╠═╣║    ╚═╗ ║ ╠═╣ ║ ║╣
@@ -117,9 +119,15 @@ parasails.registerComponent('userIdentity', {
       return 'user-icon';
     },
     parseUserId: function () {
+      if (this.id) {
+        return this.id;
+      }
       return 'member-' + this.uuid;
     },
     parseAvaterId: function () {
+      if (this.avaterId) {
+        return this.avaterId;
+      }
       return 'member-avater-' + this.uuid;
     },
     menberInfoLink: function () {

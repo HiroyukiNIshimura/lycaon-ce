@@ -17,9 +17,7 @@ SELECT (SELECT bigm_similarity($1, t."subject")) as "subjectScore",
       return o.id === team;
     });
     if (index < 0) {
-      sails.log.debug(
-        `このチーム[${team}]には、lycaonbotがいないので類似スレッド検索は実行しません。`
-      );
+      sails.log.debug(`このチーム[${team}]には、lycaonbotがいないので類似スレッド検索は実行しません。`);
       return 'skip';
     }
 
@@ -46,17 +44,15 @@ SELECT (SELECT bigm_similarity($1, t."subject")) as "subjectScore",
 
     sails.log.debug(`類似スレッドヒット ${targes.length}件！スレッド[${id}]`);
 
-    var comment =
-      'A similar thread has been created a long time ago! It may be helpful. please make sure.\n';
-    comment +=
-      '昔似たようなスレッドが作成されていますよ！参考になるかもしれません。確認してみてください。\n';
+    var comment = 'A similar thread has been created a long time ago! It may be helpful. please make sure.\n';
+    comment += '昔似たようなスレッドが作成されていますよ！参考になるかもしれません。確認してみてください。\n';
     comment += 'Excuse me if I am wrong.\n';
     comment += '間違ってたらごめんなさい😅\n';
 
     for (let entry of targes) {
-      comment += ` #${entry.id} ${entry.subject} (score: ${entry.subjectScore.toFixed(
+      comment += ` #${entry.id} ${entry.subject} (score: ${entry.subjectScore.toFixed(3)}/${entry.bodyScore.toFixed(
         3
-      )}/${entry.bodyScore.toFixed(3)})\n`;
+      )})\n`;
     }
 
     var sneeze = {
@@ -74,6 +70,7 @@ SELECT (SELECT bigm_similarity($1, t."subject")) as "subjectScore",
           user: bot,
           thread: thread,
           sneezeId: created.id,
+          botType: 'similarity-bot',
         });
 
         var sNo = await Sneeze.count({ thread: thread.id }).usingConnection(db);

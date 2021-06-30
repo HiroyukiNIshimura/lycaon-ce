@@ -67,6 +67,7 @@ parasails.registerPage('thread', {
     rightSidebar: 'noactive',
     sidebarCollapse: 'active',
     mainContents: 'active',
+    reloaded: false,
     // Main syncing/loading state for this page.
     syncing: false,
     // Form data
@@ -143,10 +144,14 @@ parasails.registerPage('thread', {
     window.onbeforeunload = function () {
       if (self.threadMode === 'edit') {
         $lycaon.socket.post('/ws/v1/thread-edit-out', { id: self.thread.id }, () => {
-          $lycaon.socket.post('/ws/v1/thread-out', { id: self.thread.id });
+          if (!self.reloaded) {
+            $lycaon.socket.post('/ws/v1/thread-out', { id: self.thread.id });
+          }
         });
       }
-      $lycaon.socket.post('/ws/v1/thread-out', { id: self.thread.id });
+      if (!self.reloaded) {
+        $lycaon.socket.post('/ws/v1/thread-out', { id: self.thread.id });
+      }
     };
 
     io.socket.on('thread-notify', (data) => {
@@ -180,7 +185,7 @@ parasails.registerPage('thread', {
           $(selector).tooltip('show');
 
           setTimeout(() => {
-            $(selector).tooltip('dispose');
+            //$(selector).tooltip('dispose');
           }, 5000);
 
           self.isCommentArrived = true;
@@ -995,6 +1000,7 @@ parasails.registerPage('thread', {
       return `/${this.organization.handleId}/thread/${item.no}`;
     },
     reload: function () {
+      this.reloaded = true;
       this.cloudSuccess = true;
       this.syncing = true;
       location.href = `/${this.organization.handleId}/thread/${this.thread.no}`;

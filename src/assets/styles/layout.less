@@ -136,10 +136,9 @@ footer.page-footer {
 }
 
 .drop-area {
-  height: 150px;
+  height: 100%;
   border: 5px solid gray;
   border-radius: 15px;
-  height: 100%;
 }
 
 .dragEnter {
@@ -324,7 +323,7 @@ svg.user-icon-sm {
     vertical-align: top;
     color: #fff;
   }
-  table th,
+  table thead th,
   table td {
     padding: 6px 13px;
     border: 1px solid #ddd;
@@ -369,7 +368,7 @@ svg.user-icon-sm {
 }
 
 .comment-tip .bs-tooltip-auto[x-placement^='bottom'] .arrow::before,
-.bs-tooltip-bottom .arrow::before {
+.tooltip.fade.bs-tooltip-bottom.show .arrow::before {
   bottom: 0;
   border-width: 0 0.4rem 0.4rem;
   border-bottom-color: #82d9fc;
