@@ -49,8 +49,7 @@ module.exports = {
       columnType: 'smallint',
       defaultsTo: 0,
       isIn: [0, 1],
-      description:
-        '0:ドラフト（他者に見えるが他者による変更はできない）、1:公開（他者に見えて他者も変更可能）',
+      description: '0:ドラフト（他者に見えるが他者による変更はできない）、1:公開（他者に見えて他者も変更可能）',
       example: 0,
     },
     status: {
@@ -102,6 +101,7 @@ module.exports = {
     accessCount: {
       type: 'number',
       defaultsTo: 0,
+      description: 'アクティビティ操作の回数。バズってる検索が簡単になるようにアクティビティ作成時に更新',
     },
     locked: {
       type: 'boolean',

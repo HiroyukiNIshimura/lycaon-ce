@@ -1,7 +1,7 @@
 const path = require('path');
 const fs = require('fs');
 const admZip = require('adm-zip');
-const utility = require('./job-utility');
+const utility = require('./modules/job-utility');
 
 module.exports = {
   backup: async function () {

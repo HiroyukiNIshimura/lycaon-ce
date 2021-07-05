@@ -295,18 +295,6 @@
             </div>
           </div>
         </div>
-        <div v-if="isCommentArrived">
-          <div class="row">
-            <div class="col-1">
-              <div class="dot-elastic mt-3 ml-5"></div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-auto">
-              <span data-microtip-position="top" role="tooltip" :aria-label="commentArrived"><a href="javascript:void(0);" @click="reload"><%= __('Reload the page') %></a></span>
-            </div>
-          </div>
-        </div>
 
         <div class="text-danger" v-if="formErrors.commentLength">
           <%= __("Comment size is too large") %>

@@ -175,17 +175,18 @@ parasails.registerPage('thread', {
       if (data.user.id !== self.me.id) {
         $lycaon.socketToast(data.message);
         if (self.thread.id === data.id) {
-          var id = self.parseUserId(data.user);
+          var id = self.parseUserAvaterId(data.user);
           var selector = '#' + id;
-          $(selector).attr('data-toggle', 'tooltip');
-          $(selector).attr('data-trigger', 'manual');
-          $(selector).attr('data-placement', 'bottom');
-          $(selector).attr('title', data.comment);
-          $(selector).tooltip({ offset: 5, container: $(selector) });
-          $(selector).tooltip('show');
+          $(selector).attr('data-content', data.comment);
+          $(selector).popover('show');
 
           setTimeout(() => {
-            //$(selector).tooltip('dispose');
+            var href = `/${self.organization.handleId}/member/${data.user.id}?tab=tab-message`;
+            var html = `<div><a href="${href}"><i class="far fa-comment-dots"></i> ${self.i18n(
+              'Send a message'
+            )}</a></div>`;
+            $(selector).popover('hide');
+            $(selector).attr('data-content', html);
           }, 5000);
 
           self.isCommentArrived = true;
@@ -848,6 +849,9 @@ parasails.registerPage('thread', {
     },
     parseUserId: function (user) {
       return 'member-' + user.id;
+    },
+    parseUserAvaterId: function (user) {
+      return 'member-avater-' + user.id;
     },
     blockEditor: function (label) {
       this.viewerBlock = Vue.$loading.show(

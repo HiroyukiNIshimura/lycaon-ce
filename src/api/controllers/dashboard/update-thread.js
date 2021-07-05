@@ -260,12 +260,24 @@ module.exports = {
       throw err;
     }
 
-    var message = {
-      key: '{0} updated Thread [#{1}] {2}',
-      params: [this.req.me.fullName, updated.no, updated.subject],
-    };
+    if (effected) {
+      await sails.helpers.agendaSchedule.with({
+        ttl: Date.now() + sails.config.custom.bot.tweetTTL,
+        job: 'tagify-bot',
+        data: {
+          id: updated.id,
+          team: updated.team,
+          organization: this.req.organization,
+        },
+      });
+    }
 
     if (!updated.local) {
+      var message = {
+        key: '{0} updated Thread [#{1}] {2}',
+        params: [this.req.me.fullName, updated.no, updated.subject],
+      };
+
       sails.sockets.broadcast(
         [`room-${this.req.organization.id}-lycaon`, `room-${this.req.organization.id}-team-${updated.team}`],
         'thread-notify',

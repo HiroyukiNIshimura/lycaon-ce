@@ -14,7 +14,7 @@
 </div>
 <div class="row mt-1 border border-top-0 border-right-0 border-left-0  align-items-center">
   <div class="col-auto mr-3 mb-1" v-for="item in members">
-    <user-identity :user="item" :organization="organization" size="sm" :id="parseUserId(item)" ></user-identity>
+    <user-identity :user="item" :organization="organization" size="sm" :id="parseUserId(item)" :avater-id="parseUserAvaterId(item)" ></user-identity>
   </div>
   <div class="col-auto mr-3 mb-1" v-if="memberQty > members.length">
     <button type="button" class="btn btn-link text-primary" @click="showAllMember">

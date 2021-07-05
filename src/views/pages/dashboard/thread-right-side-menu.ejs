@@ -211,4 +211,21 @@
       </ul>
     </ul>
   </nav>
+  <transition name="fade">
+    <div class="mt-3" v-if="isCommentArrived">
+      <div class="row justify-content-center">
+        <div class="col-auto">
+          <div class="dot-elastic"></div>
+        </div>
+      </div>
+      <div class="row mt-1 justify-content-center">
+        <div class="col-auto">
+          <span data-microtip-position="top" role="tooltip" :aria-label="commentArrived">
+            <a class="text-warning" href="javascript:void(0);" @click="reload"><%= __('Reload the page') %></a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </transition>
+
 </div>

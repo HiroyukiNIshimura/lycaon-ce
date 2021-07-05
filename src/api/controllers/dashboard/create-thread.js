@@ -181,6 +181,17 @@ module.exports = {
           team: created.team,
           subject: created.subject,
           body: created.body,
+          organization: this.req.organization,
+        },
+      });
+
+      await sails.helpers.agendaSchedule.with({
+        ttl: Date.now() + sails.config.custom.bot.tweetTTL,
+        job: 'tagify-bot',
+        data: {
+          id: created.id,
+          team: created.team,
+          organization: this.req.organization,
         },
       });
 

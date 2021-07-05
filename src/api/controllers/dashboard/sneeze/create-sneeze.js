@@ -79,17 +79,11 @@ module.exports = {
       throw err;
     }
 
-    var rooms = [`room-${this.req.organization.id}-thread-${thread.id}`];
-    var message = {
-      key: 'a comment has arrived from {0}',
-      params: [this.req.me.fullName],
-    };
-    sails.sockets.broadcast(rooms, 'comment-notify', {
-      message: message,
-      user: this.req.me,
-      comment: await sails.helpers.sanitizeDescription.with({ markdown: inputs.comment, max: 120 }),
-      timespan: Date.now(),
-      id: thread.id,
+    await sails.helpers.broadcastCommentNotify.with({
+      organizationId: this.req.organization.id,
+      threadId: thread.id,
+      fromUser: this.req.me,
+      comment: inputs.comment,
     });
 
     this.req.session.effectMessage = sails.__('Created a comment');

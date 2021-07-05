@@ -25,7 +25,9 @@ module.exports = {
       deleted: false,
       organization: this.req.organization.id,
     });
-    response.users.push(await User.findOne({ emailAddress: 'lycaonbot@example.com' }));
+
+    var bot = await sails.helpers.getBot();
+    response.users.push(bot);
 
     response.categories = await Category.find({ organization: this.req.organization.id });
 

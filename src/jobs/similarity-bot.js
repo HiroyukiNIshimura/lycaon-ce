@@ -1,5 +1,5 @@
 module.exports = {
-  similarityCheck: async function ({ id, team, subject, body }) {
+  similarityCheck: async function ({ id, team, subject, body, organization }) {
     var NATIVE_SQL = `
 SELECT (SELECT bigm_similarity($1, t."subject")) as "subjectScore",
   (SELECT bigm_similarity($2, t."body")) as "bodyScore",
@@ -23,8 +23,8 @@ SELECT (SELECT bigm_similarity($1, t."subject")) as "subjectScore",
 
     var thread = await Thread.findOne({ id: id });
     if (!thread) {
-      sails.log.debug(`類似スレッドは見つかりませんでした。スレッド[${id}]`);
-      return;
+      sails.log.error(`スレッドが見つかりませんでした。スレッド[${id}]`);
+      return 'skip';
     }
 
     var results = await sails.sendNativeQuery(NATIVE_SQL, [subject, body, id, team, subject, body]);
@@ -86,5 +86,12 @@ SELECT (SELECT bigm_similarity($1, t."subject")) as "subjectScore",
     } catch (err) {
       sails.log.error(err);
     }
+
+    await sails.helpers.broadcastCommentNotify.with({
+      organizationId: organization.id,
+      threadId: thread.id,
+      fromUser: bot,
+      comment: comment,
+    });
   },
 };

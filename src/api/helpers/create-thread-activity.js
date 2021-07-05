@@ -66,7 +66,7 @@ module.exports = {
     },
     botType: {
       type: 'string',
-      description: 'similarity-bot | duedate-bot',
+      description: 'similarity-bot | duedate-bot | reply-bot | tagify-bot',
     },
   },
   exits: {

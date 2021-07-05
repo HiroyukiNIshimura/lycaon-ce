@@ -1,6 +1,6 @@
 const path = require('path');
 const fs = require('fs');
-const utility = require('./job-utility');
+const utility = require('./modules/job-utility');
 const moment = require('moment');
 
 module.exports = {

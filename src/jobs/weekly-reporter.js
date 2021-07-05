@@ -4,21 +4,34 @@ module.exports = {
     var dayOfWeekStr = ['日', '月', '火', '水', '木', '金', '土'];
     var dt = new Date();
     dt.setHours(0, 0, 0, 0);
+    var oneMonthAgo = moment(dt.valueOf()).add(-1, 'months');
 
     var bot = await sails.helpers.getBot();
 
-    try {
-      var organizations = await Organization.find();
+    const NATIVE_SQL = `
+SELECT a.*
+  FROM "thread" a
+ WHERE a."id" IN (
+  SELECT t."id" FROM (
+    SELECT "thread" as "id" , MAX("updatedAt") as "dt" 
+      FROM "thread_activity"
+     WHERE "user" != $1
+     GROUP BY "thread") t 
+      WHERE t.dt <= $2)
+   AND a."status" = 0
+   AND a."team" = $3
+   AND a."local" = false
+ ORDER BY a."lastHumanUpdateAt" ASC
+`;
 
-      for (let organization of organizations) {
+    try {
+      for (let organization of await Organization.find()) {
         var settings = await SysSettings.findOne({ organization: organization.id });
         if (settings.weeklyReportDay !== dt.getDay()) {
           sails.log.debug(
-            `本日[${moment(dt).format('YYYY/MM/DD')}]は、${
-              dayOfWeekStr[settings.weeklyReportDay]
-            }曜日でないので、[${organization.handleId}] ${
-              organization.name
-            }の週報配信処理をパスします...`
+            `本日[${moment(dt).format('YYYY/MM/DD')}]は、${dayOfWeekStr[settings.weeklyReportDay]}曜日でないので、[${
+              organization.handleId
+            }] ${organization.name}の週報配信処理をパスします...`
           );
           continue;
         }
@@ -62,35 +75,13 @@ module.exports = {
             near.dueDateFormated = moment(Number(near.dueDateAt)).format('YYYY/MM/DD') + ' <JST>';
           }
 
-          var NATIVE_SQL = `
-SELECT a.*
-  FROM "thread" a
- WHERE a."id" IN (
-  SELECT t."id" FROM (
-    SELECT "thread" as "id" , MAX("updatedAt") as "dt" 
-      FROM "thread_activity"
-     WHERE "user" != $1
-     GROUP BY "thread") t 
-      WHERE t.dt <= $2)
-   AND a."status" = 0
-   AND a."team" = $3
-   AND a."local" = false
- ORDER BY a."lastHumanUpdateAt" ASC
-          `;
-
           //1ヶ月更新のないもの
-          var results = await sails.sendNativeQuery(NATIVE_SQL, [
-            bot.id,
-            dt.valueOf() - 30 * 24 * 60 * 60 * 1000,
-            team.id,
-          ]);
+          var results = await sails.sendNativeQuery(NATIVE_SQL, [bot.id, oneMonthAgo.valueOf(), team.id]);
 
           team.leaveAlones = results.rows;
 
           for (let leaveAlones of team.leaveAlones) {
-            leaveAlones.updatedAtFormated = moment(Number(leaveAlones.lastHumanUpdateAt)).format(
-              'YYYY/MM/DD'
-            );
+            leaveAlones.updatedAtFormated = moment(Number(leaveAlones.lastHumanUpdateAt)).format('YYYY/MM/DD');
 
             if (leaveAlones.responsible) {
               leaveAlones.responsible = await User.findOne({
@@ -128,9 +119,7 @@ SELECT a.*
             organization: organization,
             to: user.emailAddress,
             toName: user.fullName,
-            subject: sails
-              .__('[Lycaon] Weekly Report ({0})')
-              .format(moment(dt).format('YYYY/MM/DD')),
+            subject: sails.__('[Lycaon] Weekly Report ({0})').format(moment(dt).format('YYYY/MM/DD')),
             template: 'email-weekly-report',
             templateData: {
               reportDate: moment(dt).format('YYYY/MM/DD') + ' <JST>',
@@ -173,6 +162,7 @@ SELECT a.*
       }
     } catch (err) {
       sails.log.error(err);
+      throw err;
     }
   },
 };

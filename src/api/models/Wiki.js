@@ -52,6 +52,7 @@ module.exports = {
     accessCount: {
       type: 'number',
       defaultsTo: 0,
+      description: '単純な閲覧回数',
     },
     nice: {
       type: 'number',

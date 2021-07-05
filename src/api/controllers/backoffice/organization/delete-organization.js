@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const utility = require('../../../../jobs/job-utility');
+const utility = require('../../../../jobs/modules/job-utility');
 
 module.exports = {
   friendlyName: 'delete organization',
@@ -63,21 +63,13 @@ module.exports = {
         await SysSettings.destroyOne({ organization: current.id }).usingConnection(db);
         await Organization.destroyOne({ id: current.id }).usingConnection(db);
 
-        await sails
-          .sendNativeQuery(`DROP SEQUENCE IF EXISTS "org_thread_${current.handleId}";`)
-          .usingConnection(db);
-        await sails
-          .sendNativeQuery(`DROP SEQUENCE IF EXISTS "org_wiki_${current.handleId}";`)
-          .usingConnection(db);
+        await sails.sendNativeQuery(`DROP SEQUENCE IF EXISTS "org_thread_${current.handleId}";`).usingConnection(db);
+        await sails.sendNativeQuery(`DROP SEQUENCE IF EXISTS "org_wiki_${current.handleId}";`).usingConnection(db);
       });
 
-      sails.log.info(
-        `組織 [ ${current.id} : ${current.handleId} ${current.name} ] を削除しました。`
-      );
+      sails.log.info(`組織 [ ${current.id} : ${current.handleId} ${current.name} ] を削除しました。`);
 
-      this.req.session.effectMessage = sails
-        .__('Removed the organization {0}')
-        .format(current.name);
+      this.req.session.effectMessage = sails.__('Removed the organization {0}').format(current.name);
     } catch (err) {
       sails.log.error(err);
       throw err;

@@ -66,7 +66,7 @@ module.exports = {
           replyId: created.id,
         });
         //ハッシュタグはコメントを狙う
-        var sneezes = await Sneeze.find({ thread: created.thread.id }).usingConnection(db);
+        var sneezes = await Sneeze.find({ thread: sneeze.thread.id }).usingConnection(db);
         var sNo = _.findIndex(sneezes, { id: created.sneeze });
         sNo++;
 
@@ -83,17 +83,22 @@ module.exports = {
       throw err;
     }
 
-    var rooms = [`room-${this.req.organization.id}-thread-${sneeze.thread.id}`];
-    var message = {
-      key: 'a comment has arrived from {0}',
-      params: [this.req.me.fullName],
-    };
-    sails.sockets.broadcast(rooms, 'comment-notify', {
-      message: message,
-      user: this.req.me,
-      comment: await sails.helpers.sanitizeDescription.with({ markdown: inputs.comment, max: 120 }),
-      timespan: Date.now(),
-      id: sneeze.thread.id,
+    await sails.helpers.broadcastCommentNotify.with({
+      organizationId: this.req.organization.id,
+      threadId: sneeze.thread.id,
+      fromUser: this.req.me,
+      comment: inputs.comment,
+    });
+
+    await sails.helpers.agendaSchedule.with({
+      ttl: Date.now() + sails.config.custom.bot.tweetTTL,
+      job: 'reply-bot',
+      data: {
+        reply: created,
+        sneeze: sneeze,
+        team: team,
+        organization: this.req.organization,
+      },
     });
 
     this.req.session.effectMessage = sails.__('Created a reply');
