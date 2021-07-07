@@ -6,7 +6,9 @@ module.exports = {
   inputs: {
     contents: {
       type: 'string',
-      maxLength: 2000,
+      custom: function (value) {
+        return [...value].length <= 2000;
+      },
       required: true,
     },
     categories: {
@@ -14,46 +16,66 @@ module.exports = {
     },
     fullName: {
       type: 'string',
-      maxLength: 120,
+      custom: function (value) {
+        return [...value].length <= 120;
+      },
       required: true,
     },
     emailAddress: {
       type: 'string',
-      maxLength: 300,
+      custom: function (value) {
+        return [...value].length <= 300;
+      },
       required: true,
       isEmail: true,
     },
     organization: {
       type: 'string',
-      maxLength: 100,
+      custom: function (value) {
+        return [...value].length <= 100;
+      },
     },
     zipCode: {
       type: 'string',
-      maxLength: 50,
+      custom: function (value) {
+        return [...value].length <= 50;
+      },
     },
     prefecture: {
       type: 'string',
-      maxLength: 50,
+      custom: function (value) {
+        return [...value].length <= 50;
+      },
     },
     city: {
       type: 'string',
-      maxLength: 50,
+      custom: function (value) {
+        return [...value].length <= 50;
+      },
     },
     street: {
       type: 'string',
-      maxLength: 100,
+      custom: function (value) {
+        return [...value].length <= 100;
+      },
     },
     building: {
       type: 'string',
-      maxLength: 100,
+      custom: function (value) {
+        return [...value].length <= 100;
+      },
     },
     phoneNo: {
       type: 'string',
-      maxLength: 20,
+      custom: function (value) {
+        return [...value].length <= 20;
+      },
     },
     honeypot: {
       type: 'string',
-      maxLength: 10,
+      custom: function (value) {
+        return [...value].length <= 10;
+      },
     },
   },
 

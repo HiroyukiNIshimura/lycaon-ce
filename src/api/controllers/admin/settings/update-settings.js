@@ -31,16 +31,22 @@ module.exports = {
     internalEmailAddress: {
       type: 'string',
       isEmail: true,
-      maxLength: 300,
+      custom: function (value) {
+        return [...value].length <= 300;
+      },
     },
     fromEmailAddress: {
       type: 'string',
       isEmail: true,
-      maxLength: 300,
+      custom: function (value) {
+        return [...value].length <= 300;
+      },
     },
     fromName: {
       type: 'string',
-      maxLength: 100,
+      custom: function (value) {
+        return [...value].length <= 100;
+      },
     },
     workingHoursPerDay: {
       type: 'number',

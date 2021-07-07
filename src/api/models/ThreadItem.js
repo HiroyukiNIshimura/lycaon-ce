@@ -15,31 +15,30 @@ module.exports = {
       type: 'string',
       required: true,
       description: 'ファイル名',
-      maxLength: 200,
+      custom: function (value) {
+        return [...value].length <= 200;
+      },
       example: 'abd.pdf',
     },
     virtualPath: {
       type: 'string',
       required: true,
       unique: true,
-      description:
-        'ファイル格納場所からの相対的仮想パス。OSのパスにセパレーターに準じる。ファイル名はハッシュ文字列',
+      description: 'ファイル格納場所からの相対的仮想パス。OSのパスにセパレーターに準じる。ファイル名はハッシュ文字列',
       example: 'appendix/thread/1/ad1f1a52-b42a-47b4-9e03-c570bd7d558e.jpeg',
     },
     virtualPathMid: {
       type: 'string',
       required: true,
       unique: true,
-      description:
-        'ファイル格納場所からの相対的仮想パス。OSのパスにセパレーターに準じる。ファイル名はハッシュ文字列',
+      description: 'ファイル格納場所からの相対的仮想パス。OSのパスにセパレーターに準じる。ファイル名はハッシュ文字列',
       example: 'appendix/wiki/1/thum_m/ad1f1a52-b42a-47b4-9e03-c570bd7d558e.jpeg',
     },
     virtualPathSmall: {
       type: 'string',
       required: true,
       unique: true,
-      description:
-        'ファイル格納場所からの相対的仮想パス。OSのパスにセパレーターに準じる。ファイル名はハッシュ文字列',
+      description: 'ファイル格納場所からの相対的仮想パス。OSのパスにセパレーターに準じる。ファイル名はハッシュ文字列',
       example: 'appendix/wiki/1/thum_s/ad1f1a52-b42a-47b4-9e03-c570bd7d558e.jpeg',
     },
     virtualUrl: {

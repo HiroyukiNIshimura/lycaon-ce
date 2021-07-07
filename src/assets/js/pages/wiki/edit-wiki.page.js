@@ -257,6 +257,10 @@ parasails.registerPage('edit-wiki', {
       // Validate
       if (!argins.subject) {
         this.formErrors.subject = true;
+      } else {
+        if ([...argins.subject].length > 200) {
+          this.formErrors.subjectLength = true;
+        }
       }
 
       if (argins.body && new TextEncoder().encode(argins.body).length >= 107374180) {

@@ -53,7 +53,7 @@ parasails.registerPage('git-show', {
       return `/${this.organization.handleId}/team/${this.team.id}`;
     },
     bottomBtnShow: function () {
-      return this.response.length > 1000;
+      return [...this.response].length > 1000;
     },
   },
 });

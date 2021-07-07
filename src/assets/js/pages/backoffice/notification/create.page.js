@@ -54,7 +54,7 @@ parasails.registerPage('backoffice-notification-create', {
       if (!argins.subject) {
         this.formErrors.subject = true;
       } else {
-        if (argins.subject.length > 200) {
+        if ([...argins.subject].length > 200) {
           this.formErrors.subjectLength = true;
         }
       }
@@ -62,7 +62,7 @@ parasails.registerPage('backoffice-notification-create', {
       if (!argins.body) {
         this.formErrors.body = true;
       } else {
-        if (argins.body.length > 5000) {
+        if ([...argins.body].length > 5000) {
           this.formErrors.bodyLength = true;
         }
       }

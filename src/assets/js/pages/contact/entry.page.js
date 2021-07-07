@@ -55,7 +55,7 @@ parasails.registerPage('contact-entry', {
       if (!argins.fullName) {
         this.formErrors.fullName = true;
       } else {
-        if (argins.fullName.length > 120) {
+        if ([...argins.fullName].length > 120) {
           this.formErrors.fullNameLength = true;
         }
       }
@@ -67,7 +67,7 @@ parasails.registerPage('contact-entry', {
         if (!parasails.util.isValidEmailAddress(argins.emailAddress)) {
           this.formErrors.emailAddress = true;
         }
-        if (argins.emailAddress.length > 300) {
+        if ([...argins.emailAddress].length > 300) {
           this.formErrors.emailAddressLength = true;
         }
       }
@@ -81,31 +81,31 @@ parasails.registerPage('contact-entry', {
         }
       }
 
-      if (argins.organization && argins.organization.length > 100) {
+      if (argins.organization && [...argins.organization].length > 100) {
         this.formErrors.organizationLength = true;
       }
 
-      if (argins.zipCode && argins.zipCode.length > 50) {
+      if (argins.zipCode && [...argins.zipCode].length > 50) {
         this.formErrors.zipCodeLength = true;
       }
 
-      if (argins.prefecture && argins.prefecture.length > 50) {
+      if (argins.prefecture && [...argins.prefecture].length > 50) {
         this.formErrors.prefectureLength = true;
       }
 
-      if (argins.city && argins.city.length > 50) {
+      if (argins.city && [...argins.city].length > 50) {
         this.formErrors.cityLength = true;
       }
 
-      if (argins.street && argins.street.length > 100) {
+      if (argins.street && [...argins.street].length > 100) {
         this.formErrors.streetLength = true;
       }
 
-      if (argins.building && argins.building.length > 100) {
+      if (argins.building && [...argins.building].length > 100) {
         this.formErrors.buildingLength = true;
       }
 
-      if (argins.phoneNo && argins.phoneNo.length > 20) {
+      if (argins.phoneNo && [...argins.phoneNo].length > 20) {
         this.formErrors.phoneNoLength = true;
       }
 

@@ -15,7 +15,9 @@ module.exports = {
       type: 'string',
       required: true,
       description: '選択肢',
-      maxLength: 200,
+      custom: function (value) {
+        return [...value].length <= 200;
+      },
     },
     isOther: {
       type: 'boolean',

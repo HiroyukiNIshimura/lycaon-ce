@@ -56,19 +56,6 @@ parasails.registerPage('new-thread', {
       if (this.fork.milestone) {
         this.selectedMilestone = this.fork.milestone;
       }
-    } else {
-      var hit = this.autoChooseMilestone(this.milestone);
-      if (hit) {
-        this.selectedMilestone = hit;
-        var store = expiringStorage.get(this.storageKey);
-        if (!store) {
-          expiringStorage.set(this.storageKey, true, 60 * 24 * 5);
-          $lycaon.infoToast(
-            // eslint-disable-next-line quotes
-            "Starting today's date, we have set milestone candidates for this thread"
-          );
-        }
-      }
     }
 
     this.formData.concept = 0;
@@ -149,27 +136,6 @@ parasails.registerPage('new-thread', {
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
-    autoChooseMilestone: function (milestone) {
-      if (this.milestone.length > 0) {
-        var dt = new Date();
-        dt.setHours(0, 0, 0, 0);
-
-        var hit = _.find(milestone, (entry) => {
-          if (entry.startAt && entry.duration) {
-            var endAt = Number(entry.startAt) + Number(entry.duration);
-            if (entry.startAt <= dt && endAt >= dt) {
-              return true;
-            }
-          }
-          return false;
-        });
-
-        if (hit) {
-          return hit.id;
-        }
-      }
-      return false;
-    },
     chooseTemplate: function () {
       var category = _.find(this.categories, { id: this.selectedCategory });
       var regexp = new RegExp(/yyyy\/mm\/dd/, 'ig');
@@ -292,9 +258,18 @@ parasails.registerPage('new-thread', {
       // Validate
       if (!argins.subject) {
         this.formErrors.subject = true;
+      } else {
+        if ([...argins.subject].length > 200) {
+          this.formErrors.subjectLength = true;
+        }
       }
+
       if (!argins.category) {
         this.formErrors.category = true;
+      }
+
+      if (argins.body && new TextEncoder().encode(argins.body).length >= 107374180) {
+        this.formErrors.bodyLength = true;
       }
 
       if (Object.keys(this.formErrors).length > 0) {

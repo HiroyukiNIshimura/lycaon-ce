@@ -1,8 +1,7 @@
 module.exports = {
   friendlyName: 'Send password recovery email',
 
-  description:
-    'Send a password recovery notification to the user with the specified email address.',
+  description: 'Send a password recovery notification to the user with the specified email address.',
 
   inputs: {
     emailAddress: {
@@ -13,18 +12,21 @@ module.exports = {
     },
     captchaToken: {
       type: 'string',
-      maxLength: 5,
+      custom: function (value) {
+        return [...value].length <= 5;
+      },
     },
     honeypot: {
       type: 'string',
-      maxLength: 10,
+      custom: function (value) {
+        return [...value].length <= 10;
+      },
     },
   },
 
   exits: {
     success: {
-      description:
-        'The email address might have matched a user in the database.  (If so, a recovery email was sent.)',
+      description: 'The email address might have matched a user in the database.  (If so, a recovery email was sent.)',
     },
     notFound: {
       responseType: 'notfound',
@@ -51,9 +53,7 @@ module.exports = {
     // (Even if no such user exists, pretend it worked to discourage sniffing.)
     var userRecord = await User.findOne({ emailAddress: inputs.emailAddress });
     if (!userRecord) {
-      sails.log.warn(
-        `存在しないアカウントのメールアドレスが使用されました。${inputs.emailAddress}`
-      );
+      sails.log.warn(`存在しないアカウントのメールアドレスが使用されました。${inputs.emailAddress}`);
       return;
     } //•
 

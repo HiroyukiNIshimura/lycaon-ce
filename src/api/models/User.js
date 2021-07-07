@@ -16,7 +16,9 @@ module.exports = {
       required: true,
       unique: true,
       isEmail: true,
-      maxLength: 300,
+      custom: function (value) {
+        return [...value].length <= 300;
+      },
       example: 'mary.sue@example.com',
     },
 
@@ -35,8 +37,7 @@ email status until they click the link in the confirmation email.`,
     emailChangeCandidate: {
       type: 'string',
       isEmail: true,
-      description:
-        'A still-unconfirmed email address that this user wants to change to (if relevant).',
+      description: 'A still-unconfirmed email address that this user wants to change to (if relevant).',
     },
 
     password: {
@@ -51,14 +52,18 @@ email status until they click the link in the confirmation email.`,
       type: 'string',
       required: true,
       description: `Full representation of the user's name.`,
-      maxLength: 120,
+      custom: function (value) {
+        return [...value].length <= 120;
+      },
       example: 'Mary Sue van der McHenst',
     },
 
     skil: {
       type: 'string',
       description: 'skil',
-      maxLength: 1000,
+      custom: function (value) {
+        return [...value].length <= 1000;
+      },
       example: 'javaが好き',
     },
 
@@ -97,8 +102,7 @@ So, while this \`isSuperAdmin\` demarcation might not be the right approach fore
 
     emailProofToken: {
       type: 'string',
-      description:
-        'A pseudorandom, probabilistically-unique token for use in our account verification emails.',
+      description: 'A pseudorandom, probabilistically-unique token for use in our account verification emails.',
     },
 
     emailProofTokenExpiresAt: {
@@ -113,8 +117,7 @@ So, while this \`isSuperAdmin\` demarcation might not be the right approach fore
     tosAcceptedByIp: {
       type: 'string',
       description: 'The IP (ipv4) address of the request that accepted the terms of service.',
-      extendedDescription:
-        'Useful for certain types of businesses and regulatory requirements (KYC, etc.)',
+      extendedDescription: 'Useful for certain types of businesses and regulatory requirements (KYC, etc.)',
       moreInfoUrl: 'https://en.wikipedia.org/wiki/Know_your_customer',
     },
 

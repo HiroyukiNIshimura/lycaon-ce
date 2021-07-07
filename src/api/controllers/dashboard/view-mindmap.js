@@ -52,8 +52,9 @@ module.exports = {
     const maxdeep = sails.config.custom.mindmap.rootDepth;
 
     var trimName = function (s) {
-      if (s.length > 10) {
-        return s.substr(0, 10) + '...';
+      var chars = Array.from(s);
+      if (chars.length > 10) {
+        return chars.slice(0, 10).join('') + '...';
       }
       return s;
     };

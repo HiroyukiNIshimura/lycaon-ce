@@ -207,7 +207,7 @@ parasails.registerPage('wiki', {
       return `/${this.organization.handleId}/wiki/edit/${this.wiki.no}`;
     },
     bottomBtnShow: function () {
-      return this.wiki.body.length > 1000;
+      return [...this.wiki.body].length > 1000;
     },
     niceCount: function () {
       return this.wiki.nice ? this.wiki.nice : 0;

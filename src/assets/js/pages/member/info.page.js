@@ -572,7 +572,7 @@ parasails.registerPage('member-info', {
       if (!this.formData.contents) {
         this.formErrors.contents = true;
       } else {
-        if (!this.formData.contents.length > 2000) {
+        if ([...this.formData.contents].length > 2000) {
           this.formErrors.contentsLength = true;
         }
       }

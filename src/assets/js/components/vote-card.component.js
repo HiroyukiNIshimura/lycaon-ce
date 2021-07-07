@@ -22,6 +22,7 @@ parasails.registerComponent('voteCard', {
       formatter: formatter,
       dateAgo: $lycaon.formatter.dateAgo,
       formatDate: $lycaon.formatter.formatDate,
+      me: {},
     };
   },
 
@@ -61,6 +62,7 @@ parasails.registerComponent('voteCard', {
   //  ╩═╝╩╚  ╚═╝╚═╝ ╩ ╚═╝╩═╝╚═╝
   beforeMount: function () {
     //…
+    this.me = SAILS_LOCALS.me;
   },
   mounted: async function () {
     //…

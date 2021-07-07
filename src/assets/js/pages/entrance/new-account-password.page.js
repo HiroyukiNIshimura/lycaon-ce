@@ -75,7 +75,7 @@ parasails.registerPage('new-account-password', {
       if (!argins.password) {
         this.formErrors.password = true;
       } else {
-        if (argins.password.length < 6 || argins.password.length > 100) {
+        if ([...argins.password].length < 6 || [...argins.password].length > 100) {
           this.formErrors.passwordLength = true;
         }
 

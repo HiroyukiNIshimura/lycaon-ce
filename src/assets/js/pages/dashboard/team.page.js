@@ -57,6 +57,8 @@ parasails.registerPage('team', {
     selectedTab: {},
     notifyStack: [],
     revisionGraph: undefined,
+    wordSearchWord: '',
+    wordSearchWikiWord: '',
     //dialogs
     showMemberModal: false,
     // Main syncing/loading state for this page.
@@ -439,6 +441,9 @@ parasails.registerPage('team', {
       }
     },
     submittedQueryForm: function (response) {
+      this.wordSearchWord = '';
+      this.wordSearchWikiWord = '';
+
       if (!response.data) {
         console.log('data not found!');
         return;
@@ -461,9 +466,9 @@ parasails.registerPage('team', {
       this.cloudSuccess = true;
 
       if (this.queryPatern === 1) {
+        this.wordSearchWord = response.word;
         this.$nextTick(() => {
-          var word = $('#query-word').val();
-          var re = new RegExp($lycaon.regexEscape(word), 'ig');
+          var re = new RegExp($lycaon.regexEscape(this.wordSearchWord), 'ig');
 
           $.each($('.thread-subject'), function () {
             var text = $(this).text();
@@ -479,9 +484,9 @@ parasails.registerPage('team', {
       }
 
       if (this.queryPatern === 2) {
+        this.wordSearchWikiWord = response.word;
         this.$nextTick(() => {
-          var word = $('#query-word-wiki').val();
-          var re = new RegExp($lycaon.regexEscape(word), 'ig');
+          var re = new RegExp($lycaon.regexEscape(this.wordSearchWikiWord), 'ig');
 
           $.each($('.wiki-subject'), function () {
             var text = $(this).text();

@@ -17,7 +17,9 @@ module.exports = {
     },
     templateSubject: {
       type: 'string',
-      maxLength: 200,
+      custom: function (value) {
+        return [...value].length <= 200;
+      },
     },
     templateBody: {
       type: 'string',
@@ -67,7 +69,6 @@ module.exports = {
     };
 
     try {
-
       await sails.getDatastore().transaction(async (db) => {
         await Category.updateOne({
           id: current.id,

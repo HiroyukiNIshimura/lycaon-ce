@@ -29,7 +29,9 @@ requests over WebSockets instead of HTTP).`,
     },
     honeypot: {
       type: 'string',
-      maxLength: 10,
+      custom: function (value) {
+        return [...value].length <= 10;
+      },
     },
   },
 

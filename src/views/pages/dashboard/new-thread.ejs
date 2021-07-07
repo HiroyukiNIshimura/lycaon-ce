@@ -7,7 +7,11 @@
         </p>
       </div>
     </div>
-
+    
+    <div class="text-danger" v-if="formErrors.bodyLength">
+      <%= __("Body size is too large") %>
+    </div>
+    
     <ajax-form action="createThread" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedForm" @rejected="onCloudError"
       :handle-parsing="handleParsingForm">
       <div class="row border border-top-0 border-right-0 border-left-0">
@@ -32,10 +36,11 @@
             </button>
           </div>
           <div class="md-form">
-            <input type="text" maxlength="120" id="thread-subject" class="form-control" v-model.trim="formData.subject" autocomplete="thread-subject"
-              :class="[formErrors.subject ? 'is-invalid' : '']" />
+            <input type="text" maxlength="200" id="thread-subject" class="form-control" v-model.trim="formData.subject" autocomplete="thread-subject"
+              :class="[formErrors.subject || formErrors.subjectLength ? 'is-invalid' : '']" />
             <label for="thread-subject"><%= __("Please enter the subject of the thread") %></label>
             <div class="invalid-feedback" v-if="formErrors.subject"><%= __("Please enter a subject") %></div>
+            <div class="invalid-feedback" v-if="formErrors.subjectLength"><%= __("Please enter within {0} characters").format(200) %></div>
           </div>
           <div class="row">
             <div class="col-auto mb-3">

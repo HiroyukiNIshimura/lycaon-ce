@@ -15,13 +15,17 @@ module.exports = {
       type: 'string',
       required: true,
       description: 'チーム名称',
-      maxLength: 100,
+      custom: function (value) {
+        return [...value].length <= 100;
+      },
       example: 'チームA',
     },
     description: {
       type: 'string',
       description: '説明',
-      maxLength: 500,
+      custom: function (value) {
+        return [...value].length <= 500;
+      },
       example: 'チームの説明',
     },
     useGit: {

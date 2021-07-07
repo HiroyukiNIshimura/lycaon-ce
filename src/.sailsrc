@@ -3,7 +3,7 @@
     "modules": {}
   },
   "_generatedWith": {
-    "sails": "1.4.0",
-    "sails-generate": "2.0.0"
+    "sails": "1.4.3",
+    "sails-generate": "2.0.3"
   }
 }

@@ -66,7 +66,7 @@ parasails.registerPage('forgot-password', {
         if (!parasails.util.isValidEmailAddress(argins.emailAddress)) {
           this.formErrors.emailAddress = true;
         }
-        if (argins.emailAddress.length > 300) {
+        if ([...argins.emailAddress].length > 300) {
           this.formErrors.emailAddressLength = true;
         }
       }

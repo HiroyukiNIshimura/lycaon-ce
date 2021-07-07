@@ -15,7 +15,9 @@ module.exports = {
       type: 'string',
       required: true,
       description: 'タイトル',
-      maxLength: 200,
+      custom: function (value) {
+        return [...value].length <= 200;
+      },
     },
     body: {
       type: 'string',
@@ -34,7 +36,9 @@ module.exports = {
     question: {
       type: 'string',
       description: '設問',
-      maxLength: 200,
+      custom: function (value) {
+        return [...value].length <= 200;
+      },
     },
     circulationFrom: {
       type: 'ref',

@@ -13,7 +13,9 @@ module.exports = {
     //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
     contents: {
       type: 'string',
-      maxLength: 2000,
+      custom: function (value) {
+        return [...value].length <= 2000;
+      },
     },
     readAt: {
       type: 'ref',

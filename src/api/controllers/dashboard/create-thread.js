@@ -4,7 +4,9 @@ module.exports = {
   inputs: {
     subject: {
       type: 'string',
-      maxLength: 200,
+      custom: function (value) {
+        return [...value].length <= 200;
+      },
       required: true,
     },
     body: {

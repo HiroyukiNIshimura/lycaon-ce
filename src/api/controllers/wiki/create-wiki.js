@@ -9,7 +9,9 @@ module.exports = {
     subject: {
       type: 'string',
       required: true,
-      maxLength: 200,
+      custom: function (value) {
+        return [...value].length <= 200;
+      },
     },
     body: {
       type: 'string',

@@ -42,9 +42,7 @@ parasails.registerPage('edit-profile', {
   beforeMount: function () {
     // Set the form data.
     this.formData.fullName = this.me.fullName;
-    this.formData.emailAddress = this.me.emailChangeCandidate
-      ? this.me.emailChangeCandidate
-      : this.me.emailAddress;
+    this.formData.emailAddress = this.me.emailChangeCandidate ? this.me.emailChangeCandidate : this.me.emailAddress;
 
     this.formData.skil = this.me.skil;
     this.formData.notNeedMyOwnEmail = this.me.notNeedMyOwnEmail;
@@ -176,7 +174,7 @@ parasails.registerPage('edit-profile', {
       if (!argins.fullName) {
         this.formErrors.fullName = true;
       } else {
-        if (argins.fullName.length > 120) {
+        if ([...argins.fullName].length > 120) {
           this.formErrors.fullNameLength = true;
         }
       }
@@ -188,12 +186,12 @@ parasails.registerPage('edit-profile', {
         if (!parasails.util.isValidEmailAddress(argins.emailAddress)) {
           this.formErrors.emailAddress = true;
         }
-        if (argins.emailAddress.length > 300) {
+        if ([...argins.emailAddress].length > 300) {
           this.formErrors.emailAddressLength = true;
         }
       }
 
-      if (argins.skil.length > 1000) {
+      if ([...argins.skil].length > 1000) {
         this.formErrors.skil = true;
       }
 

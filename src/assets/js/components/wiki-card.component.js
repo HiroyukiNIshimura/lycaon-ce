@@ -89,10 +89,11 @@ parasails.registerComponent('wikiCard', {
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
     truncate: function (text, length) {
-      if (text.length < length) {
+      var chars = Array.from(text);
+      if (chars.length < length) {
         return text;
       }
-      return text.substring(0, length) + '...';
+      return chars.slice(0, length).join('') + '...';
     },
     tagLink: function (tag) {
       if (this.wiki.team) {

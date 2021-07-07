@@ -5,7 +5,9 @@ module.exports = {
     word: {
       type: 'string',
       description: 'query word',
-      maxLength: 50,
+      custom: function (value) {
+        return [...value].length <= 50;
+      },
       required: true,
     },
     team: {
@@ -29,7 +31,9 @@ module.exports = {
   },
 
   fn: async function (inputs) {
-    var response = {};
+    var response = {
+      word: inputs.word,
+    };
 
     var NATIVE_COUNT = `SELECT count("wiki".*) as "qty" FROM "public"."wiki"
 `;

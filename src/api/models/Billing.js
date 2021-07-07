@@ -13,12 +13,16 @@ module.exports = {
     //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
     customerName: {
       type: 'string',
-      maxLength: 100,
+      custom: function (value) {
+        return [...value].length <= 100;
+      },
       description: '請求先名称',
     },
     zipCode: {
       type: 'string',
-      maxLength: 8,
+      custom: function (value) {
+        return [...value].length <= 8;
+      },
       description: '郵便番号',
       example: '123-1234',
     },
@@ -80,22 +84,30 @@ module.exports = {
     },
     city: {
       type: 'string',
-      maxLength: 100,
+      custom: function (value) {
+        return [...value].length <= 100;
+      },
       description: '市区町村',
     },
     street: {
       type: 'string',
-      maxLength: 100,
+      custom: function (value) {
+        return [...value].length <= 100;
+      },
       description: '番地など',
     },
     building: {
       type: 'string',
-      maxLength: 100,
+      custom: function (value) {
+        return [...value].length <= 100;
+      },
       description: '建物など',
     },
     phoneNo: {
       type: 'string',
-      maxLength: 20,
+      custom: function (value) {
+        return [...value].length <= 20;
+      },
       description: '電話番号',
       example: '03-1234-1234 | 0312341234 ',
     },

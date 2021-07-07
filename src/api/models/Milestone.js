@@ -15,7 +15,9 @@ module.exports = {
       type: 'string',
       required: true,
       description: 'マイルストーン名称',
-      maxLength: 20,
+      custom: function (value) {
+        return [...value].length <= 20;
+      },
       example: '設計',
     },
     lineNo: {

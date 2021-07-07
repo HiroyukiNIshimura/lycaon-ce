@@ -17,13 +17,16 @@ module.exports = {
       unique: true,
       description: '組織ID',
       maxLength: 10,
+      regex: /^[a-zA-Z0-9]+$/,
       example: 'BL',
     },
     name: {
       type: 'string',
       required: true,
       description: '組織名',
-      maxLength: 100,
+      custom: function (value) {
+        return [...value].length <= 100;
+      },
       example: 'ブライト・エル',
     },
     emailAddress: {
@@ -31,14 +34,18 @@ module.exports = {
       required: true,
       unique: true,
       isEmail: true,
-      maxLength: 300,
+      custom: function (value) {
+        return [...value].length <= 300;
+      },
       description: '代表者メールアドレス',
       example: 'mary.sue@example.com',
     },
     fullName: {
       type: 'string',
       required: true,
-      maxLength: 120,
+      custom: function (value) {
+        return [...value].length <= 120;
+      },
       description: '代表者氏名',
       example: 'Mary Sue van der McHenst',
     },

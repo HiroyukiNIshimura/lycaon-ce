@@ -19,12 +19,12 @@ parasails.registerPage('vote-create', {
     selectedQuestions: [],
     isUploading: false,
     showImageListModal: false,
+    isQuestionnaireFormat: false,
     //…
     // Main syncing/loading state for this page.
     syncing: false,
     // Form data
     formData: {
-      isQuestionnaireFormat: false,
       /* … */
     },
     // For tracking client-side validation errors in our form.

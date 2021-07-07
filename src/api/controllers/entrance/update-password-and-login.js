@@ -23,7 +23,9 @@ module.exports = {
     },
     honeypot: {
       type: 'string',
-      maxLength: 10,
+      custom: function (value) {
+        return [...value].length <= 10;
+      },
     },
   },
 

@@ -1,1 +1,1 @@
-const lycaon_lang_work_delete = {"The associated thread has been set at {0}":"","The related thread has been released {0}":""};
+const lycaon_lang_work_delete = {"Starting today's date, we have set milestone candidates for this thread":""};

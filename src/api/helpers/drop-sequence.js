@@ -7,6 +7,7 @@ module.exports = {
       required: true,
       description: 'organization.handleId',
       maxLength: 10,
+      regex: /^[a-zA-Z0-9]+$/,
     },
   },
   exits: {

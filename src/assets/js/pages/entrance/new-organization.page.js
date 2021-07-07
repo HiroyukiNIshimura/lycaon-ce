@@ -65,10 +65,10 @@ parasails.registerPage('new-organization', {
       // Validate
       if (!argins.handleId) {
         this.formErrors.handleId = true;
-      }
-
-      if (argins.handleId && argins.handleId.length > 20) {
-        this.formErrors.handleIdLength = true;
+      } else {
+        if ([...argins.handleId].length > 10) {
+          this.formErrors.handleIdLength = true;
+        }
       }
 
       var regex = new RegExp('^[a-zA-Z0-9]+$');
@@ -80,7 +80,7 @@ parasails.registerPage('new-organization', {
       if (!argins.name) {
         this.formErrors.name = true;
       } else {
-        if (argins.name.length > 100) {
+        if ([...argins.name].length > 100) {
           this.formErrors.nameLength = true;
         }
       }
@@ -88,7 +88,7 @@ parasails.registerPage('new-organization', {
       if (!argins.fullName) {
         this.formErrors.fullName = true;
       } else {
-        if (argins.fullName.length > 120) {
+        if ([...argins.fullName].length > 120) {
           this.formErrors.fullNameLength = true;
         }
       }
@@ -99,7 +99,7 @@ parasails.registerPage('new-organization', {
         if (!parasails.util.isValidEmailAddress(argins.emailAddress)) {
           this.formErrors.emailAddress = true;
         }
-        if (argins.emailAddress.length > 300) {
+        if ([...argins.emailAddress].length > 300) {
           this.formErrors.emailAddressLength = true;
         }
       }

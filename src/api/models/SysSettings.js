@@ -44,18 +44,24 @@ module.exports = {
     internalEmailAddress: {
       type: 'string',
       isEmail: true,
-      maxLength: 300,
+      custom: function (value) {
+        return [...value].length <= 300;
+      },
       description: '管理用メールアドレス',
     },
     fromEmailAddress: {
       type: 'string',
       isEmail: true,
-      maxLength: 300,
+      custom: function (value) {
+        return [...value].length <= 300;
+      },
       description: '外部に送信するメールのfromアドレス',
     },
     fromName: {
       type: 'string',
-      maxLength: 100,
+      custom: function (value) {
+        return [...value].length <= 100;
+      },
       description: '外部に送信するメールのfrom名称',
     },
     workingHoursPerDay: {

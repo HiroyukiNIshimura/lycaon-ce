@@ -12,7 +12,9 @@ then redirect to either a special landing page (for newly-signed up users), or t
     },
     honeypot: {
       type: 'string',
-      maxLength: 10,
+      custom: function (value) {
+        return [...value].length <= 10;
+      },
     },
   },
 
@@ -99,9 +101,7 @@ then redirect to either a special landing page (for newly-signed up users), or t
       // last checked its availability. (This is a relatively rare edge case--
       // see exit description.)
       if ((await User.count({ emailAddress: user.emailChangeCandidate })) > 0) {
-        sails.log.warn(
-          `変更待機中のメールアドレス：${user.emailChangeCandidate}は既に利用されています。`
-        );
+        sails.log.warn(`変更待機中のメールアドレス：${user.emailChangeCandidate}は既に利用されています。`);
         /**
          * これは、WebサイトやAPIで常に予期されるとは限らないエッジケースです。 非常にまれであるため、500サーバーのエラーページは単純なキャッチオールとして使用されます。 これが将来重要になった場合、これはカスタムエラーページまたは解決フローに簡単に拡張できます。 ただし、コンテキストとしては、500サーバーのエラーページを表示するこの動作は、Slackなどの人気のあるアプリが同じ状況でどのように動作するかを模倣しています。
          */

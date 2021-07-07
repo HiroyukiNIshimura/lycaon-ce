@@ -20,7 +20,9 @@ module.exports = {
     otherToken: {
       type: 'string',
       description: 'その他の回答',
-      maxLength: 500,
+      custom: function (value) {
+        return [...value].length <= 500;
+      },
     },
   },
 

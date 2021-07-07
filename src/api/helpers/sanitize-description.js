@@ -22,8 +22,9 @@ module.exports = {
       var i = 0;
       for (let row of inputs.markdown.split(/\n/)) {
         text += row + '\n';
-        if (text.length > inputs.max) {
-          text = text.substring(0, inputs.max) + '...';
+        var chars = Array.from(text);
+        if (chars.length > inputs.max) {
+          text = chars.slice(0, inputs.max).join('') + '...';
           break;
         }
         i++;

@@ -11,18 +11,24 @@ module.exports = {
     name: {
       type: 'string',
       required: true,
-      maxLength: 100,
+      custom: function (value) {
+        return [...value].length <= 100;
+      },
     },
     emailAddress: {
       type: 'string',
       required: true,
       isEmail: true,
-      maxLength: 300,
+      custom: function (value) {
+        return [...value].length <= 300;
+      },
     },
     fullName: {
       type: 'string',
       required: true,
-      maxLength: 120,
+      custom: function (value) {
+        return [...value].length <= 120;
+      },
     },
     plan: {
       type: 'string',
@@ -31,18 +37,21 @@ module.exports = {
     },
     captchaToken: {
       type: 'string',
-      maxLength: 5,
+      custom: function (value) {
+        return [...value].length <= 5;
+      },
     },
     honeypot: {
       type: 'string',
-      maxLength: 10,
+      custom: function (value) {
+        return [...value].length <= 10;
+      },
     },
   },
 
   exits: {
     success: {
-      description:
-        'The email address might have matched a user in the database.  (If so, a recovery email was sent.)',
+      description: 'The email address might have matched a user in the database.  (If so, a recovery email was sent.)',
     },
     handleIdAlreadyInUse: {
       statusCode: 409,
@@ -178,9 +187,7 @@ module.exports = {
       await sails.helpers.sendTemplateEmail.with({
         organization: backoffice,
         to: sails.config.custom.backofficeMailAddress,
-        subject: isBackOffice
-          ? '新規組織を登録しました'
-          : '新規組織がエントランスより登録されました',
+        subject: isBackOffice ? '新規組織を登録しました' : '新規組織がエントランスより登録されました',
         template: 'email-bo-organization',
         templateData: {
           organization: created,
@@ -194,9 +201,7 @@ module.exports = {
       await sails.helpers.sendTemplateEmail.with({
         organization: created,
         to: email,
-        subject: sails.__(
-          'Welcome! To Lycaon (Send confirmation URL of organization registration)'
-        ),
+        subject: sails.__('Welcome! To Lycaon (Send confirmation URL of organization registration)'),
         template: 'email-regist-organization',
         templateData: {
           organization: created,

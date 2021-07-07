@@ -20,12 +20,15 @@ module.exports = {
       required: true,
       description: 'organization.handleId',
       maxLength: 10,
+      regex: /^[a-zA-Z0-9]+$/,
     },
     subject: {
       type: 'string',
       required: true,
       description: 'タイトル',
-      maxLength: 200,
+      custom: function (value) {
+        return [...value].length <= 200;
+      },
       example: 'あの問題点について',
     },
     body: {

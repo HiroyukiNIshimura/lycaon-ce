@@ -15,7 +15,9 @@ module.exports = {
       type: 'string',
       required: true,
       description: 'タイトル',
-      maxLength: 200,
+      custom: function (value) {
+        return [...value].length <= 200;
+      },
     },
     body: {
       type: 'string',

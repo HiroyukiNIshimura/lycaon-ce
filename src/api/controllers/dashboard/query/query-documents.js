@@ -5,7 +5,9 @@ module.exports = {
     word: {
       type: 'string',
       description: 'query word',
-      maxLength: 50,
+      custom: function (value) {
+        return [...value].length <= 50;
+      },
       required: true,
     },
     id: {

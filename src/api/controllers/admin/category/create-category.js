@@ -13,7 +13,9 @@ module.exports = {
     },
     templateSubject: {
       type: 'string',
-      maxLength: 200,
+      custom: function (value) {
+        return [...value].length <= 200;
+      },
     },
     templateBody: {
       type: 'string',
@@ -53,7 +55,6 @@ module.exports = {
     };
 
     try {
-
       await sails.getDatastore().transaction(async (db) => {
         var max = await Category.find({
           where: { organization: this.req.organization.id },
@@ -72,9 +73,7 @@ module.exports = {
       throw err;
     }
 
-    this.req.session.effectMessage = sails
-      .__('You have created a category {0}')
-      .format(valuesToSet.name);
+    this.req.session.effectMessage = sails.__('You have created a category {0}').format(valuesToSet.name);
 
     return {
       id: created.id,

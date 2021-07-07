@@ -1,7 +1,7 @@
 const flaverr = require('flaverr');
 
 module.exports = {
-  friendlyName: 'Create Activity utility',
+  friendlyName: 'createThreadActivity',
   description: 'Create Activity utility.',
   inputs: {
     db: {

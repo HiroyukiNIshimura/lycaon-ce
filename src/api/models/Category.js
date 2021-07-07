@@ -15,7 +15,9 @@ module.exports = {
       type: 'string',
       required: true,
       description: 'カテゴリ名称',
-      maxLength: 10,
+      custom: function (value) {
+        return [...value].length <= 10;
+      },
       example: '課題',
     },
     displayOrder: {
@@ -32,7 +34,9 @@ module.exports = {
     templateSubject: {
       type: 'string',
       description: '件名のテンプレート',
-      maxLength: 200,
+      custom: function (value) {
+        return [...value].length <= 200;
+      },
       example: '【課題】○○○○○',
     },
     templateBody: {
