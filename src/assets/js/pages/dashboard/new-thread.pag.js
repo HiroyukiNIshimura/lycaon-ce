@@ -268,7 +268,7 @@ parasails.registerPage('new-thread', {
         this.formErrors.category = true;
       }
 
-      if (argins.body && new TextEncoder().encode(argins.body).length >= 107374180) {
+      if (argins.body && new TextEncoder().encode(argins.body).length >= 2000000) {
         this.formErrors.bodyLength = true;
       }
 

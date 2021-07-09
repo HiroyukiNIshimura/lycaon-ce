@@ -32,8 +32,8 @@
           <div class="md-form">
             <label for="form-contents" class="md-textarea-label"><span
                 class="badge badge-pill badge-danger mr-2"><%= __('required') %></span><%= __('Inquiry') %></label>
-            <textarea id="form-contents" class="md-textarea form-control" rows="5" maxlength="2000"
-              :class="[formErrors.contents ? 'is-invalid' : '']" v-model.trim="formData.contents"></textarea>
+            <v-textarea id="form-contents" class="md-textarea form-control" rows="5" :maxlength="2000"
+              :class="[formErrors.contents ? 'is-invalid' : '']" v-model.trim="formData.contents"></v-textarea>
             <div class="invalid-feedback" v-if="formErrors.contents"><%= __('Please enter your inquiry') %></div>
             <div class="invalid-feedback" v-if="formErrors.contentsLength">
               <%= __('Please enter within {0} characters').format(2000) %>
@@ -85,7 +85,7 @@
           <div class="md-form">
             <label for="form-full-name"><span
                 class="badge badge-pill badge-danger mr-2"><%= __('required') %></span><%= __('Full Name') %></label>
-            <input class="form-control" id="form-full-name" type="text" maxlength="120"
+            <v-text-input class="form-control" id="form-full-name" type="text" :maxlength="120"
               :class="[formErrors.fullName || formErrors.fullNameLength ? 'is-invalid' : '']"
               v-model.trim="formData.fullName" autocomplete="name" />
             <div class="invalid-feedback" v-if="formErrors.fullName"><%= __('Please enter your full name') %></div>
@@ -96,8 +96,7 @@
           <div class="md-form">
             <label for="form-emailAddress"><span
                 class="badge badge-pill badge-danger mr-2"><%= __('required') %></span><%= __("Mail Address") %></label>
-            <input class="form-control" id="form-emailAddress" type="text" maxlength="300"
-              :class="[formErrors.emailAddress || formErrors.emailAddressLength ? 'is-invalid' : '']"
+            <v-text-input class="form-control" id="form-emailAddress" type="text" :maxlength="300" :class="[formErrors.emailAddress || formErrors.emailAddressLength ? 'is-invalid' : '']"
               v-model.trim="formData.emailAddress" />
             <div class="invalid-feedback" v-if="formErrors.emailAddress">
               <%= __("Please enter a valid email address") %>
@@ -108,8 +107,7 @@
           </div>
           <div class="md-form">
             <label for="form-organization"><%= __("Organization name") %></label>
-            <input class="form-control" id="form-organization" type="text" maxlength="100"
-              :class="[formErrors.organizationLength ? 'is-invalid' : '']" v-model.trim="formData.organization" />
+            <v-text-input class="form-control" id="form-organization" type="text" :maxlength="100" :class="[formErrors.organizationLength ? 'is-invalid' : '']" v-model.trim="formData.organization" />
             <div class="invalid-feedback" v-if="formErrors.organizationLength">
               <%= __("Please enter within {0} characters").format(100) %>
             </div>
@@ -117,15 +115,14 @@
 
           <div class="md-form">
             <label for="form-zip-code"><%= __("Postal code") %></label>
-            <input class="form-control" id="form-zip-code" type="text" maxlength="50"
-              :class="[formErrors.zipCodeLength ? 'is-invalid' : '']" v-model.trim="formData.zipCode" />
+            <v-text-input class="form-control" id="form-zip-code" type="text" :maxlength="50" :class="[formErrors.zipCodeLength ? 'is-invalid' : '']" v-model.trim="formData.zipCode" />
             <div class="invalid-feedback" v-if="formErrors.zipCodeLength">
               <%= __("Please enter within {0} characters").format(50) %>
             </div>
           </div>
           <div class="md-form">
             <label for="form-prefecture"><%= __("Prefectures") %></label>
-            <input class="form-control" id="form-prefecturee" type="text" maxlength="50"
+            <v-text-input class="form-control" id="form-prefecturee" type="text" :maxlength="50"
               :class="[formErrors.prefectureLength ? 'is-invalid' : '']" v-model.trim="formData.prefecture" />
             <div class="invalid-feedback" v-if="formErrors.prefectureLength">
               <%= __("Please enter within {0} characters").format(100) %>
@@ -133,7 +130,7 @@
           </div>
           <div class="md-form">
             <label for="form-city"><%= __("City name") %></label>
-            <input class="form-control" id="form-city" type="text" maxlength="50"
+            <v-text-input class="form-control" id="form-city" type="text" :maxlength="50"
               :class="[formErrors.cityLength ? 'is-invalid' : '']" v-model.trim="formData.city" />
             <div class="invalid-feedback" v-if="formErrors.cityLength">
               <%= __("Please enter within {0} characters").format(50) %>
@@ -141,7 +138,7 @@
           </div>
           <div class="md-form">
             <label for="form-street"><%= __("Address etc") %></label>
-            <input class="form-control" id="form-street" type="text" maxlength="100"
+            <v-text-input class="form-control" id="form-street" type="text" :maxlength="100"
               :class="[formErrors.streetLength ? 'is-invalid' : '']" v-model.trim="formData.street" />
             <div class="invalid-feedback" v-if="formErrors.streetLength">
               <%= __("Please enter within {0} characters").format(100) %>
@@ -149,7 +146,7 @@
           </div>
           <div class="md-form">
             <label for="form-building"><%= __("Name of buildings etc") %></label>
-            <input class="form-control" id="form-building" type="text" maxlength="100"
+            <v-text-input class="form-control" id="form-building" type="text" :maxlength="100"
               :class="[formErrors.buildingLength ? 'is-invalid' : '']" v-model.trim="formData.building" />
             <div class="invalid-feedback" v-if="formErrors.buildingLength">
               <%= __("Please enter within {0} characters").format(100) %>
@@ -157,7 +154,7 @@
           </div>
           <div class="md-form">
             <label for="form-phone-no"><%= __('Phone number') %></label>
-            <input class="form-control" id="form-phone-no" type="text" maxlength="20"
+            <v-text-input class="form-control" id="form-phone-no" type="text" :maxlength="20"
               :class="[formErrors.phoneNoLength ? 'is-invalid' : '']" v-model.trim="formData.phoneNo"
               autocomplete="phone" />
             <div class="invalid-feedback" v-if="formErrors.phoneNoLength">

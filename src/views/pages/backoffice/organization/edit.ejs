@@ -78,13 +78,13 @@
       <h5 class="mt-5 mb-3"><%= __("Billing information") %></h5>
       <div class="md-form">
         <label for="form-customerName"><%= __("Billing name") %></label>
-        <input type="text" maxlength="100" id="form-customerName" class="form-control"
+        <v-text-input type="text" :maxlength="100" id="form-customerName" class="form-control"
           :class="[formErrors.customerName ? 'is-invalid' : '']" v-model="formData.customerName" />
       </div>
 
       <div class="md-form">
         <label for="form-zipCode"><%= __("Postal code") %></label>
-        <input type="text" maxlength="8" id="form-zipCode" class="form-control"
+        <v-text-input type="text" :maxlength="8" id="form-zipCode" class="form-control"
           :class="[formErrors.zipCode ? 'is-invalid' : '']" v-model="formData.zipCode" />
         <div class="invalid-feedback" v-if="formErrors.zipCode">
           <%= __("Please enter a valid zip code") %>
@@ -98,24 +98,24 @@
       </div>
       <div class="md-form">
         <label for="form-city"><%= __("City name") %></label>
-        <input type="text" maxlength="100" id="form-city" class="form-control"
+        <v-text-input type="text" :maxlength="100" id="form-city" class="form-control"
           :class="[formErrors.city ? 'is-invalid' : '']" v-model="formData.city" />
       </div>
 
       <div class="md-form">
         <label for="form-street"><%= __("Address etc") %></label>
-        <input type="text" maxlength="100" id="form-street" class="form-control"
+        <v-text-input type="text" :maxlength="100" id="form-street" class="form-control"
           :class="[formErrors.street ? 'is-invalid' : '']" v-model="formData.street" />
       </div>
 
       <div class="md-form">
         <label for="form-building"><%= __("Name of buildings etc") %></label>
-        <input type="text" maxlength="100" id="form-building" class="form-control"
+        <v-text-input type="text" :maxlength="100" id="form-building" class="form-control"
           :class="[formErrors.building ? 'is-invalid' : '']" v-model="formData.building" />
       </div>
       <div class="md-form">
         <label for="form-phoneNo"><%= __("Phone number") %></label>
-        <input type="text" maxlength="100" id="form-phoneNo" class="form-control"
+        <v-text-input type="text" :maxlength="100" id="form-phoneNo" class="form-control"
           :class="[formErrors.phoneNo ? 'is-invalid' : '']" v-model="formData.phoneNo" />
         <div class="invalid-feedback" v-if="formErrors.phoneNo">
           <%= __("Please enter a valid phone number") %>

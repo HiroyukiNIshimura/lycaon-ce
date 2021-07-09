@@ -10,7 +10,7 @@
 </div>
 
 <div class="md-form mt-5">
-  <input type="text" maxlength="200" id="notification-subject" class="form-control" v-model.trim="formData.subject" autocomplete="notification-subject"
+  <v-text-input type="text" :maxlength="200" id="notification-subject" class="form-control" v-model.trim="formData.subject" autocomplete="notification-subject"
     :class="[formErrors.subject || formErrors.subjectLength ? 'is-invalid' : '']" />
   <label for="notification-subject"><%= __("Please enter a subject") %></label>
   <div class="invalid-feedback" v-if="formErrors.subject"><%= __("Please enter a subject") %></div>
@@ -19,8 +19,8 @@
 <div class="md-form">
     <label for="notification-body"
         class="md-textarea-label"><%= __('Please enter the content') %></label>
-    <textarea id="notification-body" class="md-textarea form-control" rows="10" maxlength="5000"
-        :class="[formErrors.body || formErrors.bodyLength ? 'is-invalid' : '']" v-model.trim="formData.body"></textarea>
+    <v-textarea id="notification-body" class="md-textarea form-control" rows="10" :maxlength="5000"
+        :class="[formErrors.body || formErrors.bodyLength ? 'is-invalid' : '']" v-model.trim="formData.body"></v-textarea>
     <div class="invalid-feedback" v-if="formErrors.body">
         <%= __("Please enter the content") %>
     </div>

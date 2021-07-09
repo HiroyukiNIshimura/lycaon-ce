@@ -34,7 +34,7 @@ module.exports = {
     body: {
       type: 'string',
       custom: function (value) {
-        return Buffer.byteLength(value, 'utf8') < 107374180;
+        return Buffer.byteLength(value, 'utf8') < 2000000;
       },
       description: '本文',
       example: 'これはMarkdownのままのデータ',

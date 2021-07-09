@@ -325,7 +325,7 @@ parasails.registerPage('vote-edit', {
       if (!argins.body) {
         this.formErrors.body = true;
       } else {
-        if (new TextEncoder().encode(argins.body).length >= 107374180) {
+        if (new TextEncoder().encode(argins.body).length >= 2000000) {
           this.formErrors.bodyLength = true;
         }
       }

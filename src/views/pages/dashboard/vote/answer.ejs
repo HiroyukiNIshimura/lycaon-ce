@@ -71,8 +71,8 @@
       <div class="col">
         <div class="md-form">
           <label for="my-message" class="md-textarea-label"><%= __('Please enter any other answers') %></label>
-          <textarea id="my-message" class="md-textarea form-control" rows="3" maxlength="500" :class="[formErrors.other ? 'is-invalid' : '']"
-            v-model.trim="other"></textarea>
+          <v-textarea id="my-message" class="md-textarea form-control" rows="3" :maxlength="500" :class="[formErrors.other ? 'is-invalid' : '']"
+            v-model.trim="other"></v-textarea>
         </div>
       </div>
     </div>

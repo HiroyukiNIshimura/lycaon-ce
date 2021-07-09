@@ -61,7 +61,7 @@
                 <div class="row">
                   <div class="col">
                     <div class="md-form">
-                      <input type="text" maxlength="200" id="thread-subject" class="form-control" v-model.trim="thread.subject" autocomplete="thread-subject"
+                      <v-text-input type="text" :maxlength="200" id="thread-subject" class="form-control" v-model.trim="thread.subject" autocomplete="thread-subject"
                         :class="[formErrors.subject || formErrors.subjectLength ? 'is-invalid' : '']" />
                       <label for="thread-subject"><%= __("Thread") %> #{{ thread.id }}</label>
                       <div class="invalid-feedback" v-if="formErrors.subject">

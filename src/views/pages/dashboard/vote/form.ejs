@@ -1,5 +1,5 @@
 <div class="md-form">
-  <input type="text" maxlength="200" id="vote-subject" class="form-control" v-model.trim="formData.subject" autocomplete="vote-subject"
+  <v-text-input type="text" :maxlength="200" id="vote-subject" class="form-control" v-model.trim="formData.subject" autocomplete="vote-subject"
     :class="[formErrors.subject ? 'is-invalid' : '']" />
   <label for="vote-subject"><%= __("Please enter the title of the circulation notice") %></label>
   <div class="invalid-feedback" v-if="formErrors.subject"><%= __("Please enter a subject") %></div>
@@ -84,7 +84,7 @@
 
 <div v-show="isQuestionnaireFormat">
   <div class="md-form">
-    <input type="text" maxlength="200" id="vote-question" class="form-control" v-model.trim="formData.question" autocomplete="vote-question"
+    <v-text-input type="text" :maxlength="200" id="vote-question" class="form-control" v-model.trim="formData.question" autocomplete="vote-question"
       :class="[formErrors.question ? 'is-invalid' : '']" />
     <label for="vote-question"><%= __("Please enter a question") %></label>
     <div class="invalid-feedback" v-if="formErrors.question"><%= __("Please enter a question") %></div>

@@ -1066,7 +1066,7 @@ parasails.registerPage('thread', {
         }
       }
 
-      if (argins.body && new TextEncoder().encode(argins.body).length >= 107374180) {
+      if (argins.body && new TextEncoder().encode(argins.body).length >= 2000000) {
         this.formErrors.bodyLength = true;
       }
 
@@ -1202,7 +1202,7 @@ parasails.registerPage('thread', {
       if (!argins.comment || argins.comment === '') {
         this.formErrors.comment = true;
       } else {
-        if (new TextEncoder().encode(argins.comment).length >= 107374180) {
+        if (new TextEncoder().encode(argins.comment).length >= 2000000) {
           this.formErrors.sneezeLength = true;
         }
       }
@@ -1230,7 +1230,7 @@ parasails.registerPage('thread', {
       if (!argins.comment || argins.comment === '') {
         this.formErrors.comment = true;
       } else {
-        if (new TextEncoder().encode(argins.comment).length >= 107374180) {
+        if (new TextEncoder().encode(argins.comment).length >= 2000000) {
           this.formErrors.commentLength = true;
         }
       }
@@ -1258,7 +1258,7 @@ parasails.registerPage('thread', {
       if (!argins.comment || argins.comment === '') {
         this.formErrors.comment = true;
       } else {
-        if (new TextEncoder().encode(argins.comment).length >= 107374180) {
+        if (new TextEncoder().encode(argins.comment).length >= 2000000) {
           this.formErrors.replyLength = true;
         }
       }
@@ -1286,7 +1286,7 @@ parasails.registerPage('thread', {
       if (!argins.comment || argins.comment === '') {
         this.formErrors.comment = true;
       } else {
-        if (new TextEncoder().encode(argins.comment).length >= 107374180) {
+        if (new TextEncoder().encode(argins.comment).length >= 2000000) {
           this.formErrors.replyLength = true;
         }
       }

@@ -71,7 +71,7 @@ parasails.registerPage('admin-category-edit', {
       if (argins.useTemplate) {
         if (!argins.templateSubject || !argins.templateBody) {
           this.formErrors.templateBody = true;
-        } else if (new TextEncoder().encode(argins.templateBody).length >= 107374180) {
+        } else if (new TextEncoder().encode(argins.templateBody).length >= 2000000) {
           this.formErrors.bodyLength = true;
         }
       } else {

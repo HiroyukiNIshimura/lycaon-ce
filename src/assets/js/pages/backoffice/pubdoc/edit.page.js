@@ -246,7 +246,7 @@ parasails.registerPage('backoffice-pubdoc-edit', {
         this.formErrors.subject = true;
       }
 
-      if (argins.body && new TextEncoder().encode(argins.body).length >= 107374180) {
+      if (argins.body && new TextEncoder().encode(argins.body).length >= 2000000) {
         this.formErrors.bodyLength = true;
       }
 

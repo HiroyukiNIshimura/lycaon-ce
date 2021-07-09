@@ -1,6 +1,6 @@
 <div class="md-form">
   <label for="form-name"><%= __("Team name") %></label>
-  <input type="text" maxlength="100" id="form-name" class="form-control" :class="[formErrors.name ? 'is-invalid' : '']"
+  <v-text-input type="text" :maxlength="100" id="form-name" class="form-control" :class="[formErrors.name ? 'is-invalid' : '']"
     v-model="formData.name" />
   <div class="invalid-feedback" v-if="formErrors.name"><%= __("Please enter the team name") %></div>
 </div>
@@ -8,8 +8,8 @@
 <div class="md-form">
   <label for="form-description"
     class="md-textarea-label"><%= __("Description (up to {0} characters)").format(500) %></label>
-  <textarea id="form-description" class="md-textarea form-control" rows="3" maxlength="500"
-    :class="[formErrors.description ? 'is-invalid' : '']" v-model.trim="formData.description"></textarea>
+  <v-textarea id="form-description" class="md-textarea form-control" rows="3" :maxlength="500"
+    :class="[formErrors.description ? 'is-invalid' : '']" v-model.trim="formData.description"></v-textarea>
   <div class="invalid-feedback" v-if="formErrors.description">
     <%= __("Please enter within {0} characters").format(500) %></div>
 </div>
@@ -42,7 +42,7 @@
     <span><%= __("When accessing the repository via the github v3 API") %></span>
     <div class="md-form">
       <label for="form-git-user" class="md-textarea-label"><%= __("github owner") %></label>
-      <input type="text" maxlength="300" id="form-git-user" class="form-control"
+      <v-text-input type="text" :maxlength="300" id="form-git-user" class="form-control"
         :class="[formErrors.gitUser ? 'is-invalid' : '']" v-model="formData.gitUser" />
       <div class="invalid-feedback" v-if="formErrors.gitUser"><%= __("Please enter the github owner") %></div>
     </div>
@@ -50,7 +50,7 @@
     <div class="md-form">
       <label for="form-git-repository"
         class="md-textarea-label"><%= __("github repository name") %></label>
-      <input type="text" maxlength="2000" id="form-git-repository" class="form-control"
+      <v-text-input type="text" :maxlength="2000" id="form-git-repository" class="form-control"
         :class="[formErrors.gitRepository ? 'is-invalid' : '']" v-model="formData.gitRepository" />
       <div class="invalid-feedback" v-if="formErrors.gitRepository">
         <%= __("Please enter the github repository name") %>
@@ -59,7 +59,7 @@
 
     <div class="md-form">
       <label for="form-git-password" class="md-textarea-label"><%= __("Access token (access token issued by github)") %></label>
-      <input type="password" maxlength="100" id="form-git-password" class="form-control"
+      <v-text-input type="password" :maxlength="100" id="form-git-password" class="form-control"
         :class="[formErrors.gitPassword ? 'is-invalid' : '']" v-model="formData.gitPassword" />
       <div class="invalid-feedback" v-if="formErrors.gitPassword">
         <%= __("Please enter the access token") %>
@@ -72,7 +72,7 @@
     <div class="md-form">
       <label for="form-gitlab-api"
         class="md-textarea-label"><%= __("Enter the URL of the gitlab API (eg https://gitlab.example.com/api/v4)") %></label>
-      <input type="text" maxlength="2000" id="form-gitlab-api" class="form-control"
+      <v-text-input type="text" :maxlength="2000" id="form-gitlab-api" class="form-control"
         :class="[formErrors.gitlabApi ? 'is-invalid' : '']" v-model="formData.gitlabApi" />
       <div class="invalid-feedback" v-if="formErrors.gitlabApi"><%= __("Please enter a valid URL") %></div>
     </div>
@@ -80,7 +80,7 @@
     <div class="md-form">
       <label for="form-gitlab-token"
         class="md-textarea-label"><%= __("Access token (access token issued by gitlab)") %></label>
-      <input type="text" maxlength="200" id="form-gitlab-token" class="form-control"
+      <v-text-input type="text" :maxlength="200" id="form-gitlab-token" class="form-control"
         :class="[formErrors.gitlabToken ? 'is-invalid' : '']" v-model="formData.gitlabToken" />
       <div class="invalid-feedback" v-if="formErrors.gitlabToken">
         <%= __("Please enter the access token") %>
@@ -89,7 +89,7 @@
     <div class="md-form">
       <label for="form-gitlab-project-id"
         class="md-textarea-label"><%= __("gitlab project ID (numerical value)") %></label>
-      <input type="text" maxlength="10" id="form-gitlab-project-id" class="form-control"
+      <v-text-input type="text" :maxlength="10" id="form-gitlab-project-id" class="form-control"
         :class="[formErrors.gitlabProjectId ? 'is-invalid' : '']" v-model="formData.gitlabProjectId" />
       <div class="invalid-feedback" v-if="formErrors.gitlabProjectId">
         <%= __("Please enter the project ID") %>
@@ -98,7 +98,7 @@
 
     <div class="md-form">
       <label for="form-git-origin" class="md-textarea-label"><%= __("git branch name (default: master)") %></label>
-      <input type="text" id="form-git-origin" maxlength="400" class="form-control"
+      <v-text-input type="text" id="form-git-origin" :maxlength="400" class="form-control"
         :class="[formErrors.gitOrigin ? 'is-invalid' : '']" v-model="formData.gitOrigin" />
       <div class="invalid-feedback" v-if="formErrors.gitOrigin"><%= __("Please enter the git branch name") %></div>
     </div>

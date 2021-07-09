@@ -63,7 +63,7 @@
 
       <h5><%= __('Mail delivery') %></h5>
       <div class="md-form">
-        <input type="text" id="form-from-email-address" class="form-control" maxlength="300"
+        <v-text-input type="text" id="form-from-email-address" class="form-control" :maxlength="300"
           v-model="formData.fromEmailAddress" :class="[formErrors.fromEmailAddress ? 'is-invalid' : '']" />
         <label for="form-from-email-address"><%= __("'From' email address of emails sent to the outside") %></label>
         <div class="invalid-feedback" v-if="formErrors.fromEmailAddress">
@@ -71,7 +71,7 @@
         </div>
       </div>
       <div class="md-form">
-        <input type="text" id="form-from-name" class="form-control" maxlength="100" v-model="formData.fromName"
+        <v-text-input type="text" id="form-from-name" class="form-control" :maxlength="100" v-model="formData.fromName"
           :class="[formErrors.fromName ? 'is-invalid' : '']" />
         <label for="form-from-name"><%= __("'From<name>' email address of emails sent to the outside") %></label>
       </div>
@@ -81,7 +81,7 @@
           for="form-not-mail-send"><%= __('Do not send email when updating threads') %></label>
       </div>
       <div class="md-form">
-        <input type="text" id="form-internal-email-address" class="form-control" maxlength="300"
+        <iv-text-nput type="text" id="form-internal-email-address" class="form-control" :maxlength="300"
           v-model="formData.internalEmailAddress" :class="[formErrors.internalEmailAddress ? 'is-invalid' : '']" />
         <label for="form-internal-email-address"><%= __('Administrative email address') %></label>
         <div class="invalid-feedback" v-if="formErrors.internalEmailAddress">

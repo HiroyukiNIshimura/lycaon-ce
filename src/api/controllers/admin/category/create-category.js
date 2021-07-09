@@ -23,7 +23,7 @@ module.exports = {
         if (!value) {
           return true;
         }
-        return Buffer.byteLength(value, 'utf8') < 107374180;
+        return Buffer.byteLength(value, 'utf8') < 2000000;
       },
     },
   },

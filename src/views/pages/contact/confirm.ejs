@@ -131,7 +131,7 @@
         <div class="md-form">
             <label for="form-captcha-token"><span class="badge badge-pill badge-danger mr-2"><%= __('required') %></span><%= __("Please enter the 5 letters in the picture above") %>
             </label>
-            <input class="form-control" id="form-captcha-token" type="text" maxlength="5"
+            <v-text-input class="form-control" id="form-captcha-token" type="text" :maxlength="5"
             :class="[formErrors.captchaToken ? 'is-invalid' : '']"
             v-model.trim="formData.captchaToken" />
             <div class="invalid-feedback" v-if="formErrors.captchaToken">

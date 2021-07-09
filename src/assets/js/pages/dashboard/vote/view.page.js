@@ -207,7 +207,7 @@ parasails.registerPage('vote-view', {
       if (!argins.comment || argins.comment === '') {
         this.formErrors.comment = true;
       } else {
-        if (new TextEncoder().encode(argins.comment).length >= 107374180) {
+        if (new TextEncoder().encode(argins.comment).length >= 2000000) {
           this.formErrors.commentLength = true;
         }
       }

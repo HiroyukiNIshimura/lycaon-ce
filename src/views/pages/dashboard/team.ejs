@@ -161,7 +161,7 @@
           </div>
           <div class="col-auto form-group">
             <small><label for="query-word"><%= __('Word search') %></label></small>
-            <input type="text" maxlength="30" class="form-control form-control-sm" id="query-word" v-model="query.word" v-on:keyup.enter="queryAmbiguity" />
+            <v-text-input type="text" :maxlength="30" class="form-control form-control-sm" id="query-word" v-model="query.word" v-on:keyup.enter="queryAmbiguity" />
           </div>
         </div>
         <div class="row mt-3" id="query-results">
@@ -401,7 +401,7 @@
               <div class="col form-group">
                 <div class="row">
                   <div class="col-auto"><small><label for="query-word-wiki"></label><%= __('Word search') %></label></small></div>
-                  <div class="col-auto"><input type="text" maxlength="30" class="form-control form-control-sm" id="query-word-wiki" v-model="query.wordWiki" v-on:keyup.enter="queryAmbiguityWiki" /></div>
+                  <div class="col-auto"><v-text-input type="text" :maxlength="30" class="form-control form-control-sm" id="query-word-wiki" v-model="query.wordWiki" v-on:keyup.enter="queryAmbiguityWiki" /></div>
                 </div>
               </div>
             </div>

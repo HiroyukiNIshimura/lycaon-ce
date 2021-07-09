@@ -266,7 +266,7 @@
               <div class="col form-group">
                 <div class="row">
                   <div class="col-auto"><small><label for="query-word-wiki"></label><%= __('Word search') %></label></small></div>
-                  <div class="col-auto"><input type="text" maxlength="30" class="form-control form-control-sm" id="query-word-wiki" v-model="query.wordWiki" v-on:keyup.enter="queryAmbiguityWiki" /></div>
+                  <div class="col-auto"><v-text-input type="text" :maxlength="30" class="form-control form-control-sm" id="query-word-wiki" v-model="query.wordWiki" v-on:keyup.enter="queryAmbiguityWiki" /></div>
                 </div>
               </div>
             </div>
