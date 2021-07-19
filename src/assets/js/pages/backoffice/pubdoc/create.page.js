@@ -56,9 +56,9 @@ parasails.registerPage('backoffice-pubdoc-create', {
       '600px',
       mode,
       i18next.t('Feel free to enter ...'),
+      '',
       this.addImageBlobHook.bind(this)
     );
-    this.wikiEditor.mdEditor.setValue('');
 
     this.selectedTags = _.extend([], this.cloudTags);
 
@@ -95,8 +95,8 @@ parasails.registerPage('backoffice-pubdoc-create', {
       }
     },
     deleteAppendix: function (item, index) {
-      var val = this.wikiEditor.mdEditor.getValue();
-      this.wikiEditor.mdEditor.setValue(val.replace(item.blobUrl, ''));
+      var val = $lycaon.markdown.getMarkdown(this.wikiEditor);
+      $lycaon.markdown.setMarkdown(this.wikiEditor, val.replace(item.blobUrl, ''));
       this.appendix.splice(index, 1);
     },
     downloadAppendix: function () {
@@ -164,7 +164,7 @@ parasails.registerPage('backoffice-pubdoc-create', {
       $lycaon.clearToast();
 
       var argins = this.formData;
-      argins.body = this.wikiEditor.mdEditor.getValue();
+      argins.body = $lycaon.markdown.getMarkdown(this.wikiEditor);
 
       // Validate
       if (!argins.subject) {

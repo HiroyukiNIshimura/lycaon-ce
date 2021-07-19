@@ -38,8 +38,6 @@ module.exports = {
   },
 
   fn: async function (inputs) {
-    var target = '';
-
     var wiki = await Wiki.findOne({
       id: inputs.id,
       concept: 1,
@@ -49,40 +47,27 @@ module.exports = {
       throw 'notFound';
     }
 
-    if (inputs.size === 'L') {
-      target = path.resolve(
-        sails.config.appPath,
-        'appendix',
-        'wiki',
-        String(inputs.id),
-        inputs.fileId
-      );
-    } else if (inputs.size === 'S') {
-      target = path.resolve(
-        sails.config.appPath,
-        'appendix',
-        'wiki',
-        String(inputs.id),
-        'thum_s',
-        inputs.fileId
-      );
-    } else {
-      target = path.resolve(
-        sails.config.appPath,
-        'appendix',
-        'wiki',
-        String(inputs.id),
-        'thum_m',
-        inputs.fileId
-      );
-    }
+    var getPath = function (size, id, fileId, ext) {
+      let target = path.resolve(sails.config.appPath, 'appendix', 'wiki', String(id), fileId);
+      if (size === 'M') {
+        target = path.resolve(sails.config.appPath, 'appendix', 'wiki', String(id), 'thum_m', fileId);
+      }
+      if (size === 'S') {
+        target = path.resolve(sails.config.appPath, 'appendix', 'wiki', String(id), 'thum_s', fileId);
+      }
+      if (ext) {
+        target = target + '.' + ext;
+      }
+      return target;
+    };
 
-    if (inputs.ext) {
-      target = target + '.' + inputs.ext;
-    }
+    var target = getPath(inputs.size, inputs.id, inputs.fileId, inputs.ext);
 
     if (!fs.existsSync(target)) {
-      throw 'notFound';
+      target = getPath('L', inputs.id, inputs.fileId, inputs.ext);
+      if (!fs.existsSync(target)) {
+        throw 'notFound';
+      }
     }
 
     try {

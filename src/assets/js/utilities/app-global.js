@@ -9,99 +9,182 @@ const chartOptions = {
   maxHeight: 300,
 };
 
-const videoPlugin = function () {
-  Editor.codeBlockManager.setReplacer('video', (url) => {
-    // Indentify multiple code blocks
-    const wrapperId = `yt${Math.random().toString(36).substr(2, 10)}`;
+function videoPlugin() {
+  const toHTMLRenderers = {
+    video(node) {
+      function generateId() {
+        return 'video-' + Math.random().toString(36).substr(2, 10);
+      }
+      function render(id, url) {
+        var container = document.querySelector('[data-plugin-video-id=' + id + ']');
+        if (container) {
+          container.innerHTML = `<video class="video-player" width="420" height="315" src="${url}" controls playsinline><p>動画を再生するにはvideoタグをサポートしたブラウザが必要です。</p></video>`;
+        }
+      }
 
-    var renderVideo = function (wrapperId, url) {
-      const el = document.querySelector(`#${wrapperId}`);
+      var id = generateId();
+      setTimeout(render.bind(null, id, node.literal.trim()), 0);
 
-      el.innerHTML = `<video class="video-player" width="420" height="315" src="${url}" controls playsinline><p>動画を再生するにはvideoタグをサポートしたブラウザが必要です。</p></video>`;
-    };
-    // Avoid sanitizing iframe tag
-    setTimeout(renderVideo.bind(null, wrapperId, url), 0);
+      return [
+        {
+          type: 'openTag',
+          tagName: 'div',
+          outerNewLine: true,
+          classNames: ['plugin-video'],
+          attributes: { 'data-plugin-video-id': id },
+        },
+        { type: 'closeTag', tagName: 'div', outerNewLine: true },
+      ];
+    },
+  };
 
-    return `<div id="${wrapperId}" class="plugin-video"></div>`;
-  });
-};
-const youtubePlugin = function () {
-  Editor.codeBlockManager.setReplacer('youtube', (youtubeId) => {
-    // Indentify multiple code blocks
-    const wrapperId = `yt${Math.random().toString(36).substr(2, 10)}`;
+  return { toHTMLRenderers };
+}
+function youtubePlugin() {
+  const toHTMLRenderers = {
+    youtube(node) {
+      function generateId() {
+        return 'youtube-' + Math.random().toString(36).substr(2, 10);
+      }
+      function render(id, youtubeId) {
+        var container = document.querySelector('[data-plugin-youtube-id=' + id + ']');
+        if (container) {
+          container.innerHTML = `<iframe width="420" height="315" src="https://www.youtube.com/embed/${youtubeId}"></iframe>`;
+        }
+      }
 
-    var renderYoutube = function (wrapperId, youtubeId) {
-      const el = document.querySelector(`#${wrapperId}`);
+      var id = generateId();
+      setTimeout(render.bind(null, id, node.literal.trim()), 0);
 
-      el.innerHTML = `<iframe width="420" height="315" src="https://www.youtube.com/embed/${youtubeId}"></iframe>`;
-    };
-    // Avoid sanitizing iframe tag
-    setTimeout(renderYoutube.bind(null, wrapperId, youtubeId), 0);
+      return [
+        {
+          type: 'openTag',
+          tagName: 'div',
+          outerNewLine: true,
+          classNames: ['plugin-youtube'],
+          attributes: { 'data-plugin-youtube-id': id },
+        },
+        { type: 'closeTag', tagName: 'div', outerNewLine: true },
+      ];
+    },
+  };
 
-    return `<div id="${wrapperId}" class="plugin-youtube"></div>`;
-  });
-};
-const soundcloudPlugin = function () {
-  Editor.codeBlockManager.setReplacer('soundcloud', (innerHTML) => {
-    var iframe = $(innerHTML)[0];
-    if (!iframe) {
-      return '';
-    }
-    if (!iframe.src.startsWith('https://w.soundcloud.com/player/')) {
-      return '';
-    }
+  return { toHTMLRenderers };
+}
+function soundcloudPlugin() {
+  const toHTMLRenderers = {
+    soundcloud(node) {
+      function generateId() {
+        return 'soundcloud-' + Math.random().toString(36).substr(2, 10);
+      }
+      function render(id, content) {
+        var container = document.querySelector('[data-plugin-soundcloud-id=' + id + ']');
+        if (container) {
+          container.innerHTML = content.outerHTML;
+        }
+      }
 
-    // Indentify multiple code blocks
-    const wrapperId = `sc${Math.random().toString(36).substr(2, 10)}`;
+      var content = $(node.literal)[0];
+      if (!content) {
+        return false;
+      }
+      if (!content.src.startsWith('https://w.soundcloud.com/player/')) {
+        return false;
+      }
 
-    var renderSoundcloud = function (wrapperId, innerHTML) {
-      const el = document.querySelector(`#${wrapperId}`);
-      el.innerHTML = innerHTML;
-    };
-    // Avoid sanitizing iframe tag
-    setTimeout(renderSoundcloud.bind(null, wrapperId, innerHTML), 0);
+      var id = generateId();
+      setTimeout(render.bind(null, id, content), 0);
 
-    return `<div id="${wrapperId}" class="plugin-soundcloud"></div>`;
-  });
-};
-const googleMapPlugin = function () {
-  Editor.codeBlockManager.setReplacer('googlemap', (innerHTML) => {
-    var iframe = $(innerHTML)[0];
-    if (!iframe) {
-      return '';
-    }
-    if (!iframe.src.startsWith('https://www.google.com/maps/')) {
-      return '';
-    }
+      return [
+        {
+          type: 'openTag',
+          tagName: 'div',
+          outerNewLine: true,
+          classNames: ['plugin-soundcloud'],
+          attributes: { 'data-plugin-soundcloud-id': id },
+        },
+        { type: 'closeTag', tagName: 'div', outerNewLine: true },
+      ];
+    },
+  };
 
-    // Indentify multiple code blocks
-    const wrapperId = `gm${Math.random().toString(36).substr(2, 10)}`;
+  return { toHTMLRenderers };
+}
+function googleMapPlugin() {
+  const toHTMLRenderers = {
+    googleMap(node) {
+      function generateId() {
+        return 'googlemap-' + Math.random().toString(36).substr(2, 10);
+      }
+      function render(id, content) {
+        var container = document.querySelector('[data-plugin-googlemap-id=' + id + ']');
+        if (container) {
+          container.innerHTML = content.outerHTML;
+        }
+      }
 
-    var renderGoogleMap = function (wrapperId, innerHTML) {
-      const el = document.querySelector(`#${wrapperId}`);
-      el.innerHTML = innerHTML;
-    };
-    // Avoid sanitizing iframe tag
-    setTimeout(renderGoogleMap.bind(null, wrapperId, innerHTML), 0);
+      var content = $(node.literal)[0];
+      if (!content) {
+        return false;
+      }
+      if (!content.src.startsWith('https://www.google.com/maps/')) {
+        return false;
+      }
 
-    return `<div id="${wrapperId}" class="plugin-googlemap"></div>`;
-  });
-};
-const twitterPlugin = function () {
-  Editor.codeBlockManager.setReplacer('twitter', (innerHTML) => {
-    // Indentify multiple code blocks
-    const wrapperId = `tw${Math.random().toString(36).substr(2, 10)}`;
+      var id = generateId();
+      setTimeout(render.bind(null, id, content), 0);
 
-    var renderTwitter = function (wrapperId, innerHTML) {
-      const el = document.querySelector(`#${wrapperId}`);
-      el.innerHTML = innerHTML;
-    };
-    // Avoid sanitizing iframe tag
-    setTimeout(renderTwitter.bind(null, wrapperId, innerHTML), 0);
+      return [
+        {
+          type: 'openTag',
+          tagName: 'div',
+          outerNewLine: true,
+          classNames: ['plugin-googlemap'],
+          attributes: { 'data-plugin-googlemap-id': id },
+        },
+        { type: 'closeTag', tagName: 'div', outerNewLine: true },
+      ];
+    },
+  };
 
-    return `<div id="${wrapperId}" class="plugin-twitter"></div>`;
-  });
-};
+  return { toHTMLRenderers };
+}
+function twitterPlugin() {
+  const toHTMLRenderers = {
+    twitter(node) {
+      function generateId() {
+        return 'twitter-' + Math.random().toString(36).substr(2, 10);
+      }
+      function render(id, content) {
+        var container = document.querySelector('[data-plugin-twitter-id=' + id + ']');
+        if (container) {
+          container.innerHTML = content.outerHTML;
+        }
+      }
+
+      var content = $(node.literal)[0];
+      if (!content) {
+        return false;
+      }
+
+      var id = generateId();
+      setTimeout(render.bind(null, id, content), 0);
+
+      return [
+        {
+          type: 'openTag',
+          tagName: 'div',
+          outerNewLine: true,
+          classNames: ['plugin-twitter'],
+          attributes: { 'data-plugin-twitter-id': id },
+        },
+        { type: 'closeTag', tagName: 'div', outerNewLine: true },
+      ];
+    },
+  };
+
+  return { toHTMLRenderers };
+}
 
 const formatter = new Intl.NumberFormat('ja-JP');
 const percentFormatter = new Intl.NumberFormat('ja-JP', {
@@ -787,6 +870,41 @@ const $lycaon = {
     },
   },
   markdown: {
+    customHTMLSanitizer: function (html) {
+      /* https://github.com/cure53/DOMPurify */
+      return DOMPurify.sanitize(html, {
+        ALLOWED_TAGS: [
+          'b',
+          'li',
+          'ol',
+          'ul',
+          'p',
+          'div',
+          'strong',
+          'em',
+          'del',
+          'h1',
+          'h2',
+          'h3',
+          'h4',
+          'h5',
+          'h6',
+          'pre',
+          'code',
+          'blockquote',
+          'table',
+          'thead',
+          'tbody',
+          'tr',
+          'th',
+          'td',
+          'hr',
+          'img',
+          'a',
+          'iframe',
+        ],
+      });
+    },
     extendedAutolinks: function (content) {
       var matched = linkify.match(content);
 
@@ -823,6 +941,7 @@ const $lycaon = {
         initialValue: initialValue,
         plugins: this.defaultEditorPlugin,
         extendedAutolinks: this.extendedAutolinks,
+        customHTMLSanitizer: this.customHTMLSanitizer,
       });
     },
     createEditor: function (
@@ -830,9 +949,11 @@ const $lycaon = {
       height = '300px',
       previewStyle = 'tab', //tab|vertical
       placeholder = '',
+      initialValue = '',
       addImageBlobHook
     ) {
       var editor = new Editor({
+        initialValue: initialValue,
         el: document.querySelector(selector),
         language: SAILS_LOCALS.language,
         initialEditType: 'markdown',
@@ -844,6 +965,7 @@ const $lycaon = {
         },
         plugins: this.defaultEditorPlugin,
         extendedAutolinks: this.extendedAutolinks,
+        customHTMLSanitizer: this.customHTMLSanitizer,
       });
 
       $(selector + ' button').prop('type', 'button');
@@ -854,11 +976,13 @@ const $lycaon = {
       selector,
       height = '300px',
       previewStyle = 'tab', //tab|vertical
-      placeholder = ''
+      placeholder = '',
+      initialValue = ''
       //addImageBlobHook
     ) {
       var editor = new Editor({
         el: document.querySelector(selector),
+        initialValue: initialValue,
         language: SAILS_LOCALS.language,
         initialEditType: 'markdown',
         height: height,
@@ -868,28 +992,15 @@ const $lycaon = {
           //addImageBlobHook: addImageBlobHook,
         },
         toolbarItems: [
-          'heading',
-          'bold',
-          'italic',
-          'strike',
-          'divider',
-          'hr',
-          'quote',
-          'divider',
-          'ul',
-          'ol',
-          'task',
-          'indent',
-          'outdent',
-          'divider',
-          'table',
-          'link',
-          'divider',
-          'code',
-          'codeblock',
+          ['heading', 'bold', 'italic', 'strike'],
+          ['hr', 'quote'],
+          ['ul', 'ol', 'task', 'indent', 'outdent'],
+          ['table', 'link'], //deleted 'image'
+          ['code', 'codeblock'],
         ],
         plugins: this.defaultEditorPlugin,
         extendedAutolinks: this.extendedAutolinks,
+        customHTMLSanitizer: this.customHTMLSanitizer,
       });
 
       $(selector + ' button').prop('type', 'button');
@@ -897,28 +1008,44 @@ const $lycaon = {
       return editor;
     },
     addToolberImageList: function (editor, done) {
-      var toolbar = editor.getUI().getToolbar();
-      editor.eventManager.addEventType('clickCustomButton');
-      editor.eventManager.listen('clickCustomButton', done);
-
       var createButton = function () {
         var button = document.createElement('button');
-
-        button.className = 'image-list';
+        button.type = 'button';
+        button.style.backgroundImage = 'none';
+        button.style.margin = '0';
+        button.className = 'image-list-button';
         button.innerHTML = '<i class="far fa-images"></i>';
+        button.addEventListener('click', done);
 
         return button;
       };
 
-      toolbar.addItem({
-        type: 'button',
-        options: {
+      editor.insertToolbarItem(
+        { groupIndex: 3, itemIndex: 3 },
+        {
           el: createButton(),
-          event: 'clickCustomButton',
           tooltip: i18next.t('View uploaded images in other threads and wikis'),
           style: 'color:black;background:none;',
-        },
-      });
+        }
+      );
+    },
+    getMarkdown: function (editor) {
+      if (editor.isWysiwygMode()) {
+        editor.changeMode('markdown');
+        var md = editor.getMarkdown();
+        editor.changeMode('wysiwyg');
+        return md;
+      }
+      return editor.getMarkdown();
+    },
+    setMarkdown: function (editor, md) {
+      if (editor.isWysiwygMode()) {
+        editor.changeMode('markdown');
+        editor.setMarkdown(md);
+        editor.changeMode('wysiwyg');
+      } else {
+        editor.setMarkdown(md);
+      }
     },
   },
 };
@@ -982,6 +1109,8 @@ $(() => {
     $(window).scroll(() => {
       $('.popover').popover('hide');
     });
+
+    $('.toastui-editor-contents > table').wrap($('<div class="table-responsive"></div>'));
   };
 
   $(document).ready(lycaonLoad);

@@ -13,6 +13,7 @@ parasails.registerPage('snippets', {
         { value: 'たんぽぽ', id: 5 },
       ],
     },
+    markdown: '',
   },
 
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗

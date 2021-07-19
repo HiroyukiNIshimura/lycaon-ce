@@ -32,11 +32,15 @@
     <link rel="stylesheet" href="/dependencies/MDB/mdb.min.css">
     <link rel="stylesheet" href="/dependencies/select2/select2.css">
     <link rel="stylesheet" href="/dependencies/tagify/tagify.css">
-    <link rel="stylesheet" href="/dependencies/toastui-editor/codemirror.min.css">
-    <link rel="stylesheet" href="/dependencies/toastui-editor/highlight.css">
+    <link rel="stylesheet" href="/dependencies/toastui-editor/0.libs/codemirror.min.css">
+    <link rel="stylesheet" href="/dependencies/toastui-editor/0.libs/prism.min.css">
+    <link rel="stylesheet" href="/dependencies/toastui-editor/0.libs/toastui-chart.min.css">
+    <link rel="stylesheet" href="/dependencies/toastui-editor/0.libs/tui-color-picker.min.css">
+    <link rel="stylesheet" href="/dependencies/toastui-editor/theme/toastui-editor-dark.min.css">
     <link rel="stylesheet" href="/dependencies/toastui-editor/toastui-editor.min.css">
-    <link rel="stylesheet" href="/dependencies/toastui-editor/tui-chart.min.css">
-    <link rel="stylesheet" href="/dependencies/toastui-editor/tui-color-picker.min.css">
+    <link rel="stylesheet" href="/dependencies/toastui-editor/z_plugins/toastui-editor-plugin-code-syntax-highlight.min.css">
+    <link rel="stylesheet" href="/dependencies/toastui-editor/z_plugins/toastui-editor-plugin-color-syntax.min.css">
+    <link rel="stylesheet" href="/dependencies/toastui-editor/z_plugins/toastui-editor-plugin-table-merged-cell.min.css">
     <link rel="stylesheet" href="/dependencies/vertical-timeline/vertical-timeline.css">
     <link rel="stylesheet" href="/dependencies/vue-inview/animate.min.css">
     <link rel="stylesheet" href="/dependencies/vue-loading-overlay/vue-loading.css">
@@ -102,7 +106,7 @@
     <script src="/dependencies/jquery.min.js"></script>
     <script src="/dependencies/vue.js"></script>
     <script src="/dependencies/vue-router.js"></script>
-    <script src="/dependencies/axios-0.19.2.min.js"></script>
+    <script src="/dependencies/axios.js"></script>
     <script src="/dependencies/bootstrap-4/bootstrap.bundle.min.js"></script>
     <script src="/dependencies/cheetahGrid/cheetah-grid.js"></script>
     <script src="/dependencies/cheetahGrid/vue-cheetah-grid.js"></script>
@@ -138,23 +142,27 @@
     <script src="/dependencies/select2/i18n/en.js"></script>
     <script src="/dependencies/select2/i18n/ja.js"></script>
     <script src="/dependencies/tagify/tagify.min.js"></script>
+    <script src="/dependencies/toastui-editor/0.libs/dompurify.min.js"></script>
+    <script src="/dependencies/toastui-editor/0.libs/marked.min.js"></script>
+    <script src="/dependencies/toastui-editor/0.libs/toastui-chart.min.js"></script>
+    <script src="/dependencies/toastui-editor/0.libs/tui-color-picker.min.js"></script>
     <script src="/dependencies/toastui-editor/toastui-editor-all.min.js"></script>
-    <script src="/dependencies/toastui-editor/toastui-editor-plugin-chart.min.js"></script>
-    <script src="/dependencies/toastui-editor/toastui-editor-plugin-code-syntax-highlight-all.min.js"></script>
-    <script src="/dependencies/toastui-editor/toastui-editor-plugin-color-syntax.min.js"></script>
-    <script src="/dependencies/toastui-editor/toastui-editor-plugin-table-merged-cell.min.js"></script>
-    <script src="/dependencies/toastui-editor/toastui-editor-plugin-uml.min.js"></script>
-    <script src="/dependencies/toastui-editor/z_i18n/de-de.js"></script>
-    <script src="/dependencies/toastui-editor/z_i18n/es-es.js"></script>
-    <script src="/dependencies/toastui-editor/z_i18n/et-et.js"></script>
-    <script src="/dependencies/toastui-editor/z_i18n/fr-fr.js"></script>
-    <script src="/dependencies/toastui-editor/z_i18n/hi-in.js"></script>
-    <script src="/dependencies/toastui-editor/z_i18n/it-it.js"></script>
-    <script src="/dependencies/toastui-editor/z_i18n/ja-jp.js"></script>
-    <script src="/dependencies/toastui-editor/z_i18n/ko-kr.js"></script>
-    <script src="/dependencies/toastui-editor/z_i18n/pt-pt.js"></script>
-    <script src="/dependencies/toastui-editor/z_i18n/ru-ru.js"></script>
-    <script src="/dependencies/toastui-editor/z_i18n/zh-cn.js"></script>
+    <script src="/dependencies/toastui-editor/z_i18n/de-de.min.js"></script>
+    <script src="/dependencies/toastui-editor/z_i18n/es-es.min.js"></script>
+    <script src="/dependencies/toastui-editor/z_i18n/et-et.min.js"></script>
+    <script src="/dependencies/toastui-editor/z_i18n/fr-fr.min.js"></script>
+    <script src="/dependencies/toastui-editor/z_i18n/hi-in.min.js"></script>
+    <script src="/dependencies/toastui-editor/z_i18n/it-it.min.js"></script>
+    <script src="/dependencies/toastui-editor/z_i18n/ja-jp.min.js"></script>
+    <script src="/dependencies/toastui-editor/z_i18n/ko-kr.min.js"></script>
+    <script src="/dependencies/toastui-editor/z_i18n/pt-br.min.js"></script>
+    <script src="/dependencies/toastui-editor/z_i18n/ru-ru.min.js"></script>
+    <script src="/dependencies/toastui-editor/z_i18n/zh-cn.min.js"></script>
+    <script src="/dependencies/toastui-editor/z_plugins/toastui-editor-plugin-chart.min.js"></script>
+    <script src="/dependencies/toastui-editor/z_plugins/toastui-editor-plugin-code-syntax-highlight-all.min.js"></script>
+    <script src="/dependencies/toastui-editor/z_plugins/toastui-editor-plugin-color-syntax.min.js"></script>
+    <script src="/dependencies/toastui-editor/z_plugins/toastui-editor-plugin-table-merged-cell.min.js"></script>
+    <script src="/dependencies/toastui-editor/z_plugins/toastui-editor-plugin-uml.min.js"></script>
     <script src="/dependencies/toc/jquery.toc.js"></script>
     <script src="/dependencies/toc/smooth-scroll.js"></script>
     <script src="/dependencies/twitter/widgets.js"></script>

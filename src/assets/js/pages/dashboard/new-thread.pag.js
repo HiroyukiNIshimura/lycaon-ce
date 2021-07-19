@@ -95,14 +95,13 @@ parasails.registerPage('new-thread', {
       '600px',
       mode,
       i18next.t('Feel free to enter ...'),
+      '',
       this.addImageBlobHook.bind(this)
     );
     $lycaon.markdown.addToolberImageList(self.threadEditor, () => {
-      self.threadEditor.eventManager.emit('closeAllPopup');
       self.$refs.imagelist.load();
       self.showImageListModal = true;
     });
-    this.threadEditor.mdEditor.setValue('');
 
     $lycaon.invalidEnterKey();
     $lycaon.scrollTop();
@@ -145,7 +144,7 @@ parasails.registerPage('new-thread', {
       subject = subject.replace(regexp, dt.format('YYYY/MM/DD'));
       body = body.replace(regexp, dt.format('YYYY/MM/DD'));
 
-      this.threadEditor.mdEditor.setValue(body);
+      $lycaon.markdown.setMarkdown(this.threadEditor, body);
       this.$set(this.formData, 'subject', subject);
       $('#thread-subject').focus();
     },
@@ -162,8 +161,8 @@ parasails.registerPage('new-thread', {
       }
     },
     deleteAppendix: function (item, index) {
-      var val = this.threadEditor.mdEditor.getValue();
-      this.threadEditor.mdEditor.setValue(val.replace(item.blobUrl, ''));
+      var val = $lycaon.markdown.getMarkdown(this.threadEditor);
+      $lycaon.markdown.setMarkdown(this.threadEditor, val.replace(item.blobUrl, ''));
       this.appendix.splice(index, 1);
     },
     downloadAppendix: function () {
@@ -245,7 +244,7 @@ parasails.registerPage('new-thread', {
       $lycaon.clearToast();
 
       var argins = this.formData;
-      argins.body = this.threadEditor.mdEditor.getValue();
+      argins.body = $lycaon.markdown.getMarkdown(this.threadEditor);
       argins.team = this.team.id;
       argins.local = this.local;
       if (Number(this.responsible) > 0) {

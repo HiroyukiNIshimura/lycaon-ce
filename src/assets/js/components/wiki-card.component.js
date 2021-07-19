@@ -34,10 +34,11 @@ parasails.registerComponent('wikiCard', {
   //  ╦ ╦╔╦╗╔╦╗╦
   //  ╠═╣ ║ ║║║║
   //  ╩ ╩ ╩ ╩ ╩╩═╝
-  template: `  
-<div class="card h-100 card-selectable" v-inview:animate="animate" @click="onCardClick">
+  template: `
+<div class="card h-100 card-selectable" v-inview:animate="animate">
+  <div @click="onCardClick">
     <img :src="image"
-        class="card-img-top" 
+        class="card-img-top"
         v-if="showImage"
     />
     <div class="card-body d-flex flex-column">
@@ -66,8 +67,9 @@ parasails.registerComponent('wikiCard', {
             </span>
           </div>
         </div>
-        <slot/>
     </div>
+  </div>
+  <slot/>
 </div>
   `,
 

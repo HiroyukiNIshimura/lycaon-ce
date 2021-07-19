@@ -32,6 +32,7 @@ parasails.registerComponent('vTextInput', {
   data: function () {
     return {
       text: '',
+      isPress: false,
     };
   },
 
@@ -39,7 +40,7 @@ parasails.registerComponent('vTextInput', {
   //  ╠═╣ ║ ║║║║
   //  ╩ ╩ ╩ ╩ ╩╩═╝
   template: `
-<input :type="type" @input="onInput" v-model="text" @keyup.enter="onEnter"/>
+<input :type="type" @input="onInput" v-model="text" @keyup.enter="onEnter" @keypress="onKeypress"/>
 `,
 
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
@@ -63,8 +64,16 @@ parasails.registerComponent('vTextInput', {
       }
       this.$emit('input', this.text);
     },
+    onKeypress() {
+      this.isPress = true;
+    },
     onEnter(event) {
+      if (!this.isPress) {
+        return;
+      }
+      this.$emit('input', this.text);
       this.$emit('keyup', event);
+      this.isPress = false;
     },
   },
   computed: {

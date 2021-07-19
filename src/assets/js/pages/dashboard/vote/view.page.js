@@ -52,7 +52,8 @@ parasails.registerPage('vote-view', {
       '#comment-editor',
       '300px',
       'tab',
-      i18next.t('Please enter a question or comment for the article')
+      i18next.t('Please enter a question or comment for the article'),
+      ''
     );
 
     this.vote.sneezes.forEach((entity) => {
@@ -200,7 +201,7 @@ parasails.registerPage('vote-view', {
 
       var argins = {
         vote: this.vote.id,
-        comment: this.commentEditor.mdEditor.getValue(),
+        comment: $lycaon.markdown.getMarkdown(this.commentEditor),
       };
 
       // Validate
@@ -228,7 +229,7 @@ parasails.registerPage('vote-view', {
 
       var argins = {
         id: this.openCommentIdentity,
-        comment: this.sneezeEditor.mdEditor.getValue(),
+        comment: $lycaon.markdown.getMarkdown(this.sneezeEditor),
       };
 
       // Validate
@@ -283,24 +284,22 @@ parasails.registerPage('vote-view', {
 
       var self = this;
       this.$nextTick(() => {
-        $('#' + this.getCommentEditorIdentityWrapper(sneeze))
-          .parents('.card-body')
-          .addClass('edit-active');
+        $('#' + this.getSneezeIdentity(sneeze)).addClass('edit-active');
 
         self.sneezeEditor = $lycaon.markdown.createVoteSneezeEditor(
           '#' + this.getCommentEditorIdentity(sneeze),
           '300px',
           'tab',
-          i18next.t('Please enter a question or comment for the article')
+          i18next.t('Please enter a question or comment for the article'),
+          sneeze.comment
         );
-        self.sneezeEditor.mdEditor.setValue(sneeze.comment);
         self.sneezeEditor.mdEditor.moveCursorToStart();
         $lycaon.jumpTo($('#' + self.getSneezeIdentity(sneeze)));
       });
     },
     onCommentEditCancelClick: function (sneeze) {
       this.openCommentIdentity = null;
-      var editorWrapper = this.getCommentEditorIdentityWrapper(sneeze);
+      var editorWrapper = this.getSneezeIdentity(sneeze);
 
       this.$set(
         this.sneezeStates,
@@ -312,11 +311,9 @@ parasails.registerPage('vote-view', {
 
       var self = this;
       this.$nextTick(() => {
-        self.sneezeEditor.mdEditor.remove();
+        self.sneezeEditor.defaultUI.destroy();
         self.sneezeEditor = {};
-        $('#' + editorWrapper)
-          .parents('.card-body')
-          .removeClass('edit-active');
+        $('#' + editorWrapper).removeClass('edit-active');
       });
     },
     sneezeAnker: function (sneeze) {

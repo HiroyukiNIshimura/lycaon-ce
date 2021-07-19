@@ -79,7 +79,7 @@
         <div class="text-danger" v-if="formErrors.replyLength">
           <%= __("Comment size is too large") %>
         </div>
-        <div :id="getReplyEditorIdentityWrapper(reply)" class="wapper-coment-editor" style="display: none"
+        <div :id="getReplyEditorIdentityWrapper(reply)" class="wapper-reply-editor" style="display: none"
           v-show="showReplyEditor(reply)">
           <ajax-form action="updateReply" :syncing.sync="syncing" :cloud-error.sync="cloudError"
             @submitted="submittedReplyUpdateForm" @rejected="onCloudError" :handle-parsing="handleParsingReplyUpdateForm">

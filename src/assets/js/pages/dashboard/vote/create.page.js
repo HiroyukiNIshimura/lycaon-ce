@@ -98,15 +98,13 @@ parasails.registerPage('vote-create', {
       '300px',
       mode,
       i18next.t('Feel free to enter ...'),
+      '',
       this.addImageBlobHook.bind(this)
     );
     $lycaon.markdown.addToolberImageList(this.voteEditor, () => {
-      self.voteEditor.eventManager.emit('closeAllPopup');
       self.$refs.imagelist.load();
       self.showImageListModal = true;
     });
-
-    this.voteEditor.mdEditor.setValue('');
 
     $lycaon.invalidEnterKey();
   },
@@ -162,8 +160,8 @@ parasails.registerPage('vote-create', {
       }
     },
     deleteAppendix: function (item, index) {
-      var val = this.voteEditor.mdEditor.getValue();
-      this.voteEditor.mdEditor.setValue(val.replace(item.blobUrl, ''));
+      var val = $lycaon.markdown.getMarkdown(this.voteEditor);
+      $lycaon.markdown.setMarkdown(this.voteEditor, val.replace(item.blobUrl, ''));
       this.appendix.splice(index, 1);
     },
     downloadAppendix: function () {
@@ -231,7 +229,7 @@ parasails.registerPage('vote-create', {
       $lycaon.clearToast();
 
       var argins = this.formData;
-      argins.body = this.voteEditor.mdEditor.getValue();
+      argins.body = $lycaon.markdown.getMarkdown(this.voteEditor);
       argins.users = this.selectedUsers;
       argins.choices = this.selectedQuestions;
       argins.isQuestionnaireFormat = this.isQuestionnaireFormat;

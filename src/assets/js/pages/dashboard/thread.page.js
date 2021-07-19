@@ -260,7 +260,7 @@ parasails.registerPage('thread', {
             self.newSubject = data.thread.subject;
             self.newBody = data.thread.body;
             self.conflictUser = data.user;
-            self.myBody = self.threadEditor.mdEditor.getValue();
+            self.myBody = $lycaon.markdown.getMarkdown(self.threadEditor);
             self.diff = $lycaon.diff(self.myBody, data.thread.body);
             self.showConflictModal = true;
           } else {
@@ -283,14 +283,6 @@ parasails.registerPage('thread', {
     }
 
     this.selectedTags = _.extend([], this.cloudTags);
-
-    this.commentEditor = $lycaon.markdown.createEditor(
-      '#comment-editor',
-      '300px',
-      'tab',
-      i18next.t('Feel free to enter your comments ...'),
-      this.addImageBlobHook.bind(this)
-    );
 
     this.sneezes.forEach((entity) => {
       var id = this.getCommentIdentity(entity);
@@ -326,6 +318,15 @@ parasails.registerPage('thread', {
           }
         }
       });
+
+      this.commentEditor = $lycaon.markdown.createEditor(
+        '#comment-editor',
+        '300px',
+        'tab',
+        i18next.t('Feel free to enter your comments ...'),
+        '',
+        this.addImageBlobHook.bind(this)
+      );
 
       var id = expiringStorage.get(this.storageKey);
       if (id) {
@@ -416,6 +417,17 @@ parasails.registerPage('thread', {
       } else {
         this.mainContents = 'active';
       }
+
+      //TODO Editorのツールバーリサイズ不具合対応
+      this.$nextTick(() => {
+        if (this.commentEditor.isMarkdownMode()) {
+          this.commentEditor.changeMode('wysiwyg');
+          this.commentEditor.changeMode('markdown');
+        } else {
+          this.commentEditor.changeMode('markdown');
+          this.commentEditor.changeMode('wysiwyg');
+        }
+      });
     },
     blockViewer: function (label) {
       this.viewerBlock = Vue.$loading.show(
@@ -531,15 +543,14 @@ parasails.registerPage('thread', {
           '600px',
           mode,
           i18next.t('Feel free to enter ...'),
-          this.addImageBlobHook.bind(this)
+          self.thread.body,
+          self.addImageBlobHook.bind(self)
         );
         $lycaon.markdown.addToolberImageList(self.threadEditor, () => {
-          self.threadEditor.eventManager.emit('closeAllPopup');
           self.$refs.imagelist.load();
           self.showImageListModal = true;
         });
 
-        self.threadEditor.mdEditor.setValue(self.thread.body);
         self.threadEditor.mdEditor.moveCursorToStart();
 
         $('html, body').stop().animate(
@@ -555,6 +566,11 @@ parasails.registerPage('thread', {
     onEditCancelClick: function () {
       $lycaon.socket.post('/ws/v1/thread-edit-out', { id: this.thread.id });
       this.threadMode = 'view';
+      var self = this;
+      this.$nextTick(() => {
+        self.threadEditor.defaultUI.destroy();
+        self.threadEditor = {};
+      });
     },
     onCommentEditClick: function (sneeze) {
       if (!this.checkThreadEditing()) {
@@ -584,9 +600,9 @@ parasails.registerPage('thread', {
           '300px',
           'tab',
           i18next.t('Feel free to enter your comments ...'),
+          sneeze.comment,
           this.addImageBlobHook.bind(this)
         );
-        self.sneezeEditor.mdEditor.setValue(sneeze.comment);
         self.sneezeEditor.mdEditor.moveCursorToStart();
         $lycaon.jumpTo($('#' + self.getSneezeIdentity(sneeze)));
       });
@@ -605,7 +621,7 @@ parasails.registerPage('thread', {
 
       var self = this;
       this.$nextTick(() => {
-        self.sneezeEditor.mdEditor.remove();
+        self.sneezeEditor.defaultUI.destroy();
         self.sneezeEditor = {};
         $('#' + editorWrapper)
           .parents('.card-body')
@@ -640,9 +656,9 @@ parasails.registerPage('thread', {
           '300px',
           'tab',
           i18next.t('Please write a reply to the comment ...'),
+          '',
           this.addImageBlobHook.bind(this)
         );
-        self.replyRegister.mdEditor.setValue('');
       });
     },
     onReplyRegisterCancelClick: function (sneeze) {
@@ -658,7 +674,7 @@ parasails.registerPage('thread', {
       var self = this;
       this.$nextTick(() => {
         $('#' + this.getReplyRegisterIdentityWrapper(sneeze)).removeClass('edit-active');
-        self.replyRegister.mdEditor.remove();
+        self.replyRegister.defaultUI.destroy();
         self.replyRegister = {};
       });
     },
@@ -683,18 +699,16 @@ parasails.registerPage('thread', {
 
       var self = this;
       this.$nextTick(() => {
-        $('#' + this.getReplyEditorIdentityWrapper(reply))
-          .parents('.card-body')
-          .addClass('edit-active');
+        $('#' + this.getSneezeReplyIdentity(reply)).addClass('edit-active');
 
         self.replyEditor = $lycaon.markdown.createEditor(
           '#' + this.getReplyEditorIdentity(reply),
           '300px',
           'tab',
           i18next.t('Please write a reply to the comment ...'),
+          reply.comment,
           this.addImageBlobHook.bind(this)
         );
-        self.replyEditor.mdEditor.setValue(reply.comment);
         self.replyEditor.mdEditor.moveCursorToStart();
         $lycaon.jumpTo($('#' + self.getSneezeReplyIdentity(reply)));
       });
@@ -711,11 +725,9 @@ parasails.registerPage('thread', {
 
       var self = this;
       this.$nextTick(() => {
-        self.replyEditor.mdEditor.remove();
+        self.replyEditor.defaultUI.destroy();
         self.replyEditor = {};
-        $('#' + this.getReplyEditorIdentityWrapper(reply))
-          .parents('.card-body')
-          .removeClass('edit-active');
+        $('#' + this.getSneezeReplyIdentity(reply)).removeClass('edit-active');
       });
     },
     showSneezeView: function (sneeze) {
@@ -1043,7 +1055,7 @@ parasails.registerPage('thread', {
       var argins = {
         id: this.thread.id,
         subject: this.thread.subject,
-        body: this.threadEditor.mdEditor.getValue(),
+        body: $lycaon.markdown.getMarkdown(this.threadEditor),
         local: this.local,
         concept: this.thread.concept,
         category: this.thread.category.id,
@@ -1195,7 +1207,7 @@ parasails.registerPage('thread', {
 
       var argins = {
         id: this.openCommentIdentity,
-        comment: this.sneezeEditor.mdEditor.getValue(),
+        comment: $lycaon.markdown.getMarkdown(this.sneezeEditor),
       };
 
       // Validate
@@ -1223,7 +1235,7 @@ parasails.registerPage('thread', {
 
       var argins = {
         thread: this.thread.id,
-        comment: this.commentEditor.mdEditor.getValue(),
+        comment: $lycaon.markdown.getMarkdown(this.commentEditor),
       };
 
       // Validate
@@ -1251,7 +1263,7 @@ parasails.registerPage('thread', {
 
       var argins = {
         id: this.openReplyIdentity,
-        comment: this.replyEditor.mdEditor.getValue(),
+        comment: $lycaon.markdown.getMarkdown(this.replyEditor),
       };
 
       // Validate
@@ -1279,7 +1291,7 @@ parasails.registerPage('thread', {
 
       var argins = {
         sneeze: this.currentSneeze.id,
-        comment: this.replyRegister.mdEditor.getValue(),
+        comment: $lycaon.markdown.getMarkdown(this.replyRegister),
       };
 
       // Validate

@@ -87,14 +87,13 @@ parasails.registerPage('edit-wiki', {
       '600px',
       mode,
       i18next.t('Feel free to enter ...'),
+      this.wiki.body,
       this.addImageBlobHook.bind(this)
     );
     $lycaon.markdown.addToolberImageList(this.wikiEditor, () => {
-      self.wikiEditor.eventManager.emit('closeAllPopup');
       self.$refs.imagelist.load();
       self.showImageListModal = true;
     });
-    this.wikiEditor.mdEditor.setValue(this.wiki.body);
 
     $lycaon.socket.post('/ws/v1/wiki-edit-in', { id: this.wiki.id }, () => {
       io.socket.on('wiki-edit-query', (data) => {
@@ -111,7 +110,7 @@ parasails.registerPage('edit-wiki', {
           self.newSubject = data.wiki.subject;
           self.newBody = data.wiki.body;
           self.conflictUser = data.user;
-          self.myBody = self.wikiEditor.mdEditor.getValue();
+          self.myBody = $lycaon.markdown.getMarkdown(self.wikiEditor);
           self.diff = $lycaon.diff(self.myBody, data.wiki.body);
           self.showConflictModal = true;
         }
@@ -252,7 +251,7 @@ parasails.registerPage('edit-wiki', {
 
       var argins = this.formData;
       argins.id = this.wiki.id;
-      argins.body = this.wikiEditor.mdEditor.getValue();
+      argins.body = $lycaon.markdown.getMarkdown(this.wikiEditor);
 
       // Validate
       if (!argins.subject) {

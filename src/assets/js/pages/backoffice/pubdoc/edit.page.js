@@ -74,7 +74,7 @@ parasails.registerPage('backoffice-pubdoc-edit', {
           self.newSubject = data.wiki.subject;
           self.newBody = data.wiki.body;
           self.conflictUser = data.user;
-          self.myBody = self.wikiEditor.mdEditor.getValue();
+          self.myBody = $lycaon.markdown.getMarkdown(self.wikiEditor);
           self.diff = $lycaon.diff(self.myBody, data.wiki.body);
           self.showConflictModal = true;
         }
@@ -96,9 +96,9 @@ parasails.registerPage('backoffice-pubdoc-edit', {
       '600px',
       mode,
       i18next.t('Feel free to enter ...'),
+      this.wiki.body,
       this.addImageBlobHook.bind(this)
     );
-    this.wikiEditor.mdEditor.setValue(this.wiki.body);
 
     this.selectedTags = _.extend([], this.cloudTags);
   },
@@ -239,7 +239,7 @@ parasails.registerPage('backoffice-pubdoc-edit', {
 
       var argins = this.formData;
       argins.id = this.wiki.id;
-      argins.body = this.wikiEditor.mdEditor.getValue();
+      argins.body = $lycaon.markdown.getMarkdown(this.wikiEditor);
 
       // Validate
       if (!argins.subject) {

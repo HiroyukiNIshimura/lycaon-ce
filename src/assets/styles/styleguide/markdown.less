@@ -1,0 +1,351 @@
+.markdown-styles {
+  code {
+    font-family: inherit;
+    font-size: 1rem;
+  }
+  pre {
+    font-family: inherit;
+    font-size: 1rem;
+    margin: 0.5em;
+    code {
+      font-size: 0.9rem;
+    }
+  }
+  blockquote {
+    border-color: #ea5219;
+    margin: 0.5em 0 0 0.5em;
+  }
+  h1 {
+    color: #494949;
+    font-weight: bold;
+    //border: solid 3px #ea5219;
+    padding: 0.3em;
+    //border-radius: 0.5em;
+    margin: 1em 0 1em;
+  }
+  h2 {
+    color: #494949;
+    position: relative;
+    font-weight: bold;
+    margin: 1em 0 1em;
+    padding: 0.5em 0.5em 0.2em 1.8em;
+    border-bottom: 2px solid #ea5219;
+  }
+  h2:before {
+    content: '□';
+    font-size: 180%;
+    position: absolute;
+    color: #ea5219;
+    top: 0.15em;
+    left: 0.1em;
+    height: 12px;
+    width: 12px;
+  }
+  h2:after {
+    content: '□';
+    font-size: 120%;
+    position: absolute;
+    color: #000000;
+    top: 0.78em;
+    left: 0;
+    height: 12px;
+    width: 12px;
+  }
+  h3 {
+    color: #494949;
+    padding: 0.5em 0.75em;
+    background-color: #f4f4f4;
+    border-left: 6px solid #ea5219;
+    margin-top: 1em;
+  }
+  h4 {
+    position: relative;
+    background-color: #f4f4f4;
+    padding: 0.5em 0.75em;
+    border-radius: 6px;
+    padding-left: 1.3em; /*アイコン分のスペース*/
+    line-height: 1.4;
+  }
+  h4:before {
+    font-family: 'Font Awesome 5 Free';
+    content: '\f00c'; /*アイコンのユニコード*/
+    font-weight: 900;
+    position: absolute; /*絶対位置*/
+    font-size: 1em; /*サイズ*/
+    left: 0; /*アイコンの位置*/
+    top: 0; /*アイコンの位置*/
+    color: #5ab9ff; /*アイコン色*/
+    padding: 0.5em 0.1em;
+  }
+  h5 {
+    color: #494949;
+    padding: 0.5em 0.25em;
+    border-bottom-style: dotted;
+    border-bottom-color: #ea5219;
+    border-bottom-width: thin;
+    margin-top: 0.5em;
+  }
+  h6 {
+    font-size: 1rem;
+  }
+  table thead th {
+    background: #ea5219;
+    font-weight: bold;
+    vertical-align: top;
+    color: #fff;
+  }
+  table thead th,
+  table td {
+    padding: 6px 13px;
+    border: 1px solid #ddd;
+    font-weight: initial;
+  }
+  table tr {
+    background-color: #fff;
+    border-top: 1px solid #ccc;
+  }
+  hr {
+    background-color: #fff;
+    border-color: #ea5219;
+    border-top: 1px dashed #ea5219;
+  }
+
+  ul ol {
+    margin: 0.5em;
+  }
+  a {
+    color: #4078c0;
+    text-decoration: none;
+    &:hover,
+    &:active {
+      text-decoration: underline;
+    }
+  }
+
+  img {
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12) !important;
+    max-width: 80%;
+    height: auto;
+  }
+}
+
+.markdown-wiki-styles {
+  :not(table) {
+    line-height: initial;
+  }
+  code {
+    font-family: inherit;
+    font-size: 1rem;
+  }
+  pre {
+    font-family: inherit;
+    font-size: 1rem;
+    margin: 0.5em;
+    code {
+      font-size: 0.9rem;
+    }
+  }
+  blockquote {
+    border-color: #a6d3c8;
+    margin: 0.5em 0 0 0.5em;
+  }
+  h1 {
+    color: #364e96; /*文字色*/
+    padding: 0.5em 0; /*上下の余白*/
+    border-top: solid 3px #364e96; /*上線*/
+    border-bottom: solid 3px #364e96; /*下線*/
+  }
+  h2 {
+    color: #6594e0; /*文字色*/
+    /*線の種類（点線）2px 線色*/
+    border-bottom: dashed 2px #6594e0;
+  }
+
+  h3 {
+    padding: 0.25em 0.5em; /*上下 左右の余白*/
+    color: #494949; /*文字色*/
+    background: transparent; /*背景透明に*/
+    border-left: solid 5px #7db4e6; /*左線*/
+  }
+  h4 {
+    background: linear-gradient(transparent 70%, #a7d6ff 70%);
+  }
+  h5 {
+    color: #494949;
+    padding: 0.5em 0.25em;
+    border-bottom-style: dotted;
+    border-bottom-color: #364e96;
+    border-bottom-width: thin;
+    margin-top: 0.5em;
+  }
+  h6 {
+    font-size: 1rem;
+  }
+  table thead th {
+    background: #7db4e6;
+    font-weight: bold;
+    vertical-align: top;
+    color: #fff;
+  }
+  table thead th,
+  table td {
+    padding: 6px 13px;
+    border: 1px solid #ddd;
+    font-weight: initial;
+  }
+  table tr {
+    background-color: #fff;
+    border-top: 1px solid #ccc;
+  }
+  hr {
+    background-color: #fff;
+    border-color: #364e96;
+    border-top: 1px dashed #364e96;
+  }
+
+  ul ol {
+    margin: 0.5em;
+  }
+  a {
+    color: #4078c0;
+    text-decoration: none;
+    &:hover,
+    &:active {
+      text-decoration: underline;
+    }
+  }
+
+  img {
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12) !important;
+    max-width: 80%;
+    height: auto;
+  }
+}
+
+.markdown-vote-styles {
+  :not(table) {
+    line-height: initial;
+  }
+  code {
+    font-family: inherit;
+    font-size: 1rem;
+  }
+  pre {
+    font-family: inherit;
+    font-size: 1rem;
+    margin: 0.5em;
+    code {
+      font-size: 0.9rem;
+    }
+  }
+  blockquote {
+    border-color: rgba(36, 36, 36, 0.651);
+    margin: 0.5em 0 0 0.5em;
+  }
+  h1 {
+    position: relative;
+    padding-bottom: 0.5em;
+  }
+  h1::before,
+  h1::after {
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    content: '';
+    height: 4px;
+  }
+  h1::before {
+    z-index: 2;
+    width: 15%;
+    background-color: #444;
+  }
+  h1::after {
+    width: 100%;
+    background: -webkit-repeating-linear-gradient(45deg, #fff, #fff 2px, #aaa 2px, #aaa 4px);
+    background: repeating-linear-gradient(45deg, #fff, #fff 2px, #aaa 2px, #aaa 4px);
+  }
+  h2 {
+    position: relative;
+    padding: 0 0.5em 0.5em 2em;
+    border-bottom: 1px solid #ccc;
+  }
+  h2::before,
+  h2::after {
+    position: absolute;
+    content: '';
+    border-radius: 100%;
+  }
+  h2::before {
+    top: 0.2em;
+    left: 0.2em;
+    z-index: 2;
+    width: 18px;
+    height: 18px;
+    background: rgba(150, 150, 150, 0.5);
+  }
+  h2::after {
+    top: 0.7em;
+    left: 0.7em;
+    width: 13px;
+    height: 13px;
+    background: rgba(210, 210, 210, 0.5);
+  }
+
+  h3 {
+    padding: 0.25em 0 0.25em 0.75em;
+    border-left: 6px solid #ccc;
+  }
+  h4 {
+    background: linear-gradient(transparent 70%, #fcef3c 70%);
+  }
+  h5 {
+    color: #494949;
+    padding: 0.5em 0.25em;
+    border-bottom-style: dotted;
+    border-bottom-color: #364e96;
+    border-bottom-width: thin;
+    margin-top: 0.5em;
+  }
+  h6 {
+    font-size: 1rem;
+  }
+  table thead th {
+    background: rgba(85, 84, 84, 0.5);
+    font-weight: bold;
+    vertical-align: top;
+    color: #fff;
+  }
+  table thead th,
+  table td {
+    padding: 6px 13px;
+    border: 1px solid #ddd;
+    font-weight: initial;
+  }
+  table tr {
+    background-color: #fff;
+    border-top: 1px solid #ccc;
+  }
+  hr {
+    background-color: #fff;
+    border-color: rgba(210, 210, 210, 0.5);
+    border-top: 1px dashed rgba(177, 176, 176, 0.5);
+  }
+
+  ul ol {
+    margin: 0.5em;
+  }
+  a {
+    color: #4078c0;
+    text-decoration: none;
+    &:hover,
+    &:active {
+      text-decoration: underline;
+    }
+  }
+
+  img {
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12) !important;
+    max-width: 80%;
+    height: auto;
+  }
+}

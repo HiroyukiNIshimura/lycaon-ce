@@ -1,4 +1,4 @@
-const sanitizeHtml = require('sanitize-html');
+const removeMd = require('remove-markdown');
 
 module.exports = {
   friendlyName: 'mdToSanitize',
@@ -15,12 +15,15 @@ module.exports = {
   },
   fn: async function (inputs) {
     try {
-      return sanitizeHtml(await sails.helpers.mdToHtml.with({ markdown: inputs.markdown }), {
-        allowedTags: [],
-        allowedAttributes: {},
-        exclusiveFilter: function (frame) {
-          return !frame.text.trim();
-        },
+      if (!inputs.markdown) {
+        return '';
+      }
+
+      return removeMd(inputs.markdown, {
+        stripListLeaders: false,
+        listUnicodeChar: '',
+        gfm: true,
+        useImgAltText: true,
       });
     } catch (err) {
       sails.log.debug(err);

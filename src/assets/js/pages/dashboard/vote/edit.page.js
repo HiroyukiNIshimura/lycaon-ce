@@ -133,15 +133,13 @@ parasails.registerPage('vote-edit', {
       '300px',
       mode,
       i18next.t('Feel free to enter ...'),
+      this.vote.body,
       this.addImageBlobHook.bind(this)
     );
     $lycaon.markdown.addToolberImageList(this.voteEditor, () => {
-      self.voteEditor.eventManager.emit('closeAllPopup');
       self.$refs.imagelist.load();
       self.showImageListModal = true;
     });
-
-    this.voteEditor.mdEditor.setValue(this.vote.body);
 
     $lycaon.invalidEnterKey();
   },
@@ -304,7 +302,7 @@ parasails.registerPage('vote-edit', {
 
       var argins = this.formData;
       argins.id = this.vote.id;
-      argins.body = this.voteEditor.mdEditor.getValue();
+      argins.body = $lycaon.markdown.getMarkdown(this.voteEditor);
       argins.users = this.selectedUsers;
       argins.choices = this.selectedQuestions;
       argins.isQuestionnaireFormat = this.isQuestionnaireFormat;

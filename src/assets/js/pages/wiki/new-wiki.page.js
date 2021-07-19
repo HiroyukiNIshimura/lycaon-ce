@@ -64,20 +64,17 @@ parasails.registerPage('new-wiki', {
       '600px',
       mode,
       i18next.t('Feel free to enter ...'),
+      this.thread ? this.thread.body : '',
       this.addImageBlobHook.bind(this)
     );
     var self = this;
     $lycaon.markdown.addToolberImageList(this.wikiEditor, () => {
-      self.wikiEditor.eventManager.emit('closeAllPopup');
       self.$refs.imagelist.load();
       self.showImageListModal = true;
     });
 
     if (this.thread) {
       this.formData.subject = this.thread.subject;
-      this.wikiEditor.mdEditor.setValue(this.thread.body);
-    } else {
-      this.wikiEditor.mdEditor.setValue('');
     }
 
     $lycaon.invalidEnterKey();
@@ -117,8 +114,8 @@ parasails.registerPage('new-wiki', {
       }
     },
     deleteAppendix: function (item, index) {
-      var val = this.wikiEditor.mdEditor.getValue();
-      this.wikiEditor.mdEditor.setValue(val.replace(item.blobUrl, ''));
+      var val = $lycaon.markdown.getMarkdown(this.wikiEditor);
+      $lycaon.markdown.setMarkdown(this.wikiEditor, val.replace(item.blobUrl, ''));
       this.appendix.splice(index, 1);
     },
     downloadAppendix: function () {
@@ -186,7 +183,7 @@ parasails.registerPage('new-wiki', {
       $lycaon.clearToast();
 
       var argins = this.formData;
-      argins.body = this.wikiEditor.mdEditor.getValue();
+      argins.body = $lycaon.markdown.getMarkdown(this.wikiEditor);
       argins.team = this.team.id;
 
       // Validate

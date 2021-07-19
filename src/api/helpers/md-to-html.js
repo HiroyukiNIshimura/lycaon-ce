@@ -1,5 +1,5 @@
 module.exports = {
-  friendlyName: 'Markdown to html',
+  friendlyName: 'mdToHtml',
   description: 'Markdown to html utility.',
   inputs: {
     markdown: {

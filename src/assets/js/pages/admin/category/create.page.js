@@ -30,9 +30,9 @@ parasails.registerPage('admin-category-create', {
       '#template-editor',
       '400px',
       'tab',
-      i18next.t('Please fill in the template for the new thread created in this category ...')
+      i18next.t('Please fill in the template for the new thread created in this category ...'),
+      ''
     );
-    this.templateEditor.mdEditor.setValue('');
   },
 
   //  ╦╔╗╔╔╦╗╔═╗╦═╗╔═╗╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
@@ -50,7 +50,7 @@ parasails.registerPage('admin-category-create', {
       $lycaon.clearToast();
 
       var argins = this.formData;
-      argins.templateBody = this.templateEditor.mdEditor.getValue();
+      argins.templateBody = $lycaon.markdown.getMarkdown(this.templateEditor);
       argins.useTemplate = this.useTemplate;
 
       // Validate

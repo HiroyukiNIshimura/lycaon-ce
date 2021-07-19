@@ -37,9 +37,9 @@ parasails.registerPage('admin-category-edit', {
       '#template-editor',
       '400px',
       'tab',
-      i18next.t('Please fill in the template for the new thread created in this category ...')
+      i18next.t('Please fill in the template for the new thread created in this category ...'),
+      this.category.templateBody
     );
-    this.templateEditor.mdEditor.setValue(this.category.templateBody);
 
     if (this.effectMessage) {
       $lycaon.cloudSuccessToast(this.effectMessage);
@@ -60,7 +60,7 @@ parasails.registerPage('admin-category-edit', {
       $lycaon.clearToast();
 
       var argins = this.formData;
-      argins.templateBody = this.templateEditor.mdEditor.getValue();
+      argins.templateBody = $lycaon.markdown.getMarkdown(this.templateEditor);
       argins.useTemplate = this.useTemplate;
 
       // Validate
