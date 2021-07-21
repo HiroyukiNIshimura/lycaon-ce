@@ -28,14 +28,15 @@ parasails.registerPage('admin-user-create', {
   beforeMount: function () {
     this.formData.role = 0;
 
-    this.tagifySettings = _.deepExtend({}, $lycaon.tagifySettings, {
+    this.tagifySettings = {
       placeholder: i18next.t('Please select a team to join'),
       enforceWhitelist: true,
       maxTags: undefined,
       dropdown: {
         maxItems: undefined,
       },
-    });
+      whitelist: [],
+    };
 
     var self = this;
     _.each(this.teams, (entry) => {
@@ -49,9 +50,7 @@ parasails.registerPage('admin-user-create', {
     this.selectedTeams = _.extend([], this.cloudTags);
 
     if (this.unplanned) {
-      $lycaon.infoKeepToast(
-        'No more users can be created with the current plan. Please consider updating your plan'
-      );
+      $lycaon.infoKeepToast('No more users can be created with the current plan. Please consider updating your plan');
     }
   },
 

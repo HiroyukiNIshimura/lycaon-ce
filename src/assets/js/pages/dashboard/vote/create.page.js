@@ -45,14 +45,15 @@ parasails.registerPage('vote-create', {
     }
 
     //…
-    this.userTagifySettings = _.deepExtend({}, $lycaon.tagifySettings, {
+    this.userTagifySettings = {
       placeholder: i18next.t('Select users to join the circulation'),
       enforceWhitelist: true,
       maxTags: undefined,
       dropdown: {
         maxItems: undefined,
       },
-    });
+      whitelist: [],
+    };
 
     var self = this;
     _.each(this.users, (entry) => {
@@ -70,14 +71,15 @@ parasails.registerPage('vote-create', {
       self.cloudUsers.push(val);
     });
 
-    this.questionTagifySettings = _.deepExtend({}, $lycaon.tagifySettings, {
+    this.questionTagifySettings = {
       placeholder: i18next.t('Enter your question'),
       enforceWhitelist: false,
       maxTags: 50,
       dropdown: {
         maxItems: undefined,
       },
-    });
+      whitelist: [],
+    };
   },
   mounted: async function () {
     var self = this;

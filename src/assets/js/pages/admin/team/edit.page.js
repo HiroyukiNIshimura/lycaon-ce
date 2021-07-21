@@ -42,14 +42,15 @@ parasails.registerPage('admin-team-edit', {
     this.formData.gitOrigin = this.team.gitOrigin;
     this.defaultConcept = this.team.defaultConcept;
 
-    this.userTagifySettings = _.deepExtend({}, $lycaon.tagifySettings, {
+    this.userTagifySettings = {
       placeholder: i18next.t('Select users to join the team'),
       enforceWhitelist: true,
       maxTags: undefined,
       dropdown: {
         maxItems: undefined,
       },
-    });
+      whitelist: [],
+    };
 
     var self = this;
     _.each(this.users, (entry) => {
@@ -67,14 +68,15 @@ parasails.registerPage('admin-team-edit', {
       self.cloudUsers.push(val);
     });
 
-    this.categoryTagifySettings = _.deepExtend({}, $lycaon.tagifySettings, {
+    this.categoryTagifySettings = {
       placeholder: i18next.t('Select a category for your team'),
       enforceWhitelist: true,
       maxTags: undefined,
       dropdown: {
         maxItems: undefined,
       },
-    });
+      whitelist: [],
+    };
 
     _.each(this.categories, (entry) => {
       self.categoryTagifySettings.whitelist.push({

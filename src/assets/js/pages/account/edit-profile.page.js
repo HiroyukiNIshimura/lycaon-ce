@@ -56,14 +56,15 @@ parasails.registerPage('edit-profile', {
     this.hasAvatar = this.me.avatarVirtualUrl ? true : false;
     this.avatarUrl = this.me.avatarVirtualUrl;
 
-    this.tagifySettings = _.deepExtend({}, $lycaon.tagifySettings, {
+    this.tagifySettings = {
       placeholder: i18next.t('Select teams if you need'),
       enforceWhitelist: true,
       maxTags: undefined,
       dropdown: {
         maxItems: undefined,
       },
-    });
+      whitelist: [],
+    };
 
     var self = this;
     _.each(this.teams, (entry) => {
@@ -81,14 +82,15 @@ parasails.registerPage('edit-profile', {
       self.cloudTags.push(val);
     });
 
-    this.categoryTagifySettings = _.deepExtend({}, $lycaon.tagifySettings, {
+    this.categoryTagifySettings = {
       placeholder: i18next.t('Select categories if you need'),
       enforceWhitelist: true,
       maxTags: undefined,
       dropdown: {
         maxItems: undefined,
       },
-    });
+      whitelist: [],
+    };
 
     _.each(this.categories, (entry) => {
       self.categoryTagifySettings.whitelist.push({
@@ -105,14 +107,15 @@ parasails.registerPage('edit-profile', {
       self.cloudCategoryTags.push(val);
     });
 
-    this.tagTagifySettings = _.deepExtend({}, $lycaon.tagifySettings, {
+    this.tagTagifySettings = {
       placeholder: i18next.t('Select tags if you need'),
       enforceWhitelist: true,
       maxTags: undefined,
       dropdown: {
         maxItems: undefined,
       },
-    });
+      whitelist: [],
+    };
 
     _.each(this.tags, (entry) => {
       self.tagTagifySettings.whitelist.push({

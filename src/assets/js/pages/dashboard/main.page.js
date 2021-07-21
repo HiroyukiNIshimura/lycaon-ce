@@ -57,7 +57,7 @@ parasails.registerPage('main', {
   //  ║  ║╠╣ ║╣ ║  ╚╦╝║  ║  ║╣
   //  ╩═╝╩╚  ╚═╝╚═╝ ╩ ╚═╝╩═╝╚═╝
   beforeMount: function () {
-    this.tagifySettings = _.deepExtend({}, $lycaon.tagifySettings, {
+    this.tagifySettings = {
       placeholder: i18next.t('You can add up to {0} tags to a condition').format(10),
       enforceWhitelist: true,
       maxTags: 10,
@@ -65,7 +65,8 @@ parasails.registerPage('main', {
         maxItems: undefined,
         closeOnSelect: true,
       },
-    });
+      whitelist: [],
+    };
 
     var self = this;
     _.each(this.tags, (entry) => {

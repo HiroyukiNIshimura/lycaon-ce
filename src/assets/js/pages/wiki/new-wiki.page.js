@@ -32,14 +32,15 @@ parasails.registerPage('new-wiki', {
   //  ║  ║╠╣ ║╣ ║  ╚╦╝║  ║  ║╣
   //  ╩═╝╩╚  ╚═╝╚═╝ ╩ ╚═╝╩═╝╚═╝
   beforeMount: function () {
-    this.tagifySettings = _.deepExtend({}, $lycaon.tagifySettings, {
+    this.tagifySettings = {
       placeholder: i18next.t('You can tag up to {0}').format(10),
       enforceWhitelist: false,
       maxTags: 10,
       dropdown: {
         maxItems: 50,
       },
-    });
+      whitelist: [],
+    };
 
     var self = this;
     io.socket.on('message-notify', (response) => {

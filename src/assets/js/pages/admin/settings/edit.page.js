@@ -31,14 +31,15 @@ parasails.registerPage('admin-settings-edit', {
 
     this.maxUploadFileSize = this.sysSettings.maxUploadFileSize / 1024;
 
-    this.tagifySettings = _.deepExtend({}, $lycaon.tagifySettings, {
+    this.tagifySettings = {
       placeholder: i18next.t('Select a team that does not require email notification'),
       enforceWhitelist: false,
       maxTags: undefined,
       dropdown: {
         maxItems: undefined,
       },
-    });
+      whitelist: [],
+    };
 
     var self = this;
     _.each(this.witeListOfExts, (entry) => {

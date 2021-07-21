@@ -89,14 +89,15 @@ parasails.registerPage('thread', {
     this.refsUpdate = 0;
     this.clipperMessage = i18next.t('Copy thread No');
 
-    this.tagifySettings = _.deepExtend({}, $lycaon.tagifySettings, {
+    this.tagifySettings = {
       placeholder: i18next.t('You can tag up to {0}').format(10),
       enforceWhitelist: false,
       maxTags: 10,
       dropdown: {
         maxItems: 50,
       },
-    });
+      whitelist: [],
+    };
 
     var self = this;
     _.each(this.tags, (entry) => {

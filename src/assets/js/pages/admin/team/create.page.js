@@ -34,14 +34,15 @@ parasails.registerPage('admin-team-create', {
   //  ║  ║╠╣ ║╣ ║  ╚╦╝║  ║  ║╣
   //  ╩═╝╩╚  ╚═╝╚═╝ ╩ ╚═╝╩═╝╚═╝
   beforeMount: function () {
-    this.userTagifySettings = _.deepExtend({}, $lycaon.tagifySettings, {
+    this.userTagifySettings = {
       placeholder: i18next.t('Select users to join the team'),
       enforceWhitelist: true,
       maxTags: undefined,
       dropdown: {
         maxItems: undefined,
       },
-    });
+      whitelist: [],
+    };
 
     var self = this;
     _.each(this.users, (entry) => {
@@ -51,14 +52,15 @@ parasails.registerPage('admin-team-create', {
       });
     });
 
-    this.categoryTagifySettings = _.deepExtend({}, $lycaon.tagifySettings, {
+    this.categoryTagifySettings = {
       placeholder: i18next.t('Select a category for your team'),
       enforceWhitelist: true,
       maxTags: undefined,
       dropdown: {
         maxItems: undefined,
       },
-    });
+      whitelist: [],
+    };
 
     _.each(this.categories, (entry) => {
       self.categoryTagifySettings.whitelist.push({
@@ -75,9 +77,7 @@ parasails.registerPage('admin-team-create', {
     this.selectedCategories = _.extend([], this.cloudCategories);
 
     if (this.unplanned) {
-      $lycaon.infoKeepToast(
-        'No more teams can be created with the current plan. Please consider updating your plan'
-      );
+      $lycaon.infoKeepToast('No more teams can be created with the current plan. Please consider updating your plan');
     }
   },
 

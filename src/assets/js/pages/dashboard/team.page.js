@@ -79,7 +79,7 @@ parasails.registerPage('team', {
   //  ║  ║╠╣ ║╣ ║  ╚╦╝║  ║  ║╣
   //  ╩═╝╩╚  ╚═╝╚═╝ ╩ ╚═╝╩═╝╚═╝
   beforeMount: function () {
-    this.tagifySettings = _.deepExtend({}, $lycaon.tagifySettings, {
+    this.tagifySettings = {
       placeholder: i18next.t('You can add up to {0} tags to a condition').format(10),
       enforceWhitelist: true,
       maxTags: 10,
@@ -87,7 +87,8 @@ parasails.registerPage('team', {
         maxItems: undefined,
         closeOnSelect: true,
       },
-    });
+      whitelist: [],
+    };
 
     var self = this;
     _.each(this.tags, (entry) => {
@@ -799,7 +800,7 @@ parasails.registerPage('team', {
       var commitTableRows = $('.changeset-container');
       var holder = document.getElementById('holder');
 
-      if (this.revisionGraph !== null) {
+      if (this.revisionGraph) {
         this.revisionGraph.set().clear();
       } else {
         this.revisionGraph = Raphael(holder);

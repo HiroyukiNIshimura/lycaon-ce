@@ -10,6 +10,8 @@
  * -----------------------------------------------------------------------------
  */
 
+/* https://github.com/yairEO/tagify */
+
 parasails.registerComponent('vTagifySelect', {
   //  ╔═╗╦═╗╔═╗╔═╗╔═╗
   //  ╠═╝╠╦╝║ ║╠═╝╚═╗
@@ -48,9 +50,9 @@ parasails.registerComponent('vTagifySelect', {
   //  ╩═╝╩╚  ╚═╝╚═╝ ╩ ╚═╝╩═╝╚═╝
   beforeMount: function () {
     if (this.settings) {
-      this.defaultSettings = _.extend({}, this.defaultSettings, this.settings);
+      this.defaultSettings = _.deepExtend({}, this.defaultSettings, this.settings);
     } else {
-      this.defaultSettings = _.extend({}, this.defaultSettings);
+      this.defaultSettings = _.deepExtend({}, this.defaultSettings);
     }
   },
   mounted: async function () {

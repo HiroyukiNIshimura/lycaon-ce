@@ -32,14 +32,15 @@ parasails.registerPage('admin-user-edit', {
     this.formData.role = this.user.isSuperAdmin ? 1 : 0;
     this.formData.deleted = this.user.deleted;
 
-    this.tagifySettings = _.deepExtend({}, $lycaon.tagifySettings, {
+    this.tagifySettings = {
       placeholder: i18next.t('Please select a team to join'),
       enforceWhitelist: true,
       maxTags: undefined,
       dropdown: {
         maxItems: undefined,
       },
-    });
+      whitelist: [],
+    };
 
     var self = this;
     _.each(this.teams, (entry) => {

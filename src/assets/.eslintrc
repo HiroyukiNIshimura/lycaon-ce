@@ -56,7 +56,6 @@
     "Chart": true,
     "QRCode": true,
     "Raphael": true,
-    "linkify": true,
     "VueToast": true,
     "VuejsPaginate": true,
     "Header": true,

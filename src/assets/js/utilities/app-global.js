@@ -1,4 +1,46 @@
+class ExpiringStorage {
+  get(key) {
+    const cached = JSON.parse(localStorage.getItem(key));
+
+    if (!cached) {
+      return null;
+    }
+
+    const expires = new Date(cached.expires);
+
+    if (expires < new Date()) {
+      localStorage.removeItem(key);
+      return null;
+    }
+
+    return cached.value;
+  }
+
+  set(key, value, lifeTimeInMinutes) {
+    const currentTime = new Date().getTime();
+
+    const expires = new Date(currentTime + lifeTimeInMinutes * 60000);
+
+    localStorage.setItem(key, JSON.stringify({ value, expires }));
+  }
+
+  delete(key) {
+    localStorage.removeItem(key);
+  }
+}
+const expiringStorage = new ExpiringStorage();
+
 const draggable = window['vuedraggable'];
+const formatter = new Intl.NumberFormat('ja-JP');
+const percentFormatter = new Intl.NumberFormat('ja-JP', {
+  style: 'percent',
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+});
+const floatFormatter = new Intl.NumberFormat('ja-JP', {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+});
 
 const { Editor } = toastui;
 const { chart, codeSyntaxHighlight, colorSyntax, uml, tableMergedCell } = Editor.plugin;
@@ -186,16 +228,6 @@ function twitterPlugin() {
   return { toHTMLRenderers };
 }
 
-const formatter = new Intl.NumberFormat('ja-JP');
-const percentFormatter = new Intl.NumberFormat('ja-JP', {
-  style: 'percent',
-  minimumFractionDigits: 2,
-  maximumFractionDigits: 2,
-});
-const floatFormatter = new Intl.NumberFormat('ja-JP', {
-  minimumFractionDigits: 2,
-  maximumFractionDigits: 2,
-});
 const markdownIt = window.markdownit();
 
 const linkify = markdownIt.linkify;
@@ -346,38 +378,6 @@ linkify.add('@', {
     match.text = match.text.trim() + ' ';
   },
 });
-
-class ExpiringStorage {
-  get(key) {
-    const cached = JSON.parse(localStorage.getItem(key));
-
-    if (!cached) {
-      return null;
-    }
-
-    const expires = new Date(cached.expires);
-
-    if (expires < new Date()) {
-      localStorage.removeItem(key);
-      return null;
-    }
-
-    return cached.value;
-  }
-
-  set(key, value, lifeTimeInMinutes) {
-    const currentTime = new Date().getTime();
-
-    const expires = new Date(currentTime + lifeTimeInMinutes * 60000);
-
-    localStorage.setItem(key, JSON.stringify({ value, expires }));
-  }
-
-  delete(key) {
-    localStorage.removeItem(key);
-  }
-}
-const expiringStorage = new ExpiringStorage();
 
 _.mixin({ deepExtend: underscoreDeepExtend(_) });
 
@@ -658,20 +658,6 @@ const $lycaon = {
 
     return score;
   },
-  /* https://github.com/yairEO/tagify */
-  tagifySettings: {
-    //placeholder: '',
-    whitelist: [],
-    enforceWhitelist: true,
-    editTags: 1,
-    maxTags: 10,
-    dropdown: {
-      maxItems: 50,
-      classname: 'tags-look',
-      enabled: 0,
-      closeOnSelect: false,
-    },
-  },
   rejectIgnoreExts: function (files, key, whitelist) {
     return _.filter(files, (entry) => {
       var exists = _.find(whitelist, (ext) => {
@@ -880,6 +866,7 @@ const $lycaon = {
           'ul',
           'p',
           'div',
+          'span',
           'strong',
           'em',
           'del',
@@ -899,6 +886,7 @@ const $lycaon = {
           'th',
           'td',
           'hr',
+          'br',
           'img',
           'a',
           'iframe',
