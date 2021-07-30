@@ -2,19 +2,31 @@
   <div class="container">
     <h4>Lycaon</h4>
     <hr>
-    <div><%= __("Version") %>: {{sysStatus.version}}</div>
-    <div><%= __("System operation started") %>: <lycaon-timestamp :at="sysStatus.systemLiftAt" format="timeago"></lycaon-timestamp></div>
+    <div>
+      <%= __("Version") %>: {{sysStatus.version}}
+    </div>
+    <div>
+      <%= __("System operation started") %>: <lycaon-timestamp :at="sysStatus.systemLiftAt" format="timeago"></lycaon-timestamp>
+    </div>
 
     <h4 class="mt-5">Sails</h4>
     <hr>
-    <div><%= __("Version") %>: {{sailsInfo.version}}</div>
-    <div><%= __("Environment") %>: {{sailsInfo.environment}}</div>
+    <div>
+      <%= __("Version") %>: {{sailsInfo.version}}
+    </div>
+    <div>
+      <%= __("Environment") %>: {{sailsInfo.environment}}
+    </div>
 
     <h4 class="mt-5">nodejs</h4>
     <hr>
-    <div><%= __("Version") %>: {{nodejsInfo.version}}</div>
+    <div>
+      <%= __("Version") %>: {{nodejsInfo.version}}
+    </div>
 
-    <h4 class="mt-5"><%= __("Resource") %></h4>
+    <h4 class="mt-5">
+      <%= __("Resource") %>
+    </h4>
     <hr>
     <div class="row">
       <div class="col-auto">DB Size</div>
@@ -39,8 +51,8 @@
         <div class="row">
           <div class="col-2">{{ diskspace.data.mount }}</div>
           <div class="col-2">{{ diskspace.data.capacity }}</div>
-          <div class="col-2">{{ floatFormatter.format(diskspace.data.used  / 1024 / 1024) }}</div>
-          <div class="col-2">{{ floatFormatter.format(diskspace.data.size  / 1024 / 1024) }}</div>
+          <div class="col-2">{{ floatFormatter.format(diskspace.data.used / 1024 / 1024) }}</div>
+          <div class="col-2">{{ floatFormatter.format(diskspace.data.size / 1024 / 1024) }}</div>
           <div class="col-2">{{ floatFormatter.format(diskspace.data.available / 1024 / 1024) }}</div>
         </div>
       </div>
@@ -58,13 +70,24 @@
     <div class="row mt-5">
       <div class="col-6 col-md-3 top-status">
         <dl>
-          <dt class="text-muted"><%= __("Memory usage") %><%= __("(MB)") %></dt>
+          <dt class="text-muted">
+            <%= __("Memory usage") %>
+              <%= __("(MB)") %>
+          </dt>
           <dd class="text-right">{{ floatFormatter.format(top.totalmem / 1024 / 1024) }}</dd>
-          <dt class="text-muted"><%= __("Free memory") %><%= __("(MB)") %></dt>
+          <dt class="text-muted">
+            <%= __("Free memory") %>
+              <%= __("(MB)") %>
+          </dt>
           <dd class="text-right">{{ floatFormatter.format(top.freemem / 1024 / 1024) }}</dd>
-          <dt class="text-muted"><%= __("CPU uptime") %><%= __("(s)") %></dt>
+          <dt class="text-muted">
+            <%= __("CPU uptime") %>
+              <%= __("(s)") %>
+          </dt>
           <dd class="text-right">{{ formatter.format(top.uptime) }}</dd>
-          <dt class="text-muted"><%= __("Load average") %></dt>
+          <dt class="text-muted">
+            <%= __("Load average") %>
+          </dt>
           <dd class="text-right" v-for="item in top.loadavg">{{ floatFormatter.format(item) }}</dd>
         </dl>
       </div>

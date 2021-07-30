@@ -2,16 +2,24 @@
   <div class="container">
     <modal v-if="showDeleteModal">
       <div class="card">
-        <div class="card-header"><%= __("Confirmation dialog") %></div>
+        <div class="card-header">
+          <%= __("Confirmation dialog") %>
+        </div>
         <div class="card-body">
-          <h5 class="card-title"><%= __("Confirmation of deletion") %></h5>
-          <p class="card-text"><%= __("Delete the selected team. Is it OK?") %></p>
+          <h5 class="card-title">
+            <%= __("Confirmation of deletion") %>
+          </h5>
+          <p class="card-text">
+            <%= __("Delete the selected team. Is it OK?") %>
+          </p>
           <div class="text-right">
             <button type="button" class="btn btn-danger btn-sm" @click="doDelete">
-              <i class="far fa-trash-alt"></i> <%= __("Delete") %>
+              <i class="far fa-trash-alt"></i>
+              <%= __("Delete") %>
             </button>
             <button type="button" class="btn btn-light btn-sm" @click="showDeleteModal = false">
-              <i class="fas fa-window-close"></i> <%= __("Cancel") %>
+              <i class="fas fa-window-close"></i>
+              <%= __("Cancel") %>
             </button>
           </div>
         </div>
@@ -20,7 +28,9 @@
     <div class="row">
       <div class="col text-right">
         <a class="btn btn-info btn-sm" href="/<%= organization.handleId %>/admin/team/create"><i
-            class="fas fa-plus-circle"></i> <%= __("Add new team") %></a>
+            class="fas fa-plus-circle"></i>
+          <%= __("Add new team") %>
+        </a>
       </div>
     </div>
 
@@ -34,21 +44,26 @@
 
     <div class="row mt-4" v-if="records > 0">
       <div class="col-auto">
-        <h4><%= __("Team") %></h4>
+        <h4>
+          <%= __("Team") %>
+        </h4>
       </div>
       <div class="col-auto">
         <v-pagination :page="pagination.page" :page-count="getPageCount" :handler="clickCallback"></v-pagination>
       </div>
       <div class="col">
         <small>
-          <span><%= __("Total number of teams") %> {{ formatter.format(records) }}
-            {{ i18nformatN('Team', 'Teams', records) }}
+          <span>
+            <%= __("Total number of teams") %> {{ formatter.format(records) }}
+              {{ i18nformatN('Team', 'Teams', records) }}
           </span>
         </small>
       </div>
     </div>
     <div class="row mt-4" v-else>
-      <div class="col text-muted"><%= __("Team not found") %></div>
+      <div class="col text-muted">
+        <%= __("Team not found") %>
+      </div>
     </div>
     <div class="row">
       <div class="col-auto mb-2 ml-1" v-for="item in teams">
@@ -63,20 +78,26 @@
 
             <div class="card-text text-right">
               <div class="btn-group btn-group-sm" v-if="!item.isNologin">
-                <a :href="link(item)" class="btn btn-info"><i class="far fa-edit"></i> <%= __("Edit") %></a>
+                <a :href="link(item)" class="btn btn-info"><i class="far fa-edit"></i>
+                  <%= __("Edit") %>
+                </a>
                 <button type="button" class="btn btn-info btn-sm dropdown-toggle dropdown-toggle-split"
                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <span class="sr-only">Toggle Dropdown</span>
                 </button>
                 <div class="dropdown-menu">
                   <a class="dropdown-item" href="javascript:void(0)"
-                    @click="clickDeleteTeam(item)"><%= __("Delete this team") %></a>
+                    @click="clickDeleteTeam(item)">
+                    <%= __("Delete this team") %>
+                  </a>
                 </div>
               </div>
             </div>
           </div>
           <div class="card-footer">
-            <span class="badge badge-warning" v-if="item.deleted"><%= __("Invalid team") %></span>
+            <span class="badge badge-warning" v-if="item.deleted">
+              <%= __("Invalid team") %>
+            </span>
           </div>
         </div>
       </div>

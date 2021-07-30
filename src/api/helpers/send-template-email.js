@@ -163,10 +163,7 @@ module.exports = {
     var emailTemplateLayout;
     var planeTextTemplateLayout;
     if (layout) {
-      emailTemplateLayout = path.relative(
-        path.dirname(emailTemplatePath),
-        path.resolve('layouts/', layout)
-      );
+      emailTemplateLayout = path.relative(path.dirname(emailTemplatePath), path.resolve('layouts/', layout));
       planeTextTemplateLayout = path.relative(
         path.dirname(planeTextTemplatePath),
         path.resolve('layouts/plane', layout)
@@ -179,8 +176,6 @@ module.exports = {
     var settings = {
       fromEmailAddress: sails.config.custom.backofficeMailAddress,
       fromName: 'Team Lycaon',
-      notSendBackoffice: false,
-      internalEmailAddress: sails.config.custom.backofficeMailAddress,
     };
 
     if (organization) {
@@ -196,10 +191,7 @@ module.exports = {
     // > building links and image srcs, etc.), and also provide access to core
     // > `util` package (for dumping debug data in internal emails).
     var htmlEmailContents = await sails
-      .renderView(
-        emailTemplatePath,
-        _.extend({ layout: emailTemplateLayout, url, util }, templateData)
-      )
+      .renderView(emailTemplatePath, _.extend({ layout: emailTemplateLayout, url, util }, templateData))
       .intercept((err) => {
         err.message =
           'Could not compile view template.\n' +
@@ -211,10 +203,7 @@ module.exports = {
 
     if (!rawText) {
       rawText = await sails
-        .renderView(
-          planeTextTemplatePath,
-          _.extend({ layout: planeTextTemplateLayout, url, util }, templateData)
-        )
+        .renderView(planeTextTemplatePath, _.extend({ layout: planeTextTemplateLayout, url, util }, templateData))
         .intercept((err) => {
           err.message =
             'Could not compile view template.\n' +
@@ -237,10 +226,7 @@ module.exports = {
     // If that's the case, or if we're in the "test" environment, then log
     // the email instead of sending it:
     var dontActuallySend =
-      sails.config.environment === 'test' ||
-      isToAddressConsideredFake ||
-      notConfig ||
-      sails.config.custom.isDemosite; //デモ環境
+      sails.config.environment === 'test' || isToAddressConsideredFake || notConfig || sails.config.custom.isDemosite; //デモ環境
 
     if (dontActuallySend) {
       sails.log.info('Skipped sending email!');
@@ -303,56 +289,12 @@ module.exports = {
         attachments: attachments,
       };
 
-      var sendBackoffice = function (messageData, transporter) {
-        if (settings.notSendBackoffice) {
-          sails.log.debug(
-            'Skipped sending email, SysSettings is set to "notSendBackoffice === true".\n' +
-              '\n' +
-              'But anyway, here is what WOULD have been sent:\n' +
-              '-=-=-=-=-=-=-=-=-=-=-=-=-= Email log =-=-=-=-=-=-=-=-=-=-=-=-=-\n' +
-              'To: ' +
-              to +
-              '\n' +
-              'Subject: ' +
-              subject +
-              '\n' +
-              '\n' +
-              'Body:\n' +
-              htmlEmailContents +
-              '\n' +
-              '-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-'
-          );
-          return;
-        }
-
-        //エラーの場合は、管理側にメール
-        messageData.to.address = settings.internalEmailAddress;
-        messageData.to.name = '';
-        messageData.subject = `【メール配信不可 <${toName}>${to}】${messageData.subject}`;
-        transporter.sendMail(messageData, (error, info) => {
-          if (error) {
-            sails.log.error(error);
-            //エラーでも無視する
-          } else {
-            sails.log.info('Email sent backoffice: ' + info.response);
-          }
-        });
-      };
-
       var transporter = nodemailer.createTransport(sails.config.custom.smtpSettings);
-      transporter.verify((error) => {
+      transporter.sendMail(messageData, (error, info) => {
         if (error) {
           sails.log.error(error);
-          sendBackoffice(messageData, transporter);
         } else {
-          transporter.sendMail(messageData, (error, info) => {
-            if (error) {
-              sails.log.error(error);
-              sendBackoffice(messageData, transporter);
-            } else {
-              sails.log.info('Email sent: ' + info.response + ':' + messageData.to.address);
-            }
-          });
+          sails.log.info('Email sent: ' + info.response + ':' + messageData.to.address);
         }
       });
     } //ﬁ

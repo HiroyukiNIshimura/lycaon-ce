@@ -2,19 +2,24 @@
   <div class="container">
     <ajax-form action="updateTeam" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedForm"
       @rejected="onCloudError" :handle-parsing="handleParsingForm">
-      <h4 class="mb-4"><%= __("Edit Team") %></h4>
+      <h4 class="mb-4">
+        <%= __("Edit Team") %>
+      </h4>
 
       <%- partial ('form.ejs', { type: 'edit' }) %>
 
-      <div class="row">
-        <div class="col text-right">
-          <a class="btn btn-light btn-sm" href="/<%= organization.handleId %>/admin/teams"><i
-              class="fas fa-window-close"></i> <%= __("Cancel") %></a>
-          <button type="submit" class="btn btn-primary btn-sm">
-            <i class="far fa-save"></i> <%= __("Save") %>
-          </button>
+        <div class="row">
+          <div class="col text-right">
+            <a class="btn btn-light btn-sm" href="/<%= organization.handleId %>/admin/teams"><i
+                class="fas fa-window-close"></i>
+              <%= __("Cancel") %>
+            </a>
+            <button type="submit" class="btn btn-primary btn-sm">
+              <i class="far fa-save"></i>
+              <%= __("Save") %>
+            </button>
+          </div>
         </div>
-      </div>
     </ajax-form>
   </div>
 </div>

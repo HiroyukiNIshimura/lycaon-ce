@@ -80,10 +80,21 @@ module.exports = {
       `room-${this.req.organization.id}-thread-${updated.id}`,
     ];
 
+    var priority = 'Normally';
+    switch (updated.priority) {
+      case 0:
+        priority = 'Low';
+        break;
+      case 2:
+        priority = 'High';
+        break;
+      case 1:
+      default:
+        break;
+    }
     var message = {
       key: '{0} changed the importance of thread [#{1}] {2} to [{3}]',
-      params: [this.req.me.fullName, updated.no, updated.subject],
-      priority: updated.priority,
+      params: [this.req.me.fullName, updated.no, updated.subject, sails.__(priority)],
     };
 
     //

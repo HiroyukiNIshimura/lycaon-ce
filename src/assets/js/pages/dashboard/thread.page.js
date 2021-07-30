@@ -1,4 +1,5 @@
 parasails.registerPage('thread', {
+  mixins: [messageNotify],
   //  ╦╔╗╔╦╔╦╗╦╔═╗╦    ╔═╗╔╦╗╔═╗╔╦╗╔═╗
   //  ║║║║║ ║ ║╠═╣║    ╚═╗ ║ ╠═╣ ║ ║╣
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
@@ -142,18 +143,19 @@ parasails.registerPage('thread', {
     this.viewer = $lycaon.markdown.createViewer('#viewer', this.thread.body, '100%');
 
     var self = this;
-    window.onbeforeunload = function () {
+    window.addEventListener('beforeunload', () => {
       if (self.threadMode === 'edit') {
         $lycaon.socket.post('/ws/v1/thread-edit-out', { id: self.thread.id }, () => {
           if (!self.reloaded) {
-            $lycaon.socket.post('/ws/v1/thread-out', { id: self.thread.id });
+            //$lycaon.socket.post('/ws/v1/thread-out', { id: self.thread.id });
           }
         });
+      } else {
+        if (!self.reloaded) {
+          //$lycaon.socket.post('/ws/v1/thread-out', { id: self.thread.id });
+        }
       }
-      if (!self.reloaded) {
-        $lycaon.socket.post('/ws/v1/thread-out', { id: self.thread.id });
-      }
-    };
+    });
 
     io.socket.on('thread-notify', (data) => {
       if (data.user.id !== self.me.id && data.message) {
@@ -196,15 +198,7 @@ parasails.registerPage('thread', {
       }
     });
 
-    io.socket.on('message-notify', (response) => {
-      if (response.data.sendTo === self.me.id) {
-        $lycaon.stackMessage(response, self.messageStack, self.me.organization.handleId);
-        $lycaon.socketToast(response.message);
-      }
-    });
-    $lycaon.stackMessage(false, this.messageStack, this.me.organization.handleId);
-
-    $lycaon.socket.post('/ws/v1/thread-in', { id: this.thread.id }, () => {
+    $lycaon.socket.post('/ws/v1/thread-in', { id: this.thread.id, navigation: this.navigation }, () => {
       $lycaon.socket.post('/ws/v1/thread-edit-query', { id: self.thread.id }, () => {
         io.socket.on('thread-edit-query', (data) => {
           if (data.user.id !== self.me.id && self.threadMode === 'edit') {
@@ -219,7 +213,7 @@ parasails.registerPage('thread', {
       io.socket.on('thread-in', (data) => {
         var id = self.parseUserId(data.user);
         $('#' + id).addClass('blink');
-        if (data.user.id !== self.me.id) {
+        if (data.user.id !== self.me.id && !self.me.noRaiseInoutNotify) {
           $lycaon.socketToast(data.message);
         }
         $lycaon.socket.post('/ws/v1/thread-pon', { id: self.thread.id, user: self.me });
@@ -227,7 +221,7 @@ parasails.registerPage('thread', {
       io.socket.on('thread-out', (data) => {
         var id = self.parseUserId(data.user);
         $('#' + id).removeClass('blink');
-        if (data.user.id !== self.me.id) {
+        if (data.user.id !== self.me.id && !self.me.noRaiseInoutNotify) {
           $lycaon.socketToast(data.message);
         }
       });
@@ -1020,7 +1014,7 @@ parasails.registerPage('thread', {
       this.reloaded = true;
       this.cloudSuccess = true;
       this.syncing = true;
-      location.href = `/${this.organization.handleId}/thread/${this.thread.no}`;
+      location.reload();
     },
     setRefsUpdate: function (b) {
       this.showRefsUpdateModal = false;

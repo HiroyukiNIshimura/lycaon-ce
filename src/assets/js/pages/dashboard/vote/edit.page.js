@@ -1,4 +1,5 @@
 parasails.registerPage('vote-edit', {
+  mixins: [messageNotify],
   //  ╦╔╗╔╦╔╦╗╦╔═╗╦    ╔═╗╔╦╗╔═╗╔╦╗╔═╗
   //  ║║║║║ ║ ║╠═╣║    ╚═╗ ║ ╠═╣ ║ ║╣
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
@@ -113,13 +114,6 @@ parasails.registerPage('vote-edit', {
   },
   mounted: async function () {
     var self = this;
-    io.socket.on('message-notify', (response) => {
-      if (response.data.sendTo === self.me.id) {
-        $lycaon.stackMessage(response, self.messageStack, self.me.organization.handleId);
-        $lycaon.socketToast(response.data.message);
-      }
-    });
-    $lycaon.stackMessage(false, this.messageStack, this.me.organization.handleId);
 
     this.selectedUsers = _.extend([], this.cloudUsers);
     if (this.vote.isQuestionnaireFormat) {

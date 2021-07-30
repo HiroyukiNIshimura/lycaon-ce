@@ -332,12 +332,6 @@ parasails.registerPage('member-info', {
         this.submitForm('#query-hourly-form');
       }
     },
-    submitForm: function (selector) {
-      var form = _.find(this.$children, {
-        $el: $(selector)[0],
-      });
-      form.submit();
-    },
     submittedMonthlyForm: function (response) {
       if (!response.analytics) {
         console.log('data not found!');
@@ -642,6 +636,9 @@ parasails.registerPage('member-info', {
       }
     },
     normalize: function (contents) {
+      const markdownIt = window.markdownit();
+      var linkify = markdownIt.linkify;
+
       var matchs = linkify.match(contents);
       _.each(matchs, (match) => {
         var el = `<a href="${match.url}">${match.text}</a>`;

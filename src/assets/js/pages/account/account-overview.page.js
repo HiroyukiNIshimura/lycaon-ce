@@ -1,4 +1,5 @@
 parasails.registerPage('account-overview', {
+  mixins: [messageNotify],
   //  ╦╔╗╔╦╔╦╗╦╔═╗╦    ╔═╗╔╦╗╔═╗╔╦╗╔═╗
   //  ║║║║║ ║ ║╠═╣║    ╚═╗ ║ ╠═╣ ║ ║╣
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
@@ -26,14 +27,6 @@ parasails.registerPage('account-overview', {
   beforeMount: function () {},
   mounted: async function () {
     //…
-    var self = this;
-    io.socket.on('message-notify',  (response) => {
-      if (response.data.sendTo === self.me.id) {
-        $lycaon.stackMessage(response, self.messageStack, self.me.organization.handleId);
-        $lycaon.socketToast(response.message);
-      }
-    });
-    $lycaon.stackMessage(false, this.messageStack, this.me.organization.handleId);
   },
 
   //  ╦╔╗╔╔╦╗╔═╗╦═╗╔═╗╔═╗╔╦╗╦╔═╗╔╗╔╔═╗

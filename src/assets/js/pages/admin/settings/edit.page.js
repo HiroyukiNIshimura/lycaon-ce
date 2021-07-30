@@ -109,9 +109,6 @@ parasails.registerPage('admin-settings-edit', {
       if (!argins.notMailSend && !argins.fromEmailAddress) {
         this.formErrors.fromEmailAddress = true;
       }
-      if (!argins.notSendBackoffice && !argins.internalEmailAddress) {
-        this.formErrors.internalEmailAddress = true;
-      }
 
       if (Object.keys(this.formErrors).length > 0) {
         $lycaon.errorToast('There is an error in the input value');

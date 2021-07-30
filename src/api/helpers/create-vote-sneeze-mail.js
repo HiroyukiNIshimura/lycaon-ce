@@ -56,8 +56,8 @@ module.exports = {
           vote: inputs.vote,
           title: subject,
           author: inputs.vote.author,
-          releaseAt: moment(Number(inputs.vote.circulationFrom)).format('ll') + ' <JST>',
-          endAt: moment(Number(inputs.vote.circulationTo)).format('ll') + ' <JST>',
+          releaseAt: moment(Number(inputs.vote.circulationFrom)).format('ll') + ' JST',
+          endAt: moment(Number(inputs.vote.circulationTo)).format('ll') + ' JST',
 
           commentBody: await sails.helpers.mdToHtml.with({
             markdown: inputs.sneeze.comment,
@@ -65,7 +65,7 @@ module.exports = {
           safeCommentBody: await sails.helpers.mdToSanitize.with({
             markdown: inputs.sneeze.comment,
           }),
-          commentAt: moment(Number(inputs.sneeze.updatedAt)).format('llll') + ' <JST>',
+          commentAt: moment(Number(inputs.sneeze.updatedAt)).format('llll') + ' JST',
           commenter: inputs.sneeze.owner,
           hashTag: inputs.hashTag,
           locale: lang,

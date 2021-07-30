@@ -1,70 +1,72 @@
 <% /* Note: This is injected into `views/layouts/layout-email.ejs` */ %>
-<p style="margin-bottom: 25px;"><%= inquery.fullName %> さん [ <%= inquery.emailAddress %> ] からのお問い合わせ</p>
-<dl>
+  <p style="margin-bottom: 25px;">
+    <%= inquery.fullName %> さん [ <%= inquery.emailAddress %> ] からのお問い合わせ
+  </p>
+  <dl>
     <dt>
-        <%= __('Inquiry') %>
+      <%= __('Inquiry') %>
     </dt>
     <dd>
-        <%= inquery.contents %>
+      <%= inquery.contents %>
     </dd>
     <dd>
-        ( <%= inquery.category %> )
+      ( <%= inquery.category %> )
     </dd>
     <dt>
-        <%= __('Full Name') %>
+      <%= __('Full Name') %>
     </dt>
     <dd>
-        <%= inquery.fullName %>
+      <%= inquery.fullName %>
     </dd>
     <dt>
-        <%= __("Mail Address") %>
+      <%= __("Mail Address") %>
     </dt>
     <dd>
-        <%= inquery.emailAddress %>
+      <%= inquery.emailAddress %>
     </dd>
     <dt>
-        <%= __("Organization name") %>
+      <%= __("Organization name") %>
     </dt>
     <dd>
-        <%= inquery.organization %>
+      <%= inquery.organization %>
     </dd>
     <dt>
-        <%= __("Postal code") %>
+      <%= __("Postal code") %>
     </dt>
     <dd>
-        <%= inquery.zipCode %>
+      <%= inquery.zipCode %>
     </dd>
     <dt>
-        <%= __("Prefectures") %>
+      <%= __("Prefectures") %>
     </dt>
     <dd>
-        <%= inquery.prefecture %>
+      <%= inquery.prefecture %>
     </dd>
     <dt>
-        <%= __("City name") %>
+      <%= __("City name") %>
     </dt>
     <dd>
-        <%= inquery.city %>
+      <%= inquery.city %>
     </dd>
     <dt>
-        <%= __("Address etc") %>
+      <%= __("Address etc") %>
     </dt>
     <dd>
-        <%= inquery.street %>
+      <%= inquery.street %>
     </dd>
     <dt>
-        <%= __("Name of buildings etc") %>
+      <%= __("Name of buildings etc") %>
     </dt>
     <dd>
-        <%= inquery.building %>
+      <%= inquery.building %>
     </dd>
     <dt>
-        <%= __('Phone number') %>
+      <%= __('Phone number') %>
     </dt>
     <dd>
-        <%= inquery.phoneNo %>
+      <%= inquery.phoneNo %>
     </dd>
-</dl>
+  </dl>
 
-<p style="margin-bottom: 5px;">Sincerely,</p>
-<p style="margin-top: 0px;">Team Lycaon</p>
+  <p style="margin-bottom: 5px;">Sincerely,</p>
+  <p style="margin-top: 0px;">Team Lycaon</p>

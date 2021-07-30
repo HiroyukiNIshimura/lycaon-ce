@@ -159,7 +159,6 @@ module.exports = {
 
         await SysSettings.create({
           organization: created.id,
-          internalEmailAddress: email,
           fromEmailAddress: email,
           fromName: inputs.fullName,
           maxUploadFileSize: maxUploadFileSize,

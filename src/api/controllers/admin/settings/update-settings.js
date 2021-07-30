@@ -25,16 +25,6 @@ module.exports = {
     notMailSend: {
       type: 'boolean',
     },
-    notSendBackoffice: {
-      type: 'boolean',
-    },
-    internalEmailAddress: {
-      type: 'string',
-      isEmail: true,
-      custom: function (value) {
-        return [...value].length <= 300;
-      },
-    },
     fromEmailAddress: {
       type: 'string',
       isEmail: true,

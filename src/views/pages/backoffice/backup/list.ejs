@@ -2,16 +2,24 @@
   <div class="container">
     <modal v-if="showBackupModal">
       <div class="card">
-        <div class="card-header"><%= __("Confirmation dialog") %></div>
+        <div class="card-header">
+          <%= __("Confirmation dialog") %>
+        </div>
         <div class="card-body">
-          <h5 class="card-title"><%= __("Confirmation of backup") %></h5>
-          <p class="card-text"><%= __("Perform a database backup. Is it OK?") %></p>
+          <h5 class="card-title">
+            <%= __("Confirmation of backup") %>
+          </h5>
+          <p class="card-text">
+            <%= __("Perform a database backup. Is it OK?") %>
+          </p>
           <div class="text-right">
             <button type="button" class="btn btn-danger btn-sm" @click="doBackup">
-              <i class="fas fa-download"></i> <%= __("Execute") %>
+              <i class="fas fa-download"></i>
+              <%= __("Execute") %>
             </button>
             <button type="button" class="btn btn-light btn-sm" @click="showBackupModal = false">
-              <i class="fas fa-window-close"></i> <%= __("Cancel") %>
+              <i class="fas fa-window-close"></i>
+              <%= __("Cancel") %>
             </button>
           </div>
         </div>
@@ -19,18 +27,24 @@
     </modal>
     <modal v-if="showRecoveryModal">
       <div class="card">
-        <div class="card-header"><%= __("Confirmation dialog") %></div>
+        <div class="card-header">
+          <%= __("Confirmation dialog") %>
+        </div>
         <div class="card-body">
-          <h5 class="card-title"><%= __("Confirmation of recovery") %></h5>
+          <h5 class="card-title">
+            <%= __("Confirmation of recovery") %>
+          </h5>
           <p class="card-text">
             <%= __("If you are not sure about this operation, please cancel it. Perform a database recovery. Is it OK?") %>
           </p>
           <div class="text-right">
             <button type="button" class="btn btn-danger btn-sm" @click="doRecovery">
-              <i class="fas fa-database"></i> <%= __("Execute") %>
+              <i class="fas fa-database"></i>
+              <%= __("Execute") %>
             </button>
             <button type="button" class="btn btn-light btn-sm" @click="showRecoveryModal = false">
-              <i class="fas fa-window-close"></i> <%= __("Cancel") %>
+              <i class="fas fa-window-close"></i>
+              <%= __("Cancel") %>
             </button>
           </div>
         </div>
@@ -48,14 +62,17 @@
     <div class="row">
       <div class="col text-right">
         <button type="button" class="btn btn-indigo btn-sm" @click="clickBackup">
-          <i class="fas fa-download"></i> <%= __("Make a backup now") %>
+          <i class="fas fa-download"></i>
+          <%= __("Make a backup now") %>
         </button>
       </div>
     </div>
 
     <div class="row mt-4">
       <div class="col-auto">
-        <h4><%= __("Database backups") %></h4>
+        <h4>
+          <%= __("Database backups") %>
+        </h4>
       </div>
     </div>
     <ul class="mt-3">
@@ -67,7 +84,8 @@
           </div>
           <div class="col">
             <button type="button" class="btn btn-warning btn-sm" @click="clickRecovery(item)">
-              <i class="fas fa-database"></i> <%= __("Recover from this backup") %>
+              <i class="fas fa-database"></i>
+              <%= __("Recover from this backup") %>
             </button>
             <a class="btn btn-success btn-sm" :href="downloadLink(item)">
               <i class="fas fa-cloud-download-alt fa-lg"></i>
@@ -82,7 +100,7 @@
     <%= __('Upload backup file') %>
   </div>
   <div class="ml-3 py-3 px-5">
-      <drop-fileupload :whitelist="whitelist" :callback="upload" :is-uploading="isUploading"></drop-fileupload>
+    <drop-fileupload :whitelist="whitelist" :callback="upload" :is-uploading="isUploading"></drop-fileupload>
   </div>
   <ajax-form id="backup-form" action="backup" :syncing.sync="syncing" :cloud-error.sync="cloudError"
     @submitted="submittedBackupForm" @rejected="onCloudError" :handle-parsing="handleParsingBackupForm">

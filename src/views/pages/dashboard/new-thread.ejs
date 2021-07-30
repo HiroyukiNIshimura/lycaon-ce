@@ -7,45 +7,61 @@
         </p>
       </div>
     </div>
-    
+
     <div class="text-danger" v-if="formErrors.bodyLength">
       <%= __("Body size is too large") %>
     </div>
-    
+
     <ajax-form action="createThread" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedForm" @rejected="onCloudError"
       :handle-parsing="handleParsingForm">
       <div class="row border border-top-0 border-right-0 border-left-0">
         <div class="col">
-          <span class="text-muted mr-3"><%= __("Team") %></span><a :href="teamLink">{{ team.name }}</a>
+          <span class="text-muted mr-3">
+            <%= __("Team") %>
+          </span><a :href="teamLink">{{ team.name }}</a>
         </div>
       </div>
       <div class="row" v-if="isThreadFork">
         <div class="col">
-          <span class="text-muted"><%= __("Fork source thread") %>: <a :href="forkLink(fork)" rel="noopener" target="_blank">[#{{ fork.no }}]
-              {{ fork.subject }}</a></span>
+          <span class="text-muted">
+            <%= __("Fork source thread") %>: <a :href="forkLink(fork)" rel="noopener" target="_blank">[#{{ fork.no }}]
+                {{ fork.subject }}</a>
+          </span>
         </div>
       </div>
       <div class="row">
         <div class="col">
           <div class="form-group text-right">
             <button type="button" class="btn btn-light btn-sm" @click="onEditCancelClick">
-              <i class="fas fa-window-close"></i> <%= __("Cancel") %>
+              <i class="fas fa-window-close"></i>
+              <%= __("Cancel") %>
             </button>
             <button type="submit" class="btn btn-primary btn-sm">
-              <i class="fas fa-plus-circle"></i> <%= __("Create") %>
+              <i class="fas fa-plus-circle"></i>
+              <%= __("Create") %>
             </button>
           </div>
           <div class="md-form">
             <v-text-input type="text" :maxlength="200" id="thread-subject" class="form-control" v-model.trim="formData.subject" autocomplete="thread-subject"
-              :class="[formErrors.subject || formErrors.subjectLength ? 'is-invalid' : '']" />
-            <label for="thread-subject"><%= __("Please enter the subject of the thread") %></label>
-            <div class="invalid-feedback" v-if="formErrors.subject"><%= __("Please enter a subject") %></div>
-            <div class="invalid-feedback" v-if="formErrors.subjectLength"><%= __("Please enter within {0} characters").format(200) %></div>
+              :class="[formErrors.subject || formErrors.subjectLength ? 'is-invalid' : '']"></v-text-input>
+            <label for="thread-subject">
+              <%= __("Please enter the subject of the thread") %>
+            </label>
+            <div class="invalid-feedback" v-if="formErrors.subject">
+              <%= __("Please enter a subject") %>
+            </div>
+            <div class="invalid-feedback" v-if="formErrors.subjectLength">
+              <%= __("Please enter within {0} characters").format(200) %>
+            </div>
           </div>
           <div class="row">
             <div class="col-auto mb-3">
-              <label for="thread-category"><%= __("Category") %>
-                <small class="ml-2"><a href="javascript:void(0)" @click="chooseTemplate" v-if="showTemplateSw"><%= __("Use template") %></a></small></label>
+              <label for="thread-category">
+                <%= __("Category") %>
+                  <small class="ml-2"><a href="javascript:void(0)" @click="chooseTemplate" v-if="showTemplateSw">
+                      <%= __("Use template") %>
+                    </a></small>
+              </label>
               <select class="browser-default custom-select" id="thread-category" v-model="selectedCategory" :class="[formErrors.category ? 'is-invalid' : '']">
                 <option v-for="item in categories" v-bind:value="item.id">
                   {{ item.name }}
@@ -56,28 +72,46 @@
               </select>
             </div>
             <div class="col-auto mb-3">
-              <label for="thread-responsible"><%= __("Person in charge") %>
-                <small class="ml-2"><a href="javascript:void(0)" @click="chooseMe"><%= __("Choose yourself") %></a></small></label>
+              <label for="thread-responsible">
+                <%= __("Person in charge") %>
+                  <small class="ml-2"><a href="javascript:void(0)" @click="chooseMe">
+                      <%= __("Choose yourself") %>
+                    </a></small>
+              </label>
               <select class="browser-default custom-select" id="thread-responsible" v-model="responsible">
-                <option value=""><%= __("Not set") %></option>
+                <option value="">
+                  <%= __("Not set") %>
+                </option>
                 <option v-for="item in comboMembers" v-bind:value="item.id">
                   {{ item.fullName }}
                 </option>
               </select>
             </div>
             <div class="col-auto mb-3">
-              <label for="thread-concept"><%= __("Concept") %></label>
+              <label for="thread-concept">
+                <%= __("Concept") %>
+              </label>
               <select class="browser-default custom-select" id="thread-concept" v-model="formData.concept" :class="[formErrors.concept ? 'is-invalid' : '']"
                 :disabled="local">
-                <option value="0"><%= __("draft") %></option>
-                <option value="1"><%= __("published") %></option>
+                <option value="0">
+                  <%= __("draft") %>
+                </option>
+                <option value="1">
+                  <%= __("published") %>
+                </option>
               </select>
-              <div class="invalid-feedback" v-if="formErrors.concept"><%= __("Please select a concept") %></div>
+              <div class="invalid-feedback" v-if="formErrors.concept">
+                <%= __("Please select a concept") %>
+              </div>
             </div>
             <div class="col-auto mb-3" v-if="milestone.length > 0">
-              <label for="thread-milestone"><%= __("Milestone") %></label>
+              <label for="thread-milestone">
+                <%= __("Milestone") %>
+              </label>
               <select class="browser-default custom-select" id="thread-milestone" v-model="selectedMilestone">
-                <option value=""><%= __("Not set") %></option>
+                <option value="">
+                  <%= __("Not set") %>
+                </option>
                 <option v-for="item in milestone" v-bind:value="item.id">
                   {{ item.name }}
                 </option>
@@ -88,7 +122,9 @@
             <div class="col-auto">
               <div class="custom-control custom-checkbox">
                 <input type="checkbox" class="form-check-input" id="thread-local" v-model="local" />
-                <label class="form-check-label" for="thread-local"><%= __("Private thread") %> </label>
+                <label class="form-check-label" for="thread-local">
+                  <%= __("Private thread") %>
+                </label>
               </div>
             </div>
             <div class="col">
@@ -99,8 +135,12 @@
           </div>
           <div class="row mt-3">
             <div class="col">
-              <label for="thread-tags"><%= __("Tags") %><small class="text-muted ml-3"><%= __("You can tag up to {0}").format(10) %></small></label>
-              <v-tagify-select id="thread-tags" :values="selectedTags" :settings="tagifySettings" @change="onChangeTags"></v-tagify-select>        
+              <label for="thread-tags">
+                <%= __("Tags") %><small class="text-muted ml-3">
+                    <%= __("You can tag up to {0}").format(10) %>
+                  </small>
+              </label>
+              <v-tagify-select id="thread-tags" :values="selectedTags" :settings="tagifySettings" @change="onChangeTags"></v-tagify-select>
             </div>
           </div>
           <div class="row mt-3">
@@ -111,10 +151,12 @@
           <div class="row mt-1">
             <div class="col text-right">
               <button type="button" class="btn btn-light btn-sm" @click="onEditCancelClick">
-                <i class="fas fa-window-close"></i> <%= __("Cancel") %>
+                <i class="fas fa-window-close"></i>
+                <%= __("Cancel") %>
               </button>
               <button type="submit" class="btn btn-primary btn-sm">
-                <i class="fas fa-plus-circle"></i> <%= __("Create") %>
+                <i class="fas fa-plus-circle"></i>
+                <%= __("Create") %>
               </button>
             </div>
           </div>
@@ -124,7 +166,7 @@
     <!-- appendix -->
     <editor-file :appendix="appendix" :organization="organization" mode="create" :delete-appendix="deleteAppendix" :download-appendix="downloadAppendix" :whitelist="witeListOfExts"
       :add-image="addImageBlobHook" :is-uploading="false" :planlimitation="planlimitation" title="thread" :is-demosite="isDemosite"
-      :hidden-upload="false" >
+      :hidden-upload="false">
     </editor-file>
 
   </div>

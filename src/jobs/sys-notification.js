@@ -41,7 +41,7 @@ module.exports = {
       moment.locale(lang);
 
       for (let item of notifications) {
-        item.displayDate = moment(Number(item.postingAt)).format('ll') + ' <JST>';
+        item.displayDate = moment(Number(item.postingAt)).format('ll') + ' JST';
       }
 
       var data = {

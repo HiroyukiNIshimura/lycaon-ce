@@ -178,18 +178,14 @@ module.exports = {
           break;
         case 'sneeze':
           shortAction = sails.__('(comment)');
-          sneeze = await Sneeze.findOne({ id: inputs.sneeze })
-            .populate('owner')
-            .usingConnection(inputs.db);
+          sneeze = await Sneeze.findOne({ id: inputs.sneeze }).populate('owner').usingConnection(inputs.db);
 
           action = sails.__('A comment was added by {0}').format(sneeze.owner.fullName);
           comment = sneeze.comment;
           break;
         case 'reply':
           shortAction = sails.__('(reply)');
-          reply = await Reply.findOne({ id: inputs.reply })
-            .populate('owner')
-            .usingConnection(inputs.db);
+          reply = await Reply.findOne({ id: inputs.reply }).populate('owner').usingConnection(inputs.db);
 
           action = sails.__('A reply was added by {0}').format(reply.owner.fullName);
           reply.comment;
@@ -211,16 +207,16 @@ module.exports = {
 
     var getTempData = async function (settings, thread, updater, action, team) {
       var userName = updater.fullName;
-      var updatedAt = moment(Number(thread.lastHumanUpdateAt)).format('llll') + ' <JST>';
+      var updatedAt = moment(Number(thread.lastHumanUpdateAt)).format('llll') + ' JST';
 
       if (action.activity === 'sneeze') {
         userName = action.sneeze.owner.fullName;
-        updatedAt = moment(Number(action.sneeze.updatedAt)).format('llll') + ' <JST>';
+        updatedAt = moment(Number(action.sneeze.updatedAt)).format('llll') + ' JST';
       }
 
       if (action.activity === 'reply') {
         userName = action.reply.owner.fullName;
-        updatedAt = moment(Number(action.reply.updatedAt)).format('llll') + ' <JST>';
+        updatedAt = moment(Number(action.reply.updatedAt)).format('llll') + ' JST';
       }
 
       return {
@@ -236,9 +232,7 @@ module.exports = {
           status: thread.status === 0 ? sails.__('open') : sails.__('close'),
           concept: thread.concept === 0 ? sails.__('draft') : sails.__('published'),
           responsible: thread.responsible ? thread.responsible.fullName : '',
-          dueDate: thread.dueDate
-            ? moment(Number(thread.dueDateAt)).format('YYYY/MM/DD') + ' <JST>'
-            : '',
+          dueDate: thread.dueDate ? moment(Number(thread.dueDateAt)).format('YYYY/MM/DD') + ' JST' : '',
           tags: tags.length > 0 ? tags.join(', ') : '',
         },
         title: `[#${thread.no}] ${thread.subject}`,
@@ -260,10 +254,7 @@ module.exports = {
         }),
         hashTag: inputs.hashTag,
         fromName: settings.fromName,
-        threadLink: url.resolve(
-          sails.config.custom.baseUrl,
-          `${team.organization.handleId}/thread/${thread.no}`
-        ),
+        threadLink: url.resolve(sails.config.custom.baseUrl, `${team.organization.handleId}/thread/${thread.no}`),
         settingUrl: url.resolve(
           sails.config.custom.baseUrl,
           `${team.organization.handleId}/account/profile#mail-settings`
@@ -307,9 +298,7 @@ module.exports = {
         var filterTag = false;
 
         if (entity.sendMailCategories.length > 0) {
-          mailHeaders['x-lycaon-categories-filter'] = entity.sendMailCategories
-            .map((o) => o.name)
-            .join(',');
+          mailHeaders['x-lycaon-categories-filter'] = entity.sendMailCategories.map((o) => o.name).join(',');
 
           let exists = _.intersection(
             entity.sendMailCategories.map((o) => o.id),

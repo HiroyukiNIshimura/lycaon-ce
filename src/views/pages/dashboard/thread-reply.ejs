@@ -13,10 +13,12 @@
             @submitted="submittedReplyCreateForm" @rejected="onCloudError"
             :handle-parsing="handleParsingReplyCreateForm">
             <button type="button" class="btn btn-light btn-sm" @click="onReplyRegisterCancelClick(item.sneeze)">
-              <i class="fas fa-window-close"></i> <%= __("Cancel") %>
+              <i class="fas fa-window-close"></i>
+              <%= __("Cancel") %>
             </button>
             <button type="submit" class="btn btn-primary btn-sm">
-              <i class="fas fa-reply"></i> <%= __("Add reply") %>
+              <i class="fas fa-reply"></i>
+              <%= __("Add reply") %>
             </button>
           </ajax-form>
         </div>
@@ -31,7 +33,7 @@
       <div class="card-body">
         <div class="row d-none d-sm-block">
           <div class="col">
-            <user-identity :user="reply.owner" :organization="organization" size="" ></user-identity>
+            <user-identity :user="reply.owner" :organization="organization" size=""></user-identity>
             <small class="card-subtitle ml-2 text-muted">[ <a :href="replyAnker(reply)">rep-{{ reply.serialNumber }}</a> ]
             </small>
             <small class="card-subtitle text-muted">
@@ -43,7 +45,7 @@
         </div>
         <div class="row d-block d-sm-none">
           <div class="col">
-            <user-identity :user="reply.owner" :organization="organization" size="" >
+            <user-identity :user="reply.owner" :organization="organization" size="">
             </user-identity>
           </div>
         </div>
@@ -69,7 +71,8 @@
             <div class="row mt-3">
               <div class="col text-right">
                 <button type="button" class="btn btn-outline-indigo btn-sm" :disabled="thread.locked" @click="onReplyEditClick(reply)" v-if="reply.owner && reply.owner.id === me.id">
-                  <i class="far fa-edit"></i> <%= __("Edit") %>
+                  <i class="far fa-edit"></i>
+                  <%= __("Edit") %>
                 </button>
               </div>
             </div>
@@ -91,10 +94,12 @@
             <div class="row mt-3">
               <div class="col text-right">
                 <button type="button" class="btn btn-light btn-sm" @click="onReplyEditCancelClick(reply)">
-                  <i class="fas fa-window-close"></i> <%= __("Cancel") %>
+                  <i class="fas fa-window-close"></i>
+                  <%= __("Cancel") %>
                 </button>
                 <button type="submit" class="btn btn-primary btn-sm">
-                  <i class="far fa-save"></i> <%= __("Save") %>
+                  <i class="far fa-save"></i>
+                  <%= __("Save") %>
                 </button>
               </div>
             </div>

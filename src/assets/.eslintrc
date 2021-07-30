@@ -78,6 +78,8 @@
     "EasyMDE": true,
     "DOMPurify": true,
     "marked": true,
+    //mixin
+    "messageNotify": true,
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // Make sure backend globals aren't indadvertently tolerated in our client-side JS:
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

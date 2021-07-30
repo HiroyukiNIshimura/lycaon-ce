@@ -3,23 +3,30 @@
     <div class="row">
       <div class="col text-right">
         <a class="btn btn-info btn-sm" href="/admin/notification/new"><i class="fas fa-plus-circle"></i>
-          <%= __("Create New") %></a>
+          <%= __("Create New") %>
+        </a>
       </div>
     </div>
     <div class="row mt-4" v-if="records > 0">
       <div class="col-auto">
-        <h4><%= __("System notification") %></h4>
+        <h4>
+          <%= __("System notification") %>
+        </h4>
       </div>
       <div class="col-auto">
         <v-pagination :page="pagination.page" :page-count="getPageCount" :handler="clickCallback"></v-pagination>
       </div>
       <div class="col">
-        <small><span><%= __("Total number") %> {{ formatter.format(records) }}
-            {{ i18nformatN('Item', 'Items', records) }}</span></small>
+        <small><span>
+            <%= __("Total number") %> {{ formatter.format(records) }}
+              {{ i18nformatN('Item', 'Items', records) }}
+          </span></small>
       </div>
     </div>
     <div class="row mt-4" v-else>
-      <div class="col text-muted"><%= __("System notification not found") %></div>
+      <div class="col text-muted">
+        <%= __("System notification not found") %>
+      </div>
     </div>
 
     <div class="row">
@@ -45,11 +52,15 @@
             </p>
 
             <div class="card-text text-right">
-                <a :href="link(item)" class="btn btn-info btn-sm"><i class="far fa-edit"></i> <%= __("Edit") %></a>
+              <a :href="link(item)" class="btn btn-info btn-sm"><i class="far fa-edit"></i>
+                <%= __("Edit") %>
+              </a>
             </div>
           </div>
           <div class="card-footer">
-            <span class="badge badge-warning" v-if="item.deleted"><%= __("Not posted") %></span>
+            <span class="badge badge-warning" v-if="item.deleted">
+              <%= __("Not posted") %>
+            </span>
           </div>
         </div>
       </div>

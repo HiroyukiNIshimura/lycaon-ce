@@ -1,4 +1,5 @@
 parasails.registerPage('new-thread', {
+  mixins: [messageNotify],
   //  ╦╔╗╔╦╔╦╗╦╔═╗╦    ╔═╗╔╦╗╔═╗╔╦╗╔═╗
   //  ║║║║║ ║ ║╠═╣║    ╚═╗ ║ ╠═╣ ║ ║╣
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
@@ -78,15 +79,6 @@ parasails.registerPage('new-thread', {
       $lycaon.warningToast('Please set the category to be used in the team settings');
     }
 
-    var self = this;
-    io.socket.on('message-notify', (response) => {
-      if (response.data.sendTo === self.me.id) {
-        $lycaon.stackMessage(response, self.messageStack, self.me.organization.handleId);
-        $lycaon.socketToast(response.message);
-      }
-    });
-    $lycaon.stackMessage(false, this.messageStack, this.me.organization.handleId);
-
     var mode = 'vertical';
     if (window.matchMedia('(max-width:480px)').matches) {
       mode = 'tab';
@@ -99,6 +91,8 @@ parasails.registerPage('new-thread', {
       '',
       this.addImageBlobHook.bind(this)
     );
+
+    var self = this;
     $lycaon.markdown.addToolberImageList(self.threadEditor, () => {
       self.$refs.imagelist.load();
       self.showImageListModal = true;

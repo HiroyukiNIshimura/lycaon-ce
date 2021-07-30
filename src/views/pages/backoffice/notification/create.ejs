@@ -1,7 +1,9 @@
 <div id="backoffice-notification-create" v-cloak>
   <div class="container">
-    <p class="h4 mb-4"><%= __("New system notification") %></p>
-    
+    <p class="h4 mb-4">
+      <%= __("New system notification") %>
+    </p>
+
     <div id="cloud-error" class="row">
       <div class="col-sm-6">
         <p class="text-danger" v-if="cloudError">
@@ -13,16 +15,19 @@
     <ajax-form action="createNotification" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedForm"
       @rejected="onCloudError" :handle-parsing="handleParsingForm">
       <%- partial ('form.ejs') %>
-    
-      <div class="row">
-        <div class="col text-right">
-          <a class="btn btn-light btn-sm" href="/admin/notification"><i
-              class="fas fa-window-close"></i> <%= __("Cancel") %></a>
-          <button type="submit" class="btn btn-primary btn-sm">
-            <i class="fas fa-plus-circle"></i> <%= __("Create") %>
-          </button>
+
+        <div class="row">
+          <div class="col text-right">
+            <a class="btn btn-light btn-sm" href="/admin/notification"><i
+                class="fas fa-window-close"></i>
+              <%= __("Cancel") %>
+            </a>
+            <button type="submit" class="btn btn-primary btn-sm">
+              <i class="fas fa-plus-circle"></i>
+              <%= __("Create") %>
+            </button>
+          </div>
         </div>
-      </div>
 
     </ajax-form>
   </div>

@@ -53,7 +53,7 @@ module.exports = {
           wiki: inputs.wiki,
           title: subject,
           author: inputs.author,
-          releaseAt: moment(Number(inputs.wiki.createdAt)).format('lll') + ' <JST>',
+          releaseAt: moment(Number(inputs.wiki.createdAt)).format('lll') + ' JST',
           locale: lang,
         },
       };

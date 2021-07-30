@@ -4,7 +4,7 @@
       <div class="card-body">
         <div class="row d-none d-sm-block">
           <div class="col">
-            <user-identity :user="sneeze.owner" :organization="organization" size="" ></user-identity>
+            <user-identity :user="sneeze.owner" :organization="organization" size=""></user-identity>
             <small class="card-subtitle ml-2 text-muted">[ <a :href="sneezeAnker(sneeze)">comment-{{ sneeze.serialNumber }}</a> ]</small>
             <small class="card-subtitle text-muted">
               - <lycaon-timestamp :at="sneeze.createdAt" format="timeago" :translator="commentTranslator"></lycaon-timestamp></small>
@@ -13,7 +13,7 @@
         </div>
         <div class="row d-block d-sm-none">
           <div class="col">
-            <user-identity :user="sneeze.owner" :organization="organization" size="" >
+            <user-identity :user="sneeze.owner" :organization="organization" size="">
             </user-identity>
           </div>
         </div>
@@ -36,7 +36,8 @@
             <div class="row mt-3">
               <div class="col text-right">
                 <button type="button" class="btn btn-outline-indigo btn-sm" @click="onCommentEditClick(sneeze)" v-if="sneeze.owner && sneeze.owner.id === me.id">
-                  <i class="far fa-edit"></i> <%= __("Edit") %>
+                  <i class="far fa-edit"></i>
+                  <%= __("Edit") %>
                 </button>
               </div>
             </div>
@@ -57,10 +58,12 @@
             <div class="row mt-3">
               <div class="col text-right">
                 <button type="button" class="btn btn-light btn-sm" @click="onCommentEditCancelClick(sneeze)">
-                  <i class="fas fa-window-close"></i> <%= __("Cancel") %>
+                  <i class="fas fa-window-close"></i>
+                  <%= __("Cancel") %>
                 </button>
                 <button type="submit" class="btn btn-primary btn-sm">
-                  <i class="far fa-save"></i> <%= __("Save") %>
+                  <i class="far fa-save"></i>
+                  <%= __("Save") %>
                 </button>
               </div>
             </div>

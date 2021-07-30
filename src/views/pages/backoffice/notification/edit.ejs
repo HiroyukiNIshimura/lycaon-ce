@@ -1,6 +1,8 @@
 <div id="backoffice-notification-edit" v-cloak>
   <div class="container">
-    <p class="h4 mb-4"><%= __("Edit system notification") %></p>
+    <p class="h4 mb-4">
+      <%= __("Edit system notification") %>
+    </p>
 
     <div id="cloud-error" class="row">
       <div class="col-sm-6">
@@ -13,16 +15,19 @@
     <ajax-form action="updateNotification" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedForm"
       @rejected="onCloudError" :handle-parsing="handleParsingForm">
       <%- partial ('form.ejs') %>
-    
-      <div class="row">
-        <div class="col text-right">
-          <a class="btn btn-light btn-sm" href="/admin/notification"><i
-              class="fas fa-window-close"></i> <%= __("Cancel") %></a>
-          <button type="submit" class="btn btn-primary btn-sm">
-            <i class="far fa-save"></i> <%= __("Save") %>
-          </button>
+
+        <div class="row">
+          <div class="col text-right">
+            <a class="btn btn-light btn-sm" href="/admin/notification"><i
+                class="fas fa-window-close"></i>
+              <%= __("Cancel") %>
+            </a>
+            <button type="submit" class="btn btn-primary btn-sm">
+              <i class="far fa-save"></i>
+              <%= __("Save") %>
+            </button>
+          </div>
         </div>
-      </div>
 
     </ajax-form>
   </div>

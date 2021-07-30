@@ -38,6 +38,7 @@ parasails.registerPage('mindmap', {
       trigger: 'hover focus',
       container: 'div.container',
     });
+    console.log(this.nodes);
   },
 
   //  ╦╔╗╔╔╦╗╔═╗╦═╗╔═╗╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
@@ -46,6 +47,7 @@ parasails.registerPage('mindmap', {
   methods: {
     offEditable: function () {
       this.editable = false;
+      console.log(this.nodes);
       this.$nextTick(() => {
         this.$refs.mindmap.renderMap();
         $('#node-' + this.thread.id).addClass('current-node');
@@ -57,6 +59,7 @@ parasails.registerPage('mindmap', {
     },
     onEditable: function () {
       this.editable = true;
+      console.log(this.nodes);
       this.$nextTick(() => {
         this.$refs.mindmap.renderMap();
         $('#node-' + this.thread.id).addClass('current-node');

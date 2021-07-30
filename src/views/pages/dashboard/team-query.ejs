@@ -7,83 +7,139 @@
             data-target="#collapse-query" aria-expanded="false" aria-controls="collapse-query">
             <%= __('Narrow down the threads to display') %>
           </button>
-          <span class="text-danger" v-if="filtered"><%= __('Narrowing filter is running') %></span>
+          <span class="text-danger" v-if="filtered">
+            <%= __('Narrowing filter is running') %>
+          </span>
         </small>
       </div>
       <div id="collapse-query" class="collapse" :class="isShow" aria-labelledby="heading-query" data-parent="#wrapper-accordion">
         <div class="card-body">
           <div class="row">
             <div class="col-auto mb-1">
-              <small><label for="query-status"><%= __('Status') %></label></small>
+              <small><label for="query-status">
+                  <%= __('Status') %>
+                </label></small>
               <select class="browser-default custom-select custom-select-sm" id="query-status" v-model="query.status">
-                <option value=""><%= __('All') %></option>
-                <option value="0"><%= __('open') %></option>
-                <option value="1"><%= __('close') %></option>
+                <option value="">
+                  <%= __('All') %>
+                </option>
+                <option value="0">
+                  <%= __('open') %>
+                </option>
+                <option value="1">
+                  <%= __('close') %>
+                </option>
               </select>
             </div>
             <div class="col-auto mb-1">
-              <small><label for="query-category"><%= __('Category') %></label></small>
+              <small><label for="query-category">
+                  <%= __('Category') %>
+                </label></small>
               <select class="browser-default custom-select custom-select-sm" id="query-category"
                 v-model="query.category">
-                <option value=""><%= __('All') %></option>
+                <option value="">
+                  <%= __('All') %>
+                </option>
                 <option v-for="item in categories" v-bind:value="item.id">
                   {{ item.name }}
                 </option>
               </select>
             </div>
             <div class="col-auto mb-1">
-              <small><label for="query-responsible"><%= __('Person in charge') %><small class="ml-2"><a
-                      href="javascript:void(0)"
-                      @click="chooseMe(0)"><%= __('Choose yourself') %></a></small></label></small>
+              <small><label for="query-responsible">
+                  <%= __('Person in charge') %><small class="ml-2"><a
+                        href="javascript:void(0)"
+                        @click="chooseMe(0)">
+                        <%= __('Choose yourself') %>
+                      </a></small>
+                </label></small>
               <select class="browser-default custom-select custom-select-sm" id="query-responsible"
                 v-model="query.responsible">
-                <option value=""><%= __('All') %></option>
+                <option value="">
+                  <%= __('All') %>
+                </option>
                 <option v-for="item in comboMembers" v-bind:value="item.id">
                   {{ item.fullName }}
                 </option>
               </select>
             </div>
             <div class="col-auto mb-1">
-              <small><label for="query-concept"><%= __('Concept') %></label></small>
+              <small><label for="query-concept">
+                  <%= __('Concept') %>
+                </label></small>
               <select class="browser-default custom-select custom-select-sm" id="query-concept" v-model="query.concept">
-                <option value=""><%= __('All') %></option>
-                <option value="0"><%= __('draft') %></option>
-                <option value="1"><%= __('published') %></option>
+                <option value="">
+                  <%= __('All') %>
+                </option>
+                <option value="0">
+                  <%= __('draft') %>
+                </option>
+                <option value="1">
+                  <%= __('published') %>
+                </option>
               </select>
             </div>
             <div class="col-auto mb-1">
-              <small><label for="query-owner"><%= __('Author') %><small class="ml-2"><a href="javascript:void(0)"
-                      @click="chooseMe(1)"><%= __('Choose yourself') %></a></small></label></small>
+              <small><label for="query-owner">
+                  <%= __('Author') %><small class="ml-2"><a href="javascript:void(0)"
+                        @click="chooseMe(1)">
+                        <%= __('Choose yourself') %>
+                      </a></small>
+                </label></small>
               <select class="browser-default custom-select custom-select-sm" id="query-owner" v-model="query.owner">
-                <option value=""><%= __('All') %></option>
+                <option value="">
+                  <%= __('All') %>
+                </option>
                 <option v-for="item in comboMembers" v-bind:value="item.id">
                   {{ item.fullName }}
                 </option>
               </select>
             </div>
             <div class="col-auto mb-1">
-              <small><label for="query-priority"><%= __('Importance') %></label></small>
+              <small><label for="query-priority">
+                  <%= __('Importance') %>
+                </label></small>
               <select class="browser-default custom-select custom-select-sm" id="query-priority"
                 v-model="query.priority">
-                <option value=""><%= __('All') %></option>
-                <option value="0"><%= __('Low') %></option>
-                <option value="1"><%= __('Normally') %></option>
-                <option value="2"><%= __('High') %></option>
+                <option value="">
+                  <%= __('All') %>
+                </option>
+                <option value="0">
+                  <%= __('Low') %>
+                </option>
+                <option value="1">
+                  <%= __('Normally') %>
+                </option>
+                <option value="2">
+                  <%= __('High') %>
+                </option>
               </select>
             </div>
             <div class="col-auto mb-1">
-              <small><label for="query-locked"><%= __('Archive') %></label></small>
+              <small><label for="query-locked">
+                  <%= __('Archive') %>
+                </label></small>
               <select class="browser-default custom-select custom-select-sm" id="query-locked" v-model="query.locked">
-                <option value=""><%= __('All') %></option>
-                <option value="0"><%= __('Excluding archives') %></option>
-                <option value="1"><%= __('Archive only') %></option>
+                <option value="">
+                  <%= __('All') %>
+                </option>
+                <option value="0">
+                  <%= __('Excluding archives') %>
+                </option>
+                <option value="1">
+                  <%= __('Archive only') %>
+                </option>
               </select>
             </div>
             <div class="col-auto mb-1" v-if="milestone.length > 0">
-              <small><label for="query-milestone"><%= __('Milestone') %></label></small>
+              <small><label for="query-milestone">
+                  <%= __('Milestone') %>
+                </label></small>
               <select class="browser-default custom-select custom-select-sm" id="query-milestone"
                 v-model="query.milestone">
-                <option value=""><%= __('All') %></option>
+                <option value="">
+                  <%= __('All') %>
+                </option>
                 <option v-for="item in milestone" v-bind:value="item.id">
                   {{ item.name }}
                 </option>
@@ -96,7 +152,9 @@
                 <div class="col-auto">
                   <div class="custom-control custom-checkbox">
                     <input type="checkbox" class="custom-control-input" id="query-flag" v-model="query.flag" />
-                    <label class="custom-control-label" for="query-flag"><small><%= __('With flag') %></small></label>
+                    <label class="custom-control-label" for="query-flag"><small>
+                        <%= __('With flag') %>
+                      </small></label>
                   </div>
                 </div>
               </div>
@@ -105,7 +163,9 @@
                 <div class="col-auto">
                   <div class="custom-control custom-checkbox">
                     <input type="checkbox" class="custom-control-input" id="query-working" v-model="query.working" />
-                    <label class="custom-control-label" for="query-working"><small><%= __('Working') %></small></label>
+                    <label class="custom-control-label" for="query-working"><small>
+                        <%= __('Working') %>
+                      </small></label>
                   </div>
                 </div>
               </div>
@@ -113,7 +173,9 @@
             <div class="col">
               <div class="row">
                 <div class="col-auto">
-                  <small><label for="query-tags"><%= __('Tags') %></label></small>
+                  <small><label for="query-tags">
+                      <%= __('Tags') %>
+                    </label></small>
                 </div>
                 <div class="col">
                   <v-tagify-select id="query-tags" :values="selectedTags" :settings="tagifySettings" @change="onChangeTags"></v-tagify-select>
@@ -130,7 +192,9 @@
                   <div class="custom-control custom-checkbox">
                     <input type="checkbox" class="custom-control-input" id="query-local" v-model="query.local" />
                     <label class="custom-control-label"
-                      for="query-local"><small><%= __('Show only private threads') %></small></label>
+                      for="query-local"><small>
+                        <%= __('Show only private threads') %>
+                      </small></label>
                   </div>
                 </div>
               </div>
@@ -139,7 +203,9 @@
                   <div class="custom-control custom-checkbox">
                     <input type="checkbox" class="custom-control-input" id="query-sustain" v-model="query.sustain" />
                     <label class="custom-control-label"
-                      for="query-sustain"><small><%= __('Keep this filter condition for a while') %></small></label>
+                      for="query-sustain"><small>
+                        <%= __('Keep this filter condition for a while') %>
+                      </small></label>
                   </div>
                 </div>
               </div>

@@ -15,13 +15,6 @@ module.exports = {
   },
 
   fn: async function (inputs) {
-    if (!this.req.isSocket) {
-      return 'notFound';
-    }
-    if (!this.req.me) {
-      return 'notFound';
-    }
-
     var wiki = await Wiki.findOne({
       id: inputs.id,
     });
@@ -46,7 +39,6 @@ module.exports = {
       }
       var room = `room-${this.req.organization.id}-wiki-${wiki.id}`;
       sails.sockets.leave(this.req, room);
-      sails.log.debug(`ユーザー ${this.req.me.emailAddress} がルーム[ ${room} ]を退室しました。`);
     }
 
     return {};

@@ -3,8 +3,6 @@ module.exports = {
     var dt = new Date();
     dt.setHours(0, 0, 0, 0);
 
-    var expier = dt.valueOf() - sails.config.custom.agenda.jobs.votemail.expier;
-
     try {
       //公開メール送信
       var list = await Vote.find({
@@ -37,9 +35,11 @@ module.exports = {
       }
 
       //回覧未確認者にメール送信
+      var expier = dt.valueOf() + sails.config.custom.agenda.jobs.votemail.expier;
+
       list = await Vote.find({
         mailSended: true,
-        circulationFrom: expier,
+        circulationTo: expier,
       })
         .populate('organization')
         .populate('users')
@@ -59,6 +59,7 @@ module.exports = {
               author: vote.author,
               target: 'create',
               user: entry,
+              unread: true,
             });
             await sails.helpers.sendTemplateEmail.with(data);
           }

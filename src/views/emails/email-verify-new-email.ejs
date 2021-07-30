@@ -1,11 +1,13 @@
 <% /* Note: This is injected into `views/layouts/layout-email.ejs` */ %>
-<p style="margin-bottom: 25px;"><%= __('Hello {0}').format(fullName) %></p>
-<p style="margin-bottom: 25px;">
-  <%= __('You have requested an email address update for your account') %>
-  <%= __('Click the button below to confirm your new email address') %> :
-</p>
-<div style="margin-bottom: 25px; text-align: center;">
-  <a style="
+  <p style="margin-bottom: 25px;">
+    <%= __('Hello {0}').format(fullName) %>
+  </p>
+  <p style="margin-bottom: 25px;">
+    <%= __('You have requested an email address update for your account') %>
+      <%= __('Click the button below to confirm your new email address') %> :
+  </p>
+  <div style="margin-bottom: 25px; text-align: center;">
+    <a style="
       background-color: #28afb0;
       display: inline-block;
       font-size: 1.1em;
@@ -15,13 +17,16 @@
       text-decoration: none;
       border-radius: 7px;
     "
-    href="<%= url.resolve(sails.config.custom.baseUrl,'/email/confirm')+'?token='+encodeURIComponent(token) %>"><%= __('Confirm your email address') %></a>
-</div>
-<p style="margin-bottom: 25px;">
-  <%= __('If you have problems, try pasting this link into your browser') %> :
-  <a style="color: #28afb0; word-wrap: break-word;"
-    href="<%= url.resolve(sails.config.custom.baseUrl,'/email/confirm')+'?token='+encodeURIComponent(token) %>"><%=
-    url.resolve(sails.config.custom.baseUrl,'/email/confirm')+'?token='+encodeURIComponent(token)
+      href="<%= url.resolve(sails.config.custom.baseUrl,'/email/confirm')+'?token='+encodeURIComponent(token) %>">
+      <%= __('Confirm your email address') %>
+    </a>
+  </div>
+  <p style="margin-bottom: 25px;">
+    <%= __('If you have problems, try pasting this link into your browser') %> :
+      <a style="color: #28afb0; word-wrap: break-word;"
+        href="<%= url.resolve(sails.config.custom.baseUrl,'/email/confirm')+'?token='+encodeURIComponent(token) %>">
+        <%=
+          url.resolve(sails.config.custom.baseUrl,'/email/confirm')+'?token='+encodeURIComponent(token)
     %></a>
 </p>
 <p style="margin-bottom: 5px;">Sincerely,</p>

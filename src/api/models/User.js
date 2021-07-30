@@ -148,6 +148,10 @@ So, while this \`isSuperAdmin\` demarcation might not be the right approach fore
       type: 'boolean',
       description: 'スレッド通知のトーストは不要',
     },
+    noRaiseInoutNotify: {
+      type: 'boolean',
+      description: '入退室のトーストは不要',
+    },
     isNologin: {
       type: 'boolean',
       description: 'ログイン不可なユーザー',

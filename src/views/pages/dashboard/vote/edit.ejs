@@ -2,39 +2,50 @@
   <div class="container">
     <modal v-if="showForceModal">
       <div class="card">
-        <div class="card-header"><%= __("Confirmation dialog") %></div>
+        <div class="card-header">
+          <%= __("Confirmation dialog") %>
+        </div>
         <div class="card-body">
-          <h5 class="card-title"><%= __("Confirmation of answer deletion") %></h5>
+          <h5 class="card-title">
+            <%= __("Confirmation of answer deletion") %>
+          </h5>
           <p class="card-text">
             <%= __("There is a change in the content of the questionnaire format. If you save in this state, the already answered results will be deleted. Is it OK?") %>
           </p>
           <div class="text-right">
             <button type="button" class="btn btn-danger btn-sm" @click="doForceUpdate">
-              <i class="far fa-save"></i> <%= __("Save") %>
+              <i class="far fa-save"></i>
+              <%= __("Save") %>
             </button>
             <button type="button" class="btn btn-light btn-sm" @click="showForceModal = false">
-              <i class="fas fa-window-close"></i> <%= __("Cancel") %>
+              <i class="fas fa-window-close"></i>
+              <%= __("Cancel") %>
             </button>
           </div>
         </div>
       </div>
     </modal>
 
-    <p class="h4 mb-4"><%= __("Edit circulation notice") %></p>
+    <p class="h4 mb-4">
+      <%= __("Edit circulation notice") %>
+    </p>
 
     <%- partial ('form.ejs', { action: 'updateVote' }) %>
 
-    <ajax-form id="update-vote" action="updateVote" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedForm" @rejected="onCloudError"
-      :handle-parsing="handleParsingForm">
-      <div class="row mt-3">
-        <div class="col text-right">
-          <a class="btn btn-light btn-sm" :href="returnLink"><i class="fas fa-window-close"></i> <%= __("Cancel") %></a>
-          <button type="submit" class="btn btn-primary btn-sm">
-            <i class="far fa-save"></i> <%= __("Save") %>
-          </button>
+      <ajax-form id="update-vote" action="updateVote" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedForm" @rejected="onCloudError"
+        :handle-parsing="handleParsingForm">
+        <div class="row mt-3">
+          <div class="col text-right">
+            <a class="btn btn-light btn-sm" :href="returnLink"><i class="fas fa-window-close"></i>
+              <%= __("Cancel") %>
+            </a>
+            <button type="submit" class="btn btn-primary btn-sm">
+              <i class="far fa-save"></i>
+              <%= __("Save") %>
+            </button>
+          </div>
         </div>
-      </div>
-    </ajax-form>
+      </ajax-form>
 
   </div>
 </div>

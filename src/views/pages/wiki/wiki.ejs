@@ -2,18 +2,24 @@
   <div class="container">
     <modal v-if="showCloseWikiModal">
       <div class="card">
-        <div class="card-header"><%= __("Confirmation dialog") %></div>
+        <div class="card-header">
+          <%= __("Confirmation dialog") %>
+        </div>
         <div class="card-body">
-          <h5 class="card-title"><%= __("Confirmation of not publishing") %></h5>
+          <h5 class="card-title">
+            <%= __("Confirmation of not publishing") %>
+          </h5>
           <p class="card-text">
             <%= __("Keep this Wiki private. Is this Wiki invisible to all users (you need administrator privileges to publish it again)?") %>
           </p>
           <div class="text-right">
             <button type="button" class="btn btn-danger btn-sm" @click="doCloseWiki">
-              <i class="far fa-eye-slash"></i> <%= __("Not publishing") %>
+              <i class="far fa-eye-slash"></i>
+              <%= __("Not publishing") %>
             </button>
             <button type="button" class="btn btn-light btn-sm" @click="showCloseWikiModal = false">
-              <i class="fas fa-window-close"></i> <%= __("Cancel") %>
+              <i class="fas fa-window-close"></i>
+              <%= __("Cancel") %>
             </button>
           </div>
         </div>
@@ -32,7 +38,8 @@
     <div class="row">
       <div class="col text-right">
         <a class="btn btn-light btn-sm" :href="returnLink"><i class="far fa-arrow-alt-circle-left"></i>
-          <%= __("Back") %></a>
+          <%= __("Back") %>
+        </a>
       </div>
     </div>
     <div class="row">
@@ -44,21 +51,25 @@
         </div>
         <div class="row mt-2">
           <div class="col-auto">
-            <small class="text-muted"><%= __("Tags") %></small>
+            <small class="text-muted">
+              <%= __("Tags") %>
+            </small>
           </div>
           <div class="col">
             <h5><a :href="tagLink(item)" class="badge badge-success mr-1" :aria-label="tagTooltip" data-microtip-position="bottom" data-microtip-size="medium" role="tooltip" v-for="(item, index) in wiki.tags">{{
-              item.name
-            }}</a></h5>
+                item.name
+                }}</a></h5>
           </div>
         </div>
         <div class="row">
           <div class="col text-right">
             <button type="button" class="btn btn-danger btn-sm" @click="closeWiki" v-if="wiki.owner && me.id === wiki.owner.id">
-              <i class="far fa-eye-slash"></i> <%= __("Not publishing") %>
+              <i class="far fa-eye-slash"></i>
+              <%= __("Not publishing") %>
             </button>
             <a class="btn btn-info btn-sm" :href="editLink" :class="isWikiEditDisabled"><i class="far fa-edit"></i>
-              <%= __("Edit") %></a>
+              <%= __("Edit") %>
+            </a>
           </div>
         </div>
         <div class="row">
@@ -70,11 +81,15 @@
         </div>
         <!-- appendix -->
         <div class="mb-3">
-          <viewer-file :organization="organization" :appendix="appendix" :download-appendix="downloadAppendix" ></viewer-file>
+          <viewer-file :organization="organization" :appendix="appendix" :download-appendix="downloadAppendix"></viewer-file>
         </div>
-        
+
         <div class="row justify-content-end">
-          <div class="col-auto" v-show="!showToc"><span class="d-none d-md-block"><a href="javascript:void(0)" @click="buildToc" aria-label="<%= __("For posts that use Markdown notation headlines, the table of contents will be displayed") %>" data-microtip-position="bottom" data-microtip-size="medium" role="tooltip"><%= __("Table of contents") %></a></span></div>
+          <div class="col-auto" v-show="!showToc">
+            <span class="d-none d-md-block">
+              <a href="javascript:void(0)" @click="buildToc" aria-label="<%= __("For posts that use Markdown notation headlines, the table of contents will be displayed") %>" data-microtip-position="bottom" data-microtip-size="medium" role="tooltip"><%= __("Table of contents") %></a>
+            </span>
+          </div>
         </div>
 
         <div class="row mt-1 mb-3 p-3 shadow rounded">
@@ -106,23 +121,27 @@
     <div class="row" v-if="bottomBtnShow">
       <div class="col text-right">
         <a class="btn btn-light btn-sm" :href="returnLink"><i class="far fa-arrow-alt-circle-left"></i>
-          <%= __("Back") %></a>
+          <%= __("Back") %>
+        </a>
       </div>
     </div>
     <div class="row">
       <div class="col-auto">
         <small>
-        <a class="mr-3" href="javascript:void(0)" @click="clickUpdateVote">
-          <i class="far fa-thumbs-up"></i> <%= __("How nice!") %> × {{ formatter.format(niceCount) }}
-        </a>
-        <a href="javascript:void(0)" @click="ckickUpdateFlag" v-if="isFan">
-          <span style="color: Tomato">
-            <i class="fas fa-flag"></i>
-          </span> <%= __("Remove the flag") %>
-        </a>
-        <a href="javascript:void(0)" @click="ckickUpdateFlag" v-else>
-          <i class="far fa-flag"></i> <%= __("Flag") %>
-        </a>
+          <a class="mr-3" href="javascript:void(0)" @click="clickUpdateVote">
+            <i class="far fa-thumbs-up"></i>
+            <%= __("How nice!") %> × {{ formatter.format(niceCount) }}
+          </a>
+          <a href="javascript:void(0)" @click="ckickUpdateFlag" v-if="isFan">
+            <span style="color: Tomato">
+              <i class="fas fa-flag"></i>
+            </span>
+            <%= __("Remove the flag") %>
+          </a>
+          <a href="javascript:void(0)" @click="ckickUpdateFlag" v-else>
+            <i class="far fa-flag"></i>
+            <%= __("Flag") %>
+          </a>
         </small>
       </div>
     </div>

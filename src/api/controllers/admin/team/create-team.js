@@ -170,7 +170,7 @@ Close this thread at any time if you don't need it.
 
 ## Markdown Samples
 
-\`\`\`chart
+$$chart
 ,category1,category2
 Jan,21,23
 Feb,31,17
@@ -182,7 +182,7 @@ y.title: Month
 y.min: 1
 y.max: 40
 y.suffix: $
-\`\`\`
+$$
 
 \`\`\`js
 console.log('foo')
@@ -204,7 +204,7 @@ console.log('bar')
 [1 2 3]
 \`\`\`
 
-\`\`\`uml
+$$uml
 partition Conductor {
   (*) --> "Climbs on Platform"
   --> === S1 ===
@@ -225,7 +225,7 @@ partition Orchestra #CCCCEE {
   WavesArmes --> Introduction
   --> "Play music"
 }
-\`\`\`
+$$
 `,
           concept: 0,
           status: 0,
@@ -240,9 +240,7 @@ partition Orchestra #CCCCEE {
       throw err;
     }
 
-    this.req.session.effectMessage = sails
-      .__('You have created a team {0}')
-      .format(valuesToSet.name);
+    this.req.session.effectMessage = sails.__('You have created a team {0}').format(valuesToSet.name);
 
     return {
       id: created.id,

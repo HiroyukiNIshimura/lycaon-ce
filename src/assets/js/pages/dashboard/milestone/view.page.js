@@ -1,4 +1,5 @@
 parasails.registerPage('milestone-view', {
+  mixins: [messageNotify],
   //  ╦╔╗╔╦╔╦╗╦╔═╗╦    ╔═╗╔╦╗╔═╗╔╦╗╔═╗
   //  ║║║║║ ║ ║╠═╣║    ╚═╗ ║ ╠═╣ ║ ║╣
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
@@ -277,15 +278,6 @@ parasails.registerPage('milestone-view', {
     if (this.effectMessage) {
       $lycaon.cloudSuccessToast(this.effectMessage);
     }
-
-    var self = this;
-    io.socket.on('message-notify', (response) => {
-      if (response.data.sendTo === self.me.id) {
-        $lycaon.stackMessage(response, self.messageStack, self.me.organization.handleId);
-        $lycaon.socketToast(response.message);
-      }
-    });
-    $lycaon.stackMessage(false, this.messageStack, this.me.organization.handleId);
   },
 
   //  ╦╔╗╔╔╦╗╔═╗╦═╗╔═╗╔═╗╔╦╗╦╔═╗╔╗╔╔═╗

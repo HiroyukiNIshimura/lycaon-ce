@@ -13,10 +13,10 @@ SELECT a.*
   FROM "thread" a
  WHERE a."id" IN (
   SELECT t."id" FROM (
-    SELECT "thread" as "id" , MAX("updatedAt") as "dt" 
+    SELECT "thread" as "id" , MAX("updatedAt") as "dt"
       FROM "thread_activity"
      WHERE "user" != $1
-     GROUP BY "thread") t 
+     GROUP BY "thread") t
       WHERE t.dt <= $2)
    AND a."status" = 0
    AND a."team" = $3
@@ -56,7 +56,7 @@ SELECT a.*
           }).populate('responsible');
 
           for (let orver of team.orvers) {
-            orver.dueDateFormated = moment(Number(orver.dueDateAt)).format('YYYY/MM/DD') + ' <JST>';
+            orver.dueDateFormated = moment(Number(orver.dueDateAt)).format('YYYY/MM/DD') + ' JST';
           }
 
           //期限まじかのもの
@@ -72,7 +72,7 @@ SELECT a.*
           }).populate('responsible');
 
           for (let near of team.nears) {
-            near.dueDateFormated = moment(Number(near.dueDateAt)).format('YYYY/MM/DD') + ' <JST>';
+            near.dueDateFormated = moment(Number(near.dueDateAt)).format('YYYY/MM/DD') + ' JST';
           }
 
           //1ヶ月更新のないもの
@@ -122,7 +122,7 @@ SELECT a.*
             subject: sails.__('[Lycaon] Weekly Report ({0})').format(moment(dt).format('YYYY/MM/DD')),
             template: 'email-weekly-report',
             templateData: {
-              reportDate: moment(dt).format('YYYY/MM/DD') + ' <JST>',
+              reportDate: moment(dt).format('YYYY/MM/DD') + ' JST',
               teams: [],
               locale: user.languagePreference,
               organization: organization,

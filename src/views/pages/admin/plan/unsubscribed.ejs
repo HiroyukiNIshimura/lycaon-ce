@@ -1,6 +1,8 @@
 <div id="admin-plan-unsubscribed" v-cloak>
   <div class="container">
-    <h4 class="mt-5 mb-4"><%= __('Flow of unsubscribed procedure') %></h4>
+    <h4 class="mt-5 mb-4">
+      <%= __('Flow of unsubscribed procedure') %>
+    </h4>
     <hr>
     <div id="cloud-error" class="row">
       <div class="col-sm-6">
@@ -14,7 +16,9 @@
     </div>
     <div class="row">
       <div class="col">
-        <div><%= __("Click the 'Request unsubscribed' button to request unsubscribed") %></div>
+        <div>
+          <%= __("Click the 'Request unsubscribed' button to request unsubscribed") %>
+        </div>
         <div>
           <%= __("The actual unsubscribed confirmation will be at the beginning of the month following the unsubscribed request, so you can use this system even if you make a unsubscribed request during the current month") %>
         </div>
@@ -24,7 +28,9 @@
         <div>
           <%= __("After the Unsubscribed is confirmed, the registered organization user will not be able to log in or access the content") %>
         </div>
-        <div><%= __("The created content will be deleted and we cannot take any responsibility for this") %></div>
+        <div>
+          <%= __("The created content will be deleted and we cannot take any responsibility for this") %>
+        </div>
         <div>
           <%= __("If necessary, please take the responsibility of the customer to make a backup before the Unsubscribed is confirmed") %>
         </div>
@@ -35,7 +41,9 @@
       @submitted="submittedForm" @rejected="onCloudError" :handle-parsing="handleParsingForm">
       <div class="row mt-5">
         <div class="col text-center">
-          <button type="submit" class="btn btn-deep-orange"><%= __('Request unsubscribed')%></button>
+          <button type="submit" class="btn btn-deep-orange">
+            <%= __('Request unsubscribed')%>
+          </button>
         </div>
       </div>
     </ajax-form>

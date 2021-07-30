@@ -1,4 +1,5 @@
 parasails.registerPage('team', {
+  mixins: [messageNotify],
   //  ╦╔╗╔╦╔╦╗╦╔═╗╦    ╔═╗╔╦╗╔═╗╔╦╗╔═╗
   //  ║║║║║ ║ ║╠═╣║    ╚═╗ ║ ╠═╣ ║ ║╣
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
@@ -130,9 +131,9 @@ parasails.registerPage('team', {
     });
 
     var self = this;
-    window.onbeforeunload = function () {
-      $lycaon.socket.post('/ws/v1/team-out', { id: self.team.id });
-    };
+    window.addEventListener('beforeunload', () => {
+      //$lycaon.socket.post('/ws/v1/team-out', { id: self.team.id });
+    });
 
     io.socket.on('thread-notify', (data) => {
       if (data.user.id !== self.me.id) {
@@ -143,21 +144,14 @@ parasails.registerPage('team', {
         self.submitForm('#query-counter-form');
       }
     });
-    io.socket.on('message-notify', (response) => {
-      if (response.data.sendTo === self.me.id) {
-        $lycaon.stackMessage(response, self.messageStack, self.me.organization.handleId);
-        $lycaon.socketToast(response.message);
-      }
-    });
-    $lycaon.stackMessage(false, this.messageStack, this.me.organization.handleId);
 
-    $lycaon.socket.post('/ws/v1/team-in', { id: this.team.id }, () => {
+    $lycaon.socket.post('/ws/v1/team-in', { id: this.team.id, navigation: this.navigation }, () => {
       io.socket.on('team-in', (data) => {
         var id = self.parseUserId(data.user);
         if (!$('#' + id).hasClass('blink')) {
           $('#' + id).addClass('blink');
         }
-        if (data.user.id !== self.me.id) {
+        if (data.user.id !== self.me.id && !self.me.noRaiseInoutNotify) {
           $lycaon.socketToast(data.message);
         }
         $lycaon.socket.post('/ws/v1/team-pon', { id: self.team.id, user: self.me });
@@ -165,7 +159,7 @@ parasails.registerPage('team', {
       io.socket.on('team-out', (data) => {
         var id = self.parseUserId(data.user);
         $('#' + id).removeClass('blink');
-        if (data.user.id !== self.me.id) {
+        if (data.user.id !== self.me.id && !self.me.noRaiseInoutNotify) {
           $lycaon.socketToast(data.message);
         }
       });
@@ -427,11 +421,8 @@ parasails.registerPage('team', {
     parseUserId: function (user) {
       return 'member-' + user.id;
     },
-    submitForm: function (selector) {
-      var form = _.find(this.$children, {
-        $el: $(selector)[0],
-      });
-      form.submit();
+    parseUserAvaterId: function (user) {
+      return 'member-avater-' + user.id;
     },
     threadHandler($state) {
       this.infiniteState = $state;

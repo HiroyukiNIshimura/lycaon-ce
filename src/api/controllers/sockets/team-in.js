@@ -6,6 +6,9 @@ module.exports = {
       type: 'number',
       required: true,
     },
+    navigation: {
+      type: 'string',
+    },
   },
   exits: {
     notFound: {
@@ -15,16 +18,6 @@ module.exports = {
   },
 
   fn: async function (inputs) {
-    if (!this.req.isSocket) {
-      return 'notFound';
-    }
-    if (!this.req.me) {
-      return 'notFound';
-    }
-    if (!this.req.organization) {
-      return 'notFound';
-    }
-
     var team = await sails.helpers.validateMembership.with({
       id: inputs.id,
       user: this.req.me,
@@ -38,9 +31,7 @@ module.exports = {
 
     var message = {};
 
-    if (!this.req.session.teamNotifyExpiresAt || this.req.session.teamNotifyExpiresAt <= Date.now()) {
-      this.req.session.teamNotifyExpiresAt = Date.now() + sails.config.custom.socketMessageResetTokenTTL;
-
+    if (inputs.navigation !== 'reload') {
       message = {
         key: '{0} [{1}] has joined this team',
         params: [this.req.me.fullName, this.req.me.emailAddress],

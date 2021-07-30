@@ -38,12 +38,6 @@ parasails.registerPage('notification-list', {
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
-    submitForm: function (selector) {
-      var form = _.find(this.$children, {
-        $el: $(selector)[0],
-      });
-      form.submit();
-    },
     infiniteHandler($state) {
       this.infiniteState = $state;
       this.submitForm('#query-form');

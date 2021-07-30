@@ -6,8 +6,7 @@
       tabindex="-1"
       role="dialog"
       aria-labelledby="planModalLabel"
-      aria-hidden="true"
-    >
+      aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
@@ -18,8 +17,7 @@
               type="button"
               class="close"
               data-dismiss="modal"
-              aria-label="Close"
-            >
+              aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
@@ -28,19 +26,33 @@
               <%= __('You will not be able to upload attachments that exceed any of the limits') %>
             </p>
             <dl>
-              <dt><%= __('Number of attachments to the thread') %></dt>
+              <dt>
+                <%= __('Number of attachments to the thread') %>
+              </dt>
               <dd>{{planlimitation.maxFilePerThread ? planlimitation.maxFilePerThread === 1 ? i18n('Up to {0} file').format(formatter.format(planlimitation.maxFilePerThread)) : i18n('Up to {0} files').format(formatter.format(planlimitation.maxFilePerThread)) : i18n('Unlimited') }}</dd>
-              <dt><%= __('Total attachment size to thread') %></dt>
+              <dt>
+                <%= __('Total attachment size to thread') %>
+              </dt>
               <dd>{{ planlimitation.maxSizePerThread ? i18n('Up to {0} MB').format(formatter.format(planlimitation.maxSizePerThread / 1024 / 1024)) : i18n('Unlimited') }}</dd>
-              <dt><%= __('Number of attachments to the Wiki') %></dt>
+              <dt>
+                <%= __('Number of attachments to the Wiki') %>
+              </dt>
               <dd>{{planlimitation.maxFilePerWiki ? planlimitation.maxFilePerWiki === 1 ? i18n('Up to {0} file').format(formatter.format(planlimitation.maxFilePerWiki)) : i18n('Up to {0} files').format(formatter.format(planlimitation.maxFilePerWiki)) : i18n('Unlimited') }}</dd>
-              <dt><%= __('Total attachment size to Wiki') %></dt>
+              <dt>
+                <%= __('Total attachment size to Wiki') %>
+              </dt>
               <dd>{{planlimitation.maxSizePerWiki ? i18n('Up to {0} MB').format(formatter.format(planlimitation.maxSizePerWiki / 1024 / 1024)) : i18n('Unlimited') }}</dd>
-              <dt><%= __('Number of attachments to the circular notice') %></dt>
+              <dt>
+                <%= __('Number of attachments to the circular notice') %>
+              </dt>
               <dd>{{planlimitation.maxFilePerVote ? planlimitation.maxFilePerVote === 1 ? i18n('Up to {0} file').format(formatter.format(planlimitation.maxFilePerVote)) : i18n('Up to {0} files').format(formatter.format(planlimitation.maxFilePerVote)) : i18n('Unlimited') }}</dd>
-              <dt><%= __('Total attachment size to circular notice') %></dt>
+              <dt>
+                <%= __('Total attachment size to circular notice') %>
+              </dt>
               <dd>{{planlimitation.maxSizePerVote ? i18n('Up to {0} MB').format(formatter.format(planlimitation.maxSizePerVote / 1024 / 1024)) : i18n('Unlimited') }}</dd>
-              <dt><%= __('Storage limit') %></dt>
+              <dt>
+                <%= __('Storage limit') %>
+              </dt>
               <dd>{{ planlimitation.maxQuota ? i18n('Up to {0} GB').format(formatter.format(planlimitation.maxQuota / 1024 / 1024 / 1024)) : i18n('Unlimited') }}</dd>
             </dl>
           </div>
@@ -48,60 +60,73 @@
             <button
               type="button"
               class="btn btn-light btn-sm"
-              data-dismiss="modal"
-            >
-              <i class="fas fa-window-close"></i> <%= __('Close_') %>
+              data-dismiss="modal">
+              <i class="fas fa-window-close"></i>
+              <%= __('Close_') %>
             </button>
           </div>
         </div>
       </div>
     </div>
 
-    <h4 class="mt-5 mb-4"><%= __('Usage plan') %>
-      <span class="badge badge-danger ml-2" v-if="billing.unsubscribedAt"><%= __('Processing unsubscribed request') %></span>
-      <span class="badge badge-danger ml-2" v-if="billing.planChangeAt"><%= __('Requesting plan change is being processed') %></span>
+    <h4 class="mt-5 mb-4">
+      <%= __('Usage plan') %>
+        <span class="badge badge-danger ml-2" v-if="billing.unsubscribedAt">
+          <%= __('Processing unsubscribed request') %>
+        </span>
+        <span class="badge badge-danger ml-2" v-if="billing.planChangeAt">
+          <%= __('Requesting plan change is being processed') %>
+        </span>
     </h4>
 
     <div class="row">
       <div class="col-md-8 offset-md-2">
-          <div class="card">
-            <div class="card-header text-center" :class="planStyle">
-              <h3 class="card-title">{{ organization.plan }}</h3>
-            </div>
-            <div class="card-body">
-              <p class="card-description mt-3"><%= __('Number of users') %>：{{ planlimitation.maxUser ? planlimitation.maxUser === 1 ? i18n('Up to {0} person').format(formatter.format(planlimitation.maxUser)) : i18n('Up to {0} people').format(formatter.format(planlimitation.maxUser)) : i18n('Unlimited') }}</p>
-              <p class="card-description"><%= __('Number of teams') %>：{{ planlimitation.maxTeam ? planlimitation.maxTeam === 1 ? i18n('Up to {0} team').format(formatter.format(planlimitation.maxTeam)) : i18n('Up to {0} teams').format(formatter.format(planlimitation.maxTeam)) : i18n('Unlimited') }}</p>
+        <div class="card">
+          <div class="card-header text-center" :class="planStyle">
+            <h3 class="card-title">{{ organization.plan }}</h3>
+          </div>
+          <div class="card-body">
+            <p class="card-description mt-3">
+              <%= __('Number of users') %>：{{ planlimitation.maxUser ? planlimitation.maxUser === 1 ? i18n('Up to {0} person').format(formatter.format(planlimitation.maxUser)) : i18n('Up to {0} people').format(formatter.format(planlimitation.maxUser)) : i18n('Unlimited') }}
+            </p>
+            <p class="card-description">
+              <%= __('Number of teams') %>：{{ planlimitation.maxTeam ? planlimitation.maxTeam === 1 ? i18n('Up to {0} team').format(formatter.format(planlimitation.maxTeam)) : i18n('Up to {0} teams').format(formatter.format(planlimitation.maxTeam)) : i18n('Unlimited') }}
+            </p>
 
-              <p class="card-description">
-                <a
-                  class="text-link"
-                  href="#"
-                  data-toggle="modal"
-                  data-target="#planModal"
-                  ><%= __('Storage limit') %>：{{ planlimitation.maxQuota ? i18n('Up to {0} GB').format(formatter.format(planlimitation.maxQuota / 1024 / 1024 / 1024)) : i18n('Unlimited') }}</a
-                >
-              </p>
-              <div class="row" v-if="planlimitation.maxQuota">
-                <div class="col-md-6">
-                  <div class="progress">
-                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" :style="storageUsedStyle" :aria-valuenow="storageUsed" aria-valuemin="0" aria-valuemax="100">
-                    </div>
+            <p class="card-description">
+              <a
+                class="text-link"
+                href="#"
+                data-toggle="modal"
+                data-target="#planModal">
+                <%= __('Storage limit') %>：{{ planlimitation.maxQuota ? i18n('Up to {0} GB').format(formatter.format(planlimitation.maxQuota / 1024 / 1024 / 1024)) : i18n('Unlimited') }}
+              </a>
+            </p>
+            <div class="row" v-if="planlimitation.maxQuota">
+              <div class="col-md-6">
+                <div class="progress">
+                  <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" :style="storageUsedStyle" :aria-valuenow="storageUsed" aria-valuemin="0" aria-valuemax="100">
                   </div>
                 </div>
               </div>
-
-              <p class="card-description mt-3">
-                <%= __('git log support') %>：{{planlimitation.allowUseGit ? i18n('Available') : i18n('Not available') }}
-              </p>
             </div>
+
+            <p class="card-description mt-3">
+              <%= __('git log support') %>：{{planlimitation.allowUseGit ? i18n('Available') : i18n('Not available') }}
+            </p>
           </div>
+        </div>
       </div>
     </div>
 
     <div class="row" v-if="!billing.unsubscribedAt && !organization.isBackOffice">
       <div class="col text-center">
-        <a :href="unsubscribedLink" class="btn btn-deep-orange"><%= __('Unsubscribed')%></a>
-        <a :href="changeLink" class="btn btn-primary" v-if="!billing.planChangeAt"><%= __('Plan change')%></a>
+        <a :href="unsubscribedLink" class="btn btn-deep-orange">
+          <%= __('Unsubscribed')%>
+        </a>
+        <a :href="changeLink" class="btn btn-primary" v-if="!billing.planChangeAt">
+          <%= __('Plan change')%>
+        </a>
       </div>
     </div>
   </div>

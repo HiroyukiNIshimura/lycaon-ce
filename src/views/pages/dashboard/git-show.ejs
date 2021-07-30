@@ -14,7 +14,8 @@
     <div class="row">
       <div class="col text-right">
         <a class="btn btn-light btn-sm" :href="returnLink"><i class="far fa-arrow-alt-circle-left"></i>
-          <%= __("Back") %></a>
+          <%= __("Back") %>
+        </a>
       </div>
     </div>
     <div class="row mt-3">
@@ -49,12 +50,16 @@
       <div>{{ item.line2 }}</div>
       <div class="row border p-3" v-if="item.sizeorver">
         <div class="col">
-          <span><a href="javascript:void(0)" @click="getDetail(item.row)"><%= __('There are too many differences. Click here to view details') %></a></span>
+          <span><a href="javascript:void(0)" @click="getDetail(item.row)">
+              <%= __('There are too many differences. Click here to view details') %>
+            </a></span>
         </div>
       </div>
       <div class="row border p-3" v-else-if="item.blob">
         <div class="col">
-          <span class="text-warning"><%= __('It is judged as a blob and cannot be displayed') %></span>
+          <span class="text-warning">
+            <%= __('It is judged as a blob and cannot be displayed') %>
+          </span>
         </div>
       </div>
       <div class="row" v-else>
@@ -71,7 +76,8 @@
     <div class="row" v-if="bottomBtnShow">
       <div class="col text-right">
         <a class="btn btn-light btn-sm" :href="returnLink"><i class="far fa-arrow-alt-circle-left"></i>
-          <%= __("Back") %></a>
+          <%= __("Back") %>
+        </a>
       </div>
     </div>
   </div>

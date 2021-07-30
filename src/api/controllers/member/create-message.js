@@ -70,7 +70,7 @@ module.exports = {
     var templateData = {
       user: this.req.me,
       organization: this.req.organization,
-      postedAt: moment(Number(created.createdAt)).format('llll') + ' <JST>',
+      postedAt: moment(Number(created.createdAt)).format('llll') + ' JST',
       locale: user.languagePreference,
     };
 

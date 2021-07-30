@@ -25,6 +25,9 @@ module.exports = {
       type: 'ref',
       required: true,
     },
+    unread: {
+      type: 'boolean',
+    },
   },
   exits: {
     success: {
@@ -42,6 +45,10 @@ module.exports = {
         subject = sails.__('The public circulation has been updated');
       }
 
+      if (inputs.unread) {
+        subject = sails.__('There is an unread circulation in the end of publication');
+      }
+
       var data = {
         organization: inputs.organization,
         template: 'email-vote-notify',
@@ -53,8 +60,8 @@ module.exports = {
           vote: inputs.vote,
           title: subject,
           author: inputs.author,
-          releaseAt: moment(Number(inputs.vote.circulationFrom)).format('ll') + ' <JST>',
-          endAt: moment(Number(inputs.vote.circulationTo)).format('ll') + ' <JST>',
+          releaseAt: moment(Number(inputs.vote.circulationFrom)).format('ll') + ' JST',
+          endAt: moment(Number(inputs.vote.circulationTo)).format('ll') + ' JST',
           locale: lang,
         },
       };

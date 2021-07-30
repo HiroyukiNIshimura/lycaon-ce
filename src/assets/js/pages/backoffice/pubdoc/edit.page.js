@@ -66,9 +66,10 @@ parasails.registerPage('backoffice-pubdoc-edit', {
   },
   mounted: async function () {
     var self = this;
-    window.onbeforeunload = function () {
+    window.addEventListener('beforeunload', () => {
       $lycaon.socket.post('/ws/v1/wiki-edit-out', { id: self.wiki.id });
-    };
+    });
+
     $lycaon.socket.post('/ws/v1/wiki-edit-in', { id: this.wiki.id }, () => {
       io.socket.on('wiki-update', (data) => {
         if (data.user.id !== self.me.id && self.wiki.id === data.wiki.id) {

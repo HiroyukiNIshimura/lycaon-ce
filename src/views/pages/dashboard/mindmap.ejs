@@ -2,15 +2,20 @@
   <div class="container">
     <div class="row align-items-center">
       <div class="col-auto">
-        <span><small><a class="text-light" :href="returnLink"><%= __("Thread") %> #{{ thread.no }}</a></small><small class="text-light ml-2 mr-2"><i
+        <span><small><a class="text-light" :href="returnLink">
+              <%= __("Thread") %> #{{ thread.no }}
+            </a></small><small class="text-light ml-2 mr-2"><i
               class="fas fa-chevron-right"></i></small></span>
-        <span class="h5 text-muted"><%= __('Mindmap') %></span>
+        <span class="h5 text-muted">
+          <%= __('Mindmap') %>
+        </span>
       </div>
     </div>
     <div class="row">
       <div class="col text-right">
         <a class="btn btn-light btn-sm" :href="returnLink"><i class="far fa-arrow-alt-circle-left"></i>
-          <%= __("Back") %></a>
+          <%= __("Back") %>
+        </a>
       </div>
     </div>
     <div class="mindmap-container mt-3">
@@ -19,9 +24,11 @@
     <div class="row">
       <div class="col text-right">
         <button type="button" class="btn btn-light btn-sm" @click="offEditable" v-if="editable"><i class="far fa-stop-circle"></i>
-          <%= __("Fixed") %></button>
+          <%= __("Fixed") %>
+        </button>
         <button type="button" class="btn btn-light btn-sm" @click="onEditable" v-else><i class="fas fa-arrows-alt"></i>
-          <%= __("Move") %></button>
+          <%= __("Move") %>
+        </button>
       </div>
     </div>
   </div>

@@ -1,6 +1,8 @@
 <div id="admin-plan-change" v-cloak>
   <div class="container">
-    <h4 class="mt-5 mb-4"><%= __('Apply for plan change') %></h4>
+    <h4 class="mt-5 mb-4">
+      <%= __('Apply for plan change') %>
+    </h4>
     <hr>
     <div id="cloud-error" class="row">
       <div class="col-sm-6">
@@ -87,8 +89,12 @@
           </div>
           <div class="custom-control custom-checkbox text-center">
             <input type="radio" class="custom-control-input" :id="getId(index)" :value="index" v-model="selected" />
-            <label class="custom-control-label" :for="getId(index)" v-if="!isCurrent(index)"><%= __("Change to this plan") %></label>
-            <label class="custom-control-label" :for="getId(index)" v-else><%= __("Current plan") %></label>
+            <label class="custom-control-label" :for="getId(index)" v-if="!isCurrent(index)">
+              <%= __("Change to this plan") %>
+            </label>
+            <label class="custom-control-label" :for="getId(index)" v-else>
+              <%= __("Current plan") %>
+            </label>
           </div>
         </div>
       </div>
@@ -98,7 +104,9 @@
       :handle-parsing="handleParsingForm">
       <div class="row mt-5">
         <div class="col text-center">
-          <button type="submit" class="btn btn-primary" :disabled="!allowSubmit"><%= __('Change to the selected plan')%></button>
+          <button type="submit" class="btn btn-primary" :disabled="!allowSubmit">
+            <%= __('Change to the selected plan')%>
+          </button>
         </div>
       </div>
     </ajax-form>

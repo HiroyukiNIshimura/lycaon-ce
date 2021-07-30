@@ -1,4 +1,5 @@
 parasails.registerPage('edit-profile', {
+  mixins: [messageNotify],
   //  ╦╔╗╔╦╔╦╗╦╔═╗╦    ╔═╗╔╦╗╔═╗╔╦╗╔═╗
   //  ║║║║║ ║ ║╠═╣║    ╚═╗ ║ ╠═╣ ║ ║╣
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
@@ -47,6 +48,7 @@ parasails.registerPage('edit-profile', {
     this.formData.skil = this.me.skil;
     this.formData.notNeedMyOwnEmail = this.me.notNeedMyOwnEmail;
     this.formData.noRaiseThreadNotify = this.me.noRaiseThreadNotify;
+    this.formData.noRaiseInoutNotify = this.me.noRaiseInoutNotify;
     if (!this.me.languagePreference) {
       this.me.languagePreference = this.language;
     }
@@ -136,15 +138,6 @@ parasails.registerPage('edit-profile', {
     this.selectedTeams = _.extend([], this.cloudTags);
     this.selectedCategories = _.extend([], this.cloudCategoryTags);
     this.selectedTags = _.extend([], this.cloudTagTags);
-
-    var self = this;
-    io.socket.on('message-notify', (response) => {
-      if (response.data.sendTo === self.me.id) {
-        $lycaon.stackMessage(response, self.messageStack, self.me.organization.handleId);
-        $lycaon.socketToast(response.message);
-      }
-    });
-    $lycaon.stackMessage(false, this.messageStack, this.me.organization.handleId);
   },
 
   //  ╦╔╗╔╔╦╗╔═╗╦═╗╔═╗╔═╗╔╦╗╦╔═╗╔╗╔╔═╗

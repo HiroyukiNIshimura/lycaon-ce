@@ -1,4 +1,5 @@
 parasails.registerPage('vote-view', {
+  mixins: [messageNotify],
   //  ╦╔╗╔╦╔╦╗╦╔═╗╦    ╔═╗╔╦╗╔═╗╔╦╗╔═╗
   //  ║║║║║ ║ ║╠═╣║    ╚═╗ ║ ╠═╣ ║ ║╣
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
@@ -36,16 +37,6 @@ parasails.registerPage('vote-view', {
     this.appendix = _.clone(this.vote.items);
   },
   mounted: async function () {
-    var self = this;
-
-    io.socket.on('message-notify', (response) => {
-      if (response.data.sendTo === self.me.id) {
-        $lycaon.stackMessage(response, self.messageStack, self.me.organization.handleId);
-        $lycaon.socketToast(response.message);
-      }
-    });
-    $lycaon.stackMessage(false, this.messageStack, this.me.organization.handleId);
-
     this.viewer = $lycaon.markdown.createViewer('#viewer', this.vote.body, '100%');
 
     this.commentEditor = $lycaon.markdown.createVoteSneezeEditor(
@@ -69,6 +60,10 @@ parasails.registerPage('vote-view', {
       $lycaon.cloudErrorToast(this.errorMessage);
     }
 
+    if (this.allowConfirmed) {
+      $lycaon.infoKeepToast(`After browsing the circulation, click the 'Confirmed content' button!`);
+    }
+
     this.$nextTick(() => {
       this.renderCharts();
     });
@@ -79,6 +74,10 @@ parasails.registerPage('vote-view', {
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
     renderCharts: function () {
+      if (!this.vote.isQuestionnaireFormat) {
+        return;
+      }
+
       var c1 = document.getElementById('vote-chart');
       if (c1) {
         var data = [];

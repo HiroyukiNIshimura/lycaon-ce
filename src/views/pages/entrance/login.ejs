@@ -1,7 +1,11 @@
 <div id="login" v-cloak>
   <div class="container">
-    <h3 class="text-center d-none d-sm-block"><%= __('Sign in to your account') %></h3>
-    <p class="text-center font-weight-bold lead d-block d-sm-none"><%= __('Sign in to your account') %></p>
+    <h3 class="text-center d-none d-sm-block">
+      <%= __('Sign in to your account') %>
+    </h3>
+    <p class="text-center font-weight-bold lead d-block d-sm-none">
+      <%= __('Sign in to your account') %>
+    </p>
     <div class="login-form-container">
       <hr />
       <ajax-form action="login" :syncing.sync="syncing" :cloud-error.sync="cloudError" :form-data="formData"
@@ -9,16 +13,20 @@
         <div class="md-form mt-5">
           <v-text-input type="text" :maxlength="300" id="email" class="form-control"
             :class="[formErrors.emailAddress ? 'is-invalid' : '']" v-model.trim="formData.emailAddress"
-            autocomplete="email" />
-          <label for="email"><%= __('Mail Address') %></label>
+            autocomplete="email"></v-text-input>
+          <label for="email">
+            <%= __('Mail Address') %>
+          </label>
           <div class="invalid-feedback" v-if="formErrors.emailAddress">
             <%= __('Please enter a valid email address') %>
           </div>
         </div>
         <div class="md-form">
           <v-text-input type="password" :maxlength="100" id="password" class="form-control"
-            :class="[formErrors.password ? 'is-invalid' : '']" v-model.trim="formData.password" />
-          <label for="password"><%= __('Password') %></label>
+            :class="[formErrors.password ? 'is-invalid' : '']" v-model.trim="formData.password"></v-text-input>
+          <label for="password">
+            <%= __('Password') %>
+          </label>
           <div class="invalid-feedback" v-if="formErrors.password">
             <%= __('Please enter a valid password') %>
           </div>
@@ -26,26 +34,35 @@
         <div class="form-check">
           <input type="checkbox" class="form-check-input" id="remember" name="rememberMe"
             v-model="formData.rememberMe" />
-          <label class="form-check-label" for="remember"><%= __('Remember me') %></label>
+          <label class="form-check-label" for="remember">
+            <%= __('Remember me') %>
+          </label>
         </div>
 
         <div class="row">
           <div class="col-auto">
             <p class="text-danger" v-if="cloudError==='badCombo'">
-              <small><%= __('The credentials you entered are not associated with your account. Please check your email address and password and try again') %></small>
+              <small>
+                <%= __('The credentials you entered are not associated with your account. Please check your email address and password and try again') %>
+              </small>
             </p>
             <p class="text-danger" v-else-if="cloudError">
               <small>
-                <%= __("An error occurred while processing the request. Please check the information and try again. If the error persists, please contact your administrator") %></small>
+                <%= __("An error occurred while processing the request. Please check the information and try again. If the error persists, please contact your administrator") %>
+              </small>
             </p>
           </div>
         </div>
         <honeypot :form-data="formData"></honeypot>
         <div class="form-group mt-5">
-          <button class="btn btn-elegant btn-block"><%= __('Sign in') %></button>
+          <button class="btn btn-elegant btn-block">
+            <%= __('Sign in') %>
+          </button>
         </div>
       </ajax-form>
-      <p class="text-center"><a href="/password/forgot"><%= __('Forget your password?') %></a></p>
+      <p class="text-center"><a href="/password/forgot">
+          <%= __('Forget your password?') %>
+        </a></p>
     </div>
   </div>
 

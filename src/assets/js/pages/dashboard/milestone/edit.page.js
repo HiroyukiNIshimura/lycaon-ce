@@ -1,4 +1,5 @@
 parasails.registerPage('milestone-edit', {
+  mixins: [messageNotify],
   //  ╦╔╗╔╦╔╦╗╦╔═╗╦    ╔═╗╔╦╗╔═╗╔╦╗╔═╗
   //  ║║║║║ ║ ║╠═╣║    ╚═╗ ║ ╠═╣ ║ ║╣
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
@@ -43,15 +44,6 @@ parasails.registerPage('milestone-edit', {
   },
   mounted: async function () {
     //…
-    var self = this;
-    io.socket.on('message-notify', (response) => {
-      if (response.data.sendTo === self.me.id) {
-        $lycaon.stackMessage(response, self.messageStack, self.me.organization.handleId);
-        $lycaon.socketToast(response.message);
-      }
-    });
-    $lycaon.stackMessage(false, this.messageStack, this.me.organization.handleId);
-
     $lycaon.invalidEnterKey();
   },
 
@@ -62,12 +54,6 @@ parasails.registerPage('milestone-edit', {
     //…
     chooseMe: function () {
       this.responsible = this.me.id;
-    },
-    submitForm: function (id) {
-      var form = _.find(this.$children, {
-        $el: $(id)[0],
-      });
-      form.submit();
     },
     submittedForm: async function (response) {
       this.cloudSuccess = true;

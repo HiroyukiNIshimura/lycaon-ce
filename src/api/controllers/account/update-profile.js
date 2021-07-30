@@ -38,6 +38,9 @@ module.exports = {
     noRaiseThreadNotify: {
       type: 'boolean',
     },
+    noRaiseInoutNotify: {
+      type: 'boolean',
+    },
     language: {
       type: 'string',
       required: true,
@@ -72,38 +75,22 @@ module.exports = {
     var desiredEmailEffect; // ('change-immediately', 'begin-change', 'cancel-pending-change', 'modify-pending-change', or '')
     if (
       newEmailAddress === undefined ||
-      (this.req.me.emailStatus !== 'change-requested' &&
-        newEmailAddress === this.req.me.emailAddress) ||
-      (this.req.me.emailStatus === 'change-requested' &&
-        newEmailAddress === this.req.me.emailChangeCandidate)
+      (this.req.me.emailStatus !== 'change-requested' && newEmailAddress === this.req.me.emailAddress) ||
+      (this.req.me.emailStatus === 'change-requested' && newEmailAddress === this.req.me.emailChangeCandidate)
     ) {
       desiredEmailEffect = '';
-    } else if (
-      this.req.me.emailStatus === 'change-requested' &&
-      newEmailAddress === this.req.me.emailAddress
-    ) {
+    } else if (this.req.me.emailStatus === 'change-requested' && newEmailAddress === this.req.me.emailAddress) {
       desiredEmailEffect = 'cancel-pending-change';
-    } else if (
-      this.req.me.emailStatus === 'change-requested' &&
-      newEmailAddress !== this.req.me.emailAddress
-    ) {
+    } else if (this.req.me.emailStatus === 'change-requested' && newEmailAddress !== this.req.me.emailAddress) {
       desiredEmailEffect = 'modify-pending-change';
-    } else if (
-      !sails.config.custom.verifyEmailAddresses ||
-      this.req.me.emailStatus === 'unconfirmed'
-    ) {
+    } else if (!sails.config.custom.verifyEmailAddresses || this.req.me.emailStatus === 'unconfirmed') {
       desiredEmailEffect = 'change-immediately';
     } else {
       desiredEmailEffect = 'begin-change';
     }
 
     // If the email address is changing, make sure it is not already being used.
-    if (
-      _.contains(
-        ['begin-change', 'change-immediately', 'modify-pending-change'],
-        desiredEmailEffect
-      )
-    ) {
+    if (_.contains(['begin-change', 'change-immediately', 'modify-pending-change'], desiredEmailEffect)) {
       let conflictingUser = await User.findOne({
         or: [
           {
@@ -130,6 +117,7 @@ module.exports = {
       sendMailTags: inputs.selectedTags.map((o) => o.id),
       notNeedMyOwnEmail: inputs.notNeedMyOwnEmail,
       noRaiseThreadNotify: inputs.noRaiseThreadNotify,
+      noRaiseInoutNotify: inputs.noRaiseInoutNotify,
       languagePreference: inputs.language,
     };
 

@@ -1,11 +1,13 @@
 <% /* Note: This is injected into `views/layouts/layout-email.ejs` */ %>
-<p style="margin-bottom: 25px;"><%= __('Welcome {0}').format(organization.fullName) %> ！</p>
-<p style="margin-bottom: 25px;">
+  <p style="margin-bottom: 25px;">
+    <%= __('Welcome {0}').format(organization.fullName) %> ！
+  </p>
+  <p style="margin-bottom: 25px;">
     <%= __("Your organization '[{0}] {1}' has been registered with Lycaon").format(organization.handleId, organization.name) %>
-    <%= __("If you don't remember this operation, please contact the administrator immediately") %>
-    <%= __('If not, click the button below') %> :
-</p>
-<div style="margin-bottom: 25px; text-align: center;">
+      <%= __("If you don't remember this operation, please contact the administrator immediately") %>
+        <%= __('If not, click the button below') %> :
+  </p>
+  <div style="margin-bottom: 25px; text-align: center;">
     <a style="
       background-color: #00acc4;
       display: inline-block;
@@ -16,13 +18,16 @@
       text-decoration: none;
       border-radius: 7px;
     "
-        href="<%= url.resolve(sails.config.custom.baseUrl,'/password/new-account')+'?token='+encodeURIComponent(token) %>"><%= __('Confirm password') %></a>
-</div>
-<p style="margin-bottom: 25px;">
+      href="<%= url.resolve(sails.config.custom.baseUrl,'/password/new-account')+'?token='+encodeURIComponent(token) %>">
+      <%= __('Confirm password') %>
+    </a>
+  </div>
+  <p style="margin-bottom: 25px;">
     <%= __('If you have problems, try pasting this link into your browser') %> :
-    <a style="color: #00acc4; word-wrap: break-word;"
-        href="<%= url.resolve(sails.config.custom.baseUrl,'/password/new-account')+'?token='+encodeURIComponent(token) %>"><%=
-    url.resolve(sails.config.custom.baseUrl,'/password/new-account')+'?token='+encodeURIComponent(token)
+      <a style="color: #00acc4; word-wrap: break-word;"
+        href="<%= url.resolve(sails.config.custom.baseUrl,'/password/new-account')+'?token='+encodeURIComponent(token) %>">
+        <%=
+          url.resolve(sails.config.custom.baseUrl,'/password/new-account')+'?token='+encodeURIComponent(token)
     %></a>
 </p>
 <p style="margin-bottom: 5px;">Sincerely,</p>

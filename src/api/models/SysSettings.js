@@ -37,18 +37,6 @@ module.exports = {
       type: 'boolean',
       description: 'メール配信は行わない',
     },
-    notSendBackoffice: {
-      type: 'boolean',
-      description: '配信不可のメールを管理用メールアドレスに送信しない',
-    },
-    internalEmailAddress: {
-      type: 'string',
-      isEmail: true,
-      custom: function (value) {
-        return [...value].length <= 300;
-      },
-      description: '管理用メールアドレス',
-    },
     fromEmailAddress: {
       type: 'string',
       isEmail: true,

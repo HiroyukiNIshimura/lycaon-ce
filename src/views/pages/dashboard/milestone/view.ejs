@@ -3,10 +3,10 @@
     <modal v-if="burndownDialog">
       <div class="modal-header">
         <h5 class="modal-title">
-            <%= __("Burndown chart") %>
+          <%= __("Burndown chart") %>
         </h5>
         <button type="button" class="close" @click="burndownDialog = false">
-            <span aria-hidden="true">&times;</span>
+          <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
@@ -29,20 +29,27 @@
                   :max="openClose.memberQty * openClose.days * openClose.workingHoursPerDay"
                   gauge-color="#FFD675"
                   :separator-step="0"
-                  :scale-interval="openClose.workingHoursPerDay"
-                ></vue-svg-gauge>
+                  :scale-interval="openClose.workingHoursPerDay"></vue-svg-gauge>
               </div>
               <div class="text-center text-muted">
-                <span><%= __("Cumulative working time") %> {{ floatFormatter.format(openClose.workingCloseElapsed / 1000 / 60 / 60) }}h</span>
+                <span>
+                  <%= __("Cumulative working time") %> {{ floatFormatter.format(openClose.workingCloseElapsed / 1000 / 60 / 60) }}h
+                </span>
               </div>
             </div>
             <div class="col-sm-5">
               <dl class="row">
-                <dt class="col-sm-6 text-muted text-right"><small><%= __("Maximum resource") %></small></dt>
+                <dt class="col-sm-6 text-muted text-right"><small>
+                    <%= __("Maximum resource") %>
+                  </small></dt>
                 <dd class="col-sm-6 text-right">{{ floatFormatter.format(openClose.memberQty * openClose.days * openClose.workingHoursPerDay) }}h</dd>
-                <dt class="col-sm-6 text-muted text-right"><small><%= __("Threads") %></small></dt>
+                <dt class="col-sm-6 text-muted text-right"><small>
+                    <%= __("Threads") %>
+                  </small></dt>
                 <dd class="col-sm-6 text-right">{{ openClose.threadQty }}</dd>
-                <dt class="col-sm-6 text-muted text-right"><small><%= __("Term") %></small></dt>
+                <dt class="col-sm-6 text-muted text-right"><small>
+                    <%= __("Term") %>
+                  </small></dt>
                 <dd class="col-sm-6 text-right">{{ openClose.days }}day</dd>
               </dl>
             </div>
@@ -51,16 +58,18 @@
       </div>
       <div class="modal-footer">
         <div class="text-right">
-            <button type="button" class="btn btn-light btn-sm" @click="burndownDialog = false">
-                <i class="fas fa-window-close"></i>
-                <%= __("close") %>
-            </button>
+          <button type="button" class="btn btn-light btn-sm" @click="burndownDialog = false">
+            <i class="fas fa-window-close"></i>
+            <%= __("close") %>
+          </button>
         </div>
       </div>
     </modal>
     <div class="row mt-3">
       <div class="col">
-        <span class="text-muted"><%= __('Team') %></span><span class="h5 ml-3"><a
+        <span class="text-muted">
+          <%= __('Team') %>
+        </span><span class="h5 ml-3"><a
             :href="teamUrl">{{ team.name }}</a></span>
       </div>
     </div>
@@ -70,7 +79,9 @@
       </gantt-elastic>
     </div>
     <div class="mt-3" v-else-if="tasks.length > 0 && isMobile">
-      <h4><%= __('Milestones') %></h4>
+      <h4>
+        <%= __('Milestones') %>
+      </h4>
       <div class="row mb-3" v-for="item in tasks">
         <div class="col">
           <div class="row">
@@ -79,15 +90,19 @@
             </div>
           </div>
           <div class="row">
-            <div class="col"><%= __('Start') %>: {{ startDate(item.entity) }}</div>
+            <div class="col">
+              <%= __('Start') %>: {{ startDate(item.entity) }}
+            </div>
           </div>
           <div class="row">
-            <div class="col"><%= __('End') %>: {{ endDate(item.entity) }}</div>
+            <div class="col">
+              <%= __('End') %>: {{ endDate(item.entity) }}
+            </div>
           </div>
           <div class="row">
             <div class="col">
               <%= __('Person in charge') %>: <a :href="memberLink(item.entity)" target="_blank"
-                style="color:#0077c0;">{{ item.entity.user ? item.entity.user.fullName : '' }}</a>
+                  style="color:#0077c0;">{{ item.entity.user ? item.entity.user.fullName : '' }}</a>
             </div>
           </div>
           <div class="progress">
@@ -97,10 +112,14 @@
           </div>
           <div class="row">
             <div class="col-auto">
-              <small><%= __('Progress') %>: {{ progressValue(item.entity) }} %</small>
+              <small>
+                <%= __('Progress') %>: {{ progressValue(item.entity) }} %
+              </small>
             </div>
             <div class="col"><small><a href="javascript:void(0)"
-                  @click="clickThreadsForMobile(item.entity)"><%= __('Related thread') %></a>
+                  @click="clickThreadsForMobile(item.entity)">
+                  <%= __('Related thread') %>
+                </a>
                 <span class="ml-3">{{ item.entity.closedQty }} /
                   {{ Number(item.entity.openQty) + Number(item.entity.closedQty) }}</span>
               </small>
@@ -109,7 +128,9 @@
           <div class="row">
             <div class="col">
               <small>
-                <a href="javascript:void(0)" @click="showBurndownDialog(item.entity)"><%= __("Burndown chart") %></a>
+                <a href="javascript:void(0)" @click="showBurndownDialog(item.entity)">
+                  <%= __("Burndown chart") %>
+                </a>
               </small>
             </div>
           </div>
@@ -119,18 +140,22 @@
     <div v-else>
       <div class="alert alert-primary" role="alert">
         <%= __('Milestones are groups of threads in a specific time period (phase)') %><br />
-        <%= __('Create a milestone with the new button') %><br />
-        <%= __('Creating milestones allows each thread to be associated with a milestone') %>
+          <%= __('Create a milestone with the new button') %><br />
+            <%= __('Creating milestones allows each thread to be associated with a milestone') %>
       </div>
     </div>
     <div class="row mt-3">
       <div class="col text-right">
-        <a class="btn btn-light btn-sm" :href="returnUrl"><i class="fas fa-window-close"></i> <%= __("Back") %></a>
+        <a class="btn btn-light btn-sm" :href="returnUrl"><i class="fas fa-window-close"></i>
+          <%= __("Back") %>
+        </a>
         <button type="button" class="btn btn-info btn-sm" @click="clickSort">
-          <i class="fas fa-sort"></i> <%= __("Sort") %>
+          <i class="fas fa-sort"></i>
+          <%= __("Sort") %>
         </button>
         <button type="button" class="btn btn-info btn-sm" @click="clickNew">
-          <i class="fas fa-plus-circle"></i> <%= __("Create New") %>
+          <i class="fas fa-plus-circle"></i>
+          <%= __("Create New") %>
         </button>
       </div>
     </div>

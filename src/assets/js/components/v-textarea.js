@@ -48,7 +48,11 @@ parasails.registerComponent('vTextarea', {
   beforeDestroy: function () {
     //…
   },
-
+  watch: {
+    value: function (val) {
+      this.text = val;
+    },
+  },
   //  ╦╔╗╔╔╦╗╔═╗╦═╗╔═╗╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝

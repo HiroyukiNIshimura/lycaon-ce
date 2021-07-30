@@ -2,16 +2,24 @@
   <div class="container">
     <modal v-if="showDeleteModal">
       <div class="card">
-        <div class="card-header"><%= __("Confirmation dialog") %></div>
+        <div class="card-header">
+          <%= __("Confirmation dialog") %>
+        </div>
         <div class="card-body">
-          <h5 class="card-title"><%= __("Confirmation of not publishing") %></h5>
-          <p class="card-text"><%= __("Makes the selected Wiki private. Is it OK?") %></p>
+          <h5 class="card-title">
+            <%= __("Confirmation of not publishing") %>
+          </h5>
+          <p class="card-text">
+            <%= __("Makes the selected Wiki private. Is it OK?") %>
+          </p>
           <div class="text-right">
             <button type="button" class="btn btn-danger btn-sm" @click="doSubmit">
-              <i class="far fa-eye-slash"></i> <%= __("No Publish") %>
+              <i class="far fa-eye-slash"></i>
+              <%= __("No Publish") %>
             </button>
             <button type="button" class="btn btn-light btn-sm" @click="showDeleteModal = false">
-              <i class="fas fa-window-close"></i> <%= __("Cancel") %>
+              <i class="fas fa-window-close"></i>
+              <%= __("Cancel") %>
             </button>
           </div>
         </div>
@@ -19,16 +27,24 @@
     </modal>
     <modal v-if="showRecoverModal">
       <div class="card">
-        <div class="card-header"><%= __("Confirmation dialog") %></div>
+        <div class="card-header">
+          <%= __("Confirmation dialog") %>
+        </div>
         <div class="card-body">
-          <h5 class="card-title"><%= __("Confirmation of publication") %></h5>
-          <p class="card-text"><%= __("Publish the selected Wiki. Is it OK?") %></p>
+          <h5 class="card-title">
+            <%= __("Confirmation of publication") %>
+          </h5>
+          <p class="card-text">
+            <%= __("Publish the selected Wiki. Is it OK?") %>
+          </p>
           <div class="text-right">
             <button type="button" class="btn btn-primary btn-sm" @click="doSubmit">
-              <i class="far fa-eye"></i> <%= __("Publish") %>
+              <i class="far fa-eye"></i>
+              <%= __("Publish") %>
             </button>
             <button type="button" class="btn btn-light btn-sm" @click="showRecoverModal = false">
-              <i class="fas fa-window-close"></i> <%= __("Cancel") %>
+              <i class="fas fa-window-close"></i>
+              <%= __("Cancel") %>
             </button>
           </div>
         </div>
@@ -50,7 +66,8 @@
     <div class="row">
       <div class="col text-right">
         <a class="btn btn-info btn-sm" href="/admin/pubdoc/create"><i class="fas fa-plus-circle"></i>
-          <%= __("Create New") %></a>
+          <%= __("Create New") %>
+        </a>
       </div>
     </div>
     <div class="row mt-4" v-if="records > 0">
@@ -61,25 +78,32 @@
         <v-pagination :page="pagination.page" :page-count="getPageCount" :handler="clickCallback"></v-pagination>
       </div>
       <div class="col">
-        <small><span><%= __("Total number of wikis") %> {{ formatter.format(records) }}
-            {{ i18nformatN('Wiki', 'Wikis', records) }}</span></small>
+        <small><span>
+            <%= __("Total number of wikis") %> {{ formatter.format(records) }}
+              {{ i18nformatN('Wiki', 'Wikis', records) }}
+          </span></small>
       </div>
     </div>
     <div class="row mt-4" v-else>
-      <div class="col text-muted"><%= __("Public wiki not found") %></div>
+      <div class="col text-muted">
+        <%= __("Public wiki not found") %>
+      </div>
     </div>
     <div class="row">
       <div class="col-auto mb-2 ml-1 admin-wiki-card" v-for="item in wikis" v-inview:parent="'animate'">
-        <wiki-card :wiki="item" :organization="organization" is-public="true" is-animate="false" >
+        <wiki-card :wiki="item" :organization="organization" is-public="true" is-animate="false">
           <div class="text-right mr-2">
             <button type="button" class="btn btn-primary btn-sm" @click="clickDetetOrRecver(item)" v-if="item.deleted">
-              <i class="far fa-eye"></i> <%= __("Publish") %>
+              <i class="far fa-eye"></i>
+              <%= __("Publish") %>
             </button>
             <button type="button" class="btn btn-danger btn-sm" @click="clickDetetOrRecver(item)" v-else>
-              <i class="far fa-eye-slash"></i> <%= __("No Publish") %>
+              <i class="far fa-eye-slash"></i>
+              <%= __("No Publish") %>
             </button>
             <a class="btn btn-primary btn-sm" :href="editLink(item)">
-              <i class="far fa-edit"></i> <%= __("Edit") %>
+              <i class="far fa-edit"></i>
+              <%= __("Edit") %>
             </a>
           </div>
         </wiki-card>

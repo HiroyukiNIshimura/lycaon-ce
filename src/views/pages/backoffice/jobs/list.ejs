@@ -1,50 +1,55 @@
 <div id="backoffice-jobs-list" v-cloak>
-<div class="container">
-  <div class="row mt-4" v-if="records > 0">
-    <div class="col-auto">
-      <h4><%= __("Background job error log") %></h4>
+  <div class="container">
+    <div class="row mt-4" v-if="records > 0">
+      <div class="col-auto">
+        <h4>
+          <%= __("Background job error log") %>
+        </h4>
+      </div>
+      <div class="col-auto">
+        <v-pagination :page="pagination.page" :page-count="getPageCount" :handler="clickCallback"></v-pagination>
+      </div>
+      <div class="col">
+        <small>
+          <span>
+            <%= __("Total number of logs") %> {{ formatter.format(records) }}
+              {{ i18nformatN('Item', 'Items', records) }}
+          </span>
+        </small>
+      </div>
     </div>
-    <div class="col-auto">
-      <v-pagination :page="pagination.page" :page-count="getPageCount" :handler="clickCallback"></v-pagination>
+    <div class="row mt-4" v-else>
+      <div class="col text-muted">
+        <%= __("Error log not found") %>
+      </div>
     </div>
-    <div class="col">
-      <small>
-        <span><%= __("Total number of logs") %> {{ formatter.format(records) }}
-          {{ i18nformatN('Item', 'Items', records) }}
-        </span>
-      </small>
-    </div>
-  </div>
-  <div class="row mt-4" v-else>
-    <div class="col text-muted"><%= __("Error log not found") %></div>
-  </div>
 
-  <div style="height: 700px; border: solid 1px #ddd;">
-    <c-grid :data="logs" theme="MATERIAL_DESIGN" readonly>
-      <c-grid-column field="runAt" sort="true" :filter="dateFormat"
-                            width="190">
-        <%= __('Start time') %>
-      </c-grid-column>
-      <c-grid-column field="finishedAt" sort="true" :filter="dateFormat"
-                            width="190">
-        <%= __('End time') %>
-      </c-grid-column>
-      <c-grid-column field="jobName" sort="true"
-                      width= "300">
-        <%= __('Job Id') %>
-      </c-grid-column>
-      <c-grid-column field="description" sort="true"
-                      width= "300">
-        <%= __('Description') %>
-      </c-grid-column>
-      <c-grid-column field="result" sort="true"
-                      width= "120">
-        <%= __('Status') %>
-      </c-grid-column>
-    </c-grid>
-  </div>
+    <div style="height: 700px; border: solid 1px #ddd;">
+      <c-grid :data="logs" theme="MATERIAL_DESIGN" readonly>
+        <c-grid-column field="runAt" sort="true" :filter="dateFormat"
+          width="190">
+          <%= __('Start time') %>
+        </c-grid-column>
+        <c-grid-column field="finishedAt" sort="true" :filter="dateFormat"
+          width="190">
+          <%= __('End time') %>
+        </c-grid-column>
+        <c-grid-column field="jobName" sort="true"
+          width="300">
+          <%= __('Job Id') %>
+        </c-grid-column>
+        <c-grid-column field="description" sort="true"
+          width="300">
+          <%= __('Description') %>
+        </c-grid-column>
+        <c-grid-column field="result" sort="true"
+          width="120">
+          <%= __('Status') %>
+        </c-grid-column>
+      </c-grid>
+    </div>
 
-</div>
+  </div>
 
 </div>
 <%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>

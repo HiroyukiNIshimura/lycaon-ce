@@ -2,7 +2,9 @@
   <div class="container">
     <modal v-if="showConflictModal">
       <div class="modal-header">
-        <h5 class="modal-title"><%= __("Editing conflicts occur") %></h5>
+        <h5 class="modal-title">
+          <%= __("Editing conflicts occur") %>
+        </h5>
       </div>
       <div class="modal-body">
         <div class="row">
@@ -12,7 +14,9 @@
         </div>
         <div class="row mt-3" v-if="wiki.subject !== newSubject">
           <div class="col">
-            <h6><%= __("The subject has changed") %></h6>
+            <h6>
+              <%= __("The subject has changed") %>
+            </h6>
             <ul>
               <li class="text-primary">-{{ wiki.subject }}</li>
               <li class="text-danger">+{{ newSubject }}</li>
@@ -21,7 +25,9 @@
         </div>
         <div class="row mt-3" v-if="diff.length > 0">
           <div class="col">
-            <h6 class="mb-1"><%= __("Changed body diff") %></h6>
+            <h6 class="mb-1">
+              <%= __("Changed body diff") %>
+            </h6>
             <div v-for="item in diff">
               <div v-if="item.prefix === '+'" class="text-danger">
                 {{ item.prefix }}{{ item.value }}
@@ -35,7 +41,9 @@
         </div>
         <div class="row mt-3">
           <div class="col">
-            <h6><%= __("Body you modified (copy and use)") %></h6>
+            <h6>
+              <%= __("Body you modified (copy and use)") %>
+            </h6>
             <textarea readonly id="my-body" class="form-control" rows="10" v-model="myBody"></textarea>
           </div>
         </div>

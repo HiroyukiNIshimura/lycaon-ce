@@ -1,16 +1,21 @@
 <div id="admin-plan-unsubscribed-complete" v-cloak>
   <div class="container">
-    <h4 class="mt-3"><%= __('Completed unsubscribed request') %></h4>
+    <h4 class="mt-3">
+      <%= __('Completed unsubscribed request') %>
+    </h4>
     <hr>
     <div class="row">
       <div class="col">
-        <div><%= __('A copy email was automatically sent to the email address of the organization representative')%>
+        <div>
+          <%= __('A copy email was automatically sent to the email address of the organization representative')%>
         </div>
         <div>
           <%- __("If you do not receive this copy email, there is a possibility that the email address you entered is incorrect or there is some trouble on the Internet. Sorry to trouble you, but please call us or <a>Please contact us</a>").format(`${sails.config.custom.baseUrl}/contact`)%>
         </div>
         <br>
-        <p><%= __('Thank you for your patronage')%></p>
+        <p>
+          <%= __('Thank you for your patronage')%>
+        </p>
       </div>
     </div>
   </div>

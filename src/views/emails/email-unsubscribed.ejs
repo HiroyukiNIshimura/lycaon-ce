@@ -1,49 +1,50 @@
 <% /* Note: This is injected into `views/layouts/layout-email.ejs` */ %>
-<p style="margin-bottom: 25px;">
-    <%= __('The request for unsubscribed has been accepted') %></p>
-<p style="margin-bottom: 25px;">
+  <p style="margin-bottom: 25px;">
+    <%= __('The request for unsubscribed has been accepted') %>
+  </p>
+  <p style="margin-bottom: 25px;">
     <%= __('Unsubscribed request date') %>: <%= __('unsubscribedDate') %>
-</p>
-<div>
+  </p>
+  <div>
     <%= __('The actual unsubscribed confirmation will be at the beginning of the month following the unsubscribed request, so you can use this system even if you make a unsubscribed request during the current month') %><br>
-    <%= __('The fee for the month of Unsubscribed will be the normal monthly fee. Please note that it is not prorated') %><br>
-    <%= __('After the Unsubscribed is confirmed, the registered organization user will not be able to log in or access the content') %><br>
-    <%= __('The created content will be deleted and we cannot take any responsibility for this') %><br>
-    <%= __('If necessary, please take the responsibility of the customer to make a backup before the Unsubscribed is confirmed') %><br>
-</div>
-<p style="margin-bottom: 25px;">
+      <%= __('The fee for the month of Unsubscribed will be the normal monthly fee. Please note that it is not prorated') %><br>
+        <%= __('After the Unsubscribed is confirmed, the registered organization user will not be able to log in or access the content') %><br>
+          <%= __('The created content will be deleted and we cannot take any responsibility for this') %><br>
+            <%= __('If necessary, please take the responsibility of the customer to make a backup before the Unsubscribed is confirmed') %><br>
+  </div>
+  <p style="margin-bottom: 25px;">
     <%= __('Thank you for your patronage') %>
-</p>
-<p style="margin-bottom: 25px;">
+  </p>
+  <p style="margin-bottom: 25px;">
     <%- __('If you make a mistake, <a>Please contact us</a>').format(`${sails.config.custom.baseUrl}/contact`) %>
-</p>
-<hr>
-<dl>
+  </p>
+  <hr>
+  <dl>
     <dt>
-        <%= __('Organization ID') %>
+      <%= __('Organization ID') %>
     </dt>
     <dd>
-        <%= billing.organization.handleId %>
+      <%= billing.organization.handleId %>
     </dd>
     <dt>
-        <%= __('Organization name') %>
+      <%= __('Organization name') %>
     </dt>
     <dd>
-        <%= billing.organization.name %>
+      <%= billing.organization.name %>
     </dd>
     <dt>
-        <%= __('Representative name') %>
+      <%= __('Representative name') %>
     </dt>
     <dd>
-        <%= billing.organization.fullName %>
+      <%= billing.organization.fullName %>
     </dd>
     <dt>
-        <%= __('Representative email address') %>
+      <%= __('Representative email address') %>
     </dt>
     <dd>
-        <%= billing.organization.emailAddress %>
+      <%= billing.organization.emailAddress %>
     </dd>
-</dl>
-<hr>
-<p style="margin-bottom: 5px;">Sincerely,</p>
-<p style="margin-top: 0px;">Team Lycaon</p>
+  </dl>
+  <hr>
+  <p style="margin-bottom: 5px;">Sincerely,</p>
+  <p style="margin-top: 0px;">Team Lycaon</p>

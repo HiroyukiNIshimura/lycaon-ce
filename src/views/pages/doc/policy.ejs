@@ -3,15 +3,15 @@
     <v-tabs panel-id="policy" ref="policy" class="mb-5">
       <v-tab name="<%= __("User policy") %>" id="tab-user-policy" :is-slot-if="false">
         <%- res.policy.user %>
-        <div>
-          {{ formatedUserAt }} 施行
-        </div>
+          <div>
+            {{ formatedUserAt }} 施行
+          </div>
       </v-tab>
       <v-tab name="<%= __("Privacy policy") %>" id="tab-privacy-policy" :is-slot-if="false">
         <%- res.policy.privacy %>
-        <div>
-          {{ formatedPrivacyAt }} 制定
-        </div>
+          <div>
+            {{ formatedPrivacyAt }} 制定
+          </div>
       </v-tab>
       <v-tab name="<%= __("Notation based on the Specified Commercial Transactions Law") %>" id="tab-commercial"
         :is-slot-if="false">
@@ -45,7 +45,9 @@
               <%= __("Homepage URL") %>
             </dt>
             <dd>
-              <a href="<%= sails.config.custom.platformCompanyAboutHref %>"><%= sails.config.custom.platformCompanyAboutHref %></a>
+              <a href="<%= sails.config.custom.platformCompanyAboutHref %>">
+                <%= sails.config.custom.platformCompanyAboutHref %>
+              </a>
             </dd>
           </dl>
           <dl>
@@ -53,7 +55,9 @@
               <%= __("Inquiry form") %>
             </dt>
             <dd>
-              <a href="<%= sails.config.custom.baseUrl %>/contact"><%= sails.config.custom.baseUrl %>/contact</a>
+              <a href="<%= sails.config.custom.baseUrl %>/contact">
+                <%= sails.config.custom.baseUrl %>/contact
+              </a>
             </dd>
           </dl>
           <dl>
@@ -61,7 +65,9 @@
               <%= __("phone number") %>
             </dt>
             <dd>
-              <%= __("In principle, we use the inquiry form to answer inquiries. Thank you for your cooperation") %><br><%= __("Our phone number will be notified by e-mail without delay based on the customer's request") %><br><%= __("We do not accept contact for business purposes, so please refrain from doing so") %>
+              <%= __("In principle, we use the inquiry form to answer inquiries. Thank you for your cooperation") %><br>
+                <%= __("Our phone number will be notified by e-mail without delay based on the customer's request") %><br>
+                  <%= __("We do not accept contact for business purposes, so please refrain from doing so") %>
             </dd>
           </dl>
           <dl>

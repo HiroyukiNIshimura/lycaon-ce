@@ -1,5 +1,5 @@
 <div id="notification-view" v-cloak>
- <div class="container">
+  <div class="container">
     <h5>
       <%= __('Notice from the system') %>
     </h5>
@@ -7,7 +7,8 @@
     <div class="row">
       <div class="col text-right">
         <a class="btn btn-light btn-sm" href="/notification"><i class="far fa-arrow-alt-circle-left"></i>
-          <%= __("Back") %></a>
+          <%= __("Back") %>
+        </a>
       </div>
     </div>
 
@@ -41,10 +42,14 @@
     </div>
     <div class="row mt-3">
       <div class="col text-center">
-        <button type="button" class="btn btn-light btn-sm" @click="goForward" :disabled="disabledForward"><%= __("Forward") %></button>
-        <button type="button" class="btn btn-light btn-sm" @click="goNext" :disabled="disabledNext"><%= __("Next") %></button>
+        <button type="button" class="btn btn-light btn-sm" @click="goForward" :disabled="disabledForward">
+          <%= __("Forward") %>
+        </button>
+        <button type="button" class="btn btn-light btn-sm" @click="goNext" :disabled="disabledNext">
+          <%= __("Next") %>
+        </button>
       </div>
     </div>
- </div>
+  </div>
 </div>
 <%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>

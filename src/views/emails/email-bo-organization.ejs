@@ -1,18 +1,23 @@
 <% /* Note: This is injected into `views/layouts/layout-email.ejs` */ %>
-<% if (isBackOffice) { %>
-<p style="margin-bottom: 25px;"><%= organization.fullName %> さん [ <%= organization.emailAddress %> ] を組織登録しました！</p>
-<% } else { %>
-<p style="margin-bottom: 25px;"><%= organization.fullName %> さん [ <%= organization.emailAddress %> ] が新規組織登録を実行しました！</p>
-<% } %>
+  <% if (isBackOffice) { %>
+    <p style="margin-bottom: 25px;">
+      <%= organization.fullName %> さん [ <%= organization.emailAddress %> ] を組織登録しました！
+    </p>
+    <% } else { %>
+      <p style="margin-bottom: 25px;">
+        <%= organization.fullName %> さん [ <%= organization.emailAddress %> ] が新規組織登録を実行しました！
+      </p>
+      <% } %>
 
-<p style="margin-bottom: 25px;">
-    Lycaonに組織「[<%= organization.handleId %>] <%= organization.name %>」が登録されました。
-</p>
-<p style="margin-bottom: 25px;">
-    送信したURL:
-    <a style="color: #00acc4; word-wrap: break-word;"
-        href="<%= url.resolve(sails.config.custom.baseUrl,'/password/new-account')+'?token='+encodeURIComponent(token) %>"><%=
-    url.resolve(sails.config.custom.baseUrl,'/password/new-account')+'?token='+encodeURIComponent(token)
+        <p style="margin-bottom: 25px;">
+          Lycaonに組織「[<%= organization.handleId %>] <%= organization.name %>」が登録されました。
+        </p>
+        <p style="margin-bottom: 25px;">
+          送信したURL:
+          <a style="color: #00acc4; word-wrap: break-word;"
+            href="<%= url.resolve(sails.config.custom.baseUrl,'/password/new-account')+'?token='+encodeURIComponent(token) %>">
+            <%=
+              url.resolve(sails.config.custom.baseUrl,'/password/new-account')+'?token='+encodeURIComponent(token)
     %></a>
 </p>
 <p style="margin-bottom: 5px;">Sincerely,</p>

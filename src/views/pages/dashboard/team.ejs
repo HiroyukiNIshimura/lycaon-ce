@@ -2,7 +2,9 @@
   <div class="container">
     <modal v-if="showMemberModal">
       <div class="modal-header">
-        <h5 class="modal-title"><%= __('Members') %></h5>
+        <h5 class="modal-title">
+          <%= __('Members') %>
+        </h5>
         <button type="button" class="close" @click="hideMembers">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -13,15 +15,21 @@
             <div class="card">
               <div class="card-body">
                 <div class="card-title">
-                  <user-identity :user="item" :organization="organization" size="" ></user-identity>
+                  <user-identity :user="item" :organization="organization" size=""></user-identity>
                 </div>
                 <div class="card-subtitle" v-if="item.lastSeenAt && item.lastSeenAt > 0">
-                  <small v-if="item.lastSeenAt && item.lastSeenAt > 0"><%= __('Last access') %>
-                    <lycaon-timestamp :at="item.lastSeenAt" format="timeago"></lycaon-timestamp></small>
-                  <small v-else><%= __('No access') %></small>
+                  <small v-if="item.lastSeenAt && item.lastSeenAt > 0">
+                    <%= __('Last access') %>
+                      <lycaon-timestamp :at="item.lastSeenAt" format="timeago"></lycaon-timestamp>
+                  </small>
+                  <small v-else>
+                    <%= __('No access') %>
+                  </small>
                 </div>
                 <div class="card-text">
-                  <span class="badge badge-warning" v-if="item.deleted"><%= __('Invalid user') %></span>
+                  <span class="badge badge-warning" v-if="item.deleted">
+                    <%= __('Invalid user') %>
+                  </span>
                 </div>
               </div>
             </div>
@@ -40,9 +48,13 @@
     </div>
     <div class="row align-items-center">
       <div class="col-auto">
-        <span><small><a class="text-light" href="/"><%= __('Main page') %></a></small><small class="text-light ml-2 mr-2"><i
+        <span><small><a class="text-light" href="/">
+              <%= __('Main page') %>
+            </a></small><small class="text-light ml-2 mr-2"><i
               class="fas fa-chevron-right"></i></small></span>
-        <span class="h6 text-muted"><%= __('Team') %></span>
+        <span class="h6 text-muted">
+          <%= __('Team') %>
+        </span>
       </div>
       <div class="col-12 col-md-8">
         <span class="h3">{{ team.name }}</span>
@@ -54,7 +66,9 @@
       </div>
     </div>
     <div class="row mt-3">
-      <div class="col text-muted"><%= __('Description') %></div>
+      <div class="col text-muted">
+        <%= __('Description') %>
+      </div>
     </div>
     <div class="row">
       <div class="col">{{ team.description }}</div>
@@ -62,40 +76,48 @@
     <div class="row mt-3">
       <div class="col text-muted">
         <%= __('Members') %> <small>{{ formatter.format(memberQty) }}
-          {{ i18nformatN('person', 'people', memberQty) }}</small>
+            {{ i18nformatN('person', 'people', memberQty) }}</small>
       </div>
     </div>
     <div class="row mt-3 align-items-center">
       <div class="col-auto mr-3 mb-1" v-for="item in members">
-        <user-identity :user="item" :organization="organization" size="sm" ></user-identity>
+        <user-identity :user="item" :organization="organization" size="sm" :id="parseUserId(item)" :avater-id="parseUserAvaterId(item)"></user-identity>
       </div>
       <div class="col-auto mr-3 mb-1" v-if="memberQty > members.length">
         <button type="button" class="btn btn-link text-primary" @click="showAllMember">
           <i class="fas fa-user-friends"></i>
           <%= __('other') %> {{ memberQty - members.length }}
-          {{ i18nformatN('person', 'people', memberQty - members.length) }}
+            {{ i18nformatN('person', 'people', memberQty - members.length) }}
         </button>
       </div>
     </div>
     <div class="row mt-3 justify-content-md-center">
       <div class="col-md-2">
-        <div class="text-muted"><%= __('Total number of threads') %>: {{ team.summary.total }}</div>
-        <div class="text-success"><%= __('Number of open') %>: {{ team.summary.open }}</div>
+        <div class="text-muted">
+          <%= __('Total number of threads') %>: {{ team.summary.total }}
+        </div>
+        <div class="text-success">
+          <%= __('Number of open') %>: {{ team.summary.open }}
+        </div>
       </div>
       <div class="col-md-5">
-        <div class="text-muted"><%= __('Details of the open') %></div>
+        <div class="text-muted">
+          <%= __('Details of the open') %>
+        </div>
         <canvas id="summary-chart"></canvas>
       </div>
     </div>
     <div class="row mt-3 mt-md-0">
       <div class="col text-right d-block d-sm-none">
         <button type="button" class="btn btn-info btn-block" @click="onNewThreadCkick">
-          <i class="fas fa-plus-circle"></i> <%= __('New thread') %>
+          <i class="fas fa-plus-circle"></i>
+          <%= __('New thread') %>
         </button>
       </div>
       <div class="col text-right d-none d-sm-block">
         <button type="button" class="btn btn-info" @click="onNewThreadCkick">
-          <i class="fas fa-plus-circle"></i> <%= __('New thread') %>
+          <i class="fas fa-plus-circle"></i>
+          <%= __('New thread') %>
         </button>
       </div>
     </div>
@@ -143,68 +165,100 @@
     <v-tabs :panel-id="panelId" :options="{ useUrlFragment: false, defaultTabHash: 'tab-team' }" @changed="tabChanged">
       <v-tab :name="i18n('Open threads')" id="tab-team">
         <%- partial ('team-query.ejs') %>
-        <div class="row mt-3">
-          <div class="col-auto">
-            <small><label for="query-sort"><%= __('Sort order') %></label></small>
-            <select class="browser-default custom-select custom-select-sm" id="query-sort" v-model="query.sort">
-              <option value="0"><%= __('Newest update date') %></option>
-              <option value="1"><%= __('Oldest update date') %></option>
-              <option value="2"><%= __('Newest creation date and time') %></option>
-              <option value="3"><%= __('Oldest creation date and time') %></option>
-              <option value="4"><%= __('In descending order of importance') %></option>
-              <option value="5"><%= __('In ascending order of importance') %></option>
-              <option value="6"><%= __('Newest deadline') %></option>
-              <option value="7"><%= __('Oldest deadline') %></option>
-              <option value="8"><%= __('In descending order of urgency') %></option>
-              <option value="9"><%= __('In ascending order of urgency') %></option>
-            </select>
+          <div class="row mt-3">
+            <div class="col-auto">
+              <small><label for="query-sort">
+                  <%= __('Sort order') %>
+                </label></small>
+              <select class="browser-default custom-select custom-select-sm" id="query-sort" v-model="query.sort">
+                <option value="0">
+                  <%= __('Newest update date') %>
+                </option>
+                <option value="1">
+                  <%= __('Oldest update date') %>
+                </option>
+                <option value="2">
+                  <%= __('Newest creation date and time') %>
+                </option>
+                <option value="3">
+                  <%= __('Oldest creation date and time') %>
+                </option>
+                <option value="4">
+                  <%= __('In descending order of importance') %>
+                </option>
+                <option value="5">
+                  <%= __('In ascending order of importance') %>
+                </option>
+                <option value="6">
+                  <%= __('Newest deadline') %>
+                </option>
+                <option value="7">
+                  <%= __('Oldest deadline') %>
+                </option>
+                <option value="8">
+                  <%= __('In descending order of urgency') %>
+                </option>
+                <option value="9">
+                  <%= __('In ascending order of urgency') %>
+                </option>
+              </select>
+            </div>
+            <div class="col-auto form-group">
+              <small><label for="query-word">
+                  <%= __('Word search') %>
+                </label></small>
+              <v-text-input type="text" :maxlength="30" class="form-control form-control-sm" id="query-word" v-model="query.word" v-on:keyup.enter="queryAmbiguity"></v-text-input>
+            </div>
           </div>
-          <div class="col-auto form-group">
-            <small><label for="query-word"><%= __('Word search') %></label></small>
-            <v-text-input type="text" :maxlength="30" class="form-control form-control-sm" id="query-word" v-model="query.word" v-on:keyup.enter="queryAmbiguity" />
-          </div>
-        </div>
-        <div class="row mt-3" id="query-results">
-          <div class="col">
-            <h5>
-              <%= __('Threads') %>
-              <small class="text-muted"><%= __('Total number of search results') %>
-                {{ formatter.format(queryCount) }} {{ i18nformatN('Item', 'Items', queryCount) }}</small>
-            </h5>
-            <div id="thread-results" class="mt-3" v-if="queryResults.length > 0">
-              <div class="row">
-                <div class="col-auto mb-2 ml-1" v-for="item in queryResults" v-inview:parent="'animate'">
-                  <thread-card :thread="item" :selected-tags="selectedTags" :organization="organization" :word="wordSearchWord" class="thread-card" >
-                  </thread-card>
+          <div class="row mt-3" id="query-results">
+            <div class="col">
+              <h5>
+                <%= __('Threads') %>
+                  <small class="text-muted">
+                    <%= __('Total number of search results') %>
+                      {{ formatter.format(queryCount) }} {{ i18nformatN('Item', 'Items', queryCount) }}
+                  </small>
+              </h5>
+              <div id="thread-results" class="mt-3" v-if="queryResults.length > 0">
+                <div class="row">
+                  <div class="col-auto mb-2 ml-1" v-for="item in queryResults" v-inview:parent="'animate'">
+                    <thread-card :thread="item" :selected-tags="selectedTags" :organization="organization" :word="wordSearchWord" class="thread-card">
+                    </thread-card>
+                  </div>
                 </div>
+                <infinite-loading spinner="waveDots" @infinite="threadHandler"></infinite-loading>
               </div>
-              <infinite-loading spinner="waveDots" @infinite="threadHandler"></infinite-loading>
-            </div>
-            <div v-else class="text-muted mt-3">
-              <small><%= __('No thread found that meets the criteria') %> <i class="far fa-grin-beam-sweat"></i></small>
+              <div v-else class="text-muted mt-3">
+                <small>
+                  <%= __('No thread found that meets the criteria') %> <i class="far fa-grin-beam-sweat"></i>
+                </small>
+              </div>
             </div>
           </div>
-        </div>
       </v-tab>
       <v-tab :name="i18n('Workings')" id="tab-working" :counter="counter.working">
         <div class="row">
           <div class="col">
             <h5>
               <%= __('Working threads') %>
-              <small class="text-muted"><%= __('Total number of search results') %>
-                {{ formatter.format(queryCount) }} {{ i18nformatN('Item', 'Items', queryCount) }}</small>
+                <small class="text-muted">
+                  <%= __('Total number of search results') %>
+                    {{ formatter.format(queryCount) }} {{ i18nformatN('Item', 'Items', queryCount) }}
+                </small>
             </h5>
             <div class="mt-3" v-if="queryResults.length > 0">
               <div class="row">
                 <div class="col-auto mb-2 ml-1" v-for="item in queryResults">
-                  <thread-card :thread="item" :organization="organization" class="thread-card" >
+                  <thread-card :thread="item" :organization="organization" class="thread-card">
                   </thread-card>
                 </div>
               </div>
               <infinite-loading spinner="waveDots" @infinite="workingHandler"></infinite-loading>
             </div>
             <div v-else class="text-muted mt-3">
-              <small><%= __('No threads are working') %> <i class="far fa-grin-beam-sweat"></i></small>
+              <small>
+                <%= __('No threads are working') %> <i class="far fa-grin-beam-sweat"></i>
+              </small>
             </div>
           </div>
         </div>
@@ -214,8 +268,10 @@
           <div class="col">
             <h5>
               <%= __('The threads you are in charge of') %>
-              <small class="text-muted"><%= __('Total number of search results') %>
-                {{ formatter.format(queryCount) }} {{ i18nformatN('Item', 'Items', queryCount) }}</small>
+                <small class="text-muted">
+                  <%= __('Total number of search results') %>
+                    {{ formatter.format(queryCount) }} {{ i18nformatN('Item', 'Items', queryCount) }}
+                </small>
             </h5>
             <div class="row align-items-center">
               <div class="col-auto">
@@ -231,11 +287,15 @@
                 </div>
               </div>
               <div class="col-auto">
-                <small><label for="my-query-category"><%= __('Category') %></label></small>
+                <small><label for="my-query-category">
+                    <%= __('Category') %>
+                  </label></small>
               </div>
               <div class="col">
                 <select class="browser-default custom-select-sm" v-model="selectedCategory" id="my-query-category">
-                  <option value=""><%= __('All') %></option>
+                  <option value="">
+                    <%= __('All') %>
+                  </option>
                   <option v-for="item in categories" v-bind:value="item.id">
                     {{ item.name }}
                   </option>
@@ -245,14 +305,16 @@
             <div class="mt-3" v-if="queryResults.length > 0">
               <div class="row">
                 <div class="col-auto mb-2 ml-1" v-for="item in queryResults">
-                  <thread-card :thread="item" :organization="organization" class="thread-card" >
+                  <thread-card :thread="item" :organization="organization" class="thread-card">
                   </thread-card>
                 </div>
               </div>
               <infinite-loading spinner="waveDots" @infinite="myThreadHandler"></infinite-loading>
             </div>
             <div v-else class="text-muted mt-3">
-              <small><%= __('No thread in charge') %> <i class="far fa-grin-beam-sweat"></i></small>
+              <small>
+                <%= __('No thread in charge') %> <i class="far fa-grin-beam-sweat"></i>
+              </small>
             </div>
           </div>
         </div>
@@ -262,19 +324,23 @@
           <div class="col">
             <h5>
               <%= __('Flagged threads') %>
-              <small class="text-muted"><%= __('Total number of search results') %>
-                {{ formatter.format(queryCount) }} {{ i18nformatN('Item', 'Items', queryCount) }}</small>
+                <small class="text-muted">
+                  <%= __('Total number of search results') %>
+                    {{ formatter.format(queryCount) }} {{ i18nformatN('Item', 'Items', queryCount) }}
+                </small>
             </h5>
             <div class="mt-3" v-if="queryResults.length > 0">
               <div class="row">
                 <div class="col-auto mb-2 ml-1" v-for="item in queryResults">
-                  <thread-card :thread="item" :organization="organization" class="thread-card" >
+                  <thread-card :thread="item" :organization="organization" class="thread-card">
                   </thread-card>
                 </div>
               </div>
               <infinite-loading spinner="waveDots" @infinite="flagHandler"></infinite-loading>
             </div>
-            <small v-else class="text-muted"><%= __('No thread has been flagged') %> <i class="far fa-grin-beam-sweat"></i></small>
+            <small v-else class="text-muted">
+              <%= __('No thread has been flagged') %> <i class="far fa-grin-beam-sweat"></i>
+            </small>
           </div>
         </div>
       </v-tab>
@@ -283,20 +349,24 @@
           <div class="col">
             <h5 class="mb-3">
               <%= __('Your private threads') %>
-              <small class="text-muted"><%= __('Total number of search results') %>
-                {{ formatter.format(queryCount) }} {{ i18nformatN('Item', 'Items', queryCount) }}</small>
+                <small class="text-muted">
+                  <%= __('Total number of search results') %>
+                    {{ formatter.format(queryCount) }} {{ i18nformatN('Item', 'Items', queryCount) }}
+                </small>
             </h5>
             <div class="mt-3" v-if="queryResults.length > 0">
               <div class="row">
                 <div class="col-auto mb-2 ml-1" v-for="item in queryResults">
-                  <thread-card :thread="item" :organization="organization" class="thread-card" >
+                  <thread-card :thread="item" :organization="organization" class="thread-card">
                   </thread-card>
                 </div>
               </div>
               <infinite-loading spinner="waveDots" @infinite="localHandler"></infinite-loading>
             </div>
             <div v-else class="text-muted mt-3">
-              <small><%= __('There is no private thread') %> <i class="far fa-grin-beam-sweat"></i></small>
+              <small>
+                <%= __('There is no private thread') %> <i class="far fa-grin-beam-sweat"></i>
+              </small>
             </div>
           </div>
         </div>
@@ -306,14 +376,18 @@
           <div class="col">
             <h5 class="mb-3">
               <%= __('Activities') %>
-              <small class="text-muted"><%= __('Total number of search results') %>
-                {{ formatter.format(queryCount) }} {{ i18nformatN('Item', 'Items', queryCount) }}</small>
+                <small class="text-muted">
+                  <%= __('Total number of search results') %>
+                    {{ formatter.format(queryCount) }} {{ i18nformatN('Item', 'Items', queryCount) }}
+                </small>
             </h5>
             <div class="row">
               <div class="col-auto">
                 <div class="custom-control custom-checkbox">
                   <input type="checkbox" class="custom-control-input" id="query-nonmyown" v-model="nonmyown" />
-                  <label class="custom-control-label" for="query-nonmyown"><small><%= __('Other than my activities') %></small></label>
+                  <label class="custom-control-label" for="query-nonmyown"><small>
+                      <%= __('Other than my activities') %>
+                    </small></label>
                 </div>
               </div>
             </div>
@@ -323,13 +397,15 @@
                   <div data-vticon="true">
                     <img class="vtimeline-icon-img" src="/images/clock2.png">
                   </div>
-                  <activity-card :activity="item" :organization="organization" ></activity-card>
+                  <activity-card :activity="item" :organization="organization"></activity-card>
                 </div>
               </div>
               <infinite-loading spinner="waveDots" @infinite="activityHandler"></infinite-loading>
             </div>
             <div v-else class="text-muted mt-3">
-              <small><%= __('No activity') %> <i class="far fa-grin-beam-sweat"></i></small>
+              <small>
+                <%= __('No activity') %> <i class="far fa-grin-beam-sweat"></i>
+              </small>
             </div>
           </div>
         </div>
@@ -339,8 +415,10 @@
           <div class="col">
             <h5>
               <%= __('git commit log') %>
-              <small class="text-muted"><%= __('Total number') %> {{ formatter.format(queryCount) }}
-                {{ i18nformatN('Item', 'Items', queryCount) }}</small>
+                <small class="text-muted">
+                  <%= __('Total number') %> {{ formatter.format(queryCount) }}
+                    {{ i18nformatN('Item', 'Items', queryCount) }}
+                </small>
             </h5>
             <div v-if="team.connectType === 0">
               <%= __('Repository') %>: {{ team.gitRepository }} | {{ team.gitOrigin }}
@@ -358,7 +436,9 @@
                         <div>
                           <%= __('commit') %>: <a :href="gitLink(item.id)">{{ item.hash }}</a>
                         </div>
-                        <div><%= __('committer') %>: {{ item.author_name }}</div>
+                        <div>
+                          <%= __('committer') %>: {{ item.author_name }}
+                        </div>
                         <div>{{ formatDatetime(item.commitAt) }}</div>
                         <div>ref: {{ item.refs }}</div>
                       </div>
@@ -372,8 +452,10 @@
               <infinite-loading spinner="waveDots" @infinite="gitHandler"></infinite-loading>
             </div>
             <div v-else class="text-muted mt-3">
-              <small><%= __('Is there a git commit log? Logs are syncing. It will take a few minutes to synchronize, so please wait for a while') %>
-                <i class="far fa-grin-beam-sweat"></i></small>
+              <small>
+                <%= __('Is there a git commit log? Logs are syncing. It will take a few minutes to synchronize, so please wait for a while') %>
+                  <i class="far fa-grin-beam-sweat"></i>
+              </small>
             </div>
           </div>
         </div>
@@ -381,33 +463,44 @@
       <v-tab name="wiki" id="tab-wiki">
         <div class="text-right">
           <button type="button" class="btn btn-info" @click="onNewWikiCkick">
-            <i class="fas fa-plus-circle"></i> <%= __('New Wiki') %>
+            <i class="fas fa-plus-circle"></i>
+            <%= __('New Wiki') %>
           </button>
         </div>
         <div class="row">
           <div class="col">
             <h5 class="mb-3">
               Wiki
-              <small class="text-muted"><%= __('Total number of search results') %>
-                {{ formatter.format(queryCount) }} {{ i18nformatN('Item', 'Items', queryCount) }}</small>
+              <small class="text-muted">
+                <%= __('Total number of search results') %>
+                  {{ formatter.format(queryCount) }} {{ i18nformatN('Item', 'Items', queryCount) }}
+              </small>
             </h5>
             <div class="row">
               <div class="col-sm-3 col-md-2 mb-3">
                 <div class="custom-control custom-checkbox">
                   <input type="checkbox" class="custom-control-input" id="query-wikiflag" v-model="wikiflags" />
-                  <label class="custom-control-label" for="query-wikiflag"><small><%= __('With flag') %></small></label>
+                  <label class="custom-control-label" for="query-wikiflag"><small>
+                      <%= __('With flag') %>
+                    </small></label>
                 </div>
               </div>
               <div class="col form-group">
                 <div class="row">
-                  <div class="col-auto"><small><label for="query-word-wiki"></label><%= __('Word search') %></label></small></div>
-                  <div class="col-auto"><v-text-input type="text" :maxlength="30" class="form-control form-control-sm" id="query-word-wiki" v-model="query.wordWiki" v-on:keyup.enter="queryAmbiguityWiki" /></div>
+                  <div class="col-auto"><small><label for="query-word-wiki"></label>
+                      <%= __('Word search') %></label>
+                    </small></div>
+                  <div class="col-auto">
+                    <v-text-input type="text" :maxlength="30" class="form-control form-control-sm" id="query-word-wiki" v-model="query.wordWiki" v-on:keyup.enter="queryAmbiguityWiki"></v-text-input>
+                  </div>
                 </div>
               </div>
             </div>
             <div class="row">
               <div class="col-auto">
-                <small><label for="query-tags"><%= __('Filter by tag') %></label></small>
+                <small><label for="query-tags">
+                    <%= __('Filter by tag') %>
+                  </label></small>
               </div>
             </div>
             <div class="row">
@@ -417,12 +510,14 @@
             </div>
             <div class="row mt-3" v-if="queryResults.length > 0">
               <div class="col-auto mb-2 ml-1 wiki-card" v-for="(item, index) in queryResults" :key="index">
-                <wiki-card :wiki="item" :organization="organization" :show-team="false" :word="wordSearchWikiWord" ></wiki-card>
+                <wiki-card :wiki="item" :organization="organization" :show-team="false" :word="wordSearchWikiWord"></wiki-card>
               </div>
               <infinite-loading spinner="waveDots" @infinite="wikiHandler"></infinite-loading>
             </div>
             <div v-else class="text-muted mt-3">
-              <small><%= __('No Wiki available') %> <i class="far fa-grin-beam-sweat"></i></small>
+              <small>
+                <%= __('No Wiki available') %> <i class="far fa-grin-beam-sweat"></i>
+              </small>
             </div>
           </div>
         </div>
@@ -430,15 +525,18 @@
       <v-tab :name="i18n('Circular notice')" id="tab-circular" :counter="counter.votes">
         <div class="text-right">
           <button type="button" class="btn btn-info" @click="onNewVoteCkick">
-            <i class="fas fa-plus-circle"></i> <%= __('New circulation notice') %>
+            <i class="fas fa-plus-circle"></i>
+            <%= __('New circulation notice') %>
           </button>
         </div>
         <div class="row mt-3">
           <div class="col">
             <h5 class="mb-3">
               <%= __('Circular notice') %>
-              <small class="text-muted"><%= __('Total number of search results') %>
-                {{ formatter.format(queryCount) }} {{ i18nformatN('Item', 'Items', queryCount) }}</small>
+                <small class="text-muted">
+                  <%= __('Total number of search results') %>
+                    {{ formatter.format(queryCount) }} {{ i18nformatN('Item', 'Items', queryCount) }}
+                </small>
             </h5>
             <div class="row align-items-center">
               <div class="col-auto">
@@ -465,12 +563,14 @@
 
             <div class="row mt-3" v-if="queryResults.length > 0">
               <div class="col-auto mb-2 vote-card" v-for="(item, index) in queryResults" :key="index" v-inview:parent="'animate'">
-                <vote-card :vote="item" :organization="organization" :state="item.answerState" ></vote-card>
+                <vote-card :vote="item" :organization="organization" :state="item.answerState"></vote-card>
               </div>
               <infinite-loading spinner="waveDots" @infinite="circularHandler"></infinite-loading>
             </div>
             <div v-else class="text-muted mt-3">
-              <small><%= __('No Circular notice available') %> <i class="far fa-grin-beam-sweat"></i></small>
+              <small>
+                <%= __('No Circular notice available') %> <i class="far fa-grin-beam-sweat"></i>
+              </small>
             </div>
           </div>
         </div>

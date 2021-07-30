@@ -6,6 +6,9 @@ module.exports = {
       type: 'number',
       required: true,
     },
+    navigation: {
+      type: 'string',
+    },
   },
   exits: {
     notFound: {
@@ -15,16 +18,6 @@ module.exports = {
   },
 
   fn: async function (inputs) {
-    if (!this.req.isSocket) {
-      return 'notFound';
-    }
-    if (!this.req.me) {
-      return 'notFound';
-    }
-    if (!this.req.organization) {
-      return 'notFound';
-    }
-
     var team = await sails.helpers.validateMembership.with({
       id: inputs.id,
       user: this.req.me,

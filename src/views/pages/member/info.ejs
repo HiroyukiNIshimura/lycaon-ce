@@ -7,9 +7,6 @@
       @rejected="onCloudError" :handle-parsing="handleParsingCreateMessageForm">
     </ajax-form>
     </v-tab>
-    <ajax-form id="read-message-form" action="readMessage" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedReadMessageForm"
-      @rejected="onCloudError" :handle-parsing="handleParsingReadMessageForm">
-    </ajax-form>
     <ajax-form id="query-monthly-form" action="analytics" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedMonthlyForm"
       @rejected="onCloudError" :handle-parsing="handleParsingMonthlyForm">
     </ajax-form>
@@ -25,40 +22,51 @@
 
     <div class="row">
       <div class="col-auto">
-        <user-identity :user="user" :organization="organization" size="" ></user-identity>
+        <user-identity :user="user" :organization="organization" size=""></user-identity>
       </div>
       <div class="col text-right">
         <a class="btn btn-light btn-sm" :href="returnLink"><i class="far fa-arrow-alt-circle-left"></i>
-          <%= __("Back") %></a>
+          <%= __("Back") %>
+        </a>
       </div>
     </div>
     <v-tabs ref="menberInfo" :options="{ useUrlFragment: false, defaultTabHash: 'tab-info' }" @changed="tabChanged">
       <v-tab :name="i18n('Member information')" id="tab-info">
         <div class="row mt-3">
-          <div class="col-3"><%= __("Full Name") %>:</div>
+          <div class="col-3">
+            <%= __("Full Name") %>:
+          </div>
           <div class="col">
             {{ user.fullName }}
           </div>
         </div>
         <div class="row mt-3">
-          <div class="col-3"><%= __("Mail Address") %>:</div>
+          <div class="col-3">
+            <%= __("Mail Address") %>:
+          </div>
           <div class="col">
             {{ user.emailAddress }}
           </div>
         </div>
         <div class="row mt-3">
-          <div class="col-3"><%= __("About") %>:</div>
+          <div class="col-3">
+            <%= __("About") %>:
+          </div>
           <div class="col">
             {{ user.skil }}
           </div>
         </div>
         <div class="row mt-3">
-          <div class="col-3"><%= __("Last access") %>:</div>
+          <div class="col-3">
+            <%= __("Last access") %>:
+          </div>
           <div class="col">
             <span v-if="user.lastSeenAt && user.lastSeenAt > 0">
-                <lycaon-timestamp :at="user.lastSeenAt" format="timeago"></lycaon-timestamp>
+              <lycaon-timestamp :at="user.lastSeenAt" format="timeago"></lycaon-timestamp>
             </span>
-            <span v-else><%= __("No access") %></span>
+            <span v-else>
+              <%= __("No access") %>
+            </span>
           </div>
         </div>
       </v-tab>
@@ -81,7 +89,9 @@
         </div>
         <div class="row">
           <div class="col text-right">
-            <button type="button" class="btn btn-primary btn-sm" @click="sendMessage"><%= __('Send') %></button>
+            <button type="button" class="btn btn-primary btn-sm" @click="sendMessage">
+              <%= __('Send') %>
+            </button>
           </div>
         </div>
         <div class="border border-light rounded py-3 px-3 mt-3">
@@ -99,12 +109,16 @@
             <div v-inview:enter="onRead" :id="getId(item)" :class="messageStyle(item)" v-for="(item, index) in queryResults" :key="index" v-inview:animate="'zoomInDown'">
               <div class="row">
                 <div class="col-auto">
-                  <span class="date-ago"><lycaon-timestamp :at="item.createdAt" format="timeago"></lycaon-timestamp></span>
+                  <span class="date-ago">
+                    <lycaon-timestamp :at="item.createdAt" format="timeago"></lycaon-timestamp>
+                  </span>
                 </div>
                 <div class="col-auto" v-if="isMyMessage(item)">
                   <span v-if="item.readAt" v-inview:animate="'fadeInLeft'">
                     <small class="badge badge-pill badge-success">{{ i18n('Already read') }}
-                    </small><small class="ml-3"><lycaon-timestamp :at="item.readAt" format="timeago"></lycaon-timestamp></small>
+                    </small><small class="ml-3">
+                      <lycaon-timestamp :at="item.readAt" format="timeago"></lycaon-timestamp>
+                    </small>
                   </span>
                   <span v-else v-inview:animate="'fadeInLeft'">
                     <small class="badge badge-pill badge-warning">{{ i18n('not yet read') }}</small>
@@ -116,7 +130,9 @@
             <infinite-loading spinner="waveDots" @infinite="messageHandler"></infinite-loading>
           </div>
           <div class="border border-light rounded py-3 px-3" v-else>
-            <small><%= __('No messages') %> <i class="far fa-grin-beam-sweat"></i></small>
+            <small>
+              <%= __('No messages') %> <i class="far fa-grin-beam-sweat"></i>
+            </small>
           </div>
         </div>
       </v-tab>

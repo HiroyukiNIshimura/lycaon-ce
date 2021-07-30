@@ -34,8 +34,10 @@
     </div>
     <div class="row mt-2">
       <div class="col-auto">
-        <span><%= __("Author") %>: </span>
-        <user-identity :user="vote.author" :organization="organization" size="sm" ></user-identity>
+        <span>
+          <%= __("Author") %>:
+        </span>
+        <user-identity :user="vote.author" :organization="organization" size="sm"></user-identity>
       </div>
     </div>
 
@@ -70,7 +72,9 @@
     <div class="row mt-3" v-show="otherEnabled">
       <div class="col">
         <div class="md-form">
-          <label for="my-message" class="md-textarea-label"><%= __('Please enter any other answers') %></label>
+          <label for="my-message" class="md-textarea-label">
+            <%= __('Please enter any other answers') %>
+          </label>
           <v-textarea id="my-message" class="md-textarea form-control" rows="3" :maxlength="500" :class="[formErrors.other ? 'is-invalid' : '']"
             v-model.trim="other"></v-textarea>
         </div>
@@ -78,9 +82,12 @@
     </div>
     <div class="row">
       <div class="col text-right">
-        <a class="btn btn-light btn-sm" :href="returnLink"><i class="fas fa-window-close"></i> <%= __("Cancel") %></a>
+        <a class="btn btn-light btn-sm" :href="returnLink"><i class="fas fa-window-close"></i>
+          <%= __("Cancel") %>
+        </a>
         <button type="button" class="btn btn-primary btn-sm" @click="submitAnswer">
-          <i class="far fa-save"></i> <%= __("Confirm") %>
+          <i class="far fa-save"></i>
+          <%= __("Confirm") %>
         </button>
       </div>
     </div>

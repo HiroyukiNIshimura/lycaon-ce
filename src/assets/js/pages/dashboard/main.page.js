@@ -1,4 +1,5 @@
 parasails.registerPage('main', {
+  mixins: [messageNotify],
   //  ╦╔╗╔╦╔╦╗╦╔═╗╦    ╔═╗╔╦╗╔═╗╔╦╗╔═╗
   //  ║║║║║ ║ ║╠═╣║    ╚═╗ ║ ╠═╣ ║ ║╣
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
@@ -95,18 +96,11 @@ parasails.registerPage('main', {
       if (data.user.id !== self.me.id) {
         $lycaon.stackExchange(data, self.notifyStack, self.me.organization.handleId);
         if (!self.me.noRaiseThreadNotify) {
-          $lycaon.reloadRequestToast(data.message);
+          $lycaon.socketToast(data.message);
         }
         self.submitForm('#query-counter-form');
       }
     });
-    io.socket.on('message-notify', (response) => {
-      if (response.data.sendTo === self.me.id) {
-        $lycaon.stackMessage(response, self.messageStack, self.me.organization.handleId);
-        $lycaon.socketToast(response.message);
-      }
-    });
-    $lycaon.stackMessage(false, this.messageStack, this.me.organization.handleId);
   },
   watch: {
     selectedCategory: function () {
@@ -262,12 +256,6 @@ parasails.registerPage('main', {
     },
     threadLink: function (item) {
       return `/${this.organization.handleId}/thread/${item.no}`;
-    },
-    submitForm: function (selector) {
-      var form = _.find(this.$children, {
-        $el: $(selector)[0],
-      });
-      form.submit();
     },
     submittedQueryForm: function (response) {
       if (!response.data) {

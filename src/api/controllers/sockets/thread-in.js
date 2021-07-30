@@ -6,6 +6,9 @@ module.exports = {
       type: 'number',
       required: true,
     },
+    navigation: {
+      type: 'string',
+    },
   },
   exits: {
     notFound: {
@@ -15,16 +18,6 @@ module.exports = {
   },
 
   fn: async function (inputs) {
-    if (!this.req.isSocket) {
-      return 'notFound';
-    }
-    if (!this.req.me) {
-      return 'notFound';
-    }
-    if (!this.req.organization) {
-      return 'notFound';
-    }
-
     var thread = await Thread.findOne({
       id: inputs.id,
     });
@@ -45,9 +38,7 @@ module.exports = {
 
     var message = {};
 
-    if (!this.req.session.threadNotifyExpiresAt || this.req.session.threadNotifyExpiresAt <= Date.now()) {
-      this.req.session.threadNotifyExpiresAt = Date.now() + sails.config.custom.socketMessageResetTokenTTL;
-
+    if (inputs.navigation !== 'reload') {
       message = {
         key: '{0} [{1}] has joined this thread',
         params: [this.req.me.fullName, this.req.me.emailAddress],
