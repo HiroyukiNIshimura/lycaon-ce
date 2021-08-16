@@ -99,7 +99,7 @@ module.exports = {
           gitlabProjectId: inputs.gitlabProjectId,
         });
         if (res) {
-          return res;
+          throw res;
         }
       }
     }

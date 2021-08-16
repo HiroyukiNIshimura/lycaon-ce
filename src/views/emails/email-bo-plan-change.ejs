@@ -1,57 +1,58 @@
 <% /* Note: This is injected into `views/layouts/layout-email.ejs` */ %>
-  <p style="margin-bottom: 25px;">以下のプラン変更依頼が発生しています。迅速に処理を行ってください。</p>
-  <hr>
-  <dl>
+<p style="margin-bottom: 25px;">以下のプラン変更依頼が発生しています。迅速に処理を行ってください。</p>
+<hr/>
+<dl>
     <dt>
-      <%= __('Current plan') %>
+        <%= __('Current plan') %>
     </dt>
     <dd>
-      <%= billing.organization.plan %>
+        <%= billing.organization.plan %>
     </dd>
     <dt>
-      <%= __('Plan after change') %>
+        <%= __('Plan after change') %>
     </dt>
     <dd>
-      <%= newPlan %> (<%= __(grade) %>)
+        <%= newPlan %>
+        (<%= __(grade) %>)
     </dd>
     <dt>
-      <%= __('Desired change application start date') %>
+        <%= __('Desired change application start date') %>
     </dt>
     <dd>
-      <%= preferredDate %>
+        <%= preferredDate %>
     </dd>
     <% if (grade==='Downgrade' ) { %>
-      <dt>
-        <%= __('Reason for downgrade') %>
-      </dt>
-      <dd>
-        <%= reasons %>
-      </dd>
-      <% } %>
         <dt>
-          <%= __('Organization ID') %>
+            <%= __('Reason for downgrade') %>
         </dt>
         <dd>
-          <%= billing.organization.handleId %>
+            <%= reasons %>
         </dd>
-        <dt>
-          <%= __('Organization name') %>
-        </dt>
-        <dd>
-          <%= billing.organization.name %>
-        </dd>
-        <dt>
-          <%= __('Representative name') %>
-        </dt>
-        <dd>
-          <%= billing.organization.fullName %>
-        </dd>
-        <dt>
-          <%= __('Representative email address') %>
-        </dt>
-        <dd>
-          <%= billing.organization.emailAddress %>
-        </dd>
-  </dl>
-  <p style="margin-bottom: 5px;">Sincerely,</p>
-  <p style="margin-top: 0px;">Team Lycaon</p>
+    <% } %>
+    <dt>
+        <%= __('Organization ID') %>
+    </dt>
+    <dd>
+        <%= billing.organization.handleId %>
+    </dd>
+    <dt>
+        <%= __('Organization name') %>
+    </dt>
+    <dd>
+        <%= billing.organization.name %>
+    </dd>
+    <dt>
+        <%= __('Representative name') %>
+    </dt>
+    <dd>
+        <%= billing.organization.fullName %>
+    </dd>
+    <dt>
+        <%= __('Representative email address') %>
+    </dt>
+    <dd>
+        <%= billing.organization.emailAddress %>
+    </dd>
+</dl>
+<p style="margin-bottom: 5px;">Sincerely,</p>
+<p style="margin-top: 0px;">Team Lycaon</p>

@@ -39,9 +39,12 @@ module.exports = {
       }
 
       var room = `room-${this.req.organization.id}-wiki-${wiki.id}`;
-      sails.sockets.join(this.req, room);
-      sails.sockets.broadcast(room, 'wiki-edit-query', {
-        user: this.req.me,
+      sails.sockets.join(this.req, room, (err) => {
+        if (!err) {
+          sails.sockets.broadcast(room, 'wiki-edit-query', {
+            user: this.req.me,
+          });
+        }
       });
     }
 

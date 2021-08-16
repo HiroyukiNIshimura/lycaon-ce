@@ -1,31 +1,31 @@
 <% /* Note: This is injected into `views/layouts/layout-email.ejs` */ %>
-  <p style="margin-bottom: 25px;">以下の退会依頼が発生しています。迅速に処理を行ってください。</p>
-  <hr>
-  <dl>
+<p style="margin-bottom: 25px;">以下の退会依頼が発生しています。迅速に処理を行ってください。</p>
+<hr/>
+<dl>
     <dt>
-      <%= __('Organization ID') %>
+        <%= __('Organization ID') %>
     </dt>
     <dd>
-      <%= billing.organization.handleId %>
+        <%= billing.organization.handleId %>
     </dd>
     <dt>
-      <%= __('Organization name') %>
+        <%= __('Organization name') %>
     </dt>
     <dd>
-      <%= billing.organization.name %>
+        <%= billing.organization.name %>
     </dd>
     <dt>
-      <%= __('Representative name') %>
+        <%= __('Representative name') %>
     </dt>
     <dd>
-      <%= billing.organization.fullName %>
+        <%= billing.organization.fullName %>
     </dd>
     <dt>
-      <%= __('Representative email address') %>
+        <%= __('Representative email address') %>
     </dt>
     <dd>
-      <%= billing.organization.emailAddress %>
+        <%= billing.organization.emailAddress %>
     </dd>
-  </dl>
-  <p style="margin-bottom: 5px;">Sincerely,</p>
-  <p style="margin-top: 0px;">Team Lycaon</p>
+</dl>
+<p style="margin-bottom: 5px;">Sincerely,</p>
+<p style="margin-top: 0px;">Team Lycaon</p>

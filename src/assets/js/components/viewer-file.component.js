@@ -43,7 +43,7 @@ parasails.registerComponent('viewerFile', {
           <li v-for="(item, index) in appendix">
             <small>
               <i class="fas fa-paperclip"></i>
-              <a class="mr-2" :href="downloadAppendix(item, index)" rel="noopener">{{ item.name }} <i class="fas fa-cloud-download-alt fa-lg"></i></a> <lycaon-timestamp :at="item.createdAt" format="timeago" :translator="translator"></lycaon-timestamp>
+              <a class="mr-2" :href="downloadAppendix(item, index)" rel="noopener" :aria-label="item.name" data-microtip-position="top" data-microtip-size="medium" role="tooltip">{{ truncate(item.name, 24) }} <i class="fas fa-cloud-download-alt fa-lg"></i></a> <lycaon-timestamp :at="item.createdAt" format="timeago" :translator="translator"></lycaon-timestamp>
               <user-identity :user="item.owner" :organization="organization" size="sm"></user-identity>
               {{ i18n("Attached file") }}
             </small>
@@ -88,6 +88,13 @@ parasails.registerComponent('viewerFile', {
   methods: {
     translator: function (val) {
       return this.i18n('At {0},', [val]);
+    },
+    truncate: function (text, length) {
+      var chars = Array.from(text);
+      if (chars.length < length) {
+        return text;
+      }
+      return chars.slice(0, length).join('') + '...';
     },
   },
   computed: {

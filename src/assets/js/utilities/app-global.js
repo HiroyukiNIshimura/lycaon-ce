@@ -1,3 +1,4 @@
+/* eslint-disable */
 class ExpiringStorage {
   get(key) {
     const cached = JSON.parse(localStorage.getItem(key));
@@ -53,7 +54,6 @@ const chartOptions = {
 
 _.mixin({ deepExtend: underscoreDeepExtend(_) });
 
-// eslint-disable-next-line no-redeclare
 const $lycaon = {
   formatter: {
     formatCalender: function (at, isShort) {
@@ -283,7 +283,6 @@ const $lycaon = {
       'This is a top-10 common password': 'これはトップ10のよくあるパスワードです',
       'This is a top-100 common password': 'これはトップ100のよくあるパスワードです',
       'This is a very common password': 'これは非常によくあるパスワードです',
-      // eslint-disable-next-line quotes
       "Capitalization doesn't help very much": '大文字はあまり役に立ちません',
       'All-uppercase is almost as easy to guess as all-lowercase':
         'すべて大文字は、すべて小文字と同じくらい簡単に推測できます',
@@ -310,7 +309,6 @@ const $lycaon = {
         score.scoreClass = 'score-color-1';
         break;
       case 2:
-        // eslint-disable-next-line quotes
         score.crackScore = this.i18n("It's a good password");
         score.scoreClass = 'score-color-2';
         break;
@@ -498,7 +496,7 @@ const $lycaon = {
   markdown: {
     customHTMLSanitizer: function (html) {
       /* https://github.com/cure53/DOMPurify */
-      return DOMPurify.sanitize(html, {
+      var option = {
         ALLOWED_TAGS: [
           'b',
           'li',
@@ -531,7 +529,16 @@ const $lycaon = {
           'a',
           'iframe',
         ],
-      });
+      };
+
+      var reRegExp = /<img src="blob:https?:/g;
+      var reHasRegExp = new RegExp(reRegExp.source);
+
+      if (reHasRegExp.test(html)) {
+        option.ALLOW_UNKNOWN_PROTOCOLS = true;
+      }
+
+      return DOMPurify.sanitize(html, option);
     },
     linkify: function () {
       const markdownIt = window.markdownit();

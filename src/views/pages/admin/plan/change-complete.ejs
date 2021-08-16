@@ -1,20 +1,19 @@
 <div id="admin-plan-change-complete" v-cloak>
-  <div class="container">
-    <h4 class="mt-3">
-      <%= __('We accepted the plan change') %>
-    </h4>
-    <hr>
-    <div class="row">
-      <div class="col">
-        <div>
-          <%= __('A copy email was automatically sent to the email address of the organization representative')%>
+    <div class="container">
+        <h4 class="mt-3">
+            <%= __('We accepted the plan change') %>
+        </h4>
+        <hr/>
+        <div class="row">
+            <div class="col">
+                <div>
+                    <%= __('A copy email was automatically sent to the email address of the organization representative')%>
+                </div>
+                <div>
+                    <%- __("If you do not receive this copy email, there is a possibility that the email address you entered is incorrect or there is some trouble on the Internet. Sorry to trouble you, but please call us or <a>Please contact us</a>").format(`${sails.config.custom.baseUrl}/contact`)%>
+                </div>
+                <br></div>
+            </div>
         </div>
-        <div>
-          <%- __("If you do not receive this copy email, there is a possibility that the email address you entered is incorrect or there is some trouble on the Internet. Sorry to trouble you, but please call us or <a>Please contact us</a>").format(`${sails.config.custom.baseUrl}/contact`)%>
-        </div>
-        <br>
-      </div>
     </div>
-  </div>
-</div>
-<%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>
+    <%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>

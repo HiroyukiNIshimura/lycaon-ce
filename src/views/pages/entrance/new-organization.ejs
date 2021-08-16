@@ -5,6 +5,9 @@
     </h3>
     <div class="new-organization-form" v-if="!cloudSuccess">
       <hr />
+      <div class="alert alert-primary" role="alert">
+        <%= __("Once set, the organization ID cannot be changed. Name it carefully!") %>
+      </div>
       <ajax-form action="registOrganization" :syncing.sync="syncing" :cloud-error.sync="cloudError"
         @submitted="submittedForm" @rejected="onCloudError" :handle-parsing="handleParsingForm">
         <div class="md-form mt-5">
@@ -95,9 +98,7 @@
             <div class="custom-control custom-checkbox">
               <input type="checkbox" class="custom-control-input" id="form-policy-check" v-model="policyCecked" />
               <label class="custom-control-label custom-control-label-sm"
-                for="form-policy-check"><span class="badge badge-pill badge-danger mr-2">
-                  <%= __('required') %>
-                </span>
+                for="form-policy-check">
                 <%= __("Agree to the user policy and create an account") %>
               </label>
             </div>

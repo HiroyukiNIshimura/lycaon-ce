@@ -1,55 +1,56 @@
 <div id="notification-view" v-cloak>
-  <div class="container">
-    <h5>
-      <%= __('Notice from the system') %>
-    </h5>
-    <hr>
-    <div class="row">
-      <div class="col text-right">
-        <a class="btn btn-light btn-sm" href="/notification"><i class="far fa-arrow-alt-circle-left"></i>
-          <%= __("Back") %>
-        </a>
-      </div>
-    </div>
+    <div class="container">
+        <h5>
+            <%= __('Notice from the system') %>
+        </h5>
+        <hr/>
+        <div class="row">
+            <div class="col text-right">
+                <a class="btn btn-light btn-sm" href="/notification">
+                    <i class="far fa-arrow-alt-circle-left"></i>
+                    <%= __("Back") %>
+                </a>
+            </div>
+        </div>
 
-    <div class="row mt-3">
-      <div class="col-auto">
-        <span class="badge badge-light badge-pill" v-if="notification.category === 'notice'">{{ i18n(notification.category) }}</span>
-        <span class="badge badge-danger badge-pill" v-if="notification.category === 'important'">{{ i18n(notification.category) }}</span>
-        <span class="badge badge-warning badge-pill" v-if="notification.category === 'maintenance'">{{ i18n(notification.category) }}</span>
-      </div>
+        <div class="row mt-3">
+            <div class="col-auto">
+                <span class="badge badge-light badge-pill" v-if="notification.category === 'notice'">{{ i18n(notification.category) }}</span>
+                <span class="badge badge-danger badge-pill" v-if="notification.category === 'important'">{{ i18n(notification.category) }}</span>
+                <span class="badge badge-warning badge-pill" v-if="notification.category === 'maintenance'">{{ i18n(notification.category) }}</span>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-4 col-md-2 text-muted">
+                <%= __('Publication start date')%>
+            </div>
+            <div class="col-12 col-md-10">
+                {{ formatDate(notification.postingAt) }}
+            </div>
+        </div>
+        <div class="row mt-1">
+            <div class="col-4 col-md-2 text-muted">
+                <%= __('Subject')%>
+            </div>
+            <div class="col-12 col-md-10">
+                <span class="h6">{{ notification.subject }}</span>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col py-3 px-lg-5 border rounded">
+                <div id="viewer"></div>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col text-center">
+                <button type="button" class="btn btn-light btn-sm" @click="goForward" :disabled="disabledForward">
+                    <%= __("Forward") %>
+                </button>
+                <button type="button" class="btn btn-light btn-sm" @click="goNext" :disabled="disabledNext">
+                    <%= __("Next") %>
+                </button>
+            </div>
+        </div>
     </div>
-    <div class="row mt-3">
-      <div class="col-4 col-md-2 text-muted">
-        <%= __('Publication start date')%>
-      </div>
-      <div class="col-12 col-md-10">
-        {{ formatDate(notification.postingAt) }}
-      </div>
-    </div>
-    <div class="row mt-1">
-      <div class="col-4 col-md-2 text-muted">
-        <%= __('Subject')%>
-      </div>
-      <div class="col-12 col-md-10">
-        <span class="h6">{{ notification.subject }}</span>
-      </div>
-    </div>
-    <div class="row mt-3">
-      <div class="col py-3 px-lg-5 border rounded">
-        <div id="viewer"></div>
-      </div>
-    </div>
-    <div class="row mt-3">
-      <div class="col text-center">
-        <button type="button" class="btn btn-light btn-sm" @click="goForward" :disabled="disabledForward">
-          <%= __("Forward") %>
-        </button>
-        <button type="button" class="btn btn-light btn-sm" @click="goNext" :disabled="disabledNext">
-          <%= __("Next") %>
-        </button>
-      </div>
-    </div>
-  </div>
 </div>
 <%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>

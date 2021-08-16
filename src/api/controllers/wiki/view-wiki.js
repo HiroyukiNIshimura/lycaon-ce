@@ -33,6 +33,7 @@ module.exports = {
       no: inputs.no,
       handleId: inputs.handleId,
       concept: 0,
+      deleted: false,
     })
       .populate('tags', {
         sort: 'name',

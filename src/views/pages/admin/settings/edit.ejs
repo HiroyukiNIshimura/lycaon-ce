@@ -1,155 +1,140 @@
 <div id="admin-settings-edit" v-cloak>
-  <div class="container">
-    <ajax-form action="updateSettings" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedForm"
-      @rejected="onCloudError" :handle-parsing="handleParsingForm">
-      <h4 class="mt-5 mb-4">
-        <%= __('Setting') %>
-      </h4>
-      <hr>
-      <h5>
-        <%= __('Weekly report email delivery day') %>
-      </h5>
-      <div class="form-check form-check-inline">
-        <input type="radio" class="form-check-input" id="form-weekly-sun" value="0"
-          v-model="formData.weeklyReportDay" />
-        <label class="form-check-label day-sun" for="form-weekly-sun">
-          <%= __('Sunday') %>
-        </label>
-      </div>
-      <div class="form-check form-check-inline">
-        <input type="radio" class="form-check-input" id="form-weekly-mon" value="1"
-          v-model="formData.weeklyReportDay" />
-        <label class="form-check-label" for="form-weekly-mon">
-          <%= __('Monday') %>
-        </label>
-      </div>
-      <div class="form-check form-check-inline">
-        <input type="radio" class="form-check-input" id="form-weekly-tue" value="2"
-          v-model="formData.weeklyReportDay" />
-        <label class="form-check-label" for="form-weekly-tue">
-          <%= __('Tuesday') %>
-        </label>
-      </div>
-      <div class="form-check form-check-inline">
-        <input type="radio" class="form-check-input" id="form-weekly-wed" value="3"
-          v-model="formData.weeklyReportDay" />
-        <label class="form-check-label" for="form-weekly-wed">
-          <%= __('Wednesday') %>
-        </label>
-      </div>
-      <div class="form-check form-check-inline">
-        <input type="radio" class="form-check-input" id="form-weekly-thu" value="4"
-          v-model="formData.weeklyReportDay" />
-        <label class="form-check-label" for="form-weekly-thu">
-          <%= __('Thursday') %>
-        </label>
-      </div>
-      <div class="form-check form-check-inline">
-        <input type="radio" class="form-check-input" id="form-weekly-fri" value="5"
-          v-model="formData.weeklyReportDay" />
-        <label class="form-check-label" for="form-weekly-fri">
-          <%= __('Friday') %>
-        </label>
-      </div>
-      <div class="form-check form-check-inline">
-        <input type="radio" class="form-check-input" id="form-weekly-sat" value="6"
-          v-model="formData.weeklyReportDay" />
-        <label class="form-check-label day-sat" for="form-weekly-sat">
-          <%= __('Saturday') %>
-        </label>
-      </div>
-      <hr />
+    <div class="container">
+        <ajax-form action="updateSettings" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedForm" @rejected="onCloudError" :handle-parsing="handleParsingForm">
+            <h4 class="mt-5 mb-4">
+                <%= __('Setting') %>
+            </h4>
+            <hr/>
+            <h5>
+                <%= __('Weekly report email delivery day') %>
+            </h5>
+            <div class="form-check form-check-inline">
+                <input type="radio" class="form-check-input" id="form-weekly-sun" value="0" v-model="formData.weeklyReportDay"/>
+                <label class="form-check-label day-sun" for="form-weekly-sun">
+                    <%= __('Sunday') %>
+                </label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input type="radio" class="form-check-input" id="form-weekly-mon" value="1" v-model="formData.weeklyReportDay"/>
+                <label class="form-check-label" for="form-weekly-mon">
+                    <%= __('Monday') %>
+                </label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input type="radio" class="form-check-input" id="form-weekly-tue" value="2" v-model="formData.weeklyReportDay"/>
+                <label class="form-check-label" for="form-weekly-tue">
+                    <%= __('Tuesday') %>
+                </label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input type="radio" class="form-check-input" id="form-weekly-wed" value="3" v-model="formData.weeklyReportDay"/>
+                <label class="form-check-label" for="form-weekly-wed">
+                    <%= __('Wednesday') %>
+                </label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input type="radio" class="form-check-input" id="form-weekly-thu" value="4" v-model="formData.weeklyReportDay"/>
+                <label class="form-check-label" for="form-weekly-thu">
+                    <%= __('Thursday') %>
+                </label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input type="radio" class="form-check-input" id="form-weekly-fri" value="5" v-model="formData.weeklyReportDay"/>
+                <label class="form-check-label" for="form-weekly-fri">
+                    <%= __('Friday') %>
+                </label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input type="radio" class="form-check-input" id="form-weekly-sat" value="6" v-model="formData.weeklyReportDay"/>
+                <label class="form-check-label day-sat" for="form-weekly-sat">
+                    <%= __('Saturday') %>
+                </label>
+            </div>
+            <hr/>
 
-      <h5>
-        <%= __('Upload file') %>
-      </h5>
-      <div class="md-form" v-if="enabledFilesize">
-        <input type="number" id="form-max-upload-file-size" class="form-control" v-model="maxUploadFileSize"
-          :class="[formErrors.maxUploadFileSize || formErrors.maxUploadFileSizeMin ? 'is-invalid' : '']" />
-        <label
-          for="form-max-upload-file-size">
-          <%= __('Upload file size limit (KB)') %>
-        </label>
-        <div class="invalid-feedback" v-if="formErrors.maxUploadFileSize">
-          <%= __('Enter an integer from 1 to 51,200') %>
-        </div>
-      </div>
-      <div class="row mt-3 mb-5">
-        <div class="col">
-          <label for="ext-selector">
-            <%= __('Allowed extensions') %>
-          </label>
-          <v-tagify-select id="ext-selector" :values="selectedExts" :settings="tagifySettings" @change="onChangeExtSelector"></v-tagify-select>
-        </div>
-      </div>
+            <h5>
+                <%= __('Upload file') %>
+            </h5>
+            <div class="md-form" v-if="enabledFilesize">
+                <input type="number" id="form-max-upload-file-size" class="form-control" v-model="maxUploadFileSize" :class="[formErrors.maxUploadFileSize || formErrors.maxUploadFileSizeMin ? 'is-invalid' : '']"/>
+                <label for="form-max-upload-file-size">
+                    <%= __('Upload file size limit (KB)') %>
+                </label>
+                <div class="invalid-feedback" v-if="formErrors.maxUploadFileSize">
+                    <%= __('Enter an integer from 1 to 51,200') %>
+                </div>
+            </div>
+            <div class="row mt-3 mb-5">
+                <div class="col">
+                    <label for="ext-selector">
+                        <%= __('Allowed extensions') %>
+                    </label>
+                    <v-tagify-select id="ext-selector" :values="selectedExts" :settings="tagifySettings" @change="onChangeExtSelector"></v-tagify-select>
+                </div>
+            </div>
 
-      <hr />
+            <hr/>
 
-      <h5>
-        <%= __('Mail delivery') %>
-      </h5>
-      <div class="md-form">
-        <v-text-input type="text" id="form-from-email-address" class="form-control" :maxlength="300"
-          v-model="formData.fromEmailAddress" :class="[formErrors.fromEmailAddress ? 'is-invalid' : '']"></v-text-input>
-        <label for="form-from-email-address">
-          <%= __("'From' email address of emails sent to the outside") %>
-        </label>
-        <div class="invalid-feedback" v-if="formErrors.fromEmailAddress">
-          <%= __('Please be sure to enter it when sending an email') %>
-        </div>
-      </div>
-      <div class="md-form">
-        <v-text-input type="text" id="form-from-name" class="form-control" :maxlength="100" v-model="formData.fromName"
-          :class="[formErrors.fromName ? 'is-invalid' : '']"></v-text-input>
-        <label for="form-from-name">
-          <%= __("'From<name>' email address of emails sent to the outside") %>
-        </label>
-      </div>
-      <div class="custom-control custom-checkbox">
-        <input type="checkbox" class="custom-control-input" id="form-not-mail-send" v-model="formData.notMailSend" />
-        <label class="custom-control-label"
-          for="form-not-mail-send">
-          <%= __('Do not send email when updating threads') %>
-        </label>
-      </div>
-      <hr />
+            <h5>
+                <%= __('Mail delivery') %>
+            </h5>
+            <div class="md-form">
+                <v-text-input type="text" id="form-from-email-address" class="form-control" :maxlength="300" v-model="formData.fromEmailAddress" :class="[formErrors.fromEmailAddress ? 'is-invalid' : '']"></v-text-input>
+                <label for="form-from-email-address">
+                    <%= __("'From' email address of emails sent to the outside") %>
+                </label>
+                <div class="invalid-feedback" v-if="formErrors.fromEmailAddress">
+                    <%= __('Please be sure to enter it when sending an email') %>
+                </div>
+            </div>
+            <div class="md-form">
+                <v-text-input type="text" id="form-from-name" class="form-control" :maxlength="100" v-model="formData.fromName" :class="[formErrors.fromName ? 'is-invalid' : '']"></v-text-input>
+                <label for="form-from-name">
+                    <%= __("'From<name>' email address of emails sent to the outside") %>
+                </label>
+            </div>
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="form-not-mail-send" v-model="formData.notMailSend"/>
+                <label class="custom-control-label" for="form-not-mail-send">
+                    <%= __('Do not send email when updating threads') %>
+                </label>
+            </div>
+            <hr/>
 
-      <h5>
-        <%= __('Burndown chart') %>
-      </h5>
-      <div class="md-form">
-        <input type="number" id="form-working-hours-per-day" class="form-control" v-model="formData.workingHoursPerDay"
-          :class="[formErrors.workingHoursPerDay ? 'is-invalid' : '']" />
-        <label
-          for="form-working-hours-per-day">
-          <%= __('Working hours per day') %>
-        </label>
-        <div class="invalid-feedback" v-if="formErrors.workingHoursPerDay">
-          <%= __('Enter an integer from 1 to 24') %>
-        </div>
-      </div>
+            <h5>
+                <%= __('Burndown chart') %>
+            </h5>
+            <div class="md-form">
+                <input type="number" id="form-working-hours-per-day" class="form-control" v-model="formData.workingHoursPerDay" :class="[formErrors.workingHoursPerDay ? 'is-invalid' : '']"/>
+                <label for="form-working-hours-per-day">
+                    <%= __('Working hours per day') %>
+                </label>
+                <div class="invalid-feedback" v-if="formErrors.workingHoursPerDay">
+                    <%= __('Enter an integer from 1 to 24') %>
+                </div>
+            </div>
 
-      <div class="row">
-        <div class="col text-right">
-          <a class="btn btn-light btn-sm" href="/<%= organization.handleId %>/admin/settings"><i
-              class="fas fa-window-close"></i>
-            <%= __("Cancel") %>
-          </a>
-          <button type="submit" class="btn btn-primary btn-sm">
-            <i class="far fa-save"></i>
-            <%= __("Save") %>
-          </button>
-        </div>
-      </div>
+            <div class="row">
+                <div class="col text-right">
+                    <a class="btn btn-light btn-sm" href="/<%= organization.handleId %>/admin/settings">
+                        <i class="fas fa-window-close"></i>
+                        <%= __("Cancel") %>
+                    </a>
+                    <button type="submit" class="btn btn-primary btn-sm">
+                        <i class="far fa-save"></i>
+                        <%= __("Save") %>
+                    </button>
+                </div>
+            </div>
 
-      <div id="cloud-error" class="row">
-        <div class="col-sm-6">
-          <p class="text-danger" v-if="cloudError">
-            <%= __("An error occurred while processing the request. Please check the information and try again. If the error persists, please contact your administrator") %>
-          </p>
-        </div>
-      </div>
-    </ajax-form>
-  </div>
+            <div id="cloud-error" class="row">
+                <div class="col-sm-6">
+                    <p class="text-danger" v-if="cloudError">
+                        <%= __("An error occurred while processing the request. Please check the information and try again. If the error persists, please contact your administrator") %>
+                    </p>
+                </div>
+            </div>
+        </ajax-form>
+    </div>
 </div>
 <%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>

@@ -1,76 +1,73 @@
 <div id="admin-plan-change-upgrade-confirm" v-cloak>
-  <div class="container">
-    <h4 class="mt-3">
-      <%= __('Request a plan change with the following contents') %>
-    </h4>
-    <hr>
-    <div class="row">
-      <div class="col">
-        <dl>
-          <dt>
-            <%= __('Current plan') %>
-          </dt>
-          <dd>{{ organization.plan }}</dd>
-          <dt>
-            <%= __('Plan after change') %>
-          </dt>
-          <dd>{{ plan }}</dd>
-        </dl>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col">
-        <p>
-          <%= __('Upgrade') %>
-        </p>
-      </div>
-    </div>
+    <div class="container">
+        <h4 class="mt-3">
+            <%= __('Request a plan change with the following contents') %>
+        </h4>
+        <hr/>
+        <div class="row">
+            <div class="col">
+                <dl>
+                    <dt>
+                        <%= __('Current plan') %>
+                    </dt>
+                    <dd>{{ organization.plan }}</dd>
+                    <dt>
+                        <%= __('Plan after change') %>
+                    </dt>
+                    <dd>{{ plan }}</dd>
+                </dl>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <p>
+                    <%= __('Upgrade') %>
+                </p>
+            </div>
+        </div>
 
-    <div class="row">
-      <div class="col">
-        <p>
-          <%= __('Desired change application start date') %>: {{ changeDate }}
-        </p>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col">
-        <v-date-picker ref="calendar" :attributes="calendar" :masks="calendarMasks" :min-date='new Date()' is-inline
-          v-model="selectedDate">
-        </v-date-picker>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-sm-6">
-        <div class="text-danger" v-if="errorSelectedDate">
-          <%= __("Select the desired change application start date") %>
+        <div class="row">
+            <div class="col">
+                <p>
+                    <%= __('Desired change application start date') %>:
+                    {{ changeDate }}
+                </p>
+            </div>
         </div>
-      </div>
-    </div>
-    <div class="row mt-3">
-      <div class="col">
-        <div>
-          <%= __('It is necessary to specify the plan change application start date after 3 business days (business days specified by our company) from the application date') %><br>
-            <%= __('If the plan change application start date is less than 3 business days from the application date, the plan change application start date will be automatically set to the 3 business days') %><br>
-              <%= __('The changed plan fee will be applied from the billing amount of the month including the plan change application start date') %><br>
+        <div class="row">
+            <div class="col">
+                <v-date-picker ref="calendar" :attributes="calendar" :masks="calendarMasks" :min-date='new Date()' is-inline v-model="selectedDate"></v-date-picker>
+            </div>
         </div>
-      </div>
-    </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="text-danger" v-if="errorSelectedDate">
+                    <%= __("Select the desired change application start date") %>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col">
+                <div>
+                    <%= __('It is necessary to specify the plan change application start date after 3 business days (business days specified by our company) from the application date') %><br>
+                        <%= __('If the plan change application start date is less than 3 business days from the application date, the plan change application start date will be automatically set to the 3 business days') %><br>
+                            <%= __('The changed plan fee will be applied from the billing amount of the month including the plan change application start date') %><br></div>
+                        </div>
+                    </div>
 
 
-    <ajax-form action="requestChange" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedForm"
-      @rejected="onCloudError" :handle-parsing="handleParsingForm">
-      <div class="row mt-5">
-        <div class="col text-center">
-          <a class="btn btn-light" :href="backToUrl">
-            <%= __('Back')%>
-          </a>
-          <button type="submit" class="btn btn-primary">
-            <%= __('Apply for plan change')%>
-          </button>
-        </div>
-      </div>
-    </ajax-form>
-  </div>
-</div>
-<%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>
+                    <ajax-form action="requestChange" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedForm" @rejected="onCloudError" :handle-parsing="handleParsingForm">
+                        <div class="row mt-5">
+                            <div class="col text-center">
+                                <a class="btn btn-light" :href="backToUrl">
+                                    <%= __('Back')%>
+                                </a>
+                                <button type="submit" class="btn btn-primary">
+                                    <%= __('Apply for plan change')%>
+                                </button>
+                            </div>
+                        </div>
+                    </ajax-form>
+                </div>
+            </div>
+            <%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>

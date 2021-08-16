@@ -10,7 +10,8 @@ module.exports = {
     var list = await Thread.find({
       where: {
         status: 0,
-        dueDateAt: { '!=': null, '>': target.valueOf(), '<=': last.valueOf() },
+        dueDateAt: { '>=': target.valueOf(), '<=': last.valueOf() },
+        urgency: { '<': 6 },
       },
     });
 
@@ -21,10 +22,13 @@ module.exports = {
     for (let model of list) {
       var duedate = moment(Number(model.dueDateAt));
       var diff = Math.round(duedate.diff(target, 'days', true));
+      var urgency = 0;
       if (diff >= 0 && diff < 7) {
-        var sets = { urgency: 6 - diff };
-        await Thread.updateOne({ id: model.id }).set(sets);
+        urgency = 6 - diff;
+      } else if (diff < 0) {
+        urgency = 6;
       }
+      await Thread.updateOne({ id: model.id }).set({ urgency: urgency });
     }
   },
 };

@@ -50,7 +50,7 @@ module.exports = {
     success: {},
     notFound: {
       responseType: 'notfound',
-      description: 'The user has accessed a thread that has not joined.',
+      description: 'The user has accessed a settings that has not joined.',
     },
   },
 

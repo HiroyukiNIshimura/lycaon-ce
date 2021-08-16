@@ -69,7 +69,7 @@ module.exports = {
       timestamp: new Date().getTime(),
     };
 
-    var logPath = path.resolve(sails.config.appPath, 'logs', 'load-average.json');
+    var logPath = path.resolve(sails.config.appPath, 'share', 'load-average.json');
     var logs = [];
 
     if (fs.existsSync(logPath)) {

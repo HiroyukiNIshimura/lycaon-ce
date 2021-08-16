@@ -44,8 +44,6 @@ module.exports = {
         throw 'notFound';
       }
 
-      var room = `room-${this.req.organization.id}-wiki-${wiki.id}`;
-
       var message = {
         key: '{0} [{1}] has entered the edit of this wiki',
         params: [this.req.me.fullName, this.req.me.emailAddress],
@@ -58,7 +56,7 @@ module.exports = {
         };
       }
 
-      sails.sockets.join(this.req, room);
+      var room = `room-${this.req.organization.id}-wiki-${wiki.id}`;
       sails.sockets.broadcast(room, 'wiki-edit-in', {
         message: message,
         user: this.req.me,

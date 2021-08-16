@@ -21,6 +21,7 @@ module.exports = {
         return {
           filename: filename,
           mtime: fs.statSync(path.join(backupDir, filename)).mtime.valueOf(),
+          utc: filename.replace('backup-', '').replace('.zip', ''),
         };
       }
       return false;
@@ -28,7 +29,7 @@ module.exports = {
     list = _.reject(list, (e) => {
       return !e;
     });
-    list.sort((a, b) => a.mtime - b.mtime);
+    list.sort((a, b) => Number(a.utc) - Number(b.utc));
 
     var message;
     if (this.req.session.effectMessage) {

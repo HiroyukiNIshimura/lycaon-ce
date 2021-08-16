@@ -4,7 +4,7 @@ module.exports = {
     var bot = await sails.helpers.getBot();
     var dt = new Date();
     dt.setHours(0, 0, 0, 0);
-    var target = moment(dt.valueOf()).add(-1, 'days');
+    var range = moment(dt.valueOf()).add(-5, 'days');
 
     for (let team of await Team.find({ deleted: false })) {
       var index = _.findIndex(bot.teams, (o) => {
@@ -16,7 +16,7 @@ module.exports = {
       }
 
       var threads = await Thread.find({
-        where: { status: 0, urgency: 6, dueDateAt: { '<=': target.valueOf() }, team: team.id },
+        where: { status: 0, urgency: 6, dueDateAt: { '>=': range.valueOf(), '<': dt.valueOf() }, team: team.id },
       }).populate('activities', {
         where: {
           type: 'create-sneeze',

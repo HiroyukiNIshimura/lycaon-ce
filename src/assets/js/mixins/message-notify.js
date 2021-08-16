@@ -1,3 +1,4 @@
+/* eslint-disable */
 const messageNotify = {
   data: function () {
     return {

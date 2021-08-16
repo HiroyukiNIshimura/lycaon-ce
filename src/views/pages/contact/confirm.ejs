@@ -1,207 +1,207 @@
 <div id="contact-confirm" v-cloak>
-  <div class="container">
-    <div id="cloud-error" class="row">
-      <div class="col-sm-6">
-        <p class="text-danger" v-if="cloudError">
-          <%= __("An error occurred while processing the request. Please check the information and try again. If the error persists, please contact your administrator") %>
-        </p>
-      </div>
-    </div>
+    <div class="container">
+        <div id="cloud-error" class="row">
+            <div class="col-sm-6">
+                <p class="text-danger" v-if="cloudError">
+                    <%= __("An error occurred while processing the request. Please check the information and try again. If the error persists, please contact your administrator") %>
+                </p>
+            </div>
+        </div>
 
-    <h4>
-      <%= __('Inquiry form') %>
-    </h4>
-    <hr>
-    <div class="row">
-      <div class="col">
-        <%- partial ('step-area.ejs', { clazz: 'step02-now' }) %>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col">
-        <div>
-          <%= __('The details you have entered are as follows. Please check if there are any mistakes')%>
-        </div>
-        <div>
-          <%= __("Especially for the email address, we will not be able to reply if there is an error. Please be sure to check it")%>
-        </div>
-      </div>
-    </div>
-    <div class="row mt-5">
-      <div class="col">
-        <h4 class="assistance">
-          <%= __('Please check the content of your inquiry')%>
+        <h4>
+            <%= __('Inquiry form') %>
         </h4>
-      </div>
-    </div>
-    <div class="row mt-3">
-      <div class="col">
-        <dl>
-          <dt>
-            <%= __('Inquiry') %>
-          </dt>
-          <dd>
-            {{formData.contents}}
-          </dd>
-          <dd v-if="category">
-            ( {{category}} )
-          </dd>
-        </dl>
-      </div>
-    </div>
-    <div class="row mt-3">
-      <div class="col">
-        <h4 class="assistance">
-          <%= __('Please check your customer information')%>
-        </h4>
-      </div>
-    </div>
-    <div class="row mt-3">
-      <div class="col">
-        <dl>
-          <dt>
-            <%= __('Full Name') %>
-          </dt>
-          <dd>
-            {{formData.fullName}}
-          </dd>
-        </dl>
-        <dl>
-          <dt>
-            <%= __("Mail Address") %>
-          </dt>
-          <dd>
-            {{formData.emailAddress}}
-          </dd>
-        </dl>
-        <dl>
-          <dt>
-            <%= __("Organization name") %>
-          </dt>
-          <dd>
-            {{formData.organization}}
-          </dd>
-        </dl>
-        <dl>
-          <dt>
-            <%= __("Postal code") %>
-          </dt>
-          <dd>
-            {{formData.zipCode}}
-          </dd>
-        </dl>
-        <dl>
-          <dt>
-            <%= __("Prefectures") %>
-          </dt>
-          <dd>
-            {{formData.prefecture}}
-          </dd>
-        </dl>
-        <dl>
-          <dt>
-            <%= __("City name") %>
-          </dt>
-          <dd>
-            {{formData.city}}
-          </dd>
-        </dl>
-        <dl>
-          <dt>
-            <%= __("Address etc") %>
-          </dt>
-          <dd>
-            {{formData.street}}
-          </dd>
-        </dl>
-        <dl>
-          <dt>
-            <%= __("Name of buildings etc") %>
-          </dt>
-          <dd>
-            {{formData.building}}
-          </dd>
-        </dl>
-        <dl>
-          <dt>
-            <%= __('Phone number') %>
-          </dt>
-          <dd>
-            {{formData.phoneNo}}
-          </dd>
-        </dl>
-      </div>
-    </div>
-    <div class="row mt-3">
-      <div class="col">
-        <h4 class="assistance">
-          <%= __('Handling of personal information')%>
-        </h4>
-      </div>
-    </div>
-    <div class="row mt-3">
-      <div class="col">
-        <dl>
-          <dt>
-            <%= __('Agree to the terms and conditions')%>
-          </dt>
-          <dd>
-            <%= __('I agree to the handling of personal information')%>
-          </dd>
-        </dl>
-      </div>
-    </div>
-
-    <div class="row mt-3 align-items-center">
-      <div class="col-auto">
-        <img id="captcha" :src="image" width="250" />
-      </div>
-      <div class="col-3 mt-3">
-        <button type="button" class="btn btn-success btn-sm" @click="reloadCaptcha">
-          <%= __("I can't read this character") %>
-        </button>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-sm-6">
-        <div class="md-form">
-          <label for="form-captcha-token"><span class="badge badge-pill badge-danger mr-2">
-              <%= __('required') %>
-            </span>
-            <%= __("Please enter the 5 letters in the picture above") %>
-          </label>
-          <v-text-input class="form-control" id="form-captcha-token" type="text" :maxlength="5"
-            :class="[formErrors.captchaToken ? 'is-invalid' : '']"
-            v-model.trim="formData.captchaToken"></v-text-input>
-          <div class="invalid-feedback" v-if="formErrors.captchaToken">
-            <%= __("Please enter the 5 letters in the picture above") %>
-          </div>
+        <hr/>
+        <div class="row">
+            <div class="col">
+                <%- partial ('step-area.ejs', { clazz: 'step02-now' }) %>
+            </div>
         </div>
-      </div>
-    </div>
-
-    <div class="row mt-5">
-      <div class="col text-center">
-        <div>
-          <%= __('If the above contents are correct, click the [Send with this contents] button')%>
+        <div class="row">
+            <div class="col">
+                <div>
+                    <%= __('The details you have entered are as follows. Please check if there are any mistakes')%>
+                </div>
+                <div>
+                    <%= __("Especially for the email address, we will not be able to reply if there is an error. Please be sure to check it")%>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-
-    <ajax-form action="registInquery" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedForm"
-      @rejected="onCloudError" :handle-parsing="handleParsingForm">
-      <honeypot :form-data="formData"></honeypot>
-      <div class="row">
-        <div class="col text-center">
-          <a href="/contact" class="btn btn-link">
-            <%= __('Correct the input contents')%>
-          </a>
-          <button type="submit" class="btn btn-amber btn-lg">
-            <%= __('Send with this content')%>
-          </button>
+        <div class="row mt-5">
+            <div class="col">
+                <h4 class="assistance">
+                    <%= __('Please check the content of your inquiry')%>
+                </h4>
+            </div>
         </div>
-      </div>
-    </ajax-form>
-  </div>
+        <div class="row mt-3">
+            <div class="col">
+                <dl>
+                    <dt>
+                        <%= __('Inquiry') %>
+                    </dt>
+                    <dd>
+                        {{ formData.contents }}
+                    </dd>
+                    <dd v-if="category">
+                        (
+                        {{ category }}
+                        )
+                    </dd>
+                </dl>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col">
+                <h4 class="assistance">
+                    <%= __('Please check your customer information')%>
+                </h4>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col">
+                <dl>
+                    <dt>
+                        <%= __('Full Name') %>
+                    </dt>
+                    <dd>
+                        {{ formData.fullName }}
+                    </dd>
+                </dl>
+                <dl>
+                    <dt>
+                        <%= __("Mail Address") %>
+                    </dt>
+                    <dd>
+                        {{ formData.emailAddress }}
+                    </dd>
+                </dl>
+                <dl>
+                    <dt>
+                        <%= __("Organization name") %>
+                    </dt>
+                    <dd>
+                        {{ formData.organization }}
+                    </dd>
+                </dl>
+                <dl>
+                    <dt>
+                        <%= __("Postal code") %>
+                    </dt>
+                    <dd>
+                        {{ formData.zipCode }}
+                    </dd>
+                </dl>
+                <dl>
+                    <dt>
+                        <%= __("Prefectures") %>
+                    </dt>
+                    <dd>
+                        {{ formData.prefecture }}
+                    </dd>
+                </dl>
+                <dl>
+                    <dt>
+                        <%= __("City name") %>
+                    </dt>
+                    <dd>
+                        {{ formData.city }}
+                    </dd>
+                </dl>
+                <dl>
+                    <dt>
+                        <%= __("Address etc") %>
+                    </dt>
+                    <dd>
+                        {{ formData.street }}
+                    </dd>
+                </dl>
+                <dl>
+                    <dt>
+                        <%= __("Name of buildings etc") %>
+                    </dt>
+                    <dd>
+                        {{ formData.building }}
+                    </dd>
+                </dl>
+                <dl>
+                    <dt>
+                        <%= __('Phone number') %>
+                    </dt>
+                    <dd>
+                        {{ formData.phoneNo }}
+                    </dd>
+                </dl>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col">
+                <h4 class="assistance">
+                    <%= __('Handling of personal information')%>
+                </h4>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col">
+                <dl>
+                    <dt>
+                        <%= __('Agree to the terms and conditions')%>
+                    </dt>
+                    <dd>
+                        <%= __('I agree to the handling of personal information')%>
+                    </dd>
+                </dl>
+            </div>
+        </div>
+
+        <div class="row mt-3 align-items-center">
+            <div class="col-auto">
+                <img id="captcha" :src="image" width="250"/>
+            </div>
+            <div class="col-3 mt-3">
+                <button type="button" class="btn btn-success btn-sm" @click="reloadCaptcha">
+                    <%= __("I can't read this character") %>
+                </button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="md-form">
+                    <label for="form-captcha-token">
+                        <span class="badge badge-pill badge-danger mr-2">
+                            <%= __('required') %>
+                        </span>
+                        <%= __("Please enter the 5 letters in the picture above") %>
+                    </label>
+                    <v-text-input class="form-control" id="form-captcha-token" type="text" :maxlength="5" :class="[formErrors.captchaToken ? 'is-invalid' : '']" v-model.trim="formData.captchaToken"></v-text-input>
+                    <div class="invalid-feedback" v-if="formErrors.captchaToken">
+                        <%= __("Please enter the 5 letters in the picture above") %>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-5">
+            <div class="col text-center">
+                <div>
+                    <%= __('If the above contents are correct, click the [Send with this contents] button')%>
+                </div>
+            </div>
+        </div>
+
+        <ajax-form action="registInquery" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedForm" @rejected="onCloudError" :handle-parsing="handleParsingForm">
+            <honeypot :form-data="formData"></honeypot>
+            <div class="row">
+                <div class="col text-center">
+                    <a href="/contact" class="btn btn-link">
+                        <%= __('Correct the input contents')%>
+                    </a>
+                    <button type="submit" class="btn btn-amber btn-lg">
+                        <%= __('Send with this content')%>
+                    </button>
+                </div>
+            </div>
+        </ajax-form>
+    </div>
 </div>
 <%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>

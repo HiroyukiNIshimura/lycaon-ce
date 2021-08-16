@@ -1,33 +1,33 @@
 <% /* Note: This is injected into `views/layouts/layout-email.ejs` */ %>
 
-  <h3 style="margin-bottom: 0px">
+<h3 style="margin-bottom: 0px">
     <%= __('Notice from the system') %>
-  </h3>
+</h3>
 
-  <p>
+<p>
     <%= __('This is a notification from a system that you have missed since your last login') %>
-  </p>
+</p>
 
-  <% for (var item of notifications) { %>
+<% for (var item of notifications) { %>
     <div style="margin-bottom: 5px">
-      <p>
-        <%= item.displayDate %>
-      </p>
-      <p>
-        <%= item.subject %>
-      </p>
-      <a href="<%= url.resolve(sails.config.custom.baseUrl, `/notification/${item.id}`) %>">
-        <%= __('see next') %>
-      </a>
-    </div>
-    <% } %>
-
-      <div style="margin-top: 5px">
-        <a href="<%= url.resolve(sails.config.custom.baseUrl, `/notification`) %>">
-          <%= __('Check notifications from the system') %>
+        <p>
+            <%= item.displayDate %>
+        </p>
+        <p>
+            <%= item.subject %>
+        </p>
+        <a href="<%= url.resolve(sails.config.custom.baseUrl, `/notification/${item.id}`) %>">
+            <%= __('see next') %>
         </a>
-      </div>
-      <hr>
+    </div>
+<% } %>
 
-      <p style="margin-bottom: 5px">Sincerely,</p>
-      <p style="margin-top: 0px">Team Lycaon</p>
+<div style="margin-top: 5px">
+    <a href="<%= url.resolve(sails.config.custom.baseUrl, `/notification`) %>">
+        <%= __('Check notifications from the system') %>
+    </a>
+</div>
+<hr/>
+
+<p style="margin-bottom: 5px">Sincerely,</p>
+<p style="margin-top: 0px">Team Lycaon</p>

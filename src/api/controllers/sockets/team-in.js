@@ -39,10 +39,13 @@ module.exports = {
     }
 
     var room = `room-${this.req.organization.id}-team-${team.id}`;
-    sails.sockets.join(this.req, room);
-    sails.sockets.broadcast(room, 'team-in', {
-      message: message,
-      user: this.req.me,
+    sails.sockets.join(this.req, room, (err) => {
+      if (!err) {
+        sails.sockets.broadcast(room, 'team-in', {
+          message: message,
+          user: this.req.me,
+        });
+      }
     });
 
     return {};

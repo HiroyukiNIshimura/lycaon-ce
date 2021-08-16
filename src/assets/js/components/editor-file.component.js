@@ -100,7 +100,7 @@ parasails.registerComponent('editorFile', {
             <small v-if="mode === 'update'">
               <a class="mr-1 hyper-link-icon" href="javascript:void(0)" data-toggle="popover" data-placement="top" :data-content="hyperLink(item)"><i class="fas fa-external-link-alt"></i></a>
               <i class="fas fa-paperclip"></i>
-              <a class="mr-2" :class="[hits[item.id] ? 'hit-active': '']" :href="downloadAppendix(item, index)" rel="noopener">{{ item.name }} <i class="fas fa-cloud-download-alt fa-lg"></i></a> <lycaon-timestamp :at="item.createdAt" format="timeago" :translator="translator"></lycaon-timestamp>
+              <a class="mr-2" :class="[hits[item.id] ? 'hit-active': '']" :href="downloadAppendix(item, index)" rel="noopener" :aria-label="item.name" data-microtip-position="top" data-microtip-size="medium" role="tooltip">{{ truncate(item.name, 24) }} <i class="fas fa-cloud-download-alt fa-lg"></i></a> <lycaon-timestamp :at="item.createdAt" format="timeago" :translator="translator"></lycaon-timestamp>
               <user-identity :user="item.owner" :organization="organization" size="sm"></user-identity>
               {{ i18n("Attached file") }}
               <a href="javascript:void(0)" @click="showDeleteDialog(item, index)"><i class="far fa-trash-alt" v-if="!hiddenUpload"></i></a>
@@ -108,7 +108,7 @@ parasails.registerComponent('editorFile', {
             <small v-else>
               <a class="mr-1 hyper-link-icon" href="javascript:void(0)" data-toggle="popover" data-placement="top" :data-content="hyperLink(item)"><i class="fas fa-external-link-alt"></i></a>
               <i class="fas fa-paperclip"></i>
-              <span :class="[hits[item.id] ? 'hit-active': '']">{{ item.name }} / {{ formatter.format(item.size) }}{{ i18n("byte") }}</span>
+              <span :class="[hits[item.id] ? 'hit-active': '']" :aria-label="item.name" data-microtip-position="top" data-microtip-size="medium" role="tooltip">{{ truncate(item.name, 24) }} / {{ formatter.format(item.size) }}{{ i18n("byte") }}</span>
               <a href="javascript:void(0)" @click="showDeleteDialog(item, index)" v-if="!hiddenUpload"><i class="far fa-trash-alt"></i></a>
             </small>
           </li>
@@ -192,6 +192,13 @@ parasails.registerComponent('editorFile', {
     },
     hyperLink: function (item) {
       return item.virtualUrl;
+    },
+    truncate: function (text, length) {
+      var chars = Array.from(text);
+      if (chars.length < length) {
+        return text;
+      }
+      return chars.slice(0, length).join('') + '...';
     },
   },
   computed: {

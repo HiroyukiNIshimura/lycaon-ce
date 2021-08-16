@@ -10,7 +10,7 @@
 <%= __('close') %> = <%= team.closeQty %>
 
 <%= __('Expired thread') %>
-<% if(team.nears.length > 0) { %>
+<% if(team.orvers.length > 0) { %>
 <% for (var orver of team.orvers) { %>
 <%= __('Deadline') %>：<%= orver.dueDateFormated %>
 

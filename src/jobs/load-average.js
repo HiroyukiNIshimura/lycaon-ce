@@ -7,7 +7,13 @@ const moment = require('moment');
 module.exports = {
   //
   sampling: async function () {
-    var logPath = path.resolve(sails.config.appPath, 'logs', 'load-average.json');
+    const share = path.resolve(sails.config.appPath, 'share');
+
+    if (!fs.existsSync(share)) {
+      fs.mkdirSync(share);
+    }
+
+    var logPath = path.join(share, 'load-average.json');
 
     var logs = [];
 
@@ -34,7 +40,7 @@ module.exports = {
     fs.writeFileSync(logPath, JSON.stringify(logs));
   },
   destroy: function () {
-    var logPath = path.resolve(sails.config.appPath, 'logs', 'load-average.json');
+    var logPath = path.resolve(sails.config.appPath, 'share', 'load-average.json');
     if (fs.existsSync(logPath)) {
       fs.unlinkSync(logPath);
     }
