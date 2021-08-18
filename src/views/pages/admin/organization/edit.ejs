@@ -1,78 +1,78 @@
 <div id="admin-organization-edit" v-cloak>
-    <div class="container">
-        <ajax-form action="updateMyOrganization" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedForm" @rejected="onCloudError" :handle-parsing="handleParsingForm">
-            <h4 class="mt-5 mb-4">
-                <%= __('Organization information') %>
-            </h4>
-            <hr/>
-            <div class="md-form">
-                <label for="name">
-                    <span class="badge badge-pill badge-danger mr-2">
-                        <%= __('required') %>
-                    </span>
-                    <%= __("Organization name") %>
-                </label>
-                <v-text-input class="form-control" id="name" name="name" type="text" :maxlength="100" :class="[formErrors.name || formErrors.nameLength ? 'is-invalid' : '']" v-model.trim="formData.name"></v-text-input>
-                <div class="invalid-feedback" v-if="formErrors.name">
-                    <%= __("Please enter the organization name") %>
-                </div>
-                <div class="invalid-feedback" v-if="formErrors.nameLength">
-                    <%= __("Please enter within {0} characters").format(100) %>
-                </div>
-            </div>
-            <div class="md-form">
-                <label for="fullName">
-                    <span class="badge badge-pill badge-danger mr-2">
-                        <%= __('required') %>
-                    </span>
-                    <%= __("Representative name") %>
-                </label>
-                <v-text-input class="form-control" id="fullName" name="fullName" type="text" :maxlength="120" :class="[formErrors.fullName || formErrors.fullNameLength ? 'is-invalid' : '']" v-model.trim="formData.fullName"></v-text-input>
-                <div class="invalid-feedback" v-if="formErrors.fullName">
-                    <%= __("Please enter the representative name") %>
-                </div>
-                <div class="invalid-feedback" v-if="formErrors.fullNameLength">
-                    <%= __("Please enter within {0} characters").format(120) %>
-                </div>
-            </div>
-            <div class="md-form">
-                <label for="emailAddress">
-                    <span class="badge badge-pill badge-danger mr-2">
-                        <%= __('required') %>
-                    </span>
-                    <%= __("Mail Address") %>
-                </label>
-                <v-text-input class="form-control" id="emailAddress" name="emailAddress" type="text" :maxlength="300" :class="[formErrors.emailAddress || formErrors.emailAddressLength ? 'is-invalid' : '']" v-model.trim="formData.emailAddress"></v-text-input>
-                <div class="invalid-feedback" v-if="formErrors.emailAddress">
-                    <%= __("Please enter a valid email address") %>
-                </div>
-                <div class="invalid-feedback" v-if="formErrors.emailAddressLength">
-                    <%= __("Please enter within {0} characters").format(300) %>
-                </div>
-            </div>
+  <div class="container">
+    <ajax-form action="updateMyOrganization" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedForm" @rejected="onCloudError" :handle-parsing="handleParsingForm">
+      <h4 class="mt-5 mb-4">
+        <%= __('Organization information') %>
+      </h4>
+      <hr />
+      <div class="md-form">
+        <label for="name">
+          <span class="badge badge-pill badge-danger mr-2">
+            <%= __('required') %>
+          </span>
+          <%= __("Organization name") %>
+        </label>
+        <v-text-input class="form-control" id="name" name="name" type="text" :maxlength="100" :class="[formErrors.name || formErrors.nameLength ? 'is-invalid' : '']" v-model.trim="formData.name"></v-text-input>
+        <div class="invalid-feedback" v-if="formErrors.name">
+          <%= __("Please enter the organization name") %>
+        </div>
+        <div class="invalid-feedback" v-if="formErrors.nameLength">
+          <%= __("Please enter within {0} characters").format(100) %>
+        </div>
+      </div>
+      <div class="md-form">
+        <label for="fullName">
+          <span class="badge badge-pill badge-danger mr-2">
+            <%= __('required') %>
+          </span>
+          <%= __("Representative name") %>
+        </label>
+        <v-text-input class="form-control" id="fullName" name="fullName" type="text" :maxlength="120" :class="[formErrors.fullName || formErrors.fullNameLength ? 'is-invalid' : '']" v-model.trim="formData.fullName"></v-text-input>
+        <div class="invalid-feedback" v-if="formErrors.fullName">
+          <%= __("Please enter the representative name") %>
+        </div>
+        <div class="invalid-feedback" v-if="formErrors.fullNameLength">
+          <%= __("Please enter within {0} characters").format(120) %>
+        </div>
+      </div>
+      <div class="md-form">
+        <label for="emailAddress">
+          <span class="badge badge-pill badge-danger mr-2">
+            <%= __('required') %>
+          </span>
+          <%= __("Mail Address") %>
+        </label>
+        <v-text-input class="form-control" id="emailAddress" name="emailAddress" type="text" :maxlength="300" :class="[formErrors.emailAddress || formErrors.emailAddressLength ? 'is-invalid' : '']" v-model.trim="formData.emailAddress"></v-text-input>
+        <div class="invalid-feedback" v-if="formErrors.emailAddress">
+          <%= __("Please enter a valid email address") %>
+        </div>
+        <div class="invalid-feedback" v-if="formErrors.emailAddressLength">
+          <%= __("Please enter within {0} characters").format(300) %>
+        </div>
+      </div>
 
-            <div class="row">
-                <div class="col text-right">
-                    <a class="btn btn-light btn-sm" href="/<%= organization.handleId %>/admin/organization">
-                        <i class="fas fa-window-close"></i>
-                        <%= __("Cancel") %>
-                    </a>
-                    <button type="submit" class="btn btn-primary btn-sm">
-                        <i class="far fa-save"></i>
-                        <%= __("Save") %>
-                    </button>
-                </div>
-            </div>
+      <div class="row">
+        <div class="col text-right">
+          <a class="btn btn-light btn-sm" href="/<%= organization.handleId %>/admin/organization">
+            <i class="fas fa-window-close"></i>
+            <%= __("Cancel") %>
+          </a>
+          <button type="submit" class="btn btn-primary btn-sm">
+            <i class="far fa-save"></i>
+            <%= __("Save") %>
+          </button>
+        </div>
+      </div>
 
-            <div id="cloud-error" class="row">
-                <div class="col-sm-6">
-                    <p class="text-danger" v-if="cloudError">
-                        <%= __("An error occurred while processing the request. Please check the information and try again. If the error persists, please contact your administrator") %>
-                    </p>
-                </div>
-            </div>
-        </ajax-form>
-    </div>
+      <div id="cloud-error" class="row">
+        <div class="col-sm-6">
+          <p class="text-danger" v-if="cloudError">
+            <%= __("An error occurred while processing the request. Please check the information and try again. If the error persists, please contact your administrator") %>
+          </p>
+        </div>
+      </div>
+    </ajax-form>
+  </div>
 
 </div>
 <%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>

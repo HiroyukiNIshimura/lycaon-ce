@@ -26,8 +26,7 @@
       </div>
     </modal>
 
-    <ajax-form id="form-delete-organization" action="deleteOrganization" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedForm"
-      @rejected="onCloudError" :handle-parsing="handleParsingForm"></ajax-form>
+    <ajax-form id="form-delete-organization" action="deleteOrganization" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedForm" @rejected="onCloudError" :handle-parsing="handleParsingForm"></ajax-form>
 
     <div class="row">
       <div class="col text-right">
@@ -57,8 +56,9 @@
       <div class="col">
         <small>
           <span>
-            <%= __("Total number of organizations") %> {{ formatter.format(records) }}
-              {{ i18nformatN('Organization', 'Organizations', records) }}
+            <%= __("Total number of organizations") %>
+            {{ formatter.format(records) }}
+            {{ i18nformatN('Organization', 'Organizations', records) }}
           </span>
         </small>
       </div>
@@ -68,72 +68,97 @@
       <div class="col-auto mb-2 ml-1" v-for="item in organizations">
         <div class="card card-width">
           <div class="card-body">
-            <h6 class="card-subtitle text-muted">{{ item.handleId }}</h6>
-            <h5 class="card-title mt-1">{{ item.name }}</h5>
+            <h6 class="card-subtitle text-muted">
+              {{ item.handleId }}
+            </h6>
+            <h5 class="card-title mt-1">
+              {{ item.name }}
+            </h5>
             <div class="card-text">
               <span class="ml-3 text-truncate">
-                <%= __("Representative") %> : {{ item.fullName }}
+                <%= __("Representative") %> :
+                {{ item.fullName }}
               </span>
             </div>
             <div class="card-text">
-              <span class="ml-3 text-truncate">{{ item.emailAddress }}</span>
+              <span class="ml-3 text-truncate">
+                {{ item.emailAddress }}</span>
             </div>
             <div class="card-text mt-3">
               <span class="mr-2">
                 <%= __("Plan") %>:
-              </span> <span class="badge" :class="planStyle(item)">{{ item.plan }}</span><span
-                class="badge badge-pill badge-danger ml-3" v-if="item.isBackOffice">BackOffice</span>
+              </span> <span class="badge" :class="planStyle(item)">
+                {{ item.plan }}</span><span class="badge badge-pill badge-danger ml-3" v-if="item.isBackOffice">BackOffice</span>
             </div>
             <hr />
             <dl>
               <dt class="card-text">
                 <%= __("Users") %>
               </dt>
-              <dd class="text-right">{{ formatter.format(item.userQty) }}</dd>
+              <dd class="text-right">
+                {{ formatter.format(item.userQty) }}
+              </dd>
               <dt class="card-text">
                 <%= __("Teams") %>
               </dt>
-              <dd class="text-right">{{ formatter.format(item.teamQty) }}</dd>
+              <dd class="text-right">
+                {{ formatter.format(item.teamQty) }}
+              </dd>
               <dt class="card-text">
                 <%= __("Categories") %>
               </dt>
-              <dd class="text-right">{{ formatter.format(item.categoryQty) }}</dd>
+              <dd class="text-right">
+                {{ formatter.format(item.categoryQty) }}
+              </dd>
               <dt class="card-text">
                 <%= __("Tags") %>
               </dt>
-              <dd class="text-right">{{ formatter.format(item.tagQty) }}</dd>
+              <dd class="text-right">
+                {{ formatter.format(item.tagQty) }}
+              </dd>
               <dt class="card-text">
                 <%= __("Threads") %>
               </dt>
-              <dd class="text-right">{{ formatter.format(item.threadQty) }}</dd>
+              <dd class="text-right">
+                {{ formatter.format(item.threadQty) }}
+              </dd>
               <dt class="card-text">
                 <%= __("Wikis") %>
               </dt>
-              <dd class="text-right">{{ formatter.format(item.wikiQty) }}</dd>
+              <dd class="text-right">
+                {{ formatter.format(item.wikiQty) }}
+              </dd>
               <dt class="card-text">
                 <%= __("Circular notices") %>
               </dt>
-              <dd class="text-right">{{ formatter.format(item.voteQty) }}</dd>
+              <dd class="text-right">
+                {{ formatter.format(item.voteQty) }}
+              </dd>
               <dt class="card-text">
                 <%= __("Thread attachment size") %>
               </dt>
-              <dd class="text-right">{{ floatFormatter.format(item.threadItemSize / 1024/ 1024) }}MB</dd>
+              <dd class="text-right">
+                {{ floatFormatter.format(item.threadItemSize / 1024/ 1024) }}MB
+              </dd>
               <dt class="card-text">
                 <%= __("Wiki attachment size") %>
               </dt>
-              <dd class="text-right">{{ floatFormatter.format(item.wikiItemSize / 1024/ 1024) }}MB</dd>
+              <dd class="text-right">
+                {{ floatFormatter.format(item.wikiItemSize / 1024/ 1024) }}MB
+              </dd>
               <dt class="card-text">
                 <%= __("Circular notice attachment size") %>
               </dt>
-              <dd class="text-right">{{ floatFormatter.format(item.voteItemSize / 1024/ 1024) }}MB</dd>
+              <dd class="text-right">
+                {{ floatFormatter.format(item.voteItemSize / 1024/ 1024) }}MB
+              </dd>
             </dl>
             <div class="text-right" v-if="!item.isBackOffice">
               <div class="btn-group btn-group-sm">
                 <a :href="link(item)" class="btn btn-info"><i class="far fa-edit"></i>
                   <%= __("Edit") %>
                 </a>
-                <button type="button" class="btn btn-info btn-sm dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true"
-                  aria-expanded="false">
+                <button type="button" class="btn btn-info btn-sm dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <span class="sr-only">Toggle Dropdown</span>
                 </button>
                 <div class="dropdown-menu">

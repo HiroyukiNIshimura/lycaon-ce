@@ -5,7 +5,8 @@
         <div class="row d-none d-sm-block">
           <div class="col">
             <user-identity :user="item.sneeze.owner" :organization="organization" size=""></user-identity>
-            <small class="card-subtitle ml-2 text-muted">[ <a :href="sneezeAnker(item.sneeze)">comment-{{ item.sneeze.serialNumber }}</a> ]</small>
+            <small class="card-subtitle ml-2 text-muted">[ <a :href="sneezeAnker(item.sneeze)">comment-
+                {{ item.sneeze.serialNumber }}</a> ]</small>
             <small class="card-subtitle text-muted">
               - <lycaon-timestamp :at="item.sneeze.createdAt" format="timeago" :translator="commentTranslator"></lycaon-timestamp></small>
             <clipboard class="ml-2" :data="item.sneeze.comment"></clipboard>
@@ -19,7 +20,8 @@
         </div>
         <div class="row d-block d-sm-none">
           <div class="col">
-            <small class="card-subtitle ml-2 text-muted">[ <a :href="sneezeAnker(item.sneeze)">comment-{{ item.sneeze.serialNumber }}</a> ]</small>
+            <small class="card-subtitle ml-2 text-muted">[ <a :href="sneezeAnker(item.sneeze)">comment-
+                {{ item.sneeze.serialNumber }}</a> ]</small>
             <small class="card-subtitle text-muted">
               - <lycaon-timestamp :at="item.sneeze.createdAt" format="timeago" :translator="commentTranslator"></lycaon-timestamp></small>
             <clipboard class="ml-2" :data="item.sneeze.comment"></clipboard>
@@ -57,8 +59,7 @@
           <%= __("Comment size is too large") %>
         </div>
         <div :id="getCommentEditorIdentityWrapper(item.sneeze)" class="sneeze-editor" style="display: none" v-show="showSneezeEditor(item.sneeze)">
-          <ajax-form action="updateSneeze" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedSneezeUpdateForm" @rejected="onCloudError"
-            :handle-parsing="handleParsingSneezeUpdateForm">
+          <ajax-form action="updateSneeze" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedSneezeUpdateForm" @rejected="onCloudError" :handle-parsing="handleParsingSneezeUpdateForm">
             <div class="row mt-2">
               <div class="col">
                 <div :id="getCommentEditorIdentity(item.sneeze)"></div>

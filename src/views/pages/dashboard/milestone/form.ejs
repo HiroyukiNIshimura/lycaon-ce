@@ -2,8 +2,7 @@
   <label for="form-name" class="md-textarea-label">
     <%= __("Name") %>
   </label>
-  <v-text-input type="text" :maxlength="20" id="form-name" class="form-control" :class="[formErrors.name ? 'is-invalid' : '']"
-    v-model="formData.name"></v-text-input>
+  <v-text-input type="text" :maxlength="20" id="form-name" class="form-control" :class="[formErrors.name ? 'is-invalid' : '']" v-model="formData.name"></v-text-input>
   <div class="invalid-feedback" v-if="formErrors.name">
     <%= __("Please enter a name") %>
   </div>
@@ -20,8 +19,7 @@
     </div>
     <div class="row">
       <div class="col">
-        <v-date-picker :columns="$screens({ default: 1, lg: 2 })" ref="calendar" :attributes="calendar"
-          :masks="calendarMasks" is-inline v-model="selectedDateRang" is-range></v-date-picker>
+        <v-date-picker :columns="$screens({ default: 1, lg: 2 })" ref="calendar" :attributes="calendar" :masks="calendarMasks" is-inline v-model="selectedDateRang" is-range></v-date-picker>
       </div>
     </div>
   </div>
@@ -31,10 +29,9 @@
   <div class="col">
     <label for="form-responsible">
       <%= __("Person in charge") %>
-        <small class="ml-2"><a href="javascript:void(0)"
-            @click="chooseMe">
-            <%= __("Choose yourself") %>
-          </a></small>
+      <small class="ml-2"><a href="javascript:void(0)" @click="chooseMe">
+          <%= __("Choose yourself") %>
+        </a></small>
     </label>
   </div>
 </div>

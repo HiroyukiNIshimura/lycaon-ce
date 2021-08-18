@@ -18,8 +18,12 @@
               <%= __("The subject has changed") %>
             </h6>
             <ul>
-              <li class="text-primary">-{{ wiki.subject }}</li>
-              <li class="text-danger">+{{ newSubject }}</li>
+              <li class="text-primary">-
+                {{ wiki.subject }}
+              </li>
+              <li class="text-danger">+
+                {{ newSubject }}
+              </li>
             </ul>
           </div>
         </div>
@@ -30,12 +34,17 @@
             </h6>
             <div v-for="item in diff">
               <div v-if="item.prefix === '+'" class="text-danger">
-                {{ item.prefix }}{{ item.value }}
+                {{ item.prefix }}
+                {{ item.value }}
               </div>
               <div v-else-if="item.prefix === '-'" class="text-primary">
-                {{ item.prefix }}{{ item.value }}
+                {{ item.prefix }}
+                {{ item.value }}
               </div>
-              <div class="text-truncate" v-else>{{ item.prefix }}{{ item.value }}</div>
+              <div class="text-truncate" v-else>
+                {{ item.prefix }}
+                {{ item.value }}
+              </div>
             </div>
           </div>
         </div>

@@ -3,8 +3,7 @@
     <div class="card mt-2">
       <div class="card-header" id="heading-query">
         <small class="mb-0">
-          <button class="btn btn-link btn-sm text-primary" type="button" data-toggle="collapse"
-            data-target="#collapse-query" aria-expanded="false" aria-controls="collapse-query">
+          <button class="btn btn-link btn-sm text-primary" type="button" data-toggle="collapse" data-target="#collapse-query" aria-expanded="false" aria-controls="collapse-query">
             <%= __('Narrow down the threads to display') %>
           </button>
           <span class="text-danger" v-if="filtered">
@@ -35,8 +34,7 @@
               <small><label for="query-category">
                   <%= __('Category') %>
                 </label></small>
-              <select class="browser-default custom-select custom-select-sm" id="query-category"
-                v-model="query.category">
+              <select class="browser-default custom-select custom-select-sm" id="query-category" v-model="query.category">
                 <option value="">
                   <%= __('All') %>
                 </option>
@@ -47,14 +45,11 @@
             </div>
             <div class="col-auto mb-1">
               <small><label for="query-responsible">
-                  <%= __('Person in charge') %><small class="ml-2"><a
-                        href="javascript:void(0)"
-                        @click="chooseMe(0)">
-                        <%= __('Choose yourself') %>
-                      </a></small>
+                  <%= __('Person in charge') %><small class="ml-2"><a href="javascript:void(0)" @click="chooseMe(0)">
+                      <%= __('Choose yourself') %>
+                    </a></small>
                 </label></small>
-              <select class="browser-default custom-select custom-select-sm" id="query-responsible"
-                v-model="query.responsible">
+              <select class="browser-default custom-select custom-select-sm" id="query-responsible" v-model="query.responsible">
                 <option value="">
                   <%= __('All') %>
                 </option>
@@ -81,10 +76,9 @@
             </div>
             <div class="col-auto mb-1">
               <small><label for="query-owner">
-                  <%= __('Author') %><small class="ml-2"><a href="javascript:void(0)"
-                        @click="chooseMe(1)">
-                        <%= __('Choose yourself') %>
-                      </a></small>
+                  <%= __('Author') %><small class="ml-2"><a href="javascript:void(0)" @click="chooseMe(1)">
+                      <%= __('Choose yourself') %>
+                    </a></small>
                 </label></small>
               <select class="browser-default custom-select custom-select-sm" id="query-owner" v-model="query.owner">
                 <option value="">
@@ -99,8 +93,7 @@
               <small><label for="query-priority">
                   <%= __('Importance') %>
                 </label></small>
-              <select class="browser-default custom-select custom-select-sm" id="query-priority"
-                v-model="query.priority">
+              <select class="browser-default custom-select custom-select-sm" id="query-priority" v-model="query.priority">
                 <option value="">
                   <%= __('All') %>
                 </option>
@@ -135,8 +128,7 @@
               <small><label for="query-milestone">
                   <%= __('Milestone') %>
                 </label></small>
-              <select class="browser-default custom-select custom-select-sm" id="query-milestone"
-                v-model="query.milestone">
+              <select class="browser-default custom-select custom-select-sm" id="query-milestone" v-model="query.milestone">
                 <option value="">
                   <%= __('All') %>
                 </option>
@@ -191,8 +183,7 @@
                 <div class="col">
                   <div class="custom-control custom-checkbox">
                     <input type="checkbox" class="custom-control-input" id="query-local" v-model="query.local" />
-                    <label class="custom-control-label"
-                      for="query-local"><small>
+                    <label class="custom-control-label" for="query-local"><small>
                         <%= __('Show only private threads') %>
                       </small></label>
                   </div>
@@ -202,8 +193,7 @@
                 <div class="col">
                   <div class="custom-control custom-checkbox">
                     <input type="checkbox" class="custom-control-input" id="query-sustain" v-model="query.sustain" />
-                    <label class="custom-control-label"
-                      for="query-sustain"><small>
+                    <label class="custom-control-label" for="query-sustain"><small>
                         <%= __('Keep this filter condition for a while') %>
                       </small></label>
                   </div>

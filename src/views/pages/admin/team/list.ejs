@@ -27,8 +27,7 @@
     </modal>
     <div class="row">
       <div class="col text-right">
-        <a class="btn btn-info btn-sm" href="/<%= organization.handleId %>/admin/team/create"><i
-            class="fas fa-plus-circle"></i>
+        <a class="btn btn-info btn-sm" href="/<%= organization.handleId %>/admin/team/create"><i class="fas fa-plus-circle"></i>
           <%= __("Add new team") %>
         </a>
       </div>
@@ -54,8 +53,9 @@
       <div class="col">
         <small>
           <span>
-            <%= __("Total number of teams") %> {{ formatter.format(records) }}
-              {{ i18nformatN('Team', 'Teams', records) }}
+            <%= __("Total number of teams") %>
+            {{ formatter.format(records) }}
+            {{ i18nformatN('Team', 'Teams', records) }}
           </span>
         </small>
       </div>
@@ -70,7 +70,8 @@
         <div class="card card-width h-100 card-selectable">
           <div class="card-body">
             <span class="card-title">
-              <a class="" :href="link(item)">{{ item.name }}</a>
+              <a class="" :href="link(item)">
+                {{ item.name }}</a>
             </span>
             <p class="card-text text-truncate">
               {{ item.description }}
@@ -81,13 +82,11 @@
                 <a :href="link(item)" class="btn btn-info"><i class="far fa-edit"></i>
                   <%= __("Edit") %>
                 </a>
-                <button type="button" class="btn btn-info btn-sm dropdown-toggle dropdown-toggle-split"
-                  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <button type="button" class="btn btn-info btn-sm dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <span class="sr-only">Toggle Dropdown</span>
                 </button>
                 <div class="dropdown-menu">
-                  <a class="dropdown-item" href="javascript:void(0)"
-                    @click="clickDeleteTeam(item)">
+                  <a class="dropdown-item" href="javascript:void(0)" @click="clickDeleteTeam(item)">
                     <%= __("Delete this team") %>
                   </a>
                 </div>
@@ -103,8 +102,7 @@
       </div>
     </div>
   </div>
-  <ajax-form id="delete-team-form" action="deleteTeam" :syncing.sync="syncing" :cloud-error.sync="cloudError"
-    @submitted="submittedDeleteForm" @rejected="onCloudError" :handle-parsing="handleParsingDeleteForm">
+  <ajax-form id="delete-team-form" action="deleteTeam" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedDeleteForm" @rejected="onCloudError" :handle-parsing="handleParsingDeleteForm">
   </ajax-form>
 </div>
 <%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>

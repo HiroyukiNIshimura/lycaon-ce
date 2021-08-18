@@ -2,7 +2,8 @@
   <div class="container">
     <div class="row border border-top-0 border-right-0 border-left-0 mt-3">
       <div class="col">
-        <span class="h4">{{ wiki.subject }}</span>
+        <span class="h4">
+          {{ wiki.subject }}</span>
       </div>
     </div>
     <div class="row mt-1">
@@ -19,9 +20,8 @@
         </small>
       </div>
       <div class="col">
-        <span class="badge badge-success mr-1" v-for="(item, index) in wiki.tags">{{
-          item.name
-          }}</span>
+        <span class="badge badge-success mr-1" v-for="(item, index) in wiki.tags">
+          {{ item.name }}</span>
       </div>
     </div>
 

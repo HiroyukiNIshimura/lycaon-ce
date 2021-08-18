@@ -2,8 +2,7 @@
   <label for="form-name">
     <%= __('Full Name') %>
   </label>
-  <v-text-input type="text" :maxlength="120" id="form-name" class="form-control" :class="[formErrors.name ? 'is-invalid' : '']"
-    v-model="formData.name"></v-text-input>
+  <v-text-input type="text" :maxlength="120" id="form-name" class="form-control" :class="[formErrors.name ? 'is-invalid' : '']" v-model="formData.name"></v-text-input>
   <div class="invalid-feedback" v-if="formErrors.name">
     <%= __('Please enter your full name') %>
   </div>
@@ -13,8 +12,7 @@
   <label for="form-email">
     <%= __('Mail Address') %>
   </label>
-  <v-text-input type="text" :maxlength="300" id="form-email" class="form-control"
-    :class="[formErrors.email ? 'is-invalid' : '']" v-model="formData.email"></v-text-input>
+  <v-text-input type="text" :maxlength="300" id="form-email" class="form-control" :class="[formErrors.email ? 'is-invalid' : '']" v-model="formData.email"></v-text-input>
   <div class="invalid-feedback" v-if="formErrors.email">
     <%= __('Please enter a valid email address') %>
   </div>
@@ -47,27 +45,27 @@
 </div>
 
 <% if(type==='edit' ) { %>
-  <div class="custom-control custom-checkbox mt-3" v-if="user.isSandbox === false">
-    <input type="checkbox" class="custom-control-input" id="form-deleted" v-model="formData.deleted" />
-    <label class="custom-control-label" for="form-deleted">
-      <%= __('Disable this account') %>
-    </label>
-  </div>
-  <% } %>
+<div class="custom-control custom-checkbox mt-3" v-if="user.isSandbox === false">
+  <input type="checkbox" class="custom-control-input" id="form-deleted" v-model="formData.deleted" />
+  <label class="custom-control-label" for="form-deleted">
+    <%= __('Disable this account') %>
+  </label>
+</div>
+<% } %>
 
-    <div id="cloud-error" class="row">
-      <div class="col-sm-6">
-        <p class="text-danger" v-if="cloudError === 'emailAlreadyInUse'">
-          <%= __('An account already exists that uses that email address') %>
-        </p>
-        <p class="text-danger" v-else-if="cloudError === 'unSelectedTeams'">
-          <%= __('Please select at least one team to participate in') %>
-        </p>
-        <p class="text-danger" v-else-if="cloudError === 'unplanned'">
-          <%= __('No more users can be created with the current plan. Please consider updating your plan') %>
-        </p>
-        <p class="text-danger" v-else-if="cloudError">
-          <%= __("An error occurred while processing the request. Please check the information and try again. If the error persists, please contact your administrator") %>
-        </p>
-      </div>
-    </div>
+<div id="cloud-error" class="row">
+  <div class="col-sm-6">
+    <p class="text-danger" v-if="cloudError === 'emailAlreadyInUse'">
+      <%= __('An account already exists that uses that email address') %>
+    </p>
+    <p class="text-danger" v-else-if="cloudError === 'unSelectedTeams'">
+      <%= __('Please select at least one team to participate in') %>
+    </p>
+    <p class="text-danger" v-else-if="cloudError === 'unplanned'">
+      <%= __('No more users can be created with the current plan. Please consider updating your plan') %>
+    </p>
+    <p class="text-danger" v-else-if="cloudError">
+      <%= __("An error occurred while processing the request. Please check the information and try again. If the error persists, please contact your administrator") %>
+    </p>
+  </div>
+</div>

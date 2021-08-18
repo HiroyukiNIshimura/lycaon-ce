@@ -1,10 +1,10 @@
-<ajax-form action="<%- action %>" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedForm" @rejected="onCloudError"
-  :handle-parsing="handleParsingForm">
+<ajax-form action="<%- action %>" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedForm" @rejected="onCloudError" :handle-parsing="handleParsingForm">
   <div class="row border border-top-0 border-right-0 border-left-0">
     <div class="col">
       <span class="text-muted mr-3">
         <%= __("Team") %>
-      </span><a :href="teamLink">{{ team.name }}</a>
+      </span><a :href="teamLink">
+        {{ team.name }}</a>
     </div>
   </div>
   <div class="row">
@@ -16,17 +16,16 @@
         </button>
         <button type="submit" class="btn btn-primary btn-sm">
           <% if(action==='createWiki' ) { %>
-            <i class="fas fa-plus-circle"></i>
-            <%= __("Create") %>
-              <% } else { %>
-                <i class="fas fa-save"></i>
-                <%= __("Save") %>
-                  <% } %>
+          <i class="fas fa-plus-circle"></i>
+          <%= __("Create") %>
+          <% } else { %>
+          <i class="fas fa-save"></i>
+          <%= __("Save") %>
+          <% } %>
         </button>
       </div>
       <div class="md-form">
-        <v-text-input type="text" :maxlength="200" id="wiki-subject" class="form-control" v-model.trim="formData.subject" autocomplete="wiki-subject"
-          :class="[formErrors.subject || formErrors.subjectLength ? 'is-invalid' : '']"></v-text-input>
+        <v-text-input type="text" :maxlength="200" id="wiki-subject" class="form-control" v-model.trim="formData.subject" autocomplete="wiki-subject" :class="[formErrors.subject || formErrors.subjectLength ? 'is-invalid' : '']"></v-text-input>
         <label for="wiki-subject">
           <%= __("Please enter the title of the Wiki") %>
         </label>
@@ -41,8 +40,8 @@
         <div class="col">
           <label for="wiki-tags">
             <%= __("Tags") %><small class="text-muted ml-3">
-                <%= __("You can tag up to {0}").format(10) %>
-              </small>
+              <%= __("You can tag up to {0}").format(10) %>
+            </small>
           </label>
           <v-tagify-select id="wiki-tags" :values="selectedTags" :settings="tagifySettings" @change="onChangeTags"></v-tagify-select>
         </div>
@@ -64,12 +63,12 @@
           </button>
           <button type="submit" class="btn btn-primary btn-sm">
             <% if(action==='createWiki' ) { %>
-              <i class="fas fa-plus-circle"></i>
-              <%= __("Create") %>
-                <% } else { %>
-                  <i class="fas fa-save"></i>
-                  <%= __("Save") %>
-                    <% } %>
+            <i class="fas fa-plus-circle"></i>
+            <%= __("Create") %>
+            <% } else { %>
+            <i class="fas fa-save"></i>
+            <%= __("Save") %>
+            <% } %>
           </button>
         </div>
       </div>
@@ -78,13 +77,11 @@
 </ajax-form>
 <!-- appendix -->
 <% if(action==='updateWiki' ) { %>
-  <editor-file :appendix="appendix" :organization="organization" mode="update" :delete-appendix="deleteAppendix" :download-appendix="downloadAppendix" :whitelist="witeListOfExts"
-    :add-image="addImageBlobHook" :is-uploading="isUploading" :planlimitation="planlimitation" title="wiki" :is-demosite="isDemosite">
-  </editor-file>
-  <% } else { %>
-    <editor-file :appendix="appendix" :organization="organization" mode="create" :delete-appendix="deleteAppendix" :download-appendix="downloadAppendix" :whitelist="witeListOfExts"
-      :add-image="addImageBlobHook" :is-uploading="isUploading" :planlimitation="planlimitation" title="wiki" :is-demosite="isDemosite">
-    </editor-file>
-    <% } %>
+<editor-file :appendix="appendix" :organization="organization" mode="update" :delete-appendix="deleteAppendix" :download-appendix="downloadAppendix" :whitelist="witeListOfExts" :add-image="addImageBlobHook" :is-uploading="isUploading" :planlimitation="planlimitation" title="wiki" :is-demosite="isDemosite">
+</editor-file>
+<% } else { %>
+<editor-file :appendix="appendix" :organization="organization" mode="create" :delete-appendix="deleteAppendix" :download-appendix="downloadAppendix" :whitelist="witeListOfExts" :add-image="addImageBlobHook" :is-uploading="isUploading" :planlimitation="planlimitation" title="wiki" :is-demosite="isDemosite">
+</editor-file>
+<% } %>
 
-      <image-list ref="imagelist" :show="showImageListModal" :on-hide="hideImageListModal" v-on:selected="selectedImageList"></image-list>
+<image-list ref="imagelist" :show="showImageListModal" :on-hide="hideImageListModal" v-on:selected="selectedImageList"></image-list>

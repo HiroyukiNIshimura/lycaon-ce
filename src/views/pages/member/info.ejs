@@ -1,23 +1,17 @@
 <div id="member-info" v-cloak>
   <div class="container">
-    <ajax-form id="query-message-form" action="messageList" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedMessageForm"
-      @rejected="onCloudError" :handle-parsing="handleParsingMessageForm">
+    <ajax-form id="query-message-form" action="messageList" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedMessageForm" @rejected="onCloudError" :handle-parsing="handleParsingMessageForm">
     </ajax-form>
-    <ajax-form id="create-message-form" action="createMessage" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedCreateMessageForm"
-      @rejected="onCloudError" :handle-parsing="handleParsingCreateMessageForm">
+    <ajax-form id="create-message-form" action="createMessage" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedCreateMessageForm" @rejected="onCloudError" :handle-parsing="handleParsingCreateMessageForm">
     </ajax-form>
     </v-tab>
-    <ajax-form id="query-monthly-form" action="analytics" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedMonthlyForm"
-      @rejected="onCloudError" :handle-parsing="handleParsingMonthlyForm">
+    <ajax-form id="query-monthly-form" action="analytics" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedMonthlyForm" @rejected="onCloudError" :handle-parsing="handleParsingMonthlyForm">
     </ajax-form>
-    <ajax-form id="query-daily-form" action="analytics" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedDailyForm"
-      @rejected="onCloudError" :handle-parsing="handleParsingDailyForm">
+    <ajax-form id="query-daily-form" action="analytics" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedDailyForm" @rejected="onCloudError" :handle-parsing="handleParsingDailyForm">
     </ajax-form>
-    <ajax-form id="query-hourly-form" action="analytics" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedHourlyForm"
-      @rejected="onCloudError" :handle-parsing="handleParsingHourlyForm">
+    <ajax-form id="query-hourly-form" action="analytics" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedHourlyForm" @rejected="onCloudError" :handle-parsing="handleParsingHourlyForm">
     </ajax-form>
-    <ajax-form id="query-weekly-form" action="analytics" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedWeeklyForm"
-      @rejected="onCloudError" :handle-parsing="handleParsingWeeklyForm">
+    <ajax-form id="query-weekly-form" action="analytics" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedWeeklyForm" @rejected="onCloudError" :handle-parsing="handleParsingWeeklyForm">
     </ajax-form>
 
     <div class="row">
@@ -75,9 +69,9 @@
           <div class="col">
             <div class="md-form" id="message-input">
               <i class="far fa-comment-dots prefix"></i>
-              <label for="my-message" class="md-textarea-label label-color">{{ messegeLabel }}</label>
-              <v-textarea id="my-message" class="md-textarea form-control" rows="3" :maxlength="2000"
-                :class="[formErrors.contents || formErrors.contentsLength ? 'is-invalid' : '']" v-model.trim="formData.contents" @focus="onEditorFocus" @blur="onEditorBlur"></v-textarea>
+              <label for="my-message" class="md-textarea-label label-color">
+                {{ messegeLabel }}</label>
+              <v-textarea id="my-message" class="md-textarea form-control" rows="3" :maxlength="2000" :class="[formErrors.contents || formErrors.contentsLength ? 'is-invalid' : '']" v-model.trim="formData.contents" @focus="onEditorFocus" @blur="onEditorBlur"></v-textarea>
               <div class="invalid-feedback" v-if="formErrors.contents">
                 <%= __('Please enter a message') %>
               </div>
@@ -115,13 +109,15 @@
                 </div>
                 <div class="col-auto" v-if="isMyMessage(item)">
                   <span v-if="item.readAt" v-inview:animate="'fadeInLeft'">
-                    <small class="badge badge-pill badge-success">{{ i18n('Already read') }}
+                    <small class="badge badge-pill badge-success">
+                      {{ i18n('Already read') }}
                     </small><small class="ml-3">
                       <lycaon-timestamp :at="item.readAt" format="timeago"></lycaon-timestamp>
                     </small>
                   </span>
                   <span v-else v-inview:animate="'fadeInLeft'">
-                    <small class="badge badge-pill badge-warning">{{ i18n('not yet read') }}</small>
+                    <small class="badge badge-pill badge-warning">
+                      {{ i18n('not yet read') }}</small>
                   </span>
                 </div>
               </div>

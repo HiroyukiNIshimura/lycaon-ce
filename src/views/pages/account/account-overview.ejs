@@ -30,7 +30,8 @@
         <%= __('Full Name') %>:
       </div>
       <div class="col">
-        <strong>{{ me.fullName }}</strong>
+        <strong>
+          {{ me.fullName }}</strong>
       </div>
     </div>
     <div class="row">
@@ -38,10 +39,9 @@
         <%= __('Mail Address') %>:
       </div>
       <div class="col">
-        <strong
-          :class="[me.emailStatus === 'unconfirmed' || me.emailStatus === 'change-requested' ? 'text-muted' : '']">{{ me.emailChangeCandidate ? me.emailChangeCandidate : me.emailAddress }}</strong>
-        <span v-if="me.emailStatus === 'unconfirmed' || me.emailStatus === 'change-requested'"
-          class="badge badge-pill badge-warning">
+        <strong :class="[me.emailStatus === 'unconfirmed' || me.emailStatus === 'change-requested' ? 'text-muted' : '']">
+          {{ me.emailChangeCandidate ? me.emailChangeCandidate : me.emailAddress }}</strong>
+        <span v-if="me.emailStatus === 'unconfirmed' || me.emailStatus === 'change-requested'" class="badge badge-pill badge-warning">
           <%= __('pending') %>
         </span>
       </div>

@@ -102,12 +102,16 @@
       <i class="fas fa-reply"></i></button><small class="ml-2">
       <user-identity class="mr-1" :user="item.user" :organization="organization" size="sm"></user-identity> - <lycaon-timestamp :at="item.createdAt" format="timeago" :translator="createReplyTranslator"></lycaon-timestamp> [
       <span v-if="viewActivity === 0">
-        <a href="javascript:void(0)" @click="jumpToReply(item.reply)">comment-{{ item.sneeze.serialNumber }} /
-          rep-{{ item.reply.serialNumber }}</a>
+        <a href="javascript:void(0)" @click="jumpToReply(item.reply)">comment-
+          {{ item.sneeze.serialNumber }} /
+          rep-
+          {{ item.reply.serialNumber }}</a>
       </span>
       <span v-else>
-        comment-{{ item.sneeze.serialNumber }} /
-        rep-{{ item.reply.serialNumber }}
+        comment-
+        {{ item.sneeze.serialNumber }} /
+        rep-
+        {{ item.reply.serialNumber }}
       </span>
       ]
     </small>
@@ -119,12 +123,16 @@
       <i class="fas fa-reply"></i></button><small class="ml-2">
       <user-identity class="mr-1" :user="item.user" :organization="organization" size="sm"></user-identity> - <lycaon-timestamp :at="item.createdAt" format="timeago" :translator="updateReplyTranslator"></lycaon-timestamp> [
       <span v-if="viewActivity === 0">
-        <a href="javascript:void(0)" @click="jumpToReply(item.reply)">comment-{{ item.sneeze.serialNumber }} /
-          rep-{{ item.reply.serialNumber }}</a>
+        <a href="javascript:void(0)" @click="jumpToReply(item.reply)">comment-
+          {{ item.sneeze.serialNumber }} /
+          rep-
+          {{ item.reply.serialNumber }}</a>
       </span>
       <span v-else>
-        comment-{{ item.sneeze.serialNumber }} /
-        rep-{{ item.reply.serialNumber }}
+        comment-
+        {{ item.sneeze.serialNumber }} /
+        rep-
+        {{ item.reply.serialNumber }}
       </span>
       ]
     </small>
@@ -136,10 +144,12 @@
       <i class="fas fa-comment"></i></button><small class="ml-2">
       <user-identity class="mr-1" :user="item.user" :organization="organization" size="sm"></user-identity> - <lycaon-timestamp :at="item.createdAt" format="timeago" :translator="createSneezTranslator"></lycaon-timestamp> [
       <span v-if="viewActivity === 0">
-        <a href="javascript:void(0)" @click="jumpToSneeze(item.sneeze)">comment-{{ item.sneeze.serialNumber }}</a>
+        <a href="javascript:void(0)" @click="jumpToSneeze(item.sneeze)">comment-
+          {{ item.sneeze.serialNumber }}</a>
       </span>
       <span v-else>
-        comment-{{ item.sneeze.serialNumber }}
+        comment-
+        {{ item.sneeze.serialNumber }}
       </span>
       ]
     </small>
@@ -151,10 +161,12 @@
       <i class="fas fa-comment"></i></button><small class="ml-2">
       <user-identity class="mr-1" :user="item.user" :organization="organization" size="sm"></user-identity> - <lycaon-timestamp :at="item.createdAt" format="timeago" :translator="updateSneezTranslator"></lycaon-timestamp> [
       <span v-if="viewActivity === 0">
-        <a href="javascript:void(0)" @click="jumpToSneeze(item.sneeze)">comment-{{ item.sneeze.serialNumber }}</a>
+        <a href="javascript:void(0)" @click="jumpToSneeze(item.sneeze)">comment-
+          {{ item.sneeze.serialNumber }}</a>
       </span>
       <span v-else>
-        comment-{{ item.sneeze.serialNumber }}
+        comment-
+        {{ item.sneeze.serialNumber }}
       </span>
       ]
     </small>

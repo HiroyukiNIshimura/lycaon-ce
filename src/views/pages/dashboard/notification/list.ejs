@@ -5,10 +5,11 @@
 
     <h5>
       <%= __('Notice from the system') %>
-        <small class="text-muted ml-3">
-          <%= __('Total number') %> {{ formatter.format(queryCount) }}
-            {{ i18nformatN('Item', 'Items', queryCount) }}
-        </small>
+      <small class="text-muted ml-3">
+        <%= __('Total number') %>
+        {{ formatter.format(queryCount) }}
+        {{ i18nformatN('Item', 'Items', queryCount) }}
+      </small>
     </h5>
 
     <div class="row">
@@ -26,18 +27,24 @@
             <div class="card-body">
               <div class="card-header">
                 <div>
-                  <span class="badge badge-light badge-pill" v-if="item.category === 'notice'">{{ i18n(item.category) }}</span>
-                  <span class="badge badge-danger badge-pill" v-if="item.category === 'important'">{{ i18n(item.category) }}</span>
-                  <span class="badge badge-warning badge-pill" v-if="item.category === 'maintenance'">{{ i18n(item.category) }}</span>
-                  <span class="ml-3 text-muted">{{ formatDate(item.postingAt) }}</span>
+                  <span class="badge badge-light badge-pill" v-if="item.category === 'notice'">
+                    {{ i18n(item.category) }}</span>
+                  <span class="badge badge-danger badge-pill" v-if="item.category === 'important'">
+                    {{ i18n(item.category) }}</span>
+                  <span class="badge badge-warning badge-pill" v-if="item.category === 'maintenance'">
+                    {{ i18n(item.category) }}</span>
+                  <span class="ml-3 text-muted">
+                    {{ formatDate(item.postingAt) }}</span>
                   <span class="ml-3" v-if="item.isNotRead">
-                    <small class="badge badge-pill badge-warning">{{ i18n('not yet read') }}
+                    <small class="badge badge-pill badge-warning">
+                      {{ i18n('not yet read') }}
                     </small>
                   </span>
                 </div>
               </div>
               <div class="card-text mt-3">
-                <a class="ml-3" :href="itemLink(item)">{{ item.subject }}</a>
+                <a class="ml-3" :href="itemLink(item)">
+                  {{ item.subject }}</a>
               </div>
             </div>
           </div>

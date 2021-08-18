@@ -1,10 +1,8 @@
 <div id="vote-answer" v-cloak>
   <div class="container">
-    <ajax-form id="create-answer" action="createAnswer" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedForm"
-      @rejected="onCloudError" :handle-parsing="handleParsingForm">
+    <ajax-form id="create-answer" action="createAnswer" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedForm" @rejected="onCloudError" :handle-parsing="handleParsingForm">
     </ajax-form>
-    <ajax-form id="update-answer" action="updateAnswer" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedForm"
-      @rejected="onCloudError" :handle-parsing="handleParsingForm">
+    <ajax-form id="update-answer" action="updateAnswer" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedForm" @rejected="onCloudError" :handle-parsing="handleParsingForm">
     </ajax-form>
     <div id="cloud-error" class="row">
       <div class="col-sm-6">
@@ -27,7 +25,8 @@
       <div class="col">
         <div class="row border border-top-0 border-right-0 border-left-0 mt-3">
           <div class="col">
-            <span class="h4">{{ vote.subject }}</span>
+            <span class="h4">
+              {{ vote.subject }}</span>
           </div>
         </div>
       </div>
@@ -43,7 +42,8 @@
 
     <div class="row mt-3" v-if="isEditMode">
       <div class="col text-center alert alert-primary ml-5 mr-5" role="alert">
-        <span class="">{{ answeredAt }} <%= __("Answered") %></span>
+        <span class="">
+          {{ answeredAt }} <%= __("Answered") %></span>
       </div>
     </div>
 
@@ -57,7 +57,8 @@
       <div class="col">
         <div class="custom-control custom-checkbox" v-for="(item, index) in vote.choices">
           <input type="checkbox" class="custom-control-input" :id="getCheckBoxId(index)" :value="item.id" v-model="multipleAnswer" />
-          <label class="custom-control-label" :for="getCheckBoxId(index)">{{ item.choices }}</label>
+          <label class="custom-control-label" :for="getCheckBoxId(index)">
+            {{ item.choices }}</label>
         </div>
       </div>
     </div>
@@ -65,7 +66,8 @@
       <div class="col">
         <div class="custom-control custom-checkbox" v-for="(item, index) in vote.choices">
           <input type="radio" class="custom-control-input" :id="getRadioId(index)" :value="item.id" v-model="singleAnswer" />
-          <label class="custom-control-label" :for="getRadioId(index)">{{ item.choices }}</label>
+          <label class="custom-control-label" :for="getRadioId(index)">
+            {{ item.choices }}</label>
         </div>
       </div>
     </div>
@@ -75,8 +77,7 @@
           <label for="my-message" class="md-textarea-label">
             <%= __('Please enter any other answers') %>
           </label>
-          <v-textarea id="my-message" class="md-textarea form-control" rows="3" :maxlength="500" :class="[formErrors.other ? 'is-invalid' : '']"
-            v-model.trim="other"></v-textarea>
+          <v-textarea id="my-message" class="md-textarea form-control" rows="3" :maxlength="500" :class="[formErrors.other ? 'is-invalid' : '']" v-model.trim="other"></v-textarea>
         </div>
       </div>
     </div>

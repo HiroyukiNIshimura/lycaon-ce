@@ -12,8 +12,9 @@
       <div class="col">
         <small>
           <span>
-            <%= __("Total number of logs") %> {{ formatter.format(records) }}
-              {{ i18nformatN('Item', 'Items', records) }}
+            <%= __("Total number of logs") %>
+            {{ formatter.format(records) }}
+            {{ i18nformatN('Item', 'Items', records) }}
           </span>
         </small>
       </div>
@@ -26,24 +27,19 @@
 
     <div style="height: 700px; border: solid 1px #ddd;">
       <c-grid :data="logs" theme="MATERIAL_DESIGN" readonly>
-        <c-grid-column field="runAt" sort="true" :filter="dateFormat"
-          width="190">
+        <c-grid-column field="runAt" sort="true" :filter="dateFormat" width="190">
           <%= __('Start time') %>
         </c-grid-column>
-        <c-grid-column field="finishedAt" sort="true" :filter="dateFormat"
-          width="190">
+        <c-grid-column field="finishedAt" sort="true" :filter="dateFormat" width="190">
           <%= __('End time') %>
         </c-grid-column>
-        <c-grid-column field="jobName" sort="true"
-          width="300">
+        <c-grid-column field="jobName" sort="true" width="300">
           <%= __('Job Id') %>
         </c-grid-column>
-        <c-grid-column field="description" sort="true"
-          width="300">
+        <c-grid-column field="description" sort="true" width="300">
           <%= __('Description') %>
         </c-grid-column>
-        <c-grid-column field="result" sort="true"
-          width="120">
+        <c-grid-column field="result" sort="true" width="120">
           <%= __('Status') %>
         </c-grid-column>
       </c-grid>

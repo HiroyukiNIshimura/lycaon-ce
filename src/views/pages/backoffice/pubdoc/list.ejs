@@ -58,9 +58,7 @@
       </div>
     </div>
 
-    <ajax-form id="update-deleted-form" action="updateWikiDeleted" :syncing.sync="syncing"
-      :cloud-error.sync="cloudError" @submitted="submittedForm" @rejected="onCloudError"
-      :handle-parsing="handleParsingForm">
+    <ajax-form id="update-deleted-form" action="updateWikiDeleted" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedForm" @rejected="onCloudError" :handle-parsing="handleParsingForm">
     </ajax-form>
 
     <div class="row">
@@ -79,8 +77,9 @@
       </div>
       <div class="col">
         <small><span>
-            <%= __("Total number of wikis") %> {{ formatter.format(records) }}
-              {{ i18nformatN('Wiki', 'Wikis', records) }}
+            <%= __("Total number of wikis") %>
+            {{ formatter.format(records) }}
+            {{ i18nformatN('Wiki', 'Wikis', records) }}
           </span></small>
       </div>
     </div>

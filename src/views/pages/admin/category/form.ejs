@@ -2,8 +2,7 @@
   <label for="form-name">
     <%= __("Category name") %>
   </label>
-  <v-text-input type="text" :maxlength="10" id="form-name" class="form-control" :class="[formErrors.name ? 'is-invalid' : '']"
-    v-model="formData.name" />
+  <v-text-input type="text" :maxlength="10" id="form-name" class="form-control" :class="[formErrors.name ? 'is-invalid' : '']" v-model="formData.name" />
   <div class="invalid-feedback" v-if="formErrors.name">
     <%= __("Please enter the category name") %>
   </div>
@@ -20,8 +19,7 @@
   <label for="form-template-subject" class="md-textarea-label">
     <%= __("Subject template") %>
   </label>
-  <v-text-input type="text" :maxlength="200" id="form-template-subject" class="form-control"
-    :class="[formErrors.templateSubject ? 'is-invalid' : '']" v-model="formData.templateSubject"></v-text-input>
+  <v-text-input type="text" :maxlength="200" id="form-template-subject" class="form-control" :class="[formErrors.templateSubject ? 'is-invalid' : '']" v-model="formData.templateSubject"></v-text-input>
   <div class="invalid-feedback" v-if="formErrors.templateSubject">
     <%= __("If you want to use a template, please enter the subject template or body template") %>
   </div>
@@ -37,24 +35,24 @@
 </div>
 
 <% if(type==='edit' ) { %>
-  <div class="custom-control custom-checkbox mt-3">
-    <input type="checkbox" class="custom-control-input" id="form-deleted" v-model="formData.deleted" />
-    <label class="custom-control-label" for="form-deleted">
-      <%= __("Disable this category") %>
-    </label>
-  </div>
-  <% } %>
+<div class="custom-control custom-checkbox mt-3">
+  <input type="checkbox" class="custom-control-input" id="form-deleted" v-model="formData.deleted" />
+  <label class="custom-control-label" for="form-deleted">
+    <%= __("Disable this category") %>
+  </label>
+</div>
+<% } %>
 
-    <div id="cloud-error" class="row">
-      <div class="col-sm-6">
-        <p class="text-danger" v-if="cloudError === 'isSandbox'">
-          <%= __("This category is used by the system and cannot be deleted") %>
-        </p>
-        <p class="text-danger" v-else-if="cloudError === 'nameAlreadyInUse'">
-          <%= __("A category that uses that name already exists") %>
-        </p>
-        <p class="text-danger" v-else-if="cloudError">
-          <%= __("An error occurred while processing the request. Please check the information and try again. If the error persists, please contact your administrator") %>
-        </p>
-      </div>
-    </div>
+<div id="cloud-error" class="row">
+  <div class="col-sm-6">
+    <p class="text-danger" v-if="cloudError === 'isSandbox'">
+      <%= __("This category is used by the system and cannot be deleted") %>
+    </p>
+    <p class="text-danger" v-else-if="cloudError === 'nameAlreadyInUse'">
+      <%= __("A category that uses that name already exists") %>
+    </p>
+    <p class="text-danger" v-else-if="cloudError">
+      <%= __("An error occurred while processing the request. Please check the information and try again. If the error persists, please contact your administrator") %>
+    </p>
+  </div>
+</div>

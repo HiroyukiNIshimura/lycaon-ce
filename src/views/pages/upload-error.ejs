@@ -9,12 +9,16 @@
     </div>
     <div class="row">
       <div class="col text-center">
-        <h4>[#{{ model.no }}] {{ model.subject}}</h4>
+        <h4>[#
+          {{ model.no }}]
+          {{ model.subject}}
+        </h4>
       </div>
     </div>
     <div class="row">
       <div class="col text-center">
-        <a :href="backToLink" class="btn btn-info">{{ buttonText }}</a>
+        <a :href="backToLink" class="btn btn-info">
+          {{ buttonText }}</a>
       </div>
     </div>
   </div>

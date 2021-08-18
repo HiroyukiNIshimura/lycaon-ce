@@ -18,8 +18,9 @@
       </div>
       <div class="col">
         <small><span>
-            <%= __("Total number") %> {{ formatter.format(records) }}
-              {{ i18nformatN('Item', 'Items', records) }}
+            <%= __("Total number") %>
+            {{ formatter.format(records) }}
+            {{ i18nformatN('Item', 'Items', records) }}
           </span></small>
       </div>
     </div>
@@ -34,21 +35,27 @@
         <div class="card card-width">
           <div class="card-body">
             <p class="card-text">
-              <span class="badge badge-light" v-if="item.category === 'notice'">{{ i18n(item.category) }}</span>
-              <span class="badge badge-danger" v-if="item.category === 'important'">{{ i18n(item.category) }}</span>
-              <span class="badge badge-warning" v-if="item.category === 'maintenance'">{{ i18n(item.category) }}</span>
+              <span class="badge badge-light" v-if="item.category === 'notice'">
+                {{ i18n(item.category) }}</span>
+              <span class="badge badge-danger" v-if="item.category === 'important'">
+                {{ i18n(item.category) }}</span>
+              <span class="badge badge-warning" v-if="item.category === 'maintenance'">
+                {{ i18n(item.category) }}</span>
             </p>
 
             <p class="card-text">
-              <%= __('Publication start date')%> : {{ formatDate(item.postingAt) }}
+              <%= __('Publication start date')%> :
+              {{ formatDate(item.postingAt) }}
             </p>
 
             <p class="card-text text-truncate">
-              <%= __('Subject')%> : {{ item.subject }}
+              <%= __('Subject')%> :
+              {{ item.subject }}
             </p>
 
             <p class="card-text text-truncate">
-              <%= __('not yet read')%> : {{ item.notReadQty }}
+              <%= __('not yet read')%> :
+              {{ item.notReadQty }}
             </p>
 
             <div class="card-text text-right">

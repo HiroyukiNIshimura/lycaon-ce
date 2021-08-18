@@ -8,17 +8,14 @@
       <div class="alert alert-primary" role="alert">
         <%= __("Once set, the organization ID cannot be changed. Name it carefully!") %>
       </div>
-      <ajax-form action="registOrganization" :syncing.sync="syncing" :cloud-error.sync="cloudError"
-        @submitted="submittedForm" @rejected="onCloudError" :handle-parsing="handleParsingForm">
+      <ajax-form action="registOrganization" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedForm" @rejected="onCloudError" :handle-parsing="handleParsingForm">
         <div class="md-form mt-5">
           <label for="handleId"><span class="badge badge-pill badge-danger mr-2">
               <%= __('required') %>
             </span>
             <%= __("Organization ID (alpha numeric)") %>
           </label>
-          <v-text-input class="form-control" id="handleId" name="handleId" type="text" :maxlength="10"
-            :class="[formErrors.handleId || formErrors.handleIdLength || formErrors.handleIdFormat ? 'is-invalid' : '']"
-            v-model.trim="formData.handleId"></v-text-input>
+          <v-text-input class="form-control" id="handleId" name="handleId" type="text" :maxlength="10" :class="[formErrors.handleId || formErrors.handleIdLength || formErrors.handleIdFormat ? 'is-invalid' : '']" v-model.trim="formData.handleId"></v-text-input>
           <div class="invalid-feedback" v-if="formErrors.handleId">
             <%= __("Please enter your organization ID") %>
           </div>
@@ -35,8 +32,7 @@
             </span>
             <%= __("Organization name") %>
           </label>
-          <v-text-input class="form-control" id="name" name="name" type="text" :maxlength="100"
-            :class="[formErrors.name || formErrors.nameLength ? 'is-invalid' : '']" v-model.trim="formData.name"></v-text-input>
+          <v-text-input class="form-control" id="name" name="name" type="text" :maxlength="100" :class="[formErrors.name || formErrors.nameLength ? 'is-invalid' : '']" v-model.trim="formData.name"></v-text-input>
           <div class="invalid-feedback" v-if="formErrors.name">
             <%= __("Please enter the organization name") %>
           </div>
@@ -50,9 +46,7 @@
             </span>
             <%= __("Representative name") %>
           </label>
-          <v-text-input class="form-control" id="fullName" name="fullName" type="text" :maxlength="120"
-            :class="[formErrors.fullName || formErrors.fullNameLength ? 'is-invalid' : '']"
-            v-model.trim="formData.fullName"></v-text-input>
+          <v-text-input class="form-control" id="fullName" name="fullName" type="text" :maxlength="120" :class="[formErrors.fullName || formErrors.fullNameLength ? 'is-invalid' : '']" v-model.trim="formData.fullName"></v-text-input>
           <div class="invalid-feedback" v-if="formErrors.fullName">
             <%= __("Please enter the representative name") %>
           </div>
@@ -66,9 +60,7 @@
             </span>
             <%= __("Mail Address") %>
           </label>
-          <v-text-input class="form-control" id="emailAddress" name="emailAddress" type="text" :maxlength="300"
-            :class="[formErrors.emailAddress || formErrors.emailAddressLength ? 'is-invalid' : '']"
-            v-model.trim="formData.emailAddress"></v-text-input>
+          <v-text-input class="form-control" id="emailAddress" name="emailAddress" type="text" :maxlength="300" :class="[formErrors.emailAddress || formErrors.emailAddressLength ? 'is-invalid' : '']" v-model.trim="formData.emailAddress"></v-text-input>
           <div class="invalid-feedback" v-if="formErrors.emailAddress">
             <%= __("Please enter a valid email address") %>
           </div>
@@ -97,16 +89,13 @@
           <div class="col-auto">
             <div class="custom-control custom-checkbox">
               <input type="checkbox" class="custom-control-input" id="form-policy-check" v-model="policyCecked" />
-              <label class="custom-control-label custom-control-label-sm"
-                for="form-policy-check">
+              <label class="custom-control-label custom-control-label-sm" for="form-policy-check">
                 <%= __("Agree to the user policy and create an account") %>
               </label>
             </div>
             <div class="mt-2">
-              <a class="ml-4"
-                href="/doc/policy" target="_blank">
-                <%= __("User policy") %><i
-                    class="fas fa-external-link-alt ml-1"></i>
+              <a class="ml-4" href="/doc/policy" target="_blank">
+                <%= __("User policy") %><i class="fas fa-external-link-alt ml-1"></i>
               </a>
             </div>
           </div>
@@ -130,9 +119,7 @@
                 </span>
                 <%= __("Please enter the 5 letters in the picture above") %>
               </label>
-              <v-text-input class="form-control" id="form-captcha-token" type="text" :maxlength="5"
-                :class="[formErrors.captchaToken ? 'is-invalid' : '']"
-                v-model.trim="formData.captchaToken"></v-text-input>
+              <v-text-input class="form-control" id="form-captcha-token" type="text" :maxlength="5" :class="[formErrors.captchaToken ? 'is-invalid' : '']" v-model.trim="formData.captchaToken"></v-text-input>
               <div class="invalid-feedback" v-if="formErrors.captchaToken">
                 <%= __("Please enter the 5 letters in the picture above") %>
               </div>
@@ -148,35 +135,35 @@
       </ajax-form>
     </div>
     <% if (sails.config.custom.isDemosite) {%>
-      <div class="row">
-        <div class="col-3"></div>
-        <div class="col">
-          <div class="card text-white bg-success">
-            <div class="card-body">
-              <h5 class="card-title">
-                <%= __("About the demo version") %>
-              </h5>
-              <p class="card-text text-white">
-                <%= __("This demo version will be available for a while, but there are no restrictions on the number of users, teams, etc. However, the basic data will not be persisted because the data will be deleted irregularly due to system repair") %>
-              </p>
-              <p class="card-subtitle text-white font-weight-bold">
-                <%= __("Never use it in production!") %>
-              </p>
-            </div>
+    <div class="row">
+      <div class="col-3"></div>
+      <div class="col">
+        <div class="card text-white bg-success">
+          <div class="card-body">
+            <h5 class="card-title">
+              <%= __("About the demo version") %>
+            </h5>
+            <p class="card-text text-white">
+              <%= __("This demo version will be available for a while, but there are no restrictions on the number of users, teams, etc. However, the basic data will not be persisted because the data will be deleted irregularly due to system repair") %>
+            </p>
+            <p class="card-subtitle text-white font-weight-bold">
+              <%= __("Never use it in production!") %>
+            </p>
           </div>
         </div>
-        <div class="col-3"></div>
       </div>
-      <% } %>
-        <div class="success-message" v-if="cloudSuccess">
-          <p>
-            <%= __("I have sent you a link to complete your account registration") %>
-          </p>
-          <hr />
-          <p>
-            <%- __("If you don't receive the email after a few minutes, check your junk email folder. If you still cannot find it, please try again or contact us using the <a> contact form </a>").format(`${sails.config.custom.baseUrl}/contact`) %>
-          </p>
-        </div>
+      <div class="col-3"></div>
+    </div>
+    <% } %>
+    <div class="success-message" v-if="cloudSuccess">
+      <p>
+        <%= __("I have sent you a link to complete your account registration") %>
+      </p>
+      <hr />
+      <p>
+        <%- __("If you don't receive the email after a few minutes, check your junk email folder. If you still cannot find it, please try again or contact us using the <a> contact form </a>").format(`${sails.config.custom.baseUrl}/contact`) %>
+      </p>
+    </div>
   </div>
 </div>
 <%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>

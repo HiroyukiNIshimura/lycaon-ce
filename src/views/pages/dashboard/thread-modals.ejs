@@ -18,7 +18,7 @@
             <div class="card-subtitle" v-if="item.lastSeenAt && item.lastSeenAt > 0">
               <small v-if="item.lastSeenAt && item.lastSeenAt > 0">
                 <%= __("Last access") %>
-                  <lycaon-timestamp :at="item.lastSeenAt" format="timeago"></lycaon-timestamp>
+                <lycaon-timestamp :at="item.lastSeenAt" format="timeago"></lycaon-timestamp>
               </small>
               <small v-else>
                 <%= __("No access") %>
@@ -54,8 +54,12 @@
           <%= __("The subject has changed") %>
         </h6>
         <ul>
-          <li class="text-primary">-{{ thread.subject }}</li>
-          <li class="text-danger">+{{ newSubject }}</li>
+          <li class="text-primary">-
+            {{ thread.subject }}
+          </li>
+          <li class="text-danger">+
+            {{ newSubject }}
+          </li>
         </ul>
       </div>
     </div>
@@ -66,12 +70,17 @@
         </h6>
         <div v-for="item in diff">
           <div v-if="item.prefix === '+'" class="text-danger">
-            {{ item.prefix }}{{ item.value }}
+            {{ item.prefix }}
+            {{ item.value }}
           </div>
           <div v-else-if="item.prefix === '-'" class="text-primary">
-            {{ item.prefix }}{{ item.value }}
+            {{ item.prefix }}
+            {{ item.value }}
           </div>
-          <div class="text-truncate" v-else>{{ item.prefix }}{{ item.value }}</div>
+          <div class="text-truncate" v-else>
+            {{ item.prefix }}
+            {{ item.value }}
+          </div>
         </div>
       </div>
     </div>
@@ -171,9 +180,9 @@
   <div class="card">
     <div class="card-header">
       <%= __("Emotional Rader") %>
-        <button type="button" class="close" @click="showEmotionsModal = false">
-          <span aria-hidden="true">&times;</span>
-        </button>
+      <button type="button" class="close" @click="showEmotionsModal = false">
+        <span aria-hidden="true">&times;</span>
+      </button>
     </div>
     <div class="card-body">
       <canvas id="emotions-radar"></canvas>

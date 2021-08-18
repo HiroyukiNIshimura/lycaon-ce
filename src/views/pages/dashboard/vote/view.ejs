@@ -1,7 +1,6 @@
 <div id="vote-view" v-cloak>
   <div class="container">
-    <ajax-form id="confirm-circulation" action="confirmCirculation" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedConfirmForm"
-      @rejected="onCloudError" :handle-parsing="handleParsingConfirmForm">
+    <ajax-form id="confirm-circulation" action="confirmCirculation" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedConfirmForm" @rejected="onCloudError" :handle-parsing="handleParsingConfirmForm">
     </ajax-form>
     <div id="cloud-error" class="row">
       <div class="col-sm-6">
@@ -30,7 +29,8 @@
       <div class="col">
         <div class="row border border-top-0 border-right-0 border-left-0 mt-3">
           <div class="col">
-            <span class="h4">{{ vote.subject }}</span>
+            <span class="h4">
+              {{ vote.subject }}</span>
           </div>
         </div>
         <div class="row mt-2">
@@ -47,14 +47,18 @@
               <dt>
                 <%= __("Release date") %>
               </dt>
-              <dd>{{ formatDate(vote.circulationFrom) }}</dd>
+              <dd>
+                {{ formatDate(vote.circulationFrom) }}
+              </dd>
               <dt v-if="vote.isQuestionnaireFormat">
                 <%= __("Reply deadline") %>
               </dt>
               <dt v-else>
                 <%= __("End date") %>
               </dt>
-              <dd>{{ formatDate(vote.circulationTo) }}</dd>
+              <dd>
+                {{ formatDate(vote.circulationTo) }}
+              </dd>
             </dl>
           </div>
         </div>
@@ -65,7 +69,8 @@
             </button>
           </div>
           <div class="col text-center alert alert-primary ml-5 mr-5" role="alert" v-else-if="confirmed">
-            <span class="">{{ answeredAt }} <%= __("Confirmed") %></span>
+            <span class="">
+              {{ answeredAt }} <%= __("Confirmed") %></span>
           </div>
         </div>
         <!-- appendix -->
@@ -84,8 +89,7 @@
 
         <div class="row ml-sm-5">
           <div class="col-sm-10">
-            <ajax-form action="createVoteSneeze" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedSneezeCreateForm" @rejected="onCloudError"
-              :handle-parsing="handleParsingSneezeCreateForm">
+            <ajax-form action="createVoteSneeze" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedSneezeCreateForm" @rejected="onCloudError" :handle-parsing="handleParsingSneezeCreateForm">
               <div class="row mt-3">
                 <div class="col">
                   <div id="comment-editor"></div>
@@ -116,7 +120,9 @@
       <div class="col border border-info rounded py-3 px-3">
         <span>{{vote.question}}</span>
         <ul>
-          <li v-for="item in vote.choices">{{ item.choices }}</li>
+          <li v-for="item in vote.choices">
+            {{ item.choices }}
+          </li>
         </ul>
         <span v-if="vote.multipleAnswers">(<%= __("Multiple answers can be selected") %>)</span>
         <div class="text-center" v-if="allowAnswere">

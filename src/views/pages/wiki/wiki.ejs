@@ -25,14 +25,11 @@
         </div>
       </div>
     </modal>
-    <ajax-form id="close-wiki-form" action="deleteWiki" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedForm"
-      @rejected="onCloudError" :handle-parsing="handleParsingForm">
+    <ajax-form id="close-wiki-form" action="deleteWiki" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedForm" @rejected="onCloudError" :handle-parsing="handleParsingForm">
     </ajax-form>
-    <ajax-form id="flag-wiki-form" action="updateWikiFlag" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedFlagForm"
-      @rejected="onCloudError" :handle-parsing="handleParsingFlagForm">
+    <ajax-form id="flag-wiki-form" action="updateWikiFlag" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedFlagForm" @rejected="onCloudError" :handle-parsing="handleParsingFlagForm">
     </ajax-form>
-    <ajax-form id="vote-wiki-form" action="updateWikiVote" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedVoteForm"
-      @rejected="onCloudError" :handle-parsing="handleParsingVoteForm">
+    <ajax-form id="vote-wiki-form" action="updateWikiVote" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedVoteForm" @rejected="onCloudError" :handle-parsing="handleParsingVoteForm">
     </ajax-form>
 
     <div class="row">
@@ -46,7 +43,8 @@
       <div class="col">
         <div class="row border border-top-0 border-right-0 border-left-0 mt-3">
           <div class="col">
-            <span class="h4">{{ wiki.subject }}</span>
+            <span class="h4">
+              {{ wiki.subject }}</span>
           </div>
         </div>
         <div class="row mt-2">
@@ -56,9 +54,8 @@
             </small>
           </div>
           <div class="col">
-            <h5><a :href="tagLink(item)" class="badge badge-success mr-1" :aria-label="tagTooltip" data-microtip-position="bottom" data-microtip-size="medium" role="tooltip" v-for="(item, index) in wiki.tags">{{
-                item.name
-                }}</a></h5>
+            <h5><a :href="tagLink(item)" class="badge badge-success mr-1" :aria-label="tagTooltip" data-microtip-position="bottom" data-microtip-size="medium" role="tooltip" v-for="(item, index) in wiki.tags">
+                {{ item.name }}</a></h5>
           </div>
         </div>
         <div class="row">
@@ -75,7 +72,8 @@
         <div class="row">
           <div class="col-auto col-md text-right" v-if="isWikiEditDisabled">
             <div class="alert alert-primary blink text-center" role="alert">
-              <small> {{ i18n('This Wiki is being edited by {0} ...').format(conflictUser.fullName) }}</small>
+              <small>
+                {{ i18n('This Wiki is being edited by {0} ...').format(conflictUser.fullName) }}</small>
             </div>
           </div>
         </div>
@@ -130,7 +128,8 @@
         <small>
           <a class="mr-3" href="javascript:void(0)" @click="clickUpdateVote">
             <i class="far fa-thumbs-up"></i>
-            <%= __("How nice!") %> × {{ formatter.format(niceCount) }}
+            <%= __("How nice!") %> ×
+            {{ formatter.format(niceCount) }}
           </a>
           <a href="javascript:void(0)" @click="ckickUpdateFlag" v-if="isFan">
             <span style="color: Tomato">

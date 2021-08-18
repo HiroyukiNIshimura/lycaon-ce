@@ -30,7 +30,8 @@
                   {{ item.name }}
                 </span>
                 <p class="card-text">
-                  <%= __("Display order") %>:{{ item.lineNo }}
+                  <%= __("Display order") %>:
+                  {{ item.lineNo }}
                 </p>
               </div>
             </div>
@@ -39,8 +40,7 @@
       </draggable>
     </div>
   </div>
-  <ajax-form id="update-order-form" action="updateMilestoneOrder" :syncing.sync="syncing" :cloud-error.sync="cloudError"
-    @submitted="submittedForm" @rejected="onCloudError" :handle-parsing="handleParsingForm">
+  <ajax-form id="update-order-form" action="updateMilestoneOrder" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedForm" @rejected="onCloudError" :handle-parsing="handleParsingForm">
   </ajax-form>
   <div id="cloud-error" class="row">
     <div class="col-sm-6">
