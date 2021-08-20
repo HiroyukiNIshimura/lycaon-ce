@@ -32,28 +32,28 @@ parasails.registerComponent('activityCard', {
   //  ╩ ╩ ╩ ╩ ╩╩═╝
   template: `
 <div class="px-1 py-1" v-inview:animate="'zoomInDown'">
-<p v-if="team"><a :href="teamLink">{{ team.name }}</a></p>
-<h6><a :href="threadLink">[#{{ activity.thread.no }}] {{ activity.thread.subject }}</a></h6>
-<div class="mb-2">
+  <p v-if="team"><a :href="teamLink">{{ team.name }}</a></p>
+  <h6><a :href="threadLink">[#{{ activity.thread.no }}] {{ activity.thread.subject }}</a></h6>
+  <div class="mb-2">
     <span class="badge badge-light mr-1" v-if="activity.thread.concept === 0">{{ i18n('draft') }}</span>
     <span class="badge badge-success mr-1" v-if="activity.thread.concept === 1">{{ i18n('published') }}</span>
     <span :class="displayStatusClass"><i :class="displayStatusIcon" class="mr-1"></i>{{ displayStatus }}</span>
     <span class="badge badge-danger mr-1" v-if="activity.thread.locked">{{ i18n('Archive') }}</span>
     <span class="badge badge-primary mr-1" v-if="activity.thread.local">{{ i18n('Private') }}</span>
-</div>
-<div class="mt-3">
-  <small>
-    {{ i18n('Changer') }}：<user-identity :user="activity.user" :organization="organization" size="sm"></user-identity>
-  </small>
-</div>
-<div class="mt-3">
-  <button type="button" class="btn btn-light btn-circle-timeline" :class="iconColor">
+  </div>
+  <div class="mt-3">
+    <small>
+      {{ i18n('Changer') }}：<user-identity :user="activity.user" :organization="organization" size="sm"></user-identity>
+    </small>
+  </div>
+  <div class="mt-3">
+    <button type="button" class="btn btn-light btn-circle-timeline" :class="iconColor">
       <i class="fas" :class="iconName"></i>
-  </button>
-  <span class="text-break">{{ description }}</span>
+    </button>
+    <span class="text-break">{{ description }}</span>
+  </div>
 </div>
-</div>
-  `,
+`,
 
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
   //  ║  ║╠╣ ║╣ ║  ╚╦╝║  ║  ║╣

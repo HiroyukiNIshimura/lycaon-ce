@@ -225,49 +225,31 @@ parasails.registerComponent('infiniteLoading', {
   //  ╩ ╩ ╩ ╩ ╩╩═╝
   template: `
   <div class="infinite-loading-container">
-    <div
-      class="infinite-status-prompt"
-      v-show="isShowSpinner"
-      :style="slotStyles.spinner">
+    <div class="infinite-status-prompt" v-show="isShowSpinner" :style="slotStyles.spinner">
       <slot name="spinner" v-bind="{ isFirstLoad }">
         <component :is="spinnerView"></component>
       </slot>
     </div>
-    <div
-      class="infinite-status-prompt"
-      :style="slotStyles.noResults"
-      v-show="isShowNoResults">
+    <div class="infinite-status-prompt" :style="slotStyles.noResults" v-show="isShowNoResults">
       <slot name="no-results">
         <component v-if="slots.noResults.render" :is="slots.noResults"></component>
         <template v-else>{{ slots.noResults }}</template>
       </slot>
     </div>
-    <div
-      class="infinite-status-prompt"
-      :style="slotStyles.noMore"
-      v-show="isShowNoMore">
+    <div class="infinite-status-prompt" :style="slotStyles.noMore" v-show="isShowNoMore">
       <slot name="no-more">
         <component v-if="slots.noMore.render" :is="slots.noMore"></component>
         <template v-else>{{ slots.noMore }}</template>
       </slot>
     </div>
-    <div
-      class="infinite-status-prompt"
-      :style="slotStyles.error"
-      v-show="isShowError">
+    <div class="infinite-status-prompt" :style="slotStyles.error" v-show="isShowError">
       <slot name="error" :trigger="attemptLoad">
-        <component
-          v-if="slots.error.render"
-          :is="slots.error"
-          :trigger="attemptLoad">
+        <component v-if="slots.error.render" :is="slots.error" :trigger="attemptLoad">
         </component>
         <template v-else>
           {{ slots.error }}
           <br>
-          <button
-            class="btn-try-infinite"
-            @click="attemptLoad"
-            v-text="slots.errorBtnText">
+          <button class="btn-try-infinite" @click="attemptLoad" v-text="slots.errorBtnText">
           </button>
         </template>
       </slot>

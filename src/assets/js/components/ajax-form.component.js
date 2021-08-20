@@ -117,9 +117,7 @@ parasails.registerComponent('ajaxForm', {
         'If `:form-rules` or `:form-errors.sync` are in use, then `:form-data` must also be passed in.  (If the AJAX request doesn\'t need form data, then use an empty dictionary, i.e. `:form-data="{}"`.)'
       );
     } else if (this.formRules && !this.formErrors) {
-      throw new Error(
-        'If `:form-rules` are provided, then `:form-errors.sync` must also be passed in.'
-      );
+      throw new Error('If `:form-rules` are provided, then `:form-errors.sync` must also be passed in.');
     }
 
     if (this.formRules) {
@@ -145,9 +143,7 @@ parasails.registerComponent('ajaxForm', {
             // - - - - - - - - - - - - - - - - - - - - -
           } else {
             let kebabRules = _.map(_.clone(SUPPORTED_RULES), (ruleName) => _.kebabCase(ruleName));
-            let lowerCaseRules = _.map(_.clone(SUPPORTED_RULES), (ruleName) =>
-              ruleName.toLowerCase()
-            );
+            let lowerCaseRules = _.map(_.clone(SUPPORTED_RULES), (ruleName) => ruleName.toLowerCase());
             let ruleIdx =
               _.indexOf(kebabRules, ruleName) === -1
                 ? _.indexOf(lowerCaseRules, ruleName.toLowerCase()) === -1
@@ -242,8 +238,7 @@ parasails.registerComponent('ajaxForm', {
             let ruleRhs = this.formRules[fieldName][ruleName];
             let violation;
 
-            let isFieldValuePresent =
-              fieldValue !== undefined && fieldValue !== '' && !_.isNull(fieldValue);
+            let isFieldValuePresent = fieldValue !== undefined && fieldValue !== '' && !_.isNull(fieldValue);
 
             if (ruleName === 'required' && (ruleRhs === true || ruleRhs === false)) {
               // ® Must be defined, non-null, and not the empty string
@@ -291,10 +286,7 @@ parasails.registerComponent('ajaxForm', {
               let otherFieldName = ruleRhs;
               let otherFieldValue = formData[otherFieldName];
               violation = otherFieldValue !== fieldValue;
-            } else if (
-              ruleName === 'isHalfwayDecentPassword' &&
-              (ruleRhs === true || ruleRhs === false)
-            ) {
+            } else if (ruleName === 'isHalfwayDecentPassword' && (ruleRhs === true || ruleRhs === false)) {
               // ® Must be a halfway-decent password
               // > This is an arbitrary distinction, so change it if you want.
               // > Just... please use common sense.  And try to avoid engaging
@@ -302,8 +294,7 @@ parasails.registerComponent('ajaxForm', {
               if (ruleRhs === false) {
                 violation = false;
               } else {
-                violation =
-                  (!_.isString(fieldValue) && !_.isNumber(fieldValue)) || fieldValue.length < 6;
+                violation = (!_.isString(fieldValue) && !_.isNumber(fieldValue)) || fieldValue.length < 6;
               }
             } else if (ruleName === 'custom' && _.isFunction(ruleRhs)) {
               // ® Provided function must return truthy when invoked with the value.

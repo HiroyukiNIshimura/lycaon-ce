@@ -31,21 +31,22 @@ parasails.registerComponent('imageList', {
   //  ╩ ╩ ╩ ╩ ╩╩═╝
   template: `
 <div>
-<modal class="image-list" v-if="show">
+  <modal class="image-list" v-if="show">
     <div class="modal-header">
-        <h5 class="modal-title">
-            {{ i18n('Image list') }}
-        </h5>
-        <button type="button" class="close" @click="onHide">
-            <span aria-hidden="true">&times;</span>
-        </button>
+      <h5 class="modal-title">
+        {{ i18n('Image list') }}
+      </h5>
+      <button type="button" class="close" @click="onHide">
+        <span aria-hidden="true">&times;</span>
+      </button>
     </div>
     <div class="text-center mb-3 d-block d-sm-none" v-if="state">
-      <button class="btn btn-light btn-sm btn-block" type="button" @click="infineHandler">{{ i18n('See more') }}</button>
+      <button class="btn btn-light btn-sm btn-block" type="button"
+        @click="infineHandler">{{ i18n('See more') }}</button>
     </div>
     <div class="modal-body">
       <div class="card-columns" v-if="records > 0">
-        <div class="card card-image card-selectable" v-for="item in images"  @click="selectImage(item)">
+        <div class="card card-image card-selectable" v-for="item in images" @click="selectImage(item)">
           <img :src="imageRef(item)" class="card-img-top" />
           <div class="card-img-overlay">
             <p class="text-white">{{ item.name }}</p>
@@ -53,10 +54,11 @@ parasails.registerComponent('imageList', {
         </div>
       </div>
       <div class="text-center mt-1" v-if="state">
-        <button class="btn btn-light btn-sm btn-block" type="button" @click="infineHandler">{{ i18n('See more') }}</button>
+        <button class="btn btn-light btn-sm btn-block" type="button"
+          @click="infineHandler">{{ i18n('See more') }}</button>
       </div>
     </div>
-</modal>
+  </modal>
 </div>
 `,
 

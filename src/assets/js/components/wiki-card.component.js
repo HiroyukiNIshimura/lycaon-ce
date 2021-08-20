@@ -37,41 +37,42 @@ parasails.registerComponent('wikiCard', {
   template: `
 <div class="card h-100 card-selectable" v-inview:animate="animate">
   <div @click="onCardClick">
-    <img :src="image"
-        class="card-img-top"
-        v-if="showImage"
-    />
+    <img :src="image" class="card-img-top" v-if="showImage" />
     <div class="card-body d-flex flex-column">
-        <p class="card-title" v-if="showTeam"><a :href="teamLink">{{ wiki.team.name }}</a></p>
-        <a class="card-title h4 wiki-subject" :href="wikiLink" :target="target">{{ truncate(wiki.subject, 50) }}</a>
-        <div class="card-subtitle"><small class="text-muted">wiki-no: {{ wiki.no }}</small></div>
-        <div class="card-text">
-          <span :href="tagLink(item)" class="badge badge-success mr-1" v-for="(item, index) in wiki.tags" :key="index" v-if="showTeam">{{ item.name }}</span>
-          <a :href="tagLink(item)" class="badge badge-success mr-1" :aria-label="tagTooltip" data-microtip-position="top" data-microtip-size="medium" role="tooltip" v-for="(item, index) in wiki.tags" :key="index" v-if="!showTeam">{{ item.name }}</a>
+      <p class="card-title" v-if="showTeam"><a :href="teamLink">{{ wiki.team.name }}</a></p>
+      <a class="card-title h4 wiki-subject" :href="wikiLink" :target="target">{{ truncate(wiki.subject, 50) }}</a>
+      <div class="card-subtitle"><small class="text-muted">wiki-no: {{ wiki.no }}</small></div>
+      <div class="card-text">
+        <span :href="tagLink(item)" class="badge badge-success mr-1" v-for="(item, index) in wiki.tags" :key="index"
+          v-if="showTeam">{{ item.name }}</span>
+        <a :href="tagLink(item)" class="badge badge-success mr-1" :aria-label="tagTooltip" data-microtip-position="top"
+          data-microtip-size="medium" role="tooltip" v-for="(item, index) in wiki.tags" :key="index"
+          v-if="!showTeam">{{ item.name }}</a>
+      </div>
+      <div class="card-section">
+        <div class="mt-3">
+          <span class="card-text wiki-card-content">{{ wiki.sanitizeHtml }}</span>
+          <div class="card-section-overlay mt-3" v-if="hitContent" v-html="hitContent"></div>
         </div>
-        <div class="card-section">
-          <div class="mt-3">
-            <span class="card-text wiki-card-content">{{ wiki.sanitizeHtml }}</span>
-            <div class="card-section-overlay mt-3" v-if="hitContent" v-html="hitContent"></div>
-          </div>
-          <div class="card-text mt-3">
-            <small>
-              <user-identity :user="wiki.owner" :organization="organization" size="sm"></user-identity>
-              <lycaon-timestamp :at="wiki.createdAt" format="timeago" :translator="translator" short="true"></lycaon-timestamp>
-            </small>
-          </div>
-          <div class="card-text mt-3">
-            <i class="far fa-thumbs-up"></i> {{ i18n('How nice!') }} × {{ formatter.format(niceCount) }}
-            <span style="color: Tomato" class="ml-3" v-if="isFan">
-              <i class="fas fa-flag"></i>
-            </span>
-          </div>
+        <div class="card-text mt-3">
+          <small>
+            <user-identity :user="wiki.owner" :organization="organization" size="sm"></user-identity>
+            <lycaon-timestamp :at="wiki.createdAt" format="timeago" :translator="translator" short="true">
+            </lycaon-timestamp>
+          </small>
         </div>
+        <div class="card-text mt-3">
+          <i class="far fa-thumbs-up"></i> {{ i18n('How nice!') }} × {{ formatter.format(niceCount) }}
+          <span style="color: Tomato" class="ml-3" v-if="isFan">
+            <i class="fas fa-flag"></i>
+          </span>
+        </div>
+      </div>
     </div>
   </div>
-  <slot/>
+  <slot />
 </div>
-  `,
+`,
 
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
   //  ║  ║╠╣ ║╣ ║  ╚╦╝║  ║  ║╣

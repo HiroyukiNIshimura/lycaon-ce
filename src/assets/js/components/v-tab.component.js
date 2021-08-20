@@ -35,19 +35,15 @@ parasails.registerComponent('vTab', {
   //  ╠═╣ ║ ║║║║
   //  ╩ ╩ ╩ ╩ ╩╩═╝
   template: `
-<section v-show="isActive"
-        :aria-hidden="! isActive"
-        class="tabs-component-panel"
-        :id="computedId"
-        role="tabpanel">
-        <div v-if="isSlotIf">
-          <slot v-if="isActive" />
-        </div>
-        <div v-else>
-          <slot />
-        </div>
+<section v-show="isActive" :aria-hidden="! isActive" class="tabs-component-panel" :id="computedId" role="tabpanel">
+  <div v-if="isSlotIf">
+    <slot v-if="isActive" />
+  </div>
+  <div v-else>
+    <slot />
+  </div>
 </section>
-    `,
+`,
 
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
   //  ║  ║╠╣ ║╣ ║  ╚╦╝║  ║  ║╣

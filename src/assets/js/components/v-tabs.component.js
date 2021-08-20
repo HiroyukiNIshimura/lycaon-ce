@@ -43,30 +43,18 @@ parasails.registerComponent('vTabs', {
   //  ╩ ╩ ╩ ╩ ╩╩═╝
   template: `
  <div class="tabs-component">
-    <ul role="tablist" class="tabs-component-tabs">
-        <li
-            v-for="(tab, i) in tabs"
-            :key="i"
-            :class="{ 'is-active': tab.isActive, 'is-disabled': tab.isDisabled }"
-            class="tabs-component-tab"
-            role="presentation"
-            v-show="tab.isVisible"
-        >
-            <a v-html="tab.header"
-                :aria-controls="tab.hash"
-                :aria-selected="tab.isActive"
-                @click="selectTab(tab.hash, $event)"
-                href="javascript:void(0)"
-                class="tabs-component-tab-a"
-                role="tab"
-            ></a>
-        </li>
-    </ul>
-    <div :id="panelId" class="tabs-component-panels">
-        <slot/>
-    </div>
+  <ul role="tablist" class="tabs-component-tabs">
+    <li v-for="(tab, i) in tabs" :key="i" :class="{ 'is-active': tab.isActive, 'is-disabled': tab.isDisabled }"
+      class="tabs-component-tab" role="presentation" v-show="tab.isVisible">
+      <a v-html="tab.header" :aria-controls="tab.hash" :aria-selected="tab.isActive"
+        @click="selectTab(tab.hash, $event)" href="javascript:void(0)" class="tabs-component-tab-a" role="tab"></a>
+    </li>
+  </ul>
+  <div :id="panelId" class="tabs-component-panels">
+    <slot />
+  </div>
 </div>
-      `,
+`,
 
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
   //  ║  ║╠╣ ║╣ ║  ╚╦╝║  ║  ║╣
@@ -141,7 +129,7 @@ parasails.registerComponent('vTabs', {
       if (tab.isActive) {
         // If tab is active, set a different one as active.
         tab.isActive = visible;
-        this.tabs.every((tab, /*index, array*/) => {
+        this.tabs.every((tab /*index, array*/) => {
           if (tab.isVisible) {
             tab.isActive = true;
             return false;

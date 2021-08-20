@@ -47,11 +47,11 @@ parasails.registerComponent('modal', {
       <div class="modal-dialog modal-dialog-scrollable custom-width" role="document">
         <div class="modal-content">
           <slot></slot>
-        </div><!-- /.modal-content -->
-      </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
+        </div>
+      </div>
+    </div>
   </transition>
-  `,
+`,
 
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
   //  ║  ║╠╣ ║╣ ║  ╚╦╝║  ║  ║╣
@@ -156,7 +156,7 @@ parasails.registerComponent('modal', {
         // Hard code some style overrides on our modal dialog.
         // Without these, it gets weird.
         $(this.$el).css({
-          'overflow-y': 'auto!important',
+          'overflow-y': 'auto !important',
           position: 'absolute',
           left: '0',
           top: '0',
@@ -165,11 +165,7 @@ parasails.registerComponent('modal', {
 
       // Focus our "focus-first" field, if relevant.
       // (but not on mobile, because it can get weird)
-      if (
-        typeof bowser !== 'undefined' &&
-        !bowser.mobile &&
-        this.$find('[focus-first]').length > 0
-      ) {
+      if (typeof bowser !== 'undefined' && !bowser.mobile && this.$find('[focus-first]').length > 0) {
         this.$focus('[focus-first]');
       }
 

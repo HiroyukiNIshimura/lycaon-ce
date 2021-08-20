@@ -37,20 +37,17 @@ parasails.registerComponent('userIdentity', {
 <span class="ml-1" v-if="user">
   <span :id="parseAvaterId" class="user-avater-icon">
     <img :class="sizeClass" :src="user.gravatarUrl" v-if="user.avatarType === 'gravatar'" />
-    <img
-        class="rounded-circle"
-        :class="sizeClass"
-        :src="user.avatarVirtualUrl"
-        v-else-if="user.avatarType === 'user-avatar'"
-    />
+    <img class="rounded-circle" :class="sizeClass" :src="user.avatarVirtualUrl"
+      v-else-if="user.avatarType === 'user-avatar'" />
     <svg :class="sizeClass" :data-jdenticon-value="user.emailAddress" v-else></svg>
   </span>
-  <a :id="parseUserId" class="ml-1 comment-tip" :href="menberInfoLink" v-if="showUserName == true">{{ user.fullName }}</a>
+  <a :id="parseUserId" class="ml-1 comment-tip" :href="menberInfoLink"
+    v-if="showUserName == true">{{ user.fullName }}</a>
 </span>
 <span class="ml-1" v-else>
-{{ i18n('Anonymous account') }}
+  {{ i18n('Anonymous account') }}
 </span>
-  `,
+`,
 
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
   //  ║  ║╠╣ ║╣ ║  ╚╦╝║  ║  ║╣

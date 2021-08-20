@@ -30,26 +30,27 @@ parasails.registerComponent('dropFileupload', {
   //  ╠═╣ ║ ║║║║
   //  ╩ ╩ ╩ ╩ ╩╩═╝
   template: `
-<div ref="dropArea" class="col drop-area" :class="{dragEnter: isDragEnter}" 
-    @dragenter="dragEnter" @dragleave="dragLeave"
-    @dragover.prevent="dragOver" @drop.prevent="dropFile($event)">
+<div ref="dropArea" class="col drop-area" :class="{dragEnter: isDragEnter}" @dragenter="dragEnter"
+  @dragleave="dragLeave" @dragover.prevent="dragOver" @drop.prevent="dropFile($event)">
   <div class="row py-3">
-      <div class="col">
-        <small>{{ i18n('Choose or drop the file') }}</small>
-        <div class="input-group">
-          <div class="custom-file">
-            <input type="file" class="custom-file-input" :id="inputId" @change="onFileChange($event)">
-            <label class="custom-file-label text-truncate" :for="inputId"></label>
-          </div>
+    <div class="col">
+      <small>{{ i18n('Choose or drop the file') }}</small>
+      <div class="input-group">
+        <div class="custom-file">
+          <input type="file" class="custom-file-input" :id="inputId" @change="onFileChange($event)">
+          <label class="custom-file-label text-truncate" :for="inputId"></label>
         </div>
-        <div class="text-center mt-3" :aria-label="i18n('Drag the upload file to this area')" data-microtip-position="bottom" data-microtip-size="medium" role="tooltip">
-          <i class="fas fa-cloud-upload-alt fa-2x"></i> {{ i18n('File upload') }}
-        </div>
-        <div class="text-muted text-break">{{ i18n('Files with the extension ({0}) can be attached', [whitelistStr()]) }}</div>
       </div>
+      <div class="text-center mt-3" :aria-label="i18n('Drag the upload file to this area')"
+        data-microtip-position="bottom" data-microtip-size="medium" role="tooltip">
+        <i class="fas fa-cloud-upload-alt fa-2x"></i> {{ i18n('File upload') }}
+      </div>
+      <div class="text-muted text-break">{{ i18n('Files with the extension ({0}) can be attached', [whitelistStr()]) }}
+      </div>
+    </div>
   </div>
 </div>
-  `,
+`,
 
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
   //  ║  ║╠╣ ║╣ ║  ╚╦╝║  ║  ║╣

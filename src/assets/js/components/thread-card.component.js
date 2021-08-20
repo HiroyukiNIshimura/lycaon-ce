@@ -12,7 +12,7 @@ parasails.registerComponent('threadCard', {
   //  ╔═╗╦═╗╔═╗╔═╗╔═╗
   //  ╠═╝╠╦╝║ ║╠═╝╚═╗
   //  ╩  ╩╚═╚═╝╩  ╚═╝
-  props: ['thread', 'selectedTags', 'team', 'organization', 'word'],
+  props: ['thread', 'selectedTags', 'team', 'organization', 'word', 'showCounter'],
 
   //  ╦╔╗╔╦╔╦╗╦╔═╗╦    ╔═╗╔╦╗╔═╗╔╦╗╔═╗
   //  ║║║║║ ║ ║╠═╣║    ╚═╗ ║ ╠═╣ ║ ║╣
@@ -30,8 +30,10 @@ parasails.registerComponent('threadCard', {
   //  ╩ ╩ ╩ ╩ ╩╩═╝
   template: `
 <div class="card h-100 card-selectable">
-  <div class="thread-priority-bar" :aria-label="i18n('Importance: High')" data-microtip-position="bottom" role="tooltip" v-show="thread.priority === 2"></div>
-  <div class="thread-urgency-bar" :aria-label="i18n('Urgency')" data-microtip-position="bottom" role="tooltip" :class="urgencyBarColor" v-show="thread.urgency > 0"></div>
+  <div class="thread-priority-bar" :aria-label="i18n('Importance: High')" data-microtip-position="bottom" role="tooltip"
+    v-show="thread.priority === 2"></div>
+  <div class="thread-urgency-bar" :aria-label="i18n('Urgency')" data-microtip-position="bottom" role="tooltip"
+    :class="urgencyBarColor" v-show="thread.urgency > 0"></div>
   <div class="card-body">
     <div class="row">
       <div class="col h5 card-subtitle mb-2">
@@ -50,12 +52,15 @@ parasails.registerComponent('threadCard', {
     </div>
     <p class="card-title" v-if="team"><a :href="teamLink">{{ team.name }}</a></p>
     <h5 class="card-title"><a class="thread-subject" :href="threadLink">[#{{ thread.no }}] {{ thread.subject }}</a></h5>
+    <div class="card-subtitle mb-1" v-if="showCounter">
+      <span class="text-success">{{ i18n('Views') }} : {{thread.accessCount}}</span>
+    </div>
     <div class="card-subtitle mb-2">
-        <span class="badge badge-light mr-1" v-if="thread.concept === 0">{{ i18n('draft') }}</span>
-        <span class="badge badge-success mr-1" v-if="thread.concept === 1">{{ i18n('published') }}</span>
-        <span :class="displayStatusClass"><i :class="displayStatusIcon" class="mr-1"></i>{{ displayStatus }}</span>
-        <span class="badge badge-danger mr-1" v-if="thread.locked">{{ i18n('Archive') }}</span>
-        <span class="badge badge-primary mr-1" v-if="thread.local">{{ i18n('Private') }}</span>
+      <span class="badge badge-light mr-1" v-if="thread.concept === 0">{{ i18n('draft') }}</span>
+      <span class="badge badge-success mr-1" v-if="thread.concept === 1">{{ i18n('published') }}</span>
+      <span :class="displayStatusClass"><i :class="displayStatusIcon" class="mr-1"></i>{{ displayStatus }}</span>
+      <span class="badge badge-danger mr-1" v-if="thread.locked">{{ i18n('Archive') }}</span>
+      <span class="badge badge-primary mr-1" v-if="thread.local">{{ i18n('Private') }}</span>
     </div>
     <div class="card-section">
       <div class="card-text">{{ i18n('Deadline') }}：
@@ -71,13 +76,15 @@ parasails.registerComponent('threadCard', {
       <div class="card-text mb-1">
         <small>
           <user-identity :user="thread.owner" :organization="organization" size="sm"></user-identity>
-          <lycaon-timestamp :at="thread.createdAt" format="timeago" :translator="createTranslator" short="true"></lycaon-timestamp>
+          <lycaon-timestamp :at="thread.createdAt" format="timeago" :translator="createTranslator" short="true">
+          </lycaon-timestamp>
         </small>
       </div>
       <div class="card-text mb-1" v-if="thread.lastUpdateUser">
         <small>
           <user-identity :user="thread.lastUpdateUser" :organization="organization" size="sm"></user-identity>
-          <lycaon-timestamp :at="thread.lastHumanUpdateAt" format="timeago" :translator="updateTranslator" short="true"></lycaon-timestamp>
+          <lycaon-timestamp :at="thread.lastHumanUpdateAt" format="timeago" :translator="updateTranslator" short="true">
+          </lycaon-timestamp>
         </small>
       </div>
       <div class="card-text mb-1" v-if="thread.working">
@@ -94,7 +101,8 @@ parasails.registerComponent('threadCard', {
     <span class="badge badge-success mr-1" v-for="(item, index) in thread.tags" :key="index" v-if="team">
       {{ item.name }}
     </span>
-    <a :href="tagLink(item)" class="badge badge-success mr-1" :aria-label="tagTooltip" data-microtip-position="top" data-microtip-size="medium" role="tooltip" v-for="(item, index) in thread.tags" :key="index" v-if="!team">
+    <a :href="tagLink(item)" class="badge badge-success mr-1" :aria-label="tagTooltip" data-microtip-position="top"
+      data-microtip-size="medium" role="tooltip" v-for="(item, index) in thread.tags" :key="index" v-if="!team">
       {{ item.name }}
     </a>
     <div v-if="thread.milestone">
@@ -103,7 +111,7 @@ parasails.registerComponent('threadCard', {
     </div>
   </div>
 </div>
-  `,
+`,
 
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
   //  ║  ║╠╣ ║╣ ║  ╚╦╝║  ║  ║╣

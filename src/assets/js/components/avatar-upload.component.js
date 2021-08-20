@@ -36,26 +36,19 @@ parasails.registerComponent('avatarUpload', {
     <div v-show="$refs.upload && $refs.upload.dropActive" class="drop-active">
       <h3>Drop files to upload</h3>
     </div>
-    <div class="avatar-upload"  v-show="!edit">
+    <div class="avatar-upload" v-show="!edit">
       <div class="text-center p-2">
         <label for="avatar">
-          <img :src="files.length ? files[0].url : avatarUrl"  class="rounded-circle" v-if="hasAvatar" />
-          <img :src="files.length ? files[0].url : 'https://www.gravatar.com/avatar/default?s=200&r=pg&d=mm'"  class="rounded-circle" v-else />
+          <img :src="files.length ? files[0].url : avatarUrl" class="rounded-circle" v-if="hasAvatar" />
+          <img :src="files.length ? files[0].url : 'https://www.gravatar.com/avatar/default?s=200&r=pg&d=mm'"
+            class="rounded-circle" v-else />
           <p class="pt-2">{{ i18n('Drop the file on the icon or select the avatar image with the button below')}}</p>
         </label>
       </div>
       <div class="text-center p-2">
-        <file-upload
-          extensions="gif,jpg,jpeg,png"
-          accept="image/png,image/gif,image/jpeg"
-          name="avatar"
-          class="btn btn-primary btn-sm"
-          :custom-action="uploadAction"
-          :drop="!edit"
-          v-model="files"
-          @input-filter="inputFilter"
-          @input-file="inputFile"
-          ref="upload">
+        <file-upload extensions="gif,jpg,jpeg,png" accept="image/png,image/gif,image/jpeg" name="avatar"
+          class="btn btn-primary btn-sm" :custom-action="uploadAction" :drop="!edit" v-model="files"
+          @input-filter="inputFilter" @input-file="inputFile" ref="upload">
           アバターを選択する
         </file-upload>
       </div>
@@ -66,12 +59,13 @@ parasails.registerComponent('avatarUpload', {
         <img ref="editImage" :src="files[0].url" />
       </div>
       <div class="text-center p-4">
-        <button type="button" class="btn btn-light btn-sm" @click.prevent="$refs.upload.clear">{{ i18n('Cancel') }}</button>
+        <button type="button" class="btn btn-light btn-sm"
+          @click.prevent="$refs.upload.clear">{{ i18n('Cancel') }}</button>
         <button type="submit" class="btn btn-primary btn-sm" @click.prevent="editSave">{{ i18n('Upload') }}</button>
       </div>
     </div>
   </div>
-  `,
+`,
 
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
   //  ║  ║╠╣ ║╣ ║  ╚╦╝║  ║  ║╣
@@ -129,7 +123,7 @@ parasails.registerComponent('avatarUpload', {
     alert(message) {
       alert(message);
     },
-    inputFile(newFile, oldFile, /*prevent*/) {
+    inputFile(newFile, oldFile /*prevent*/) {
       if (newFile && !oldFile) {
         this.$nextTick(function () {
           this.edit = true;
@@ -154,7 +148,7 @@ parasails.registerComponent('avatarUpload', {
         }
       }
     },
-    uploadAction: async function (blob, /*component*/) {
+    uploadAction: async function (blob /*component*/) {
       var data = new FormData();
       data.append('avatar', blob.file);
 
