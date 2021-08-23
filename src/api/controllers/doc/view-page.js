@@ -3,9 +3,9 @@ module.exports = {
 
   description: 'Display "" page.',
   inputs: {
-    id: {
+    no: {
       type: 'number',
-      description: 'wiki.id',
+      description: 'wiki.no',
     },
   },
 
@@ -22,9 +22,9 @@ module.exports = {
   fn: async function (inputs) {
     var response = {};
 
-    if (inputs.id) {
+    if (inputs.no) {
       response.wiki = await Wiki.findOne({
-        id: inputs.id,
+        no: inputs.no,
         concept: 1,
         deleted: false,
       })

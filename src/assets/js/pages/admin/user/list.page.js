@@ -8,10 +8,12 @@ parasails.registerPage('admin-user-list', {
     selectedUser: {},
     showDeleteModal: false,
     showResetModal: false,
+    deleteBtnDisabled: false,
     // Main syncing/loading state for this page.
     syncing: false,
     // Form data
     formData: {
+      deletePin: '',
       /* … */
     },
     // For tracking client-side validation errors in our form.
@@ -32,7 +34,15 @@ parasails.registerPage('admin-user-list', {
       $lycaon.cloudSuccessToast(this.effectMessage);
     }
   },
-
+  watch: {
+    'formData.deletePin': function (val) {
+      if (val === this.deletePin) {
+        this.deleteBtnDisabled = false;
+      } else {
+        this.deleteBtnDisabled = true;
+      }
+    },
+  },
   //  ╦╔╗╔╔╦╗╔═╗╦═╗╔═╗╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
@@ -57,10 +67,7 @@ parasails.registerPage('admin-user-list', {
       form.submit();
     },
     submittedResetForm: async function (response) {
-      $lycaon.successToast('A password reset email has been sent to user {0} {1}', [
-        response.id,
-        response.fullName,
-      ]);
+      $lycaon.successToast('A password reset email has been sent to user {0} {1}', [response.id, response.fullName]);
       this.cloudSuccess = true;
     },
     handleParsingResetForm: function () {
@@ -77,6 +84,7 @@ parasails.registerPage('admin-user-list', {
     clickDeleteUser: function (user) {
       this.selectedUser = user;
       this.showDeleteModal = true;
+      this.deleteBtnDisabled = true;
     },
     doDelete: function () {
       var form = _.find(this.$children, {
@@ -103,6 +111,9 @@ parasails.registerPage('admin-user-list', {
   computed: {
     getPageCount: function () {
       return Math.ceil(this.records / this.pagination.limit);
+    },
+    deletePinInfo: function () {
+      return this.i18n(`Please enter '{0}' for confirmation`, [this.deletePin]);
     },
   },
 });

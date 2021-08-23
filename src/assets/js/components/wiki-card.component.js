@@ -109,7 +109,7 @@ parasails.registerComponent('wikiCard', {
     },
     onCardClick: function () {
       if (this.isPublic) {
-        var url = `/doc/${this.wiki.id}`;
+        var url = `/doc/${this.wiki.no}`;
         window.open(url, '_blank');
       } else {
         location.href = `/${this.organization.handleId}/wiki/${this.wiki.no}`;

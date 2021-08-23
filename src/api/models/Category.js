@@ -50,16 +50,6 @@ module.exports = {
       description: '本文のテンプレートMarkdown',
       example: '# 課題○○○○○',
     },
-    deleted: {
-      type: 'boolean',
-      description: '論理削除フラグ',
-      example: 'false',
-    },
-    isSandbox: {
-      type: 'boolean',
-      description: 'Sandbox',
-      example: 'false',
-    },
 
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗

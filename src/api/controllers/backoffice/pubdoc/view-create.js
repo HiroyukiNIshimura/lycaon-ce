@@ -12,7 +12,7 @@ module.exports = {
   fn: async function () {
     var response = {};
 
-    response.tags = await Tag.find().sort('name ASC');
+    response.tags = await Tag.find({ organization: this.req.organization.id }).sort('name ASC');
     response.witeListOfExts = [];
     if (this.req.sysSettings.witeListOfExts) {
       var exts = this.req.sysSettings.witeListOfExts.split(',');

@@ -30,9 +30,6 @@ module.exports = {
         return Buffer.byteLength(value, 'utf8') < 2000000;
       },
     },
-    deleted: {
-      type: 'boolean',
-    },
   },
   exits: {
     notFound: {
@@ -65,7 +62,6 @@ module.exports = {
       useTemplate: inputs.useTemplate,
       templateSubject: inputs.templateSubject,
       templateBody: inputs.templateBody,
-      deleted: inputs.deleted,
     };
 
     try {

@@ -34,15 +34,6 @@
   </div>
 </div>
 
-<% if(type==='edit' ) { %>
-<div class="custom-control custom-checkbox mt-3">
-  <input type="checkbox" class="custom-control-input" id="form-deleted" v-model="formData.deleted" />
-  <label class="custom-control-label" for="form-deleted">
-    <%= __("Disable this category") %>
-  </label>
-</div>
-<% } %>
-
 <div id="cloud-error" class="row">
   <div class="col-sm-6">
     <p class="text-danger" v-if="cloudError === 'isSandbox'">

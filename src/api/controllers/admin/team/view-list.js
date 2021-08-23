@@ -40,6 +40,8 @@ module.exports = {
       skip: pagination.skip,
     });
 
+    response.deletePin = await sails.helpers.genPin();
+
     if (this.req.session.effectMessage) {
       response.effectMessage = this.req.session.effectMessage;
       delete this.req.session.effectMessage;

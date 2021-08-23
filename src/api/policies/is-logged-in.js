@@ -21,18 +21,23 @@ module.exports = async function (req, res, proceed) {
 
     if (req.params && req.params.handleId) {
       if (req.organization.handleId !== req.params.handleId) {
-        return res.notfound();
+        if (req.me) {
+          delete req.session.originalUrl;
+          return res.unauthorized();
+        } else {
+          return res.notfound();
+        }
+      }
+    }
+
+    if (!req.wantsJSON) {
+      // stock original request url
+      if (req.originalUrl !== '/' && req.originalUrl !== '/login' && req.originalUrl !== '/logout') {
+        req.session.originalUrl = req.originalUrl;
       }
     }
 
     return proceed();
-  }
-
-  if (!req.wantsJSON) {
-    // stock original request url
-    if (req.originalUrl !== '/' && req.originalUrl !== '/login' && req.originalUrl !== '/logout') {
-      req.session.originalUrl = req.originalUrl;
-    }
   }
 
   //--•

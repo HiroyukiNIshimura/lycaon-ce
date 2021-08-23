@@ -14,11 +14,11 @@ module.exports = {
       responseType: 'notfound',
       description: 'The user has accessed a thread that has not joined.',
     },
-    isSandbox: {
+    usingThread: {
       statusCode: 405,
-      description: 'The provided this item is Sandbox.',
+      description: 'The provided this item is now using.',
     },
-    using: {
+    usingTeam: {
       statusCode: 405,
       description: 'The provided this item is now using.',
     },
@@ -28,16 +28,20 @@ module.exports = {
     var current = await Category.findOne({
       id: inputs.id,
       organization: this.req.organization.id,
-    }).populate('threads');
+    })
+      .populate('threads')
+      .populate('teams');
+
     if (!current) {
       throw 'notFound';
     }
-    if (current.isSandbox) {
-      throw 'isSandbox';
-    }
 
     if (current.threads && current.threads.length > 0) {
-      throw 'using';
+      throw 'usingThread';
+    }
+
+    if (current.teams && current.teams.length > 0) {
+      throw 'usingTeam';
     }
 
     try {
@@ -46,7 +50,25 @@ module.exports = {
           id: current.id,
         }).usingConnection(db);
 
+        var categories = await Category.find({
+          where: { organization: this.req.organization.id },
+          sort: 'displayOrder ASC',
+        }).usingConnection(db);
+
+        var i = 1;
+        for (let category of categories) {
+          await Category.updateOne({
+            id: category.id,
+            organization: this.req.organization.id,
+          })
+            .set({ displayOrder: i })
+            .usingConnection(db);
+
+          i++;
+        }
+
         sails.log.info(`カテゴリ[ ${current.id} : ${current.name} ] を削除しました。`);
+        this.req.session.effectMessage = sails.__('Removed the category {0}').format(current.name);
       });
     } catch (err) {
       sails.log.error(err);

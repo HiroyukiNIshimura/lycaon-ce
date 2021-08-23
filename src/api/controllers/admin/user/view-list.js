@@ -51,6 +51,8 @@ module.exports = {
     this.req.session.ReferencePoint = [];
     this.req.session.ReferencePoint.push(this.req.originalUrl);
 
+    response.deletePin = await sails.helpers.genPin();
+
     return response;
   },
 };

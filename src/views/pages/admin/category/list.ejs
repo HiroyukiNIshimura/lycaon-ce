@@ -1,5 +1,37 @@
 <div id="admin-category-list" v-cloak>
   <div class="container">
+    <modal v-if="showDeleteModal">
+      <div class="card">
+        <div class="card-header">
+          <%= __("Confirmation dialog") %>
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">
+            <%= __("Confirmation of deletion") %>
+          </h5>
+          <p class="card-text">
+            <%= __("Deletes the selected category. Is it OK?") %>
+          </p>
+          <p class="card-text">
+            {{ deletePinInfo }}
+          </p>
+          <div class="mb-2">
+            <v-text-input class="form-control" type="text" v-model.trim="formData.deletePin" :class="[formErrors.deletePin ? 'is-invalid' : '']"></v-text-input>
+          </div>
+          <div class="text-right">
+            <button type="button" class="btn btn-danger btn-sm" @click="doDelete" :disabled="deleteBtnDisabled">
+              <i class="far fa-trash-alt"></i>
+              <%= __("Delete") %>
+            </button>
+            <button type="button" class="btn btn-light btn-sm" @click="showDeleteModal = false">
+              <i class="fas fa-window-close"></i>
+              <%= __("Cancel") %>
+            </button>
+          </div>
+        </div>
+      </div>
+    </modal>
+
     <div class="row">
       <div class="col text-right">
         <a class="btn btn-info btn-sm" href="/<%= organization.handleId %>/admin/category/create"><i class="fas fa-plus-circle"></i>
@@ -10,7 +42,10 @@
 
     <div id="cloud-error" class="row">
       <div class="col-sm-6">
-        <p class="text-danger" v-if="cloudError">
+        <p class="text-danger" v-if="cloudError === 'usingThread' || cloudError === 'usingTeam'">
+          <%= __("This category is used by teams and threads. It cannot be deleted") %>
+        </p>
+        <p class="text-danger" v-else-if="cloudError">
           <%= __("An error occurred while processing the request. Please check the information and try again. If the error persists, please contact your administrator") %>
         </p>
       </div>
@@ -44,15 +79,20 @@
                     {{ item.displayOrder }}
                   </span>
                 </div>
-                <div class="col-2">
-                  <span class="badge badge-warning" v-if="item.deleted">
-                    <%= __('Invalid category') %>
-                  </span>
-                </div>
                 <div class="col text-right">
-                  <a :href="link(item)" class="btn btn-info btn-sm"><i class="far fa-edit"></i>
-                    <%= __('Edit') %>
-                  </a>
+                  <div class="btn-group btn-group-sm">
+                    <a :href="link(item)" class="btn btn-info btn-sm"><i class="far fa-edit"></i>
+                      <%= __('Edit') %>
+                    </a>
+                    <button type="button" class="btn btn-info btn-sm dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <div class="dropdown-menu">
+                      <a class="dropdown-item" href="javascript:void(0)" @click="clickDeleteCategory(item)">
+                        <%= __("Delete this category") %>
+                      </a>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -62,6 +102,8 @@
     </div>
   </div>
   <ajax-form id="update-order-form" action="updateCategoryOrder" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedForm" @rejected="onCloudError" :handle-parsing="handleParsingForm">
+  </ajax-form>
+  <ajax-form id="delete-category-form" action="deleteCategory" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedDeleteForm" @rejected="onCloudError" :handle-parsing="handleParsingDeleteForm">
   </ajax-form>
 </div>
 <%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>

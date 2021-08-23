@@ -6,11 +6,12 @@ parasails.registerPage('admin-team-list', {
     formatter: formatter,
     selectedTeam: {},
     showDeleteModal: false,
+    deleteBtnDisabled: false,
     // Main syncing/loading state for this page.
     syncing: false,
     // Form data
     formData: {
-      /* … */
+      deletePin: '',
     },
     // For tracking client-side validation errors in our form.
     // > Has property set to `true` for each invalid property in `formData`.
@@ -30,7 +31,15 @@ parasails.registerPage('admin-team-list', {
       $lycaon.cloudSuccessToast(this.effectMessage);
     }
   },
-
+  watch: {
+    'formData.deletePin': function (val) {
+      if (val === this.deletePin) {
+        this.deleteBtnDisabled = false;
+      } else {
+        this.deleteBtnDisabled = true;
+      }
+    },
+  },
   //  ╦╔╗╔╔╦╗╔═╗╦═╗╔═╗╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
@@ -44,6 +53,7 @@ parasails.registerPage('admin-team-list', {
     clickDeleteTeam: function (team) {
       this.selectedTeam = team;
       this.showDeleteModal = true;
+      this.deleteBtnDisabled = true;
     },
     doDelete: function () {
       var form = _.find(this.$children, {
@@ -70,6 +80,9 @@ parasails.registerPage('admin-team-list', {
   computed: {
     getPageCount: function () {
       return Math.ceil(this.records / this.pagination.limit);
+    },
+    deletePinInfo: function () {
+      return this.i18n(`Please enter '{0}' for confirmation`, [this.deletePin]);
     },
   },
 });

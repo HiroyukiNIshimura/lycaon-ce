@@ -5,11 +5,13 @@ parasails.registerPage('admin-category-edit', {
   data: {
     useTemplate: false,
     templateEditor: {},
+    showUsingModal: false,
     //…
     // Main syncing/loading state for this page.
     syncing: false,
     // Form data
     formData: {
+      deleted: false,
       /* … */
     },
     // For tracking client-side validation errors in our form.
@@ -30,7 +32,6 @@ parasails.registerPage('admin-category-edit', {
     this.formData.displayOrder = this.category.displayOrder;
     this.useTemplate = this.category.useTemplate;
     this.formData.templateSubject = this.category.templateSubject;
-    this.formData.deleted = this.category.deleted;
   },
   mounted: async function () {
     this.templateEditor = $lycaon.markdown.createEditor(

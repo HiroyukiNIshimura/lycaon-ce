@@ -26,6 +26,7 @@ actually logged in.  (If they weren't, then this action is just a no-op.)`,
   fn: async function () {
     // Clear the `userId` property from this session.
     delete this.req.session.userId;
+    delete this.req.session.originalUrl;
 
     // Then finish up, sending an appropriate response.
     // > Under the covers, this persists the now-logged-out session back

@@ -6,10 +6,14 @@ parasails.registerPage('admin-category-list', {
     formatter: formatter,
     categories: [],
     inDrag: false,
+    selectedCategory: {},
+    showDeleteModal: false,
+    deleteBtnDisabled: false,
     // Main syncing/loading state for this page.
     syncing: false,
     // Form data
     formData: {
+      deletePin: '',
       /* … */
     },
     // For tracking client-side validation errors in our form.
@@ -28,9 +32,19 @@ parasails.registerPage('admin-category-list', {
   //  ╩═╝╩╚  ╚═╝╚═╝ ╩ ╚═╝╩═╝╚═╝
   beforeMount: function () {},
   mounted: async function () {
-    //…
+    if (this.effectMessage) {
+      $lycaon.cloudSuccessToast(this.effectMessage);
+    }
   },
-
+  watch: {
+    'formData.deletePin': function (val) {
+      if (val === this.deletePin) {
+        this.deleteBtnDisabled = false;
+      } else {
+        this.deleteBtnDisabled = true;
+      }
+    },
+  },
   //  ╦╔╗╔╔╦╗╔═╗╦═╗╔═╗╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
@@ -79,6 +93,32 @@ parasails.registerPage('admin-category-list', {
 
       return argins;
     },
+    clickDeleteCategory: function (category) {
+      this.selectedCategory = category;
+      this.showDeleteModal = true;
+      this.deleteBtnDisabled = true;
+    },
+    doDelete: function () {
+      var form = _.find(this.$children, {
+        $el: $('#delete-category-form')[0],
+      });
+      form.submit();
+    },
+    submittedDeleteForm: async function () {
+      this.cloudSuccess = true;
+      location.reload();
+    },
+    handleParsingDeleteForm: function () {
+      this.formErrors = {};
+      $lycaon.clearToast();
+      this.showDeleteModal = false;
+
+      var argins = {
+        id: this.selectedCategory.id,
+      };
+
+      return argins;
+    },
   },
   computed: {
     dragOptions() {
@@ -88,6 +128,9 @@ parasails.registerPage('admin-category-list', {
         disabled: false,
         ghostClass: 'ghost',
       };
+    },
+    deletePinInfo: function () {
+      return this.i18n(`Please enter '{0}' for confirmation`, [this.deletePin]);
     },
   },
 });

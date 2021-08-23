@@ -32,8 +32,8 @@ module.exports = {
 
     var NATIVE_COUNT_SQL = `
 select count("team__teams"."id") as qty
-  from "public"."team_users__user_teams" as "team_users__user_teams__teams" 
-  left outer join "team" as "team__teams" on "team_users__user_teams__teams"."team_users" = "team__teams"."id" 
+  from "public"."team_users__user_teams" as "team_users__user_teams__teams"
+  left outer join "team" as "team__teams" on "team_users__user_teams__teams"."team_users" = "team__teams"."id"
  where "team__teams"."deleted" = false
    and "team_users__user_teams__teams"."user_teams" = $1
 `;
@@ -43,7 +43,7 @@ select count("team__teams"."id") as qty
       response.records = rawResult.rows[0].qty;
 
       response.categories = await Category.find()
-        .where({ organization: this.req.organization.id, deleted: false })
+        .where({ organization: this.req.organization.id })
         .sort('displayOrder ASC');
       response.tags = await Tag.find({ organization: this.req.organization.id }).sort('name ASC');
 
