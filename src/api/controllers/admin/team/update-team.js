@@ -104,7 +104,9 @@ module.exports = {
       }
     }
 
-    var current = await Team.findOne({ id: inputs.id, organization: this.req.organization.id });
+    var current = await Team.findOne({ id: inputs.id, organization: this.req.organization.id }).populate('users', {
+      where: { isNologin: false, isSandbox: false, deleted: false },
+    });
     if (!current) {
       throw 'notFound';
     }
@@ -159,6 +161,9 @@ module.exports = {
         })
           .set(valuesToSet)
           .usingConnection(db);
+
+        //TODO
+        await sails.helpers.sendTeamMail.with({ id: current.id, action: 'update', ignores: current.users, db: db });
       });
     } catch (err) {
       sails.log.error(err);

@@ -33,26 +33,26 @@ module.exports = {
 
     const NATIVE_SQL = {
       monthly: `
-select to_char(to_timestamp("createdAt"/1000), 'YYYY/MM') as dt, count(*) as qty 
-  from "thread_activity" 
+select to_char(to_timestamp("createdAt"/1000), 'YYYY/MM') as dt, count(*) as qty
+  from "thread_activity"
  where "user" = $1 and "type" = $2 and "createdAt" >= $3 and "createdAt" <= $4
  group by to_char(to_timestamp("createdAt"/1000), 'YYYY/MM');
     `,
       daily: `
-select to_char(to_timestamp("createdAt"/1000), 'DD') as dt, count(*) as qty 
-  from "thread_activity" 
+select to_char(to_timestamp("createdAt"/1000), 'DD') as dt, count(*) as qty
+  from "thread_activity"
  where "user" = $1 and "type" = $2 and "createdAt" >= $3 and "createdAt" <= $4
  group by to_char(to_timestamp("createdAt"/1000), 'DD');
     `,
       hourly: `
-select to_char(to_timestamp("createdAt"/1000), 'HH24') as dt, count(*) as qty 
-  from "thread_activity" 
+select to_char(to_timestamp("createdAt"/1000), 'HH24') as dt, count(*) as qty
+  from "thread_activity"
   where "user" = $1 and "type" = $2 and "createdAt" >= $3 and "createdAt" <= $4
   group by to_char(to_timestamp("createdAt"/1000), 'HH24');
         `,
       weekly: `
-select to_char(to_timestamp("createdAt"/1000), 'D') as dt, count(*) as qty 
-  from "thread_activity" 
+select to_char(to_timestamp("createdAt"/1000), 'D') as dt, count(*) as qty
+  from "thread_activity"
  where "user" = $1 and "type" = $2 and "createdAt" >= $3 and "createdAt" <= $4
  group by to_char(to_timestamp("createdAt"/1000), 'D');
     `,
@@ -60,26 +60,26 @@ select to_char(to_timestamp("createdAt"/1000), 'D') as dt, count(*) as qty
 
     const NATIVE_WIKI_SQL = {
       monthly: `
-select to_char(to_timestamp("createdAt"/1000), 'YYYY/MM') as dt, count(*) as qty 
-  from "wiki" 
+select to_char(to_timestamp("createdAt"/1000), 'YYYY/MM') as dt, count(*) as qty
+  from "wiki"
  where "owner" = $1 and "createdAt" >= $2 and "createdAt" <= $3
  group by to_char(to_timestamp("createdAt"/1000), 'YYYY/MM');
     `,
       daily: `
-select to_char(to_timestamp("createdAt"/1000), 'DD') as dt, count(*) as qty 
-  from "wiki" 
+select to_char(to_timestamp("createdAt"/1000), 'DD') as dt, count(*) as qty
+  from "wiki"
  where "owner" = $1 and "createdAt" >= $2 and "createdAt" <= $3
  group by to_char(to_timestamp("createdAt"/1000), 'DD');
     `,
       hourly: `
-select to_char(to_timestamp("createdAt"/1000), 'HH24') as dt, count(*) as qty 
-  from "wiki" 
+select to_char(to_timestamp("createdAt"/1000), 'HH24') as dt, count(*) as qty
+  from "wiki"
   where "owner" = $1 and "createdAt" >= $2 and "createdAt" <= $3
   group by to_char(to_timestamp("createdAt"/1000), 'HH24');
         `,
       weekly: `
-select to_char(to_timestamp("createdAt"/1000), 'D') as dt, count(*) as qty 
-  from "wiki" 
+select to_char(to_timestamp("createdAt"/1000), 'D') as dt, count(*) as qty
+  from "wiki"
  where "owner" = $1 and "createdAt" >= $2 and "createdAt" <= $3
  group by to_char(to_timestamp("createdAt"/1000), 'D');
     `,
@@ -87,26 +87,26 @@ select to_char(to_timestamp("createdAt"/1000), 'D') as dt, count(*) as qty
 
     const NATIVE_GIT_SQL = {
       monthly: `
-select to_char(to_timestamp("commitAt"/1000), 'YYYY/MM') as dt, count(*) as qty 
-  from "git_log" 
+select to_char(to_timestamp("commitAt"/1000), 'YYYY/MM') as dt, count(*) as qty
+  from "git_log"
  where "author_email" = $1 and "commitAt" >= $2 and "commitAt" <= $3
  group by to_char(to_timestamp("commitAt"/1000), 'YYYY/MM');
     `,
       daily: `
-select to_char(to_timestamp("commitAt"/1000), 'DD') as dt, count(*) as qty 
-  from "git_log" 
+select to_char(to_timestamp("commitAt"/1000), 'DD') as dt, count(*) as qty
+  from "git_log"
  where "author_email" = $1 and "commitAt" >= $2 and "commitAt" <= $3
  group by to_char(to_timestamp("commitAt"/1000), 'DD');
     `,
       hourly: `
-select to_char(to_timestamp("commitAt"/1000), 'HH24') as dt, count(*) as qty 
-  from "git_log" 
+select to_char(to_timestamp("commitAt"/1000), 'HH24') as dt, count(*) as qty
+  from "git_log"
   where "author_email" = $1 and "commitAt" >= $2 and "commitAt" <= $3
   group by to_char(to_timestamp("commitAt"/1000), 'HH24');
         `,
       weekly: `
-select to_char(to_timestamp("commitAt"/1000), 'D') as dt, count(*) as qty 
-  from "git_log" 
+select to_char(to_timestamp("commitAt"/1000), 'D') as dt, count(*) as qty
+  from "git_log"
  where "author_email" = $1 and "commitAt" >= $2 and "commitAt" <= $3
  group by to_char(to_timestamp("commitAt"/1000), 'D');
     `,
@@ -115,6 +115,7 @@ select to_char(to_timestamp("commitAt"/1000), 'D') as dt, count(*) as qty
     const types = [
       'create',
       'update',
+      'update-subject',
       'local',
       'update-category',
       'update-concept',
@@ -194,27 +195,14 @@ select to_char(to_timestamp("commitAt"/1000), 'D') as dt, count(*) as qty
 
     try {
       for (let type of types) {
-        let result = await sails.sendNativeQuery(sql, [
-          response.user.id,
-          type,
-          from.valueOf(),
-          to.valueOf(),
-        ]);
+        let result = await sails.sendNativeQuery(sql, [response.user.id, type, from.valueOf(), to.valueOf()]);
         response.analytics[type] = result.rows;
       }
 
-      var result = await sails.sendNativeQuery(wikisql, [
-        response.user.id,
-        from.valueOf(),
-        to.valueOf(),
-      ]);
+      var result = await sails.sendNativeQuery(wikisql, [response.user.id, from.valueOf(), to.valueOf()]);
       response.analytics.wiki = result.rows;
 
-      result = await sails.sendNativeQuery(gitsql, [
-        response.user.emailAddress,
-        from.valueOf(),
-        to.valueOf(),
-      ]);
+      result = await sails.sendNativeQuery(gitsql, [response.user.emailAddress, from.valueOf(), to.valueOf()]);
       response.analytics.git = result.rows;
     } catch (err) {
       sails.log.error(err);

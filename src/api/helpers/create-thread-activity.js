@@ -16,6 +16,7 @@ module.exports = {
       isIn: [
         'create',
         'update',
+        'update-subject',
         'local',
         'update-category',
         'update-concept',
@@ -83,6 +84,7 @@ module.exports = {
     switch (type) {
       case 'create':
       case 'update':
+      case 'update-subject':
       case 'local':
       case 'update-reply':
       case 'delete-reply':

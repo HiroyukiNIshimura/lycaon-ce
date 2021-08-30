@@ -91,8 +91,6 @@ module.exports = {
         "category__category"."useTemplate" as "category__useTemplate",
         "category__category"."templateSubject" as "category__templateSubject",
         "category__category"."templateBody" as "category__templateBody",
-        "category__category"."deleted" as "category__deleted",
-        "category__category"."isSandbox" as "category__isSandbox",
         "category__category"."organization" as "category__organization",
         "milestone__milestone"."id" as "milestone__id",
         "milestone__milestone"."createdAt" as "milestone__createdAt",
@@ -220,7 +218,7 @@ module.exports = {
         LEFT OUTER JOIN "user" as "user__owner" on "thread"."owner" = "user__owner"."id"
         LEFT OUTER JOIN "user" as "user__responsible" on "thread"."responsible" = "user__responsible"."id"
         LEFT OUTER JOIN "user" as "user__workingUser" on "thread"."workingUser" = "user__workingUser"."id"
-        LEFT OUTER JOIN "user" as "user__lastUpdateUser" on "thread"."lastUpdateUser" = "user__lastUpdateUser"."id" 
+        LEFT OUTER JOIN "user" as "user__lastUpdateUser" on "thread"."lastUpdateUser" = "user__lastUpdateUser"."id"
                 `;
 
     var NATIVE_WHERE = `WHERE "thread"."team" = $1
@@ -233,7 +231,7 @@ AND ("thread"."subject" ilike $2 OR "thread"."body" ilike $3
       )
 `;
 
-    var NATIVE_WHERE2 = `WHERE "thread"."team" IN (SELECT "id" FROM "team" WHERE "organization" = $1)  
+    var NATIVE_WHERE2 = `WHERE "thread"."team" IN (SELECT "id" FROM "team" WHERE "organization" = $1)
 AND "thread"."local" = false
 AND ("thread"."subject" ilike $2 OR "thread"."body" ilike $3
  OR "thread"."id" in (SELECT "thread" FROM "sneeze" WHERE "comment" ilike $4)
@@ -247,20 +245,20 @@ AND ("thread"."subject" ilike $2 OR "thread"."body" ilike $3
         `;
 
     var NATIVE_SNEEZE = `
-SELECT "id", "comment", "thread"                  
+SELECT "id", "comment", "thread"
   FROM "public"."sneeze"
  WHERE "thread" = $1
    AND "comment" ilike $2
     `;
     var NATIVE_REPLY = `
-SELECT "id", "comment", "thread", "sneeze"                  
+SELECT "id", "comment", "thread", "sneeze"
   FROM "public"."reply"
  WHERE "thread" = $1
    AND "comment" ilike $2
 `;
 
     var NATIVE_ITEM = `
-SELECT "id", "name", "virtualPath", "thread"                             
+SELECT "id", "name", "virtualPath", "thread"
   FROM "public"."thread_item"
  WHERE "thread" = $1
    AND "qWords" ilike $2

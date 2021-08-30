@@ -119,6 +119,7 @@ module.exports = {
 
     //メール送信する場合true
     var effected = false;
+    var effectedOnlySubject = false;
 
     try {
       await sails.getDatastore().transaction(async (db) => {
@@ -169,7 +170,16 @@ module.exports = {
           }
         }
 
-        if (current.subject !== updated.subject || current.body !== updated.body) {
+        if (current.subject !== updated.subject && current.body === updated.body) {
+          await sails.helpers.createThreadActivity.with({
+            db: db,
+            type: 'update-subject',
+            user: this.req.me,
+            thread: updated,
+          });
+
+          effectedOnlySubject = true;
+        } else if (current.subject !== updated.subject || current.body !== updated.body) {
           await sails.helpers.createThreadActivity.with({
             db: db,
             type: 'update',
@@ -177,6 +187,10 @@ module.exports = {
             thread: updated,
           });
 
+          effected = true;
+        }
+
+        if (current.subject !== updated.subject || current.body !== updated.body) {
           var message = {
             key: '{0} has updated the subject or body of thread [#{1}] {2}',
             params: [this.req.me.fullName, updated.no, updated.subject],
@@ -188,8 +202,6 @@ module.exports = {
             user: this.req.me,
             thread: updated,
           });
-
-          effected = true;
         }
 
         var localNotify = false;
@@ -255,6 +267,14 @@ module.exports = {
             action: 'update',
             db: db,
           });
+        } else {
+          if (effectedOnlySubject) {
+            await sails.helpers.sendThreadMailWrapper.with({
+              thread: updated.id,
+              action: 'update-subject',
+              db: db,
+            });
+          }
         }
       });
     } catch (err) {

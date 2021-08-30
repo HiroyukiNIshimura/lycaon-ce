@@ -234,6 +234,8 @@ $$
           owner: bot.id,
         }).usingConnection(db);
         //
+
+        await sails.helpers.sendTeamMail.with({ id: created.id, action: 'create', db: db });
       });
     } catch (err) {
       sails.log.error(err);

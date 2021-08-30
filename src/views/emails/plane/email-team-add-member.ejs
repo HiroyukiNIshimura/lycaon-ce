@@ -1,0 +1,11 @@
+<% /* Note: This is injected into `views/layouts/layout-email.ejs` */ %>
+
+<%= __('You have joined Team {0}').format(team.name) %>
+------------------------------
+
+<%= __('Please access the team from this link') %>
+[ <%= url.resolve(sails.config.custom.baseUrl, `/${organization.handleId}/team/${team.id}`) %> ]
+
+------------------------------
+Sincerely,
+<%= fromName %>

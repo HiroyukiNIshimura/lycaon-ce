@@ -94,6 +94,8 @@ parasails.registerComponent('activityCard', {
           return this.i18n('Created a thread at {0}', [at]);
         case 'update':
           return this.i18n('Updated the thread at {0}', [at]);
+        case 'update-subject':
+          return this.i18n('Updated the subject at {0}', [at]);
         case 'local':
           return this.i18n('Changed the thread to [ private ] at {0}', [at]);
         case 'update-reply':
@@ -197,6 +199,8 @@ parasails.registerComponent('activityCard', {
         case 'create':
           return 'fa-exclamation-circle';
         case 'update':
+          return 'fa-edit';
+        case 'update-subject':
           return 'fa-edit';
         case 'local':
           return 'fa-eye-slash';

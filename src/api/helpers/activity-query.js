@@ -64,8 +64,6 @@ SELECT
     "category__category"."id" as "category__id",
     "category__category"."name" as "category__name",
     "category__category"."displayOrder" as "category__displayOrder",
-    "category__category"."deleted" as "category__deleted",
-    "category__category"."isSandbox" as "category__isSandbox",
     "user__responsible"."id" as "responsible__id",
     "user__responsible"."emailAddress" as "responsible__emailAddress",
     "user__responsible"."fullName" as "responsible__fullName",

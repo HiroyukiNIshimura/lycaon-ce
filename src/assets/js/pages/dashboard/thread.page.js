@@ -761,6 +761,9 @@ parasails.registerPage('thread', {
     isUpdateThread: function (type) {
       return type === 'update' && this.viewActivity !== 1;
     },
+    isUpdateSubject: function (type) {
+      return type === 'update-subject' && this.viewActivity !== 1;
+    },
     isLocal: function (type) {
       return type === 'local' && this.viewActivity !== 1;
     },
@@ -1554,6 +1557,9 @@ parasails.registerPage('thread', {
     },
     updateTranslator: function (val) {
       return this.i18n('Updated the thread at {0}', [val]);
+    },
+    updateSubjectTranslator: function (val) {
+      return this.i18n('Updated the subject at {0}', [val]);
     },
     attachTranslator: function (val, option) {
       return this.i18n('Attached file [{0}] at {1}', [option.fileName, val]);

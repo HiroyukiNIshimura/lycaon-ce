@@ -15,6 +15,7 @@ module.exports = {
       isIn: [
         'create',
         'update',
+        'update-subject',
         'status',
         'concept',
         'responsible',
@@ -93,6 +94,10 @@ module.exports = {
           break;
         case 'update':
           action = sails.__('The thread has been updated_2');
+          shortAction = sails.__('(update)');
+          break;
+        case 'update-subject':
+          action = sails.__('The subject has changed');
           shortAction = sails.__('(update)');
           break;
         case 'status':

@@ -57,7 +57,6 @@ module.exports = {
         sort: 'lastSeenAt DESC',
       })
       .populate('categories', {
-        where: { deleted: false },
         sort: 'displayOrder ASC',
       });
     response.comboMembers = team.users;
