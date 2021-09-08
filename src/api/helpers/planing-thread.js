@@ -1,5 +1,5 @@
 module.exports = {
-  friendlyName: 'planing helper',
+  friendlyName: 'planingThread',
   description: 'planing helper.',
   inputs: {
     organization: {
@@ -29,15 +29,15 @@ module.exports = {
     }
 
     const NATIVE_SQL_T_ITEM = `
-select sum("size") as "size" 
-  from "thread_item" 
- where "thread" in 
-   (select "id" 
-      from "thread" 
-     where "team" in 
-       (select "id" 
-          from "team" 
-         where "organization" = $1))     
+select sum("size") as "size"
+  from "thread_item"
+ where "thread" in
+   (select "id"
+      from "thread"
+     where "team" in
+       (select "id"
+          from "team"
+         where "organization" = $1))
     `;
 
     var organization = await Organization.findOne({ id: inputs.organization });

@@ -2,7 +2,7 @@
  * Sailsのhelperにあったけどどうしよう
  */
 module.exports = {
-  friendlyName: 'Create Gravatar Url',
+  friendlyName: 'parseGravatarUrl',
   description: 'Create Gravatar Url.',
   inputs: {
     email: {

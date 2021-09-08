@@ -1,4 +1,5 @@
 <div id="vote-view" v-cloak>
+  <account-notification-banner></account-notification-banner>
   <div class="container">
     <ajax-form id="confirm-circulation" action="confirmCirculation" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedConfirmForm" @rejected="onCloudError" :handle-parsing="handleParsingConfirmForm">
     </ajax-form>

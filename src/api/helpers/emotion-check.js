@@ -4,7 +4,7 @@ const _ = require('lodash');
 const sanitizeHtml = require('sanitize-html');
 
 module.exports = {
-  friendlyName: 'Emotion Check',
+  friendlyName: 'emotionCheck',
   description: 'Emotion Check utility.',
   inputs: {
     contents: {

@@ -2,7 +2,7 @@ const moment = require('moment');
 const url = require('url');
 
 module.exports = {
-  friendlyName: 'Send Thread mail utility',
+  friendlyName: 'sendThreadMailWrapper',
   description: 'Send Thread mail utility.',
   inputs: {
     thread: {

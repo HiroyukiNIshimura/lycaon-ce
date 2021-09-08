@@ -4,7 +4,7 @@ const axios = require('axios');
 const MAX_DIFF_DATA_SIZE = 2000;
 
 module.exports = {
-  friendlyName: 'parse gitlab show response',
+  friendlyName: 'gitlabShow',
   description: 'parse gitlab show response.',
   inputs: {
     gitlog: {
@@ -48,9 +48,7 @@ module.exports = {
     moment.locale(inputs.me.languagePreference);
 
     var getDiffs = async function (team, hash) {
-      let url = new URL(
-        `${team.gitlabApi}/projects/${team.gitlabProjectId}/repository/commits/${hash}/diff`
-      );
+      let url = new URL(`${team.gitlabApi}/projects/${team.gitlabProjectId}/repository/commits/${hash}/diff`);
       url.search = `private_token=${team.gitlabToken}`;
       try {
         var res = await axios.get(url.href);
@@ -60,16 +58,12 @@ module.exports = {
           message: `gitlabと接続ができませんでした [${url.href}] [${err}]`,
           team: team,
         });
-        throw new Error(
-          sails.__('Could not connect with gitlab [{0}] [{1}]').format(url.href, err)
-        );
+        throw new Error(sails.__('Could not connect with gitlab [{0}] [{1}]').format(url.href, err));
       }
     };
 
     var getCommit = async function (team, hash) {
-      let url = new URL(
-        `${team.gitlabApi}/projects/${team.gitlabProjectId}/repository/commits/${hash}`
-      );
+      let url = new URL(`${team.gitlabApi}/projects/${team.gitlabProjectId}/repository/commits/${hash}`);
       url.search = `private_token=${team.gitlabToken}`;
       try {
         var res = await axios.get(url.href);
@@ -79,9 +73,7 @@ module.exports = {
           message: `gitlabと接続ができませんでした [${url.href}] [${err}]`,
           team: team,
         });
-        throw new Error(
-          sails.__('Could not connect with gitlab [{0}] [{1}]').format(url.href, err)
-        );
+        throw new Error(sails.__('Could not connect with gitlab [{0}] [{1}]').format(url.href, err));
       }
     };
 

@@ -1,5 +1,5 @@
 module.exports = {
-  friendlyName: 'drop sequence',
+  friendlyName: 'dropSequence',
   description: 'drop sequence.',
   inputs: {
     handleId: {

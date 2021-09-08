@@ -1,5 +1,5 @@
 module.exports = {
-  friendlyName: 'activity sql helper',
+  friendlyName: 'activityQuery',
   description: 'activity sql helper utility.',
   inputs: {
     where: {

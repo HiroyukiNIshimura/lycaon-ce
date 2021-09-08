@@ -1,5 +1,5 @@
 module.exports = {
-  friendlyName: 'get sequence nextval',
+  friendlyName: 'getNextval',
   description: 'get sequence nextval.',
   inputs: {
     target: {

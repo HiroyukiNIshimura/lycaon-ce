@@ -80,6 +80,12 @@ then redirect to either a special landing page (for newly-signed up users), or t
       });
       this.req.session.userId = user.id;
 
+      // In case there was an existing session, broadcast a message that we can
+      // display in other open tabs.
+      if (sails.hooks.sockets) {
+        await sails.helpers.broadcastSessionChange(this.req);
+      }
+
       if (this.req.wantsJSON) {
         return;
       } else {
@@ -122,6 +128,13 @@ then redirect to either a special landing page (for newly-signed up users), or t
         emailChangeCandidate: '',
       });
       this.req.session.userId = user.id;
+
+      // In case there was an existing session, broadcast a message that we can
+      // display in other open tabs.
+      if (sails.hooks.sockets) {
+        await sails.helpers.broadcastSessionChange(this.req);
+      }
+
       if (this.req.wantsJSON) {
         return;
       } else {

@@ -1,4 +1,5 @@
 <div id="milestone-edit" v-cloak>
+  <account-notification-banner></account-notification-banner>
   <div class="container">
     <ajax-form id="form-delete" action="deleteMilestone" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedDeleteForm" @rejected="onCloudError" :handle-parsing="handleParsingDeleteForm">
     </ajax-form>

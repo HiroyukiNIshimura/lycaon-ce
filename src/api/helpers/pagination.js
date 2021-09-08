@@ -1,5 +1,5 @@
 module.exports = {
-  friendlyName: 'Pagination',
+  friendlyName: 'pagination',
   description: 'Pagination helper.',
   inputs: {
     page: {

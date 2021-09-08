@@ -1,5 +1,5 @@
 module.exports = {
-  friendlyName: 'planing helper',
+  friendlyName: 'planingWiki',
   description: 'planing helper.',
   inputs: {
     organization: {
@@ -29,15 +29,15 @@ module.exports = {
     }
 
     const NATIVE_SQL_W_ITEM = `
-select sum("size") as "size" 
-  from "wiki_item" 
- where "wiki" in 
-   (select "id" 
-      from "wiki" 
-     where "team" in 
-       (select "id" 
-          from "team" 
-         where "organization" = $1))     
+select sum("size") as "size"
+  from "wiki_item"
+ where "wiki" in
+   (select "id"
+      from "wiki"
+     where "team" in
+       (select "id"
+          from "team"
+         where "organization" = $1))
     `;
 
     var organization = await Organization.findOne({ id: inputs.organization });

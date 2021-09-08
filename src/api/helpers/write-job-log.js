@@ -1,7 +1,7 @@
 const moment = require('moment');
 
 module.exports = {
-  friendlyName: 'Write Jobs log',
+  friendlyName: 'writeJobLog',
 
   description: 'Write Jobs log.',
 

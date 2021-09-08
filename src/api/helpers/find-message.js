@@ -1,5 +1,5 @@
 module.exports = {
-  friendlyName: 'get message',
+  friendlyName: 'findMessage',
   description: 'get message.',
   inputs: {
     me: {

@@ -1,7 +1,7 @@
 const nodemailer = require('nodemailer');
 
 module.exports = {
-  friendlyName: 'Send template email',
+  friendlyName: 'sendTemplateEmail',
 
   description: 'Send an email using a template.',
 

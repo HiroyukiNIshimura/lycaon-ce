@@ -1,5 +1,5 @@
 module.exports = {
-  friendlyName: 'check git repository access',
+  friendlyName: 'gitRepositoryCheck',
   description: 'check git repository access.',
   inputs: {
     connectType: {

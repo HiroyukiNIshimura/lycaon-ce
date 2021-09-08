@@ -1,5 +1,5 @@
 module.exports = {
-  friendlyName: 'query counters',
+  friendlyName: 'queryCounter',
   description: 'query counters.',
   inputs: {
     team: {
@@ -113,21 +113,15 @@ SELECT COUNT("vote".*) as "qty"
    AND "vote"."circulationFrom" <= $2
    AND "vote"."circulationTo" >= $3
    AND "vote"."id" IN (SELECT "vote_users" FROM "user_votes__vote_users" WHERE "user_votes" = $4)
-   AND "vote"."id" 
-       NOT IN (SELECT "vote_choices"."vote" FROM "vote_choices" WHERE "vote_choices"."id" 
+   AND "vote"."id"
+       NOT IN (SELECT "vote_choices"."vote" FROM "vote_choices" WHERE "vote_choices"."id"
            IN (SELECT "vote_answer"."voteChoices" FROM "vote_answer" WHERE "vote_answer"."user" = $5))
 `;
 
       var dt = new Date();
       dt.setHours(0, 0, 0, 0);
 
-      var params = [
-        inputs.user.organization.id,
-        dt.valueOf(),
-        dt.valueOf(),
-        inputs.user.id,
-        inputs.user.id,
-      ];
+      var params = [inputs.user.organization.id, dt.valueOf(), dt.valueOf(), inputs.user.id, inputs.user.id];
 
       if (inputs.db) {
         counter.myThread = await query.queryMyThread.usingConnection(inputs.db);
@@ -135,9 +129,7 @@ SELECT COUNT("vote".*) as "qty"
         counter.flag = await query.queryFlag.usingConnection(inputs.db);
         counter.local = await query.queryLocal.usingConnection(inputs.db);
 
-        let rawResult = await sails
-          .sendNativeQuery(NATIVE_NEW_VOTE_SQL, params)
-          .usingConnection(inputs.db);
+        let rawResult = await sails.sendNativeQuery(NATIVE_NEW_VOTE_SQL, params).usingConnection(inputs.db);
         counter.votes = rawResult.rows[0].qty;
       } else {
         counter.myThread = await query.queryMyThread;

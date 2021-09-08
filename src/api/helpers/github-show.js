@@ -4,7 +4,7 @@ const axios = require('axios');
 const MAX_DIFF_DATA_SIZE = 2000;
 
 module.exports = {
-  friendlyName: 'parse github show response',
+  friendlyName: 'githubShow',
   description: 'parse github show response.',
   inputs: {
     gitlog: {
@@ -48,9 +48,7 @@ module.exports = {
     moment.locale(inputs.me.languagePreference);
 
     var getCommit = async function (team, hash) {
-      let url = new URL(
-        `https://api.github.com/repos/${team.gitUser}/${team.gitRepository}/commits/${hash}`
-      );
+      let url = new URL(`https://api.github.com/repos/${team.gitUser}/${team.gitRepository}/commits/${hash}`);
 
       var headers = {
         Accept: 'application/vnd.github.v3+json',
@@ -69,9 +67,7 @@ module.exports = {
           message: `githubと接続ができませんでした [${url.href}] [${err}]`,
           team: team,
         });
-        throw new Error(
-          sails.__('Could not connect with github [{0}] [{1}]').format(url.href, err)
-        );
+        throw new Error(sails.__('Could not connect with github [{0}] [{1}]').format(url.href, err));
       }
     };
 

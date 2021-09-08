@@ -1,5 +1,5 @@
 module.exports = {
-  friendlyName: 'planing helper',
+  friendlyName: 'planingUser',
   description: 'planing helper.',
   inputs: {
     organization: {

@@ -1,7 +1,7 @@
 const crypto = require('crypto');
 
 module.exports = {
-  friendlyName: 'decrypto string',
+  friendlyName: 'decryptoString',
   description: 'decrypto string.',
   inputs: {
     encrypto: {

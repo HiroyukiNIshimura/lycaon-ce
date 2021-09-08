@@ -1,5 +1,5 @@
 module.exports = {
-  friendlyName: 'find threads',
+  friendlyName: 'findThread',
   description: 'find threads.',
   inputs: {
     whereClause: {

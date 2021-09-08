@@ -1,5 +1,5 @@
 module.exports = {
-  friendlyName: 'Validate team membership utility',
+  friendlyName: 'validateMembership',
   description: 'Validate team membership utility.',
   inputs: {
     id: {

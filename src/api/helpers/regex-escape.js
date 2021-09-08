@@ -1,5 +1,5 @@
 module.exports = {
-  friendlyName: 'regex escape',
+  friendlyName: 'regexEscape',
   description: 'regex escape.',
   inputs: {
     str: {
@@ -16,9 +16,7 @@ module.exports = {
       var reRegExp = /[\\^$.*+?()[\]{}|]/g;
       var reHasRegExp = new RegExp(reRegExp.source);
 
-      return inputs.str && reHasRegExp.test(inputs.str)
-        ? inputs.str.replace(reRegExp, '\\$&')
-        : inputs.str;
+      return inputs.str && reHasRegExp.test(inputs.str) ? inputs.str.replace(reRegExp, '\\$&') : inputs.str;
     } catch (err) {
       sails.log.debug(err);
     }

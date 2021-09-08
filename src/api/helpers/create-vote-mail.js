@@ -1,7 +1,7 @@
 const moment = require('moment');
 
 module.exports = {
-  friendlyName: 'create vote mail data',
+  friendlyName: 'createVoteMail',
   description: 'create vote mail data.',
   inputs: {
     organization: {

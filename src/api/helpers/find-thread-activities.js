@@ -1,5 +1,5 @@
 module.exports = {
-  friendlyName: 'find thread activities',
+  friendlyName: 'findThreadActivities',
   description: 'find thread activities.',
   inputs: {
     id: {

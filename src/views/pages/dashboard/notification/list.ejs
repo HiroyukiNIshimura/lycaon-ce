@@ -1,4 +1,5 @@
 <div id="notification-list" v-cloak>
+  <account-notification-banner></account-notification-banner>
   <div class="container">
     <ajax-form id="query-form" action="queryNotification" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedQueryForm" @rejected="onCloudError" :handle-parsing="handleParsingQueryForm">
     </ajax-form>

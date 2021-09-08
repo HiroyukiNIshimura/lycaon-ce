@@ -1,5 +1,5 @@
 module.exports = {
-  friendlyName: 'planing helper',
+  friendlyName: 'planingVote',
   description: 'planing helper.',
   inputs: {
     organization: {
@@ -29,11 +29,11 @@ module.exports = {
     }
 
     const NATIVE_SQL_V_ITEM = `
-  select sum("size") as "size" 
-    from "vote_item" 
-   where "vote" in 
-     (select "id" 
-        from "vote" 
+  select sum("size") as "size"
+    from "vote_item"
+   where "vote" in
+     (select "id"
+        from "vote"
        where "organization" = $1)
       `;
 

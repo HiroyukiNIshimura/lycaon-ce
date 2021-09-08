@@ -1,7 +1,7 @@
 const axios = require('axios');
 
 module.exports = {
-  friendlyName: 'check url',
+  friendlyName: 'checkUrl',
   description: 'check url utility.',
   inputs: {
     url: {

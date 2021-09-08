@@ -1,7 +1,7 @@
 const moment = require('moment');
 
 module.exports = {
-  friendlyName: 'create wiki mail data',
+  friendlyName: 'createWikiMail',
   description: 'create wiki mail data.',
   inputs: {
     organization: {

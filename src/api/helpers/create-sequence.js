@@ -1,5 +1,5 @@
 module.exports = {
-  friendlyName: 'create sequence',
+  friendlyName: 'createSequence',
   description: 'create sequence.',
   inputs: {
     handleId: {
