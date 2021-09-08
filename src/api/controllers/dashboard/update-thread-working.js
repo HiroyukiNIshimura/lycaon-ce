@@ -79,7 +79,7 @@ module.exports = {
             .usingConnection(db);
         }
 
-        await sails.helpers.createThreadActivity.with({
+        await sails.helpers.storage.createThreadActivity.with({
           db: db,
           type: 'update-working',
           user: this.req.me,
@@ -90,7 +90,7 @@ module.exports = {
           await sails.helpers.timeMeasurement.with({ db: db, thread: updated });
         }
 
-        await sails.helpers.sendThreadMailWrapper.with({
+        await sails.helpers.mail.sendThreadMailWrapper.with({
           thread: updated.id,
           action: 'working',
           db: db,

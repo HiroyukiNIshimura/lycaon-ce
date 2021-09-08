@@ -80,7 +80,7 @@ module.exports = {
 
     moment.locale(user.languagePreference);
     sails.hooks.i18n.setLocale(user.languagePreference);
-    await sails.helpers.sendTemplateEmail.with({
+    await sails.helpers.mail.sendTemplateEmail.with({
       organization: this.req.organization,
       to: user.emailAddress,
       subject: sails.__('Notification of message reception from {0}').format(this.req.me.fullName),

@@ -29,7 +29,7 @@ module.exports = {
         .populate('flags');
 
       if (inputs.id) {
-        response.counter = await sails.helpers.queryCounter.with({
+        response.counter = await sails.helpers.storage.queryCounter.with({
           team: inputs.id,
           flags: user.flags.map((o) => {
             return o.id;
@@ -37,7 +37,7 @@ module.exports = {
           user: user,
         });
       } else {
-        response.counter = await sails.helpers.queryCounter.with({
+        response.counter = await sails.helpers.storage.queryCounter.with({
           team: user.teams.map((o) => {
             return o.id;
           }),

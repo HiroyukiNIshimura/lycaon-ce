@@ -171,7 +171,7 @@ module.exports = {
         }
 
         if (current.subject !== updated.subject && current.body === updated.body) {
-          await sails.helpers.createThreadActivity.with({
+          await sails.helpers.storage.createThreadActivity.with({
             db: db,
             type: 'update-subject',
             user: this.req.me,
@@ -180,7 +180,7 @@ module.exports = {
 
           effectedOnlySubject = true;
         } else if (current.subject !== updated.subject || current.body !== updated.body) {
-          await sails.helpers.createThreadActivity.with({
+          await sails.helpers.storage.createThreadActivity.with({
             db: db,
             type: 'update',
             user: this.req.me,
@@ -207,7 +207,7 @@ module.exports = {
         var localNotify = false;
         if (current.local !== updated.local && updated.local) {
           localNotify = true;
-          await sails.helpers.createThreadActivity.with({
+          await sails.helpers.storage.createThreadActivity.with({
             db: db,
             type: 'local',
             user: this.req.me,
@@ -218,7 +218,7 @@ module.exports = {
         }
 
         if (current.category !== updated.category) {
-          await sails.helpers.createThreadActivity.with({
+          await sails.helpers.storage.createThreadActivity.with({
             db: db,
             type: 'update-category',
             user: this.req.me,
@@ -229,7 +229,7 @@ module.exports = {
         }
 
         if (!localNotify && current.concept !== updated.concept) {
-          await sails.helpers.createThreadActivity.with({
+          await sails.helpers.storage.createThreadActivity.with({
             db: db,
             type: 'update-concept',
             user: this.req.me,
@@ -240,7 +240,7 @@ module.exports = {
         }
 
         if (current.responsible !== updated.responsible) {
-          await sails.helpers.createThreadActivity.with({
+          await sails.helpers.storage.createThreadActivity.with({
             db: db,
             type: 'responsible',
             user: this.req.me,
@@ -251,7 +251,7 @@ module.exports = {
         }
 
         if (current.milestone !== updated.milestone) {
-          await sails.helpers.createThreadActivity.with({
+          await sails.helpers.storage.createThreadActivity.with({
             db: db,
             type: 'milestone',
             user: this.req.me,
@@ -262,14 +262,14 @@ module.exports = {
         }
 
         if (effected) {
-          await sails.helpers.sendThreadMailWrapper.with({
+          await sails.helpers.mail.sendThreadMailWrapper.with({
             thread: updated.id,
             action: 'update',
             db: db,
           });
         } else {
           if (effectedOnlySubject) {
-            await sails.helpers.sendThreadMailWrapper.with({
+            await sails.helpers.mail.sendThreadMailWrapper.with({
               thread: updated.id,
               action: 'update-subject',
               db: db,

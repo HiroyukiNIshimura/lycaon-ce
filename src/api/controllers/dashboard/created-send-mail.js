@@ -27,10 +27,10 @@ module.exports = {
       }
 
       await sails.getDatastore().transaction(async (db) => {
-        await sails.helpers.sendThreadMailWrapper.with({
+        await sails.helpers.mail.sendThreadMailWrapper.with({
           thread: thread.id,
           action: 'create',
-          db: db
+          db: db,
         });
       });
 

@@ -135,7 +135,7 @@ module.exports = {
 
     inquery.category = buffja.join(', ');
 
-    await sails.helpers.sendTemplateEmail.with({
+    await sails.helpers.mail.sendTemplateEmail.with({
       organization: backoffice,
       to: sails.config.custom.backofficeMailAddress,
       subject: '問い合わせフォームからの入力通知',
@@ -156,7 +156,7 @@ module.exports = {
 
     inquery.category = buff.join(', ');
 
-    await sails.helpers.sendTemplateEmail.with({
+    await sails.helpers.mail.sendTemplateEmail.with({
       organization: backoffice,
       to: inquery.emailAddress,
       subject: sails.__('Thank you for your inquiry'),

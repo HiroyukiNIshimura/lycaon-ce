@@ -104,7 +104,7 @@ module.exports = {
           wiki.tagToken += tag + ':';
         });
 
-        wiki.no = await sails.helpers.getNextval.with({
+        wiki.no = await sails.helpers.storage.getNextval.with({
           target: 'wiki',
           handleId: wiki.handleId,
         });
@@ -114,7 +114,7 @@ module.exports = {
         if (inputs.concept === 0) {
           team = await Team.findOne({ id: created.team }).populate('users');
           for (let entry of team.users) {
-            var data = await sails.helpers.createWikiMail.with({
+            var data = await sails.helpers.mail.createWikiMail.with({
               organization: this.req.me.organization,
               wiki: created,
               author: this.req.me,

@@ -216,7 +216,7 @@ module.exports = {
       }
 
       response.records = await Thread.count().where(whereClause);
-      response.data = await sails.helpers.findThread.with({
+      response.data = await sails.helpers.storage.findThread.with({
         whereClause: whereClause,
         sort: sort,
         pagination: pagination,

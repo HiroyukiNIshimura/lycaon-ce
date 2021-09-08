@@ -56,7 +56,7 @@ module.exports = {
           locale: lang,
         },
       };
-      await sails.helpers.sendTemplateEmail.with(data);
+      await sails.helpers.mail.sendTemplateEmail.with(data);
     }
   },
 };

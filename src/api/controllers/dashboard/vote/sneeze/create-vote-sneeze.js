@@ -62,7 +62,7 @@ module.exports = {
     var formail = await VoteSneeze.findOne({ id: created.id }).populate('owner');
 
     for (let entry of vote.users) {
-      var data = await sails.helpers.createVoteSneezeMail.with({
+      var data = await sails.helpers.mail.createVoteSneezeMail.with({
         organization: this.req.me.organization,
         vote: vote,
         sneeze: formail,

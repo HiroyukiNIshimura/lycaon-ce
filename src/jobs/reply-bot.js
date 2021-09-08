@@ -78,7 +78,7 @@ module.exports = {
       await sails.getDatastore().transaction(async (db) => {
         var created = await Reply.create(valuesToSet).fetch().usingConnection(db);
 
-        await sails.helpers.createThreadActivity.with({
+        await sails.helpers.storage.createThreadActivity.with({
           db: db,
           type: 'create-reply',
           user: bot,
@@ -92,7 +92,7 @@ module.exports = {
         var sNo = _.findIndex(sneezes, { id: reply.sneeze });
         sNo++;
 
-        await sails.helpers.sendThreadMailWrapper.with({
+        await sails.helpers.mail.sendThreadMailWrapper.with({
           thread: sneeze.thread.id,
           action: 'reply',
           reply: created.id,

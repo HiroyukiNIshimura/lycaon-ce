@@ -139,7 +139,7 @@ module.exports = {
       var created = {};
       await sails.getDatastore().transaction(async (db) => {
         created = await Organization.create(org).fetch().usingConnection(db);
-        await sails.helpers.createSequence.with({ handleId: created.handleId });
+        await sails.helpers.storage.createSequence.with({ handleId: created.handleId });
 
         await Billing.create({ organization: created.id }).fetch().usingConnection(db);
 
@@ -183,7 +183,7 @@ module.exports = {
 
       // 新規組織登録確認メール送信（Backoffice用）
       var backoffice = await Organization.findOne({ handleId: 'brightl' });
-      await sails.helpers.sendTemplateEmail.with({
+      await sails.helpers.mail.sendTemplateEmail.with({
         organization: backoffice,
         to: sails.config.custom.backofficeMailAddress,
         subject: isBackOffice ? '新規組織を登録しました' : '新規組織がエントランスより登録されました',
@@ -197,7 +197,7 @@ module.exports = {
       });
 
       // 新規組織登録確認メール送信
-      await sails.helpers.sendTemplateEmail.with({
+      await sails.helpers.mail.sendTemplateEmail.with({
         organization: created,
         to: email,
         subject: sails.__('Welcome! To Lycaon (Send confirmation URL of organization registration)'),

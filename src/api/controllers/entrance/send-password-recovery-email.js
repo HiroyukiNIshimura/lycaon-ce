@@ -69,7 +69,7 @@ module.exports = {
     });
 
     // Send recovery email
-    await sails.helpers.sendTemplateEmail.with({
+    await sails.helpers.mail.sendTemplateEmail.with({
       organization: this.req.organization,
       to: inputs.emailAddress,
       subject: sails.__('Password reset notification'),

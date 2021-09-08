@@ -59,7 +59,7 @@ module.exports = {
           .set(reply)
           .usingConnection(db);
 
-        await sails.helpers.createThreadActivity.with({
+        await sails.helpers.storage.createThreadActivity.with({
           db: db,
           type: 'update-reply',
           user: this.req.me,

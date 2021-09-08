@@ -89,7 +89,7 @@ module.exports = {
 
     if (inputs.useGit) {
       if (inputs.useGit) {
-        var res = await sails.helpers.gitRepositoryCheck.with({
+        var res = await sails.helpers.git.gitRepositoryCheck.with({
           connectType: inputs.connectType,
           gitRepository: inputs.gitRepository,
           gitUser: inputs.gitUser,
@@ -163,7 +163,12 @@ module.exports = {
           .usingConnection(db);
 
         //TODO
-        await sails.helpers.sendTeamMail.with({ id: current.id, action: 'update', ignores: current.users, db: db });
+        await sails.helpers.mail.sendTeamMail.with({
+          id: current.id,
+          action: 'update',
+          ignores: current.users,
+          db: db,
+        });
       });
     } catch (err) {
       sails.log.error(err);

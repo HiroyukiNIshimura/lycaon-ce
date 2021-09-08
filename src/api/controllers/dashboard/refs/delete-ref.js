@@ -49,7 +49,7 @@ module.exports = {
           await Thread.updateOne({ id: child.id }).set({ parent: null });
         }
 
-        await sails.helpers.createThreadActivity.with({
+        await sails.helpers.storage.createThreadActivity.with({
           db: db,
           type: 'delete-relationship',
           user: this.req.me,
@@ -62,9 +62,7 @@ module.exports = {
       throw err;
     }
 
-    this.req.session.effectMessage = sails
-      .__('Removed association with thread [#{0}]')
-      .format(inputs.child);
+    this.req.session.effectMessage = sails.__('Removed association with thread [#{0}]').format(inputs.child);
 
     return {};
   },

@@ -3,8 +3,8 @@ module.exports = {
     var NATIVE_SQL = `
 SELECT (SELECT bigm_similarity($1, t."subject")) as "subjectScore",
   (SELECT bigm_similarity($2, t."body")) as "bodyScore",
-  t.* 
-  FROM "thread" t 
+  t.*
+  FROM "thread" t
  WHERE t."id" != $3
    AND t."team" = $4
    AND (t."subject" =% $5 OR t."body" =% $6)
@@ -64,7 +64,7 @@ SELECT (SELECT bigm_similarity($1, t."subject")) as "subjectScore",
     try {
       await sails.getDatastore().transaction(async (db) => {
         var created = await Sneeze.create(sneeze).fetch().usingConnection(db);
-        await sails.helpers.createThreadActivity.with({
+        await sails.helpers.storage.createThreadActivity.with({
           db: db,
           type: 'create-sneeze',
           user: bot,
@@ -75,7 +75,7 @@ SELECT (SELECT bigm_similarity($1, t."subject")) as "subjectScore",
 
         var sNo = await Sneeze.count({ thread: thread.id }).usingConnection(db);
 
-        await sails.helpers.sendThreadMailWrapper.with({
+        await sails.helpers.mail.sendThreadMailWrapper.with({
           thread: thread.id,
           action: 'sneeze',
           sneeze: created.id,

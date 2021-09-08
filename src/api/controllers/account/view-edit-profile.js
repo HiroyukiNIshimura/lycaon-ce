@@ -35,11 +35,9 @@ module.exports = {
     }
 
     var tags = await Tag.find({ organization: this.req.organization.id }).sort('name ASC');
-    var categories = await Category.find({ organization: this.req.organization.id }).sort(
-      'name ASC'
-    );
+    var categories = await Category.find({ organization: this.req.organization.id }).sort('name ASC');
 
-    var messageStack = await sails.helpers.findMessage.with({ me: this.req.me });
+    var messageStack = await sails.helpers.storage.findMessage.with({ me: this.req.me });
 
     return {
       teams: user.teams,

@@ -50,7 +50,7 @@ module.exports = {
       line++;
     }
 
-    response.messageStack = await sails.helpers.findMessage.with({ me: this.req.me });
+    response.messageStack = await sails.helpers.storage.findMessage.with({ me: this.req.me });
 
     if (this.req.session.ReferencePoint) {
       response.backToUrl = _.last(this.req.session.ReferencePoint);

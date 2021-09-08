@@ -31,13 +31,13 @@ module.exports = {
     var response = {};
 
     if (gitlog.team.connectType === 0) {
-      response = await sails.helpers.githubShow.with({
+      response = await sails.helpers.git.githubShow.with({
         gitlog: gitlog,
         row: inputs.row,
         me: this.req.me,
       });
     } else {
-      response = await sails.helpers.gitlabShow.with({
+      response = await sails.helpers.git.gitlabShow.with({
         gitlog: gitlog,
         row: inputs.row,
         me: this.req.me,

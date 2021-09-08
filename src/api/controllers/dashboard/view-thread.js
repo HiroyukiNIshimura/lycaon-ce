@@ -98,7 +98,7 @@ module.exports = {
       team_users: response.team.id,
     });
 
-    var activities = await sails.helpers.findThreadActivities.with({ id: response.thread.id });
+    var activities = await sails.helpers.storage.findThreadActivities.with({ id: response.thread.id });
     response.sneezes = activities.sneezes;
     response.replys = activities.replys;
     response.activities = activities.activities;
@@ -145,7 +145,7 @@ module.exports = {
       });
     }
 
-    response.messageStack = await sails.helpers.findMessage.with({ me: this.req.me });
+    response.messageStack = await sails.helpers.storage.findMessage.with({ me: this.req.me });
 
     this.req.session.ReferencePoint = [];
     this.req.session.ReferencePoint.push(this.req.originalUrl);

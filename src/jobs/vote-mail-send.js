@@ -20,7 +20,7 @@ module.exports = {
         }
 
         for (let entry of vote.users) {
-          let data = await sails.helpers.createVoteMail.with({
+          let data = await sails.helpers.mail.createVoteMail.with({
             organization: vote.organization,
             vote: vote,
             author: vote.author,
@@ -28,7 +28,7 @@ module.exports = {
             user: entry,
           });
 
-          await sails.helpers.sendTemplateEmail.with(data);
+          await sails.helpers.mail.sendTemplateEmail.with(data);
         }
 
         await Vote.updateOne({ id: vote.id }).set({ mailSended: true });
@@ -53,7 +53,7 @@ module.exports = {
           });
 
           if (exists < 0) {
-            let data = await sails.helpers.createVoteMail.with({
+            let data = await sails.helpers.mail.createVoteMail.with({
               organization: vote.organization,
               vote: vote,
               author: vote.author,
@@ -61,7 +61,7 @@ module.exports = {
               user: entry,
               unread: true,
             });
-            await sails.helpers.sendTemplateEmail.with(data);
+            await sails.helpers.mail.sendTemplateEmail.with(data);
           }
           //
         }

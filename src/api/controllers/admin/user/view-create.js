@@ -26,7 +26,7 @@ module.exports = {
       organization: this.req.organization.id,
     });
 
-    if (!(await sails.helpers.planingUser.with({ organization: this.req.organization.id }))) {
+    if (!(await sails.helpers.planing.planingUser.with({ organization: this.req.organization.id }))) {
       response.unplanned = true;
     }
 

@@ -45,10 +45,7 @@ module.exports = {
     if (!response.user) {
       throw 'notFound';
     }
-    if (
-      response.user.organization &&
-      response.user.organization.id !== this.req.me.organization.id
-    ) {
+    if (response.user.organization && response.user.organization.id !== this.req.me.organization.id) {
       throw 'notFound';
     }
     if (inputs.handleId !== this.req.me.organization.handleId) {
@@ -57,7 +54,7 @@ module.exports = {
 
     await User.setGravatarUrl(response.user, 36);
 
-    response.messageStack = await sails.helpers.findMessage.with({ me: this.req.me });
+    response.messageStack = await sails.helpers.storage.findMessage.with({ me: this.req.me });
 
     if (this.req.session.ReferencePoint) {
       response.backToUrl = _.last(this.req.session.ReferencePoint);

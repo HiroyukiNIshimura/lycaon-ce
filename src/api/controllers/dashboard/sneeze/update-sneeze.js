@@ -57,7 +57,7 @@ module.exports = {
           .set(sneeze)
           .usingConnection(db);
 
-        await sails.helpers.createThreadActivity.with({
+        await sails.helpers.storage.createThreadActivity.with({
           db: db,
           type: 'update-sneeze',
           user: this.req.me,

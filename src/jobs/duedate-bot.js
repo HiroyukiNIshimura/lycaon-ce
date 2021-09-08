@@ -47,7 +47,7 @@ module.exports = {
         try {
           await sails.getDatastore().transaction(async (db) => {
             var created = await Sneeze.create(sneeze).fetch().usingConnection(db);
-            await sails.helpers.createThreadActivity.with({
+            await sails.helpers.storage.createThreadActivity.with({
               db: db,
               type: 'create-sneeze',
               user: bot,
@@ -58,7 +58,7 @@ module.exports = {
 
             var sNo = await Sneeze.count({ thread: thread.id }).usingConnection(db);
 
-            await sails.helpers.sendThreadMailWrapper.with({
+            await sails.helpers.mail.sendThreadMailWrapper.with({
               thread: thread.id,
               action: 'sneeze',
               sneeze: created.id,

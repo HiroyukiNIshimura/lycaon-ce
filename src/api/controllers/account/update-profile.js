@@ -176,7 +176,7 @@ module.exports = {
     // If an email address change was requested, and re-confirmation is required,
     // send the "confirm account" email.
     if (desiredEmailEffect === 'begin-change' || desiredEmailEffect === 'modify-pending-change') {
-      await sails.helpers.sendTemplateEmail.with({
+      await sails.helpers.mail.sendTemplateEmail.with({
         organization: this.req.organization,
         to: newEmailAddress,
         subject: sails.__('Notification of completion of email address change'),

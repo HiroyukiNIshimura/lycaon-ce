@@ -96,7 +96,7 @@ module.exports = {
       response.badState = 'notConfirmPassedDeadline';
     }
 
-    response.messageStack = await sails.helpers.findMessage.with({ me: this.req.me });
+    response.messageStack = await sails.helpers.storage.findMessage.with({ me: this.req.me });
 
     if (this.req.session.effectMessage) {
       response.effectMessage = this.req.session.effectMessage;

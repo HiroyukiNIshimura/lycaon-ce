@@ -40,7 +40,7 @@ module.exports = {
   },
 
   fn: async function (inputs) {
-    if (!(await sails.helpers.planingUser.with({ organization: this.req.organization.id }))) {
+    if (!(await sails.helpers.planing.planingUser.with({ organization: this.req.organization.id }))) {
       throw 'unplanned';
     }
 
@@ -84,7 +84,7 @@ module.exports = {
       });
 
       // 新規ユーザー登録確認メール送信
-      await sails.helpers.sendTemplateEmail.with({
+      await sails.helpers.mail.sendTemplateEmail.with({
         organization: this.req.organization,
         to: email,
         subject: sails.__('Welcome! To Lycaon (Send user registration confirmation URL)'),
@@ -100,9 +100,7 @@ module.exports = {
       throw err;
     }
 
-    this.req.session.effectMessage = sails
-      .__('You have created a user {0}')
-      .format(valuesToSet.fullName);
+    this.req.session.effectMessage = sails.__('You have created a user {0}').format(valuesToSet.fullName);
 
     return {
       id: created.id,

@@ -44,7 +44,7 @@ module.exports = {
     var NATIVE_COUNT_SQL = `
 SELECT COUNT("thread_activity".*)
   FROM "public"."thread_activity" as "thread_activity"
-  LEFT OUTER JOIN "thread" as "thread__thread" 
+  LEFT OUTER JOIN "thread" as "thread__thread"
     ON "thread__thread"."id" = "thread_activity"."thread"
 `;
 
@@ -110,13 +110,10 @@ SELECT COUNT("thread_activity".*)
           where = NATIVE_WHERE_MAIN_NONMYOWN_SQL;
         }
 
-        rawResult = await sails.sendNativeQuery(NATIVE_COUNT_SQL + where, [
-          inputs.id,
-          this.req.me.id,
-        ]);
+        rawResult = await sails.sendNativeQuery(NATIVE_COUNT_SQL + where, [inputs.id, this.req.me.id]);
         response.records = rawResult.rows[0].count;
 
-        response.data = await sails.helpers.activityQuery.with({
+        response.data = await sails.helpers.storage.activityQuery.with({
           where:
             where +
             `
@@ -130,13 +127,10 @@ LIMIT $3 OFFSET $4`,
           where = NATIVE_WHERE_TEAM_NONMYOWN_SQL;
         }
 
-        rawResult = await sails.sendNativeQuery(NATIVE_COUNT_SQL + where, [
-          this.req.me.id,
-          this.req.me.id,
-        ]);
+        rawResult = await sails.sendNativeQuery(NATIVE_COUNT_SQL + where, [this.req.me.id, this.req.me.id]);
         response.records = rawResult.rows[0].count;
 
-        response.data = await sails.helpers.activityQuery.with({
+        response.data = await sails.helpers.storage.activityQuery.with({
           where:
             where +
             `

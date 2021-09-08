@@ -58,7 +58,7 @@ SELECT "organization", MAX("lastSeenAt") as "lastSeenAt"
             locale: representative.languagePreference,
           },
         };
-        await sails.helpers.sendTemplateEmail.with(data);
+        await sails.helpers.mail.sendTemplateEmail.with(data);
 
         sails.log.info(`${organization.handleId} ${organization.name} 宛に退会勧告メールを送信しました。`);
       }

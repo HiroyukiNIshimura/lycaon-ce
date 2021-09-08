@@ -11,10 +11,10 @@ SELECT a.*
   FROM "thread" a
  WHERE a."id" IN (
   SELECT t."id" FROM (
-    SELECT "thread" as "id", MAX("updatedAt") as "dt" 
+    SELECT "thread" as "id", MAX("updatedAt") as "dt"
       FROM "thread_activity"
      WHERE "user" != $1
-     GROUP BY "thread") t 
+     GROUP BY "thread") t
    WHERE t.dt <= $2)
    AND a."status" = 0
    AND a."team" = $3
@@ -81,7 +81,7 @@ SELECT a.*
               };
 
               var created = await Sneeze.create(sneeze).fetch().usingConnection(db);
-              await sails.helpers.createThreadActivity.with({
+              await sails.helpers.storage.createThreadActivity.with({
                 db: db,
                 type: 'create-sneeze',
                 user: bot,
@@ -92,7 +92,7 @@ SELECT a.*
 
               var sNo = await Sneeze.count({ thread: thread.id }).usingConnection(db);
 
-              await sails.helpers.sendThreadMailWrapper.with({
+              await sails.helpers.mail.sendThreadMailWrapper.with({
                 thread: thread.id,
                 action: 'sneeze',
                 sneeze: created.id,

@@ -31,7 +31,7 @@ module.exports = {
 
     response.categories = await Category.find({ organization: this.req.organization.id });
 
-    if (!(await sails.helpers.planingTeam.with({ organization: this.req.organization.id }))) {
+    if (!(await sails.helpers.planing.planingTeam.with({ organization: this.req.organization.id }))) {
       response.unplanned = true;
     }
     return response;

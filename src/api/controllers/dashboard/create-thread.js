@@ -147,7 +147,7 @@ module.exports = {
           thread.tagToken += tag + ':';
         });
 
-        thread.no = await sails.helpers.getNextval.with({
+        thread.no = await sails.helpers.storage.getNextval.with({
           target: 'thread',
           handleId: thread.handleId,
         });
@@ -157,7 +157,7 @@ module.exports = {
           await ThreadRef.create({ left: created.parent, right: created.id }).usingConnection(db);
         }
 
-        await sails.helpers.createThreadActivity.with({
+        await sails.helpers.storage.createThreadActivity.with({
           db: db,
           type: 'create',
           user: user,
@@ -165,7 +165,7 @@ module.exports = {
         });
 
         if (inputs.fork) {
-          await sails.helpers.createThreadActivity.with({
+          await sails.helpers.storage.createThreadActivity.with({
             db: db,
             type: 'fork',
             user: this.req.me,

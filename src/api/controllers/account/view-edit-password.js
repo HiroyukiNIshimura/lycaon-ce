@@ -20,7 +20,7 @@ module.exports = {
   },
 
   fn: async function () {
-    var messageStack = await sails.helpers.findMessage.with({ me: this.req.me });
+    var messageStack = await sails.helpers.storage.findMessage.with({ me: this.req.me });
     return { messageStack: messageStack };
   },
 };

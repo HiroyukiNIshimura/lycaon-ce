@@ -97,7 +97,7 @@ module.exports = {
       }),
     };
 
-    response.counter = await sails.helpers.queryCounter.with({
+    response.counter = await sails.helpers.storage.queryCounter.with({
       team: response.team.id,
       flags: user.flags.map((o) => {
         return o.id;
@@ -161,7 +161,7 @@ module.exports = {
       this.res.clearCookie('teamQueryParam');
     }
 
-    response.messageStack = await sails.helpers.findMessage.with({ me: this.req.me });
+    response.messageStack = await sails.helpers.storage.findMessage.with({ me: this.req.me });
 
     this.req.session.ReferencePoint = [];
     this.req.session.ReferencePoint.push(this.req.originalUrl);

@@ -76,7 +76,7 @@ module.exports = {
         await ThreadRef.create({ left: current.id, right: child.id }).usingConnection(db);
         await ThreadRef.create({ left: child.id, right: current.id }).usingConnection(db);
 
-        await sails.helpers.createThreadActivity.with({
+        await sails.helpers.storage.createThreadActivity.with({
           db: db,
           type: 'relationship',
           user: this.req.me,
@@ -89,9 +89,7 @@ module.exports = {
       throw err;
     }
 
-    this.req.session.effectMessage = sails
-      .__('A thread [#{0}] has been associated')
-      .format(inputs.child);
+    this.req.session.effectMessage = sails.__('A thread [#{0}] has been associated').format(inputs.child);
 
     return {};
   },

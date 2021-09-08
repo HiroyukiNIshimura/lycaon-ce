@@ -20,9 +20,7 @@ module.exports = {
   },
 
   fn: async function () {
-    var current = await Billing.findOne({ organization: this.req.organization.id }).populate(
-      'organization'
-    );
+    var current = await Billing.findOne({ organization: this.req.organization.id }).populate('organization');
     if (!current) {
       throw 'notFound';
     }
@@ -53,7 +51,7 @@ module.exports = {
     // バックオフィスあて
     sails.hooks.i18n.setLocale('ja');
     moment.locale('ja');
-    await sails.helpers.sendTemplateEmail.with({
+    await sails.helpers.mail.sendTemplateEmail.with({
       organization: backoffice,
       to: sails.config.custom.backofficeMailAddress,
       subject: '退会依頼通知',
@@ -66,7 +64,7 @@ module.exports = {
 
     sails.hooks.i18n.setLocale(representative.languagePreference);
     moment.locale(representative.languagePreference);
-    await sails.helpers.sendTemplateEmail.with({
+    await sails.helpers.mail.sendTemplateEmail.with({
       organization: backoffice,
       to: representative.emailAddress,
       subject: sails.__('The request for unsubscribed has been accepted'),

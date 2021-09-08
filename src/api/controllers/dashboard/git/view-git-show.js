@@ -37,12 +37,12 @@ module.exports = {
     var response = {};
 
     if (gitlog.team.connectType === 0) {
-      response = await sails.helpers.githubShow.with({ gitlog: gitlog, me: this.req.me });
+      response = await sails.helpers.git.githubShow.with({ gitlog: gitlog, me: this.req.me });
     } else {
-      response = await sails.helpers.gitlabShow.with({ gitlog: gitlog, me: this.req.me });
+      response = await sails.helpers.git.gitlabShow.with({ gitlog: gitlog, me: this.req.me });
     }
 
-    response.messageStack = await sails.helpers.findMessage.with({ me: this.req.me });
+    response.messageStack = await sails.helpers.storage.findMessage.with({ me: this.req.me });
 
     if (this.req.session.ReferencePoint) {
       response.backToUrl = _.last(this.req.session.ReferencePoint);

@@ -157,7 +157,7 @@ SELECT a.*
             }
             data.templateData.teams.push(exists);
           }
-          await sails.helpers.sendTemplateEmail.with(data);
+          await sails.helpers.mail.sendTemplateEmail.with(data);
         }
       }
     } catch (err) {

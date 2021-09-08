@@ -79,7 +79,7 @@ module.exports = {
   },
 
   fn: async function (inputs) {
-    if (!(await sails.helpers.planingTeam.with({ organization: this.req.organization.id }))) {
+    if (!(await sails.helpers.planing.planingTeam.with({ organization: this.req.organization.id }))) {
       throw 'unplanned';
     }
 
@@ -94,7 +94,7 @@ module.exports = {
     }
 
     if (inputs.useGit) {
-      var res = await sails.helpers.gitRepositoryCheck.with({
+      var res = await sails.helpers.git.gitRepositoryCheck.with({
         connectType: inputs.connectType,
         gitRepository: inputs.gitRepository,
         gitUser: inputs.gitUser,
@@ -151,7 +151,7 @@ module.exports = {
         created = await Team.create(valuesToSet).fetch().usingConnection(db);
 
         await Thread.create({
-          no: await sails.helpers.getNextval.with({
+          no: await sails.helpers.storage.getNextval.with({
             target: 'thread',
             handleId: this.req.organization.handleId,
           }),
@@ -235,7 +235,7 @@ $$
         }).usingConnection(db);
         //
 
-        await sails.helpers.sendTeamMail.with({ id: created.id, action: 'create', db: db });
+        await sails.helpers.mail.sendTeamMail.with({ id: created.id, action: 'create', db: db });
       });
     } catch (err) {
       sails.log.error(err);

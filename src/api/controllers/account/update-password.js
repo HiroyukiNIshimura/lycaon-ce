@@ -34,7 +34,7 @@ module.exports = {
     });
 
     // パスワード変更確認メール送信
-    await sails.helpers.sendTemplateEmail.with({
+    await sails.helpers.mail.sendTemplateEmail.with({
       organization: this.req.organization,
       to: updated.emailAddress,
       subject: sails.__('Notification of password change completion'),

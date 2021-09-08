@@ -63,14 +63,14 @@ module.exports = {
           .set(valueSet)
           .usingConnection(db);
 
-        await sails.helpers.createThreadActivity.with({
+        await sails.helpers.storage.createThreadActivity.with({
           db: db,
           type: 'responsible',
           user: this.req.me,
           thread: updated,
         });
 
-        await sails.helpers.sendThreadMailWrapper.with({
+        await sails.helpers.mail.sendThreadMailWrapper.with({
           thread: updated.id,
           action: 'responsible',
           db: db,

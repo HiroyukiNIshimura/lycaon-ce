@@ -71,14 +71,12 @@ module.exports = {
         })
           .set({ parent: parent.id })
           .usingConnection(db);
-        var ref = await ThreadRef.findOne({ left: parent.id, right: current.id }).usingConnection(
-          db
-        );
+        var ref = await ThreadRef.findOne({ left: parent.id, right: current.id }).usingConnection(db);
         if (!ref) {
           await ThreadRef.create({ left: parent.id, right: current.id }).usingConnection(db);
         }
 
-        await sails.helpers.createThreadActivity.with({
+        await sails.helpers.storage.createThreadActivity.with({
           db: db,
           type: 'relationship',
           user: this.req.me,

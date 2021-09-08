@@ -41,7 +41,7 @@ module.exports = {
       sort: 'lastSeenAt DESC',
     });
 
-    response.messageStack = await sails.helpers.findMessage.with({ me: this.req.me });
+    response.messageStack = await sails.helpers.storage.findMessage.with({ me: this.req.me });
 
     return response;
   },

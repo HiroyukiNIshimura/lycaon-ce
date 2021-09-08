@@ -47,7 +47,7 @@ select count("team__teams"."id") as qty
         .sort('displayOrder ASC');
       response.tags = await Tag.find({ organization: this.req.organization.id }).sort('name ASC');
 
-      response.messageStack = await sails.helpers.findMessage.with({ me: this.req.me });
+      response.messageStack = await sails.helpers.storage.findMessage.with({ me: this.req.me });
     } catch (err) {
       sails.log.error(err);
       throw err;

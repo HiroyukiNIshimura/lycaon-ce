@@ -51,7 +51,7 @@ module.exports = {
         return res.notFound();
       }
 
-      let valid = await sails.helpers.planingThread.with({
+      let valid = await sails.helpers.planing.planingThread.with({
         organization: user.organization,
         thread: thread,
         appendSize: blobSize,
@@ -87,7 +87,7 @@ module.exports = {
         }
       }
 
-      let valid = await sails.helpers.planingWiki.with({
+      let valid = await sails.helpers.planing.planingWiki.with({
         organization: user.organization,
         wiki: wiki,
         appendSize: blobSize,
@@ -113,7 +113,7 @@ module.exports = {
         return res.notFound();
       }
 
-      let valid = await sails.helpers.planingVote.with({
+      let valid = await sails.helpers.planing.planingVote.with({
         organization: user.organization,
         vote: vote,
         appendSize: blobSize,
@@ -289,7 +289,7 @@ module.exports = {
           var container = 'thread';
           if (req.params.type === 'thread' || req.params.type === 'createthread') {
             createdRecord = await ThreadItem.create(item).fetch().usingConnection(db);
-            await sails.helpers.createThreadActivity.with({
+            await sails.helpers.storage.createThreadActivity.with({
               db: db,
               type: 'attach-file',
               user: user,
@@ -378,7 +378,7 @@ module.exports = {
             id: item.id,
           }).usingConnection(db);
 
-          await sails.helpers.createThreadActivity.with({
+          await sails.helpers.storage.createThreadActivity.with({
             db: db,
             type: 'delete-file',
             user: req.me,

@@ -116,7 +116,7 @@ module.exports = {
       if (created.circulationFrom <= Date.now()) {
         var formail = await Vote.findOne({ id: created.id }).populate('users').populate('author');
         for (let entry of formail.users) {
-          var data = await sails.helpers.createVoteMail.with({
+          var data = await sails.helpers.mail.createVoteMail.with({
             organization: this.req.me.organization,
             vote: formail,
             author: formail.author,
