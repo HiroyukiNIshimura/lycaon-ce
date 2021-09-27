@@ -1,0 +1,34 @@
+<% /* Note: This is injected into `views/layouts/layout-email.ejs` */ %>
+<p style="margin-bottom: 25px;">
+  <%= __('Hello {0}').format(fullName) %>
+</p>
+<p style="margin-bottom: 25px;;padding: 0.5em 1em;background-color:rgb(255, 152, 0);">
+  <%= __('Your account was signed in to from a new location') %>
+</p>
+
+<table style="border-collapse: collapse;">
+  <tbody>
+    <tr>
+      <td width="30%" style="border: 1px solid black;padding: 0.5em 1em;"><%= __('Date and time') %></td>
+      <td style="border: 1px solid black;padding: 0.5em 1em;"><%= loginDate %></td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid black;padding: 0.5em 1em;"><%= __('IP address') %></td>
+      <td style="border: 1px solid black;padding: 0.5em 1em;"><%= ipAddress %></td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid black;padding: 0.5em 1em;"><%= __('User agent') %></td>
+      <td style="border: 1px solid black;padding: 0.5em 1em;"><%= userAgent %></td>
+    </tr>
+  </tbody>
+</table>
+
+<p style="margin-bottom: 25px;">
+  <%= __('If you remember logging in from another device or browser, you can ignore this email') %>
+</p>
+<p style="margin-bottom: 25px;">
+  <%= __('If you did not recently sign in, you should immediately change your password. Passwords should be unique and not used for any other sites or services') %>
+</p>
+
+<p style="margin-bottom: 5px;">Sincerely,</p>
+<p style="margin-top: 0px;">Team Lycaon</p>

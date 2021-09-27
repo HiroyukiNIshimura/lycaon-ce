@@ -1,4 +1,6 @@
 const moment = require('moment');
+const momentTZ = require('moment-timezone');
+
 module.exports = {
   weeklyReport: async function () {
     var dayOfWeekStr = ['日', '月', '火', '水', '木', '金', '土'];
@@ -56,7 +58,7 @@ SELECT a.*
           }).populate('responsible');
 
           for (let orver of team.orvers) {
-            orver.dueDateFormated = moment(Number(orver.dueDateAt)).format('YYYY/MM/DD') + ' JST';
+            orver.dueDateFormated = momentTZ(Number(orver.dueDateAt)).tz('Asia/Tokyo').format('YYYY/MM/DD') + ' JST';
           }
 
           //期限まじかのもの
@@ -72,7 +74,7 @@ SELECT a.*
           }).populate('responsible');
 
           for (let near of team.nears) {
-            near.dueDateFormated = moment(Number(near.dueDateAt)).format('YYYY/MM/DD') + ' JST';
+            near.dueDateFormated = momentTZ(Number(near.dueDateAt)).tz('Asia/Tokyo').format('YYYY/MM/DD') + ' JST';
           }
 
           //1ヶ月更新のないもの
@@ -81,7 +83,8 @@ SELECT a.*
           team.leaveAlones = results.rows;
 
           for (let leaveAlones of team.leaveAlones) {
-            leaveAlones.updatedAtFormated = moment(Number(leaveAlones.lastHumanUpdateAt)).format('YYYY/MM/DD');
+            leaveAlones.updatedAtFormated =
+              momentTZ(Number(leaveAlones.lastHumanUpdateAt)).tz('Asia/Tokyo').format('YYYY/MM/DD') + ' JST';
 
             if (leaveAlones.responsible) {
               leaveAlones.responsible = await User.findOne({
@@ -119,10 +122,12 @@ SELECT a.*
             organization: organization,
             to: user.emailAddress,
             toName: user.fullName,
-            subject: sails.__('[Lycaon] Weekly Report ({0})').format(moment(dt).format('YYYY/MM/DD')),
+            subject: sails
+              .__('[Lycaon] Weekly Report ({0})')
+              .format(momentTZ(dt).tz('Asia/Tokyo').format('YYYY/MM/DD') + ' JST'),
             template: 'email-weekly-report',
             templateData: {
-              reportDate: moment(dt).format('YYYY/MM/DD') + ' JST',
+              reportDate: momentTZ(dt).tz('Asia/Tokyo').format('YYYY/MM/DD') + ' JST',
               teams: [],
               locale: user.languagePreference,
               organization: organization,

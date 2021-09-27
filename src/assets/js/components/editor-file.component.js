@@ -151,7 +151,13 @@ parasails.registerComponent('editorFile', {
   beforeDestroy: function () {
     //…
   },
-
+  watch: {
+    appendix: function () {
+      this.$nextTick(() => {
+        $('[data-toggle="popover"]').popover();
+      });
+    },
+  },
   //  ╦╔╗╔╔╦╗╔═╗╦═╗╔═╗╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝

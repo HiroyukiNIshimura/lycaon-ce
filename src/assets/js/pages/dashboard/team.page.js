@@ -136,12 +136,18 @@ parasails.registerPage('team', {
     });
 
     io.socket.on('thread-notify', (data) => {
-      if (data.user.id !== self.me.id) {
-        $lycaon.stackExchange(data, self.notifyStack, self.me.organization.handleId);
-        if (!self.me.noRaiseThreadNotify) {
-          $lycaon.reloadRequestToast(data.message);
+      if (
+        _.findIndex(self.me.teams, (o) => {
+          return o.id === data.thread.team;
+        }) > -1
+      ) {
+        if (data.user.id !== self.me.id) {
+          $lycaon.stackExchange(data, self.notifyStack, self.me.organization.handleId);
+          if (!self.me.noRaiseThreadNotify) {
+            $lycaon.reloadRequestToast(data.message);
+          }
+          self.submitForm('#query-counter-form');
         }
-        self.submitForm('#query-counter-form');
       }
     });
 
@@ -791,11 +797,7 @@ parasails.registerPage('team', {
       var commitTableRows = $('.changeset-container');
       var holder = document.getElementById('holder');
 
-      if (this.revisionGraph) {
-        this.revisionGraph.set().clear();
-      } else {
-        this.revisionGraph = Raphael(holder);
-      }
+      this.revisionGraph = Raphael(holder);
 
       var top = this.revisionGraph.set();
       var graphXOffset = commitTableRows.first().find('.card').first().position().left - $(holder).position().left;

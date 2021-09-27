@@ -1,72 +1,72 @@
 <% /* Note: This is injected into `views/layouts/layout-email.ejs` */ %>
 <p style="margin-bottom: 25px;">
-    <%= __('We accepted the plan change') %>
+  <%= __('We accepted the plan change') %>
 </p>
 <p style="margin-bottom: 25px;">
-    <%= __('Plan change request date') %>:
-    <%= __('planChangeDate') %>
+  <%= __('Plan change request date') %>:
+  <%= __('planChangeDate') %>
 </p>
 <div>
-    <dl>
-        <dt>
-            <%= __('Current plan') %>
-        </dt>
-        <dd>
-            <%= billing.organization.plan %>
-        </dd>
-        <dt>
-            <%= __('Plan after change') %>
-        </dt>
-        <dd>
-            <%= newPlan %>
-            (<%= __(grade) %>)
-        </dd>
-        <dt>
-            <%= __('Desired change application start date') %>
-        </dt>
-        <dd>
-            <%= preferredDate %>
-        </dd>
-        <% if (grade==='Downgrade' ) { %>
-            <dt>
-                <%= __('Reason for downgrade') %>
-            </dt>
-            <dd>
-                <%= reasons %>
-            </dd>
-        <% } %>
-    </dl>
+  <dl>
+    <dt>
+      <%= __('Current plan') %>
+    </dt>
+    <dd>
+      <%= billing.organization.plan %>
+    </dd>
+    <dt>
+      <%= __('Plan after change') %>
+    </dt>
+    <dd>
+      <%= newPlan %>
+      (<%= __(grade) %>)
+    </dd>
+    <dt>
+      <%= __('Desired change application start date') %>
+    </dt>
+    <dd>
+      <%= preferredDate %>
+    </dd>
+    <% if (grade==='Downgrade' ) { %>
+    <dt>
+      <%= __('Reason for downgrade') %>
+    </dt>
+    <dd>
+      <%= reasons %>
+    </dd>
+    <% } %>
+  </dl>
 </div>
 <p style="margin-bottom: 25px;">
-    <%- __('If you make a mistake, <a>Please contact us</a>').format(`${sails.config.custom.baseUrl}/contact`) %>
+  <%- __('If you make a mistake, <a>Please contact us</a>').format(`${sails.config.custom.baseUrl}/contact`) %>
 </p>
-<hr/>
+<hr />
 <dl>
-    <dt>
-        <%= __('Organization ID') %>
-    </dt>
-    <dd>
-        <%= billing.organization.handleId %>
-    </dd>
-    <dt>
-        <%= __('Organization name') %>
-    </dt>
-    <dd>
-        <%= billing.organization.name %>
-    </dd>
-    <dt>
-        <%= __('Representative name') %>
-    </dt>
-    <dd>
-        <%= billing.organization.fullName %>
-    </dd>
-    <dt>
-        <%= __('Representative email address') %>
-    </dt>
-    <dd>
-        <%= billing.organization.emailAddress %>
-    </dd>
+  <dt>
+    <%= __('Organization ID') %>
+  </dt>
+  <dd>
+    <%= billing.organization.handleId %>
+  </dd>
+  <dt>
+    <%= __('Organization name') %>
+  </dt>
+  <dd>
+    <%= billing.organization.name %>
+  </dd>
+  <dt>
+    <%= __('Representative name') %>
+  </dt>
+  <dd>
+    <%= billing.organization.fullName %>
+  </dd>
+  <dt>
+    <%= __('Representative email address') %>
+  </dt>
+  <dd>
+    <%= billing.organization.emailAddress %>
+  </dd>
 </dl>
-<hr/>
+<hr />
 <p style="margin-bottom: 5px;">Sincerely,</p>
 <p style="margin-top: 0px;">Team Lycaon</p>

@@ -69,13 +69,17 @@ module.exports = {
       type: 'string',
       description: 'similarity-bot | duedate-bot | reply-bot | tagify-bot',
     },
+    req: {
+      type: 'ref',
+      description: 'request',
+    },
   },
   exits: {
     success: {
       description: 'All done.',
     },
   },
-  fn: async function ({ db, type, user, thread, sneezeId, replyId, refId, fileName, botType }) {
+  fn: async function ({ db, type, user, thread, sneezeId, replyId, refId, fileName, botType, req }) {
     var rawData = '';
     var dudate;
     var userName;
@@ -176,6 +180,11 @@ module.exports = {
       user: user.id,
       rawData: rawData,
     };
+
+    if (req) {
+      valueSets.clientIp = req.ip;
+      valueSets.userAgent = req.headers['user-agent'];
+    }
 
     if (fileName) {
       valueSets.fileName = fileName;

@@ -20,6 +20,11 @@ module.exports = {
       return res.badRequest();
     }
 
+    var hostid = process.env.HOSTING_URL;
+    if (!hostid) {
+      hostid = 'localhost';
+    }
+
     var user = await User.findOne({
       id: req.me.id,
     });
@@ -64,7 +69,7 @@ module.exports = {
         });
       }
 
-      virtualDir = path.join('appendix', 'thread', String(req.params.id));
+      virtualDir = path.join('appendix', hostid, 'thread', String(req.params.id));
     } else if (req.params.type === 'wiki' || req.params.type === 'createwiki') {
       wiki = await Wiki.findOne({
         id: req.params.id,
@@ -100,7 +105,7 @@ module.exports = {
         });
       }
 
-      virtualDir = path.join('appendix', 'wiki', String(req.params.id));
+      virtualDir = path.join('appendix', hostid, 'wiki', String(req.params.id));
     } else if (req.params.type === 'vote' || req.params.type === 'createvote') {
       vote = await Vote.findOne({
         id: req.params.id,
@@ -126,7 +131,7 @@ module.exports = {
         });
       }
 
-      virtualDir = path.join('appendix', 'vote', String(req.params.id));
+      virtualDir = path.join('appendix', hostid, 'vote', String(req.params.id));
     } else {
       return res.badRequest();
     }
@@ -295,6 +300,7 @@ module.exports = {
               user: user,
               thread: thread,
               fileName: item.name,
+              req: req,
             });
           } else if (req.params.type === 'wiki' || req.params.type === 'createwiki') {
             createdRecord = await WikiItem.create(item).fetch().usingConnection(db);
@@ -384,6 +390,7 @@ module.exports = {
             user: req.me,
             thread: thread,
             fileName: item.name,
+            req: req,
           });
         });
       }

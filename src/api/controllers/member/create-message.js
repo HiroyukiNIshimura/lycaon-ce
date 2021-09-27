@@ -1,4 +1,5 @@
 const moment = require('moment');
+const momentTZ = require('moment-timezone');
 
 module.exports = {
   friendlyName: 'Create messages',
@@ -70,7 +71,7 @@ module.exports = {
     var templateData = {
       user: this.req.me,
       organization: this.req.organization,
-      postedAt: moment(Number(created.createdAt)).format('llll') + ' JST',
+      postedAt: momentTZ(Number(created.createdAt)).tz('Asia/Tokyo').format('llll') + ' JST',
       locale: user.languagePreference,
     };
 

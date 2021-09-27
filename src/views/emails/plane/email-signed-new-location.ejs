@@ -1,0 +1,17 @@
+<% /* Note: This is injected into `views/layouts/layout-email.ejs` */ %>
+<%= __('Hello {0}').format(fullName) %>
+
+<%= __('Your account was signed in to from a new location') %>
+
+------------------------------
+<%= __('Date and time') %> : <%= loginDate %>
+<%= __('IP address') %> : <%= ipAddress %>
+<%= __('User agent') %> : <%= userAgent %>
+------------------------------
+
+<%= __('If you remember logging in from another device or browser, you can ignore this email') %>
+<%= __('If you did not recently sign in, you should immediately change your password. Passwords should be unique and not used for any other sites or services') %>
+
+------------------------------
+Sincerely,
+Team Lycaon

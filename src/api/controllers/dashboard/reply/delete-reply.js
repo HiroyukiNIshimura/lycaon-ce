@@ -54,6 +54,7 @@ module.exports = {
           thread: current.thread,
           sneezeId: current.sneeze.id,
           replyId: current.id,
+          req: this.req,
         });
       });
     } catch (err) {

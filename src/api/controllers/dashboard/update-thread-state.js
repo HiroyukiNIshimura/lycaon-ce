@@ -65,6 +65,7 @@ module.exports = {
           type: 'update-status',
           user: this.req.me,
           thread: updated,
+          req: this.req,
         });
 
         if (inputs.status === 1) {
@@ -82,12 +83,6 @@ module.exports = {
       throw err;
     }
 
-    var rooms = [
-      `room-${this.req.organization.id}-lycaon`,
-      `room-${this.req.organization.id}-team-${team.id}`,
-      `room-${this.req.organization.id}-thread-${updated.id}`,
-    ];
-
     var message = {
       key: '{0} has opened the thread [#{1}] {2}',
       params: [this.req.me.fullName, updated.no, updated.subject],
@@ -101,6 +96,12 @@ module.exports = {
     }
 
     if (!updated.local) {
+      var rooms = [
+        `room-${this.req.organization.id}-lycaon`,
+        `room-${this.req.organization.id}-team-${team.id}`,
+        `room-${this.req.organization.id}-thread-${updated.id}`,
+      ];
+
       sails.sockets.broadcast(rooms, 'thread-notify', {
         message: message,
         user: this.req.me,

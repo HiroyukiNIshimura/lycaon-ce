@@ -46,12 +46,17 @@ module.exports = {
     var team = {};
 
     var getPath = function (size, type, id, fileId, ext) {
-      let target = path.resolve(sails.config.appPath, 'appendix', type, String(id), fileId);
+      var hostid = process.env.HOSTING_URL;
+      if (!hostid) {
+        hostid = 'localhost';
+      }
+
+      let target = path.resolve(sails.config.appPath, 'appendix', hostid, type, String(id), fileId);
       if (size === 'M') {
-        target = path.resolve(sails.config.appPath, 'appendix', type, String(id), 'thum_m', fileId);
+        target = path.resolve(sails.config.appPath, 'appendix', hostid, type, String(id), 'thum_m', fileId);
       }
       if (size === 'S') {
-        target = path.resolve(sails.config.appPath, 'appendix', type, String(id), 'thum_s', fileId);
+        target = path.resolve(sails.config.appPath, 'appendix', hostid, type, String(id), 'thum_s', fileId);
       }
       if (ext) {
         target = target + '.' + ext;

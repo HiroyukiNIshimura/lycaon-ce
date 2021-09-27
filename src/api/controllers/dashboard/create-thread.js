@@ -162,6 +162,7 @@ module.exports = {
           type: 'create',
           user: user,
           thread: created,
+          req: this.req,
         });
 
         if (inputs.fork) {
@@ -171,6 +172,7 @@ module.exports = {
             user: this.req.me,
             thread: parent,
             refId: created.id,
+            req: this.req,
           });
         }
       });
@@ -198,19 +200,20 @@ module.exports = {
       });
 
       if (!created.local) {
-        sails.sockets.broadcast(
-          [`room-${this.req.organization.id}-lycaon`, `room-${this.req.organization.id}-team-${created.team}`],
-          'thread-notify',
-          {
-            message: {
-              key: '{0} created Thread [#{1}] {2}',
-              params: [this.req.me.fullName, created.no, created.subject],
-            },
-            user: this.req.me,
-            thread: created,
-            timespan: Date.now(),
-          }
-        );
+        var rooms = [
+          `room-${this.req.organization.id}-lycaon`,
+          `room-${this.req.organization.id}-team-${created.team}`,
+        ];
+
+        sails.sockets.broadcast(rooms, 'thread-notify', {
+          message: {
+            key: '{0} created Thread [#{1}] {2}',
+            params: [this.req.me.fullName, created.no, created.subject],
+          },
+          user: this.req.me,
+          thread: created,
+          timespan: Date.now(),
+        });
       }
 
       this.req.session.effectMessage = sails.__('You have created thread');

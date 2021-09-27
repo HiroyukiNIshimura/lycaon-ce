@@ -80,17 +80,17 @@
           </div>
           <div class="card-body">
             <p class="card-description mt-3">
-              <%= __('Number of users') %>：
+              <%= __('Number of users') %>:
               {{ planlimitation.maxUser ? planlimitation.maxUser === 1 ? i18n('Up to {0} person').format(formatter.format(planlimitation.maxUser)) : i18n('Up to {0} people').format(formatter.format(planlimitation.maxUser)) : i18n('Unlimited') }}
             </p>
             <p class="card-description">
-              <%= __('Number of teams') %>：
+              <%= __('Number of teams') %>:
               {{ planlimitation.maxTeam ? planlimitation.maxTeam === 1 ? i18n('Up to {0} team').format(formatter.format(planlimitation.maxTeam)) : i18n('Up to {0} teams').format(formatter.format(planlimitation.maxTeam)) : i18n('Unlimited') }}
             </p>
 
             <p class="card-description">
               <a class="text-link" href="#" data-toggle="modal" data-target="#planModal">
-                <%= __('Storage limit') %>：
+                <%= __('Storage limit') %>:
                 {{ planlimitation.maxQuota ? i18n('Up to {0} GB').format(formatter.format(planlimitation.maxQuota / 1024 / 1024 / 1024)) : i18n('Unlimited') }}
               </a>
             </p>
@@ -104,7 +104,7 @@
             </div>
 
             <p class="card-description mt-3">
-              <%= __('git log support') %>：{{planlimitation.allowUseGit ? i18n('Available') : i18n('Not available') }}
+              <%= __('git log support') %>: {{planlimitation.allowUseGit ? i18n('Available') : i18n('Not available') }}
             </p>
           </div>
         </div>

@@ -3,8 +3,8 @@
 <%= __('Weekly Report') %>（<%= reportDate %>）
 
 <% for (var team of teams) { %>
-<%= __('Team') %>：<%= team.name %>
-<%= __('Number of threads') %>：<%= team.totalQty %>
+<%= __('Team') %>: <%= team.name %>
+<%= __('Number of threads') %>: <%= team.totalQty %>
 
 <%= __('open') %> = <%= team.openQty %> （<%= __('Not in charge')%> = <%= team.noAsignQty %>）
 <%= __('close') %> = <%= team.closeQty %>
@@ -12,11 +12,11 @@
 <%= __('Expired thread') %>
 <% if(team.orvers.length > 0) { %>
 <% for (var orver of team.orvers) { %>
-<%= __('Deadline') %>：<%= orver.dueDateFormated %>
+<%= __('Deadline') %>: <%= orver.dueDateFormated %>
 
 [#<%= orver.no %>] <%= orver.subject %>
 [ <%= url.resolve(sails.config.custom.baseUrl, `/${organization.handleId}/thread/${orver.no}`) %> ]
-<%= __('Person in charge') %>：<%= orver.asignName %>
+<%= __('Person in charge') %>: <%= orver.asignName %>
 <% } %>
 <% } else { %>
 <%= __('No report') %>
@@ -25,12 +25,12 @@
 <%= __('Deadline thread') %>
 <% if(team.nears.length > 0) { %>
 <% for (var near of team.nears) { %>
-<%= __('Deadline') %>：<%= near.dueDateFormated %>
+<%= __('Deadline') %>: <%= near.dueDateFormated %>
 
 [#<%= near.no %>] <%= near.subject %>
 [ <%= url.resolve(sails.config.custom.baseUrl, `/${organization.handleId}/thread/${near.no}`) %> ]
 
-<%= __('Person in charge') %>：<%= near.asignName %>
+<%= __('Person in charge') %>: <%= near.asignName %>
 <% } %>
 <% } else { %>
 <%= __('No report') %>
@@ -39,12 +39,12 @@
 <%= __('Abandoned thread') %>
 <% if(team.leaveAlones.length > 0) { %>
 <% for (var leaveAlone of team.leaveAlones) { %>
-<%= __('Last updated') %>：<%= leaveAlone.updatedAtFormated %>
+<%= __('Last updated') %>: <%= leaveAlone.updatedAtFormated %>
 
 [#<%= leaveAlone.no %>] <%= leaveAlone.subject %>
 [ <%= url.resolve(sails.config.custom.baseUrl, `/${organization.handleId}/thread/${leaveAlone.no}`) %> ]
 
-<%= __('Person in charge') %>：<%= leaveAlone.asignName %>
+<%= __('Person in charge') %>: <%= leaveAlone.asignName %>
 <% } %>
 <% } else { %>
 <%= __('No report') %>

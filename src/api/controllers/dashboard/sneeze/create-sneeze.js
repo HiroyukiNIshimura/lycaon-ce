@@ -62,6 +62,7 @@ module.exports = {
           user: this.req.me,
           thread: thread,
           sneezeId: created.id,
+          req: this.req,
         });
 
         var sNo = await Sneeze.count({ thread: thread.id }).usingConnection(db);

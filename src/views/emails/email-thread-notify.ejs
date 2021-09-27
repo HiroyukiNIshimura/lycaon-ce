@@ -1,71 +1,70 @@
 <% /* Note: This is injected into `views/layouts/layout-email.ejs` */ %>
 
-  <h4>
-    <%= __('Thread [#{0}] Update Notice').format(thread.no) %>
-  </h4>
+<h4>
+  <%= __('Thread [#{0}] Update Notice').format(thread.no) %>
+</h4>
 
-  <p>
-    <%= action %>
-  </p>
-  <% if (comment) { %>
-    <p>
-      <%- comment %>
-    </p>
-    <% } %>
-      <p style="margin-bottom: 0px;">
-        <%= __('Changer') %>：<%= updater %>
-      </p>
-      <p style="margin-top: 0px;">
-        <%= __('Update date') %>：<%= updatedAt %>
-      </p>
-      <hr />
+<p>
+  <%= action %>
+</p>
+<% if (comment) { %>
+<p>
+  <%- comment %>
+</p>
+<% } %>
+<p style="margin-bottom: 0px;">
+  <%= __('Changer') %>: <%= updater %>
+</p>
+<p style="margin-top: 0px;">
+  <%= __('Update date') %>: <%= updatedAt %>
+</p>
+<hr />
 
-      <p style="margin-bottom: 0px;">
-        <%= __('Team') %>
-      </p>
-      <p style="margin-bottom: 25px;">
-        <a style="color: #00acc4;" href="<%= url.resolve(sails.config.custom.baseUrl, `/${organization.handleId}/team/${team.id}`) %>">
-          <%= team.name %>
-        </a>
-      </p>
+<p style="margin-bottom: 0px;">
+  <%= __('Team') %>
+</p>
+<p style="margin-bottom: 25px;">
+  <a style="color: #00acc4;" href="<%= url.resolve(sails.config.custom.baseUrl, `/${organization.handleId}/team/${team.id}`) %>">
+    <%= team.name %>
+  </a>
+</p>
 
-      <p>
-        <a style="color: #00acc4;"
-          href="<%= url.resolve(sails.config.custom.baseUrl, `/${organization.handleId}/thread/${thread.no}`) %><%= locals.hashTag ? hashTag : ''  %>">
-          <%= title %>
-        </a>
-      </p>
-      <hr />
-      <ul style="list-style-type: none">
-        <li>
-          <%= __('Category') %>：<%= thread.category %>
-        </li>
-        <li>
-          <%= __('Status') %>：<%= thread.status %>
-        </li>
-        <li>
-          <%= __('Concept') %>：<%= thread.concept %>
-        </li>
-        <li>
-          <%= __('Person in charge') %>：<%= thread.responsible %>
-        </li>
-        <li>
-          <%= __('Deadline') %>：<%= thread.dueDate %>
-        </li>
-        <li>
-          <%= __('Tags') %>：<%= thread.tags %>
-        </li>
-      </ul>
-      <hr />
+<p>
+  <a style="color: #00acc4;" href="<%= url.resolve(sails.config.custom.baseUrl, `/${organization.handleId}/thread/${thread.no}`) %><%= locals.hashTag ? hashTag : ''  %>">
+    <%= title %>
+  </a>
+</p>
+<hr />
+<ul style="list-style-type: none">
+  <li>
+    <%= __('Category') %>: <%= thread.category %>
+  </li>
+  <li>
+    <%= __('Status') %>: <%= thread.status %>
+  </li>
+  <li>
+    <%= __('Concept') %>: <%= thread.concept %>
+  </li>
+  <li>
+    <%= __('Person in charge') %>: <%= thread.responsible %>
+  </li>
+  <li>
+    <%= __('Deadline') %>: <%= thread.dueDate %>
+  </li>
+  <li>
+    <%= __('Tags') %>: <%= thread.tags %>
+  </li>
+</ul>
+<hr />
 
-      <%- threadBody %>
+<%- threadBody %>
 
-        <hr />
+<hr />
 
-        <%- __('Please set whether to deliver the mail related to the thread from <a> here </a>').format(settingUrl) %>
+<%- __('Please set whether to deliver the mail related to the thread from <a> here </a>').format(settingUrl) %>
 
-          <hr />
-          <p style="margin-bottom: 5px;">Sincerely,</p>
-          <p style="margin-top: 0px;">
-            <%= fromName %>
-          </p>
+<hr />
+<p style="margin-bottom: 5px;">Sincerely,</p>
+<p style="margin-top: 0px;">
+  <%= fromName %>
+</p>

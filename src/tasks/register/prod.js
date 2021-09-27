@@ -12,7 +12,7 @@
  *
  */
 module.exports = function (grunt) {
-  if (process.env.JOB_SERVICE) {
+  if (process.env.JOB_SERVICE || process.env.DB_MIGRATION) {
     grunt.registerTask('prod', []);
   } else {
     grunt.registerTask('prod', [

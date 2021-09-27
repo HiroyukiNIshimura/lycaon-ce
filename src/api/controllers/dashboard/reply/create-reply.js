@@ -64,6 +64,7 @@ module.exports = {
           thread: sneeze.thread,
           sneezeId: sneeze.id,
           replyId: created.id,
+          req: this.req,
         });
         //ハッシュタグはコメントを狙う
         var sneezes = await Sneeze.find({ thread: sneeze.thread.id }).usingConnection(db);

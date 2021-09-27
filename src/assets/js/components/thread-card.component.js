@@ -63,11 +63,11 @@ parasails.registerComponent('threadCard', {
       <span class="badge badge-primary mr-1" v-if="thread.local">{{ i18n('Private') }}</span>
     </div>
     <div class="card-section">
-      <div class="card-text">{{ i18n('Deadline') }}：
+      <div class="card-text">{{ i18n('Deadline') }}:
         <span v-if="thread.dueDateAt">{{ formatDate(thread.dueDateAt) }}</span>
         <span v-else>{{ i18n('unspecified') }}</span>
       </div>
-      <div class="card-text mb-2">{{ i18n('Person in charge') }}：
+      <div class="card-text mb-2">{{ i18n('Person in charge') }}:
         <span v-if="thread.responsible">
           <user-identity :user="thread.responsible" :organization="organization" size="sm"></user-identity>
         </span>

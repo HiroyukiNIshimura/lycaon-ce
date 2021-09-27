@@ -1,4 +1,5 @@
 const moment = require('moment');
+const momentTZ = require('moment-timezone');
 
 module.exports = {
   sendMail: async function () {
@@ -41,7 +42,7 @@ module.exports = {
       moment.locale(lang);
 
       for (let item of notifications) {
-        item.displayDate = moment(Number(item.postingAt)).format('ll') + ' JST';
+        item.displayDate = momentTZ(Number(item.postingAt)).tz('Asia/Tokyo').format('ll') + ' JST';
       }
 
       var data = {

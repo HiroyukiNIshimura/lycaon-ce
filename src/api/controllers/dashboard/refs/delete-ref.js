@@ -55,6 +55,7 @@ module.exports = {
           user: this.req.me,
           thread: current,
           refId: inputs.child,
+          req: this.req,
         });
       });
     } catch (err) {

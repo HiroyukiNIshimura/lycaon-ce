@@ -120,6 +120,7 @@ module.exports = {
               author: this.req.me,
               target: 'create',
               user: entry,
+              team: team,
             });
 
             await sails.helpers.agendaSchedule.with({

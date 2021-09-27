@@ -26,6 +26,7 @@
     "markdown-it": "^12.1.0",
     "mkdirp": "^1.0.4",
     "moment": "^2.29.1",
+    "moment-timezone": "^0.5.33",
     "node-df": "^0.1.4",
     "nodemailer": "^6.6.3",
     "pdf-parse": "^1.1.1",

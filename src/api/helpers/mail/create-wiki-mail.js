@@ -1,4 +1,5 @@
 const moment = require('moment');
+const momentTZ = require('moment-timezone');
 
 module.exports = {
   friendlyName: 'mail.createWikiMail',
@@ -22,6 +23,10 @@ module.exports = {
       defaultsTo: 'create',
     },
     user: {
+      type: 'ref',
+      required: true,
+    },
+    team: {
       type: 'ref',
       required: true,
     },
@@ -53,8 +58,9 @@ module.exports = {
           wiki: inputs.wiki,
           title: subject,
           author: inputs.author,
-          releaseAt: moment(Number(inputs.wiki.createdAt)).format('lll') + ' JST',
+          releaseAt: momentTZ(Number(inputs.wiki.createdAt)).tz('Asia/Tokyo').format('lll') + ' JST',
           locale: lang,
+          team: inputs.team,
         },
       };
 

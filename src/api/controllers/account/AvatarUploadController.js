@@ -15,7 +15,12 @@ module.exports = {
       return res.notFound();
     }
 
-    var targetDir = path.resolve(sails.config.appPath, 'avatar', String(user.id));
+    var hostid = process.env.HOSTING_URL;
+    if (!hostid) {
+      hostid = 'localhost';
+    }
+
+    var targetDir = path.resolve(sails.config.appPath, 'avatar', hostid, String(user.id));
 
     //https://github.com/balderdashy/skipper
     req.file('avatar').upload(
@@ -25,10 +30,7 @@ module.exports = {
       },
       async function afterUpload(err, uploadedFiles) {
         if (err) {
-          if (
-            err.code &&
-            (err.code === 'E_EXCEEDS_UPLOAD_LIMIT' || err.code === 'E_EXCEEDS_FILE_SIZE_LIMIT')
-          ) {
+          if (err.code && (err.code === 'E_EXCEEDS_UPLOAD_LIMIT' || err.code === 'E_EXCEEDS_FILE_SIZE_LIMIT')) {
             //size error
             return res.json({
               error: 'EXCEEDS_UPLOAD_LIMIT',
@@ -44,7 +46,7 @@ module.exports = {
         var hashName = path.basename(uploadedFiles[0].fd);
         var extWithout = path.basename(hashName, ext);
 
-        var virtualPath = path.join('avatar', String(user.id), hashName);
+        var virtualPath = path.join('avatar', hostid, String(user.id), hashName);
         var url = '/avatar/' + String(user.id) + '/' + extWithout + '/' + ext.replace('.', '');
 
         var item = {

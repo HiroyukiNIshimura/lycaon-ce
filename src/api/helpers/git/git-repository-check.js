@@ -66,7 +66,7 @@ module.exports = {
         return 'badRequest';
       }
 
-      let url = new URL(`${inputs.gitlabApi}/projects/${inputs.gitlabProjectId}`);
+      let url = new URL(`${inputs.gitlabApi}/projects/${inputs.gitlabProjectId}/repository/commits`);
       if (inputs.gitlabToken) {
         url.search = `private_token=${inputs.gitlabToken}`;
       }

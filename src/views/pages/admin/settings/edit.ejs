@@ -114,6 +114,16 @@
         </div>
       </div>
 
+      <h5>
+        <%= __('Wiki') %>
+      </h5>
+      <div class="custom-control custom-checkbox">
+        <input type="checkbox" class="custom-control-input" id="form-not-share-wiki" v-model="formData.notShareWiki" />
+        <label class="custom-control-label" for="form-not-share-wiki">
+          <%= __('Don\'t share wikis within your organization') %>
+        </label>
+      </div>
+
       <div class="row">
         <div class="col text-right">
           <a class="btn btn-light btn-sm" href="/<%= organization.handleId %>/admin/settings">

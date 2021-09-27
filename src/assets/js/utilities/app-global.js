@@ -1076,6 +1076,9 @@ $(() => {
     $(window).scroll(() => {
       $('.popover').popover('hide');
     });
+
+    $('.toastui-editor-contents table').addClass('table');
+    $('.toastui-editor-contents table').wrap('<div class="table-responsive">');
   };
 
   $(document).ready(lycaonLoad);

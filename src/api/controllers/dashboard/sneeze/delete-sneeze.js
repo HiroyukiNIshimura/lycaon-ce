@@ -51,6 +51,7 @@ module.exports = {
           user: this.req.me,
           thread: current.thread,
           sneezeId: current.id,
+          req: this.req,
         });
       });
     } catch (err) {

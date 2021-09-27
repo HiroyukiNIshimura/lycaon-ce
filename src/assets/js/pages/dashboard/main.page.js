@@ -93,12 +93,18 @@ parasails.registerPage('main', {
 
     var self = this;
     io.socket.on('thread-notify', (data) => {
-      if (data.user.id !== self.me.id) {
-        $lycaon.stackExchange(data, self.notifyStack, self.me.organization.handleId);
-        if (!self.me.noRaiseThreadNotify) {
-          $lycaon.socketToast(data.message);
+      if (
+        _.findIndex(self.me.teams, (o) => {
+          return o.id === data.thread.team;
+        }) > -1
+      ) {
+        if (data.user.id !== self.me.id) {
+          $lycaon.stackExchange(data, self.notifyStack, self.me.organization.handleId);
+          if (!self.me.noRaiseThreadNotify) {
+            $lycaon.socketToast(data.message);
+          }
+          self.submitForm('#query-counter-form');
         }
-        self.submitForm('#query-counter-form');
       }
     });
   },

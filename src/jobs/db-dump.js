@@ -38,7 +38,8 @@ module.exports = {
         try {
           await model.count();
         } catch (err) {
-          sails.log.info(err);
+          sails.log.info('テーブルが存在しません。このエラーは無視して構いません。');
+          sails.log.verbose(err);
           continue;
         }
 

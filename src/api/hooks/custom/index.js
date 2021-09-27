@@ -186,12 +186,12 @@ module.exports = function defineCustomHook(sails) {
             }
 
             var NATIVE_SQL = `
-SELECT count(t.*) as qty 
+SELECT count(t.*) as qty
   FROM "sysnotification_users__user_sysNotifications" t
  WHERE t."user_sysNotifications" = $1
-   AND exists (SELECT 1 FROM "sys_notification" 
-       WHERE "id" = t."sysnotification_users" 
-         AND "deleted" = false 
+   AND exists (SELECT 1 FROM "sys_notification"
+       WHERE "id" = t."sysnotification_users"
+         AND "deleted" = false
          AND "postingAt" < $2);
             `;
 
@@ -217,6 +217,7 @@ SELECT count(t.*) as qty
             var MS_TO_BUFFER = 60 * 1000;
             var now = Date.now();
             if (loggedInUser.lastSeenAt < now - MS_TO_BUFFER) {
+              //ここは敢えて非同期
               User.updateOne({ id: loggedInUser.id })
                 .set({ lastSeenAt: now })
                 .exec((err) => {

@@ -45,6 +45,10 @@ module.exports = {
       max: 24,
       min: 1,
     },
+    notShareWiki: {
+      type: 'boolean',
+      defaultsTo: false,
+    },
   },
   exits: {
     success: {},

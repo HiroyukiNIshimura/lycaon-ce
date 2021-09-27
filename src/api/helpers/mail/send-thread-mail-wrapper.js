@@ -1,4 +1,5 @@
 const moment = require('moment');
+const momentTZ = require('moment-timezone');
 const url = require('url');
 
 module.exports = {
@@ -212,16 +213,16 @@ module.exports = {
 
     var getTempData = async function (settings, thread, updater, action, team) {
       var userName = updater.fullName;
-      var updatedAt = moment(Number(thread.lastHumanUpdateAt)).format('llll') + ' JST';
+      var updatedAt = momentTZ(Number(thread.lastHumanUpdateAt)).tz('Asia/Tokyo').format('llll') + ' JST';
 
       if (action.activity === 'sneeze') {
         userName = action.sneeze.owner.fullName;
-        updatedAt = moment(Number(action.sneeze.updatedAt)).format('llll') + ' JST';
+        updatedAt = momentTZ(Number(action.sneeze.updatedAt)).tz('Asia/Tokyo').format('llll') + ' JST';
       }
 
       if (action.activity === 'reply') {
         userName = action.reply.owner.fullName;
-        updatedAt = moment(Number(action.reply.updatedAt)).format('llll') + ' JST';
+        updatedAt = momentTZ(Number(action.reply.updatedAt)).tz('Asia/Tokyo').format('llll') + ' JST';
       }
 
       return {
@@ -237,7 +238,9 @@ module.exports = {
           status: thread.status === 0 ? sails.__('open') : sails.__('close'),
           concept: thread.concept === 0 ? sails.__('draft') : sails.__('published'),
           responsible: thread.responsible ? thread.responsible.fullName : '',
-          dueDate: thread.dueDate ? moment(Number(thread.dueDateAt)).format('YYYY/MM/DD') + ' JST' : '',
+          dueDate: thread.dueDate
+            ? momentTZ(Number(thread.dueDateAt)).tz('Asia/Tokyo').format('YYYY/MM/DD') + ' JST'
+            : '',
           tags: tags.length > 0 ? tags.join(', ') : '',
         },
         title: `[#${thread.no}] ${thread.subject}`,

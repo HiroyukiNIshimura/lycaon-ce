@@ -9,6 +9,11 @@ module.exports = {
     var wikiQty = 0;
     var voteQty = 0;
 
+    var hostid = process.env.HOSTING_URL;
+    if (!hostid) {
+      hostid = 'localhost';
+    }
+
     //チームが削除され参照がNULLになっているスレッドの削除
     while (true) {
       var targetThreads = await Thread.find({ where: { team: null }, sort: 'id ASC', limit: 500 });
@@ -20,7 +25,7 @@ module.exports = {
 
       for (let item of targetThreads) {
         try {
-          let target = path.resolve(sails.config.appPath, 'appendix', 'thread', String(item.id));
+          let target = path.resolve(sails.config.appPath, 'appendix', hostid, 'thread', String(item.id));
           if (fs.existsSync(target)) {
             utility.rmdir(target);
             sails.log.debug(`添付ファイルを削除しました。${target}`);
@@ -47,7 +52,7 @@ module.exports = {
 
       for (let item of targetWikis) {
         try {
-          let target = path.resolve(sails.config.appPath, 'appendix', 'wiki', String(item.id));
+          let target = path.resolve(sails.config.appPath, 'appendix', hostid, 'wiki', String(item.id));
           if (fs.existsSync(target)) {
             utility.rmdir(target);
             sails.log.debug(`添付ファイルを削除しました。${target}`);
@@ -74,7 +79,7 @@ module.exports = {
 
       for (let item of targetVotes) {
         try {
-          let target = path.resolve(sails.config.appPath, 'appendix', 'vote', String(item.id));
+          let target = path.resolve(sails.config.appPath, 'appendix', hostid, 'vote', String(item.id));
           if (fs.existsSync(target)) {
             utility.rmdir(target);
             sails.log.debug(`添付ファイルを削除しました。${target}`);

@@ -43,7 +43,7 @@ parasails.registerComponent('activityCard', {
   </div>
   <div class="mt-3">
     <small>
-      {{ i18n('Changer') }}：<user-identity :user="activity.user" :organization="organization" size="sm"></user-identity>
+      {{ i18n('Changer') }}: <user-identity :user="activity.user" :organization="organization" size="sm"></user-identity>
     </small>
   </div>
   <div class="mt-3">

@@ -61,6 +61,7 @@ module.exports = {
           type: 'update-priority',
           user: this.req.me,
           thread: updated,
+          req: this.req,
         });
 
         await sails.helpers.mail.sendThreadMailWrapper.with({
@@ -73,12 +74,6 @@ module.exports = {
       sails.log.error(err);
       throw err;
     }
-
-    var rooms = [
-      `room-${this.req.organization.id}-lycaon`,
-      `room-${this.req.organization.id}-team-${team.id}`,
-      `room-${this.req.organization.id}-thread-${updated.id}`,
-    ];
 
     var priority = 'Normally';
     switch (updated.priority) {
@@ -99,6 +94,12 @@ module.exports = {
 
     //
     if (!updated.local) {
+      var rooms = [
+        `room-${this.req.organization.id}-lycaon`,
+        `room-${this.req.organization.id}-team-${team.id}`,
+        `room-${this.req.organization.id}-thread-${updated.id}`,
+      ];
+
       sails.sockets.broadcast(rooms, 'thread-notify', {
         message: message,
         user: this.req.me,

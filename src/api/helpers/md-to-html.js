@@ -22,7 +22,7 @@ module.exports = {
       return '';
     }
 
-    var md = require('markdown-it')();
+    var md = require('markdown-it')({ breaks: true });
     var html = require('html');
 
     if (inputs.prettyPrint) {

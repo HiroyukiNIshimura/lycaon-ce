@@ -60,6 +60,11 @@ module.exports = {
       min: 1,
       description: '1日の作業時間',
     },
+    notShareWiki: {
+      type: 'boolean',
+      defaultsTo: false,
+      description: 'Wikiを組織内で共有しない',
+    },
 
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗

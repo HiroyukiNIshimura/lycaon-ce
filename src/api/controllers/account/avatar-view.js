@@ -35,7 +35,12 @@ module.exports = {
       throw 'notFound';
     }
 
-    var target = path.resolve(sails.config.appPath, 'avatar', String(inputs.id), inputs.fileId);
+    var hostid = process.env.HOSTING_URL;
+    if (!hostid) {
+      hostid = 'localhost';
+    }
+
+    var target = path.resolve(sails.config.appPath, 'avatar', hostid, String(inputs.id), inputs.fileId);
     if (inputs.ext) {
       target = target + '.' + inputs.ext;
     }

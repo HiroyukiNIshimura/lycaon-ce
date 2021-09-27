@@ -1,3 +1,7 @@
+const crypto = require('crypto');
+const bcrypt = require('bcrypt');
+const moment = require('moment');
+
 module.exports = {
   friendlyName: 'Login',
 
@@ -94,8 +98,6 @@ and exposed as \`req.me\`.)`,
       throw 'badCombo';
     }
 
-    var bcrypt = require('bcrypt');
-
     try {
       var res = await bcrypt.compare(inputs.password, userRecord.password);
       if (!res) {
@@ -123,6 +125,55 @@ and exposed as \`req.me\`.)`,
         this.req.session.cookie.maxAge = sails.config.custom.rememberMeCookieMaxAge;
       }
     } //ﬁ
+
+    try {
+      var hash = crypto.createHash('sha256').update(`${this.req.ip}|${this.req.headers['user-agent']}`).digest('hex');
+
+      await sails.getDatastore().transaction(async (db) => {
+        await ClientHash.destroy({
+          user: userRecord.id,
+          expiresAt: { '<': Date.now() },
+        }).usingConnection(db);
+
+        var clientHashs = await ClientHash.find({ user: userRecord.id }).usingConnection(db);
+        if (
+          _.findIndex(clientHashs, (o) => {
+            return o.hash === hash;
+          }) < 0
+        ) {
+          if (userRecord.lastClientHash && userRecord.lastClientHash !== hash) {
+            var lang = userRecord.languagePreference ? userRecord.languagePreference : 'en';
+            sails.hooks.i18n.setLocale(lang);
+            moment.locale(lang);
+            // Send email
+            await sails.helpers.mail.sendTemplateEmail.with({
+              organization: this.req.organization,
+              to: inputs.emailAddress,
+              subject: sails.__('Your account was signed in to from a new location'),
+              template: 'email-signed-new-location',
+              templateData: {
+                fullName: userRecord.fullName,
+                loginDate: moment().format('lll'),
+                ipAddress: this.req.ip,
+                userAgent: this.req.headers['user-agent'],
+                locale: this.req.me ? this.req.me.languagePreference : this.req.getLocale(),
+              },
+            });
+          }
+
+          await ClientHash.create({
+            user: userRecord.id,
+            hash: hash,
+            expiresAt: Date.now() + sails.config.custom.clientHashDeleteAge,
+          }).usingConnection(db);
+        }
+
+        await User.updateOne({ id: userRecord.id }).set({ lastClientHash: hash }).usingConnection(db);
+      });
+    } catch (error) {
+      sails.log.error(error);
+      throw error;
+    }
 
     // Modify the active session instance.
     // (This will be persisted when the response is sent.)

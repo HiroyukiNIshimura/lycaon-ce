@@ -38,8 +38,13 @@ module.exports = {
       throw 'isBackOffice';
     }
 
+    var hostid = process.env.HOSTING_URL;
+    if (!hostid) {
+      hostid = 'localhost';
+    }
+
     for (let user of current.users) {
-      let target = path.resolve(sails.config.appPath, 'avatar', String(user.id));
+      let target = path.resolve(sails.config.appPath, 'avatar', hostid, String(user.id));
       try {
         if (fs.existsSync(target)) {
           utility.rmdir(target);

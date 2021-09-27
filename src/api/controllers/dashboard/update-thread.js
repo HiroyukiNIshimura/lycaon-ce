@@ -176,6 +176,7 @@ module.exports = {
             type: 'update-subject',
             user: this.req.me,
             thread: updated,
+            req: this.req,
           });
 
           effectedOnlySubject = true;
@@ -185,6 +186,7 @@ module.exports = {
             type: 'update',
             user: this.req.me,
             thread: updated,
+            req: this.req,
           });
 
           effected = true;
@@ -212,6 +214,7 @@ module.exports = {
             type: 'local',
             user: this.req.me,
             thread: updated,
+            req: this.req,
           });
 
           effected = true;
@@ -223,6 +226,7 @@ module.exports = {
             type: 'update-category',
             user: this.req.me,
             thread: updated,
+            req: this.req,
           });
 
           effected = true;
@@ -234,6 +238,7 @@ module.exports = {
             type: 'update-concept',
             user: this.req.me,
             thread: updated,
+            req: this.req,
           });
 
           effected = true;
@@ -245,6 +250,7 @@ module.exports = {
             type: 'responsible',
             user: this.req.me,
             thread: updated,
+            req: this.req,
           });
 
           effected = true;
@@ -256,6 +262,7 @@ module.exports = {
             type: 'milestone',
             user: this.req.me,
             thread: updated,
+            req: this.req,
           });
 
           effected = true;
@@ -300,16 +307,18 @@ module.exports = {
         params: [this.req.me.fullName, updated.no, updated.subject],
       };
 
-      sails.sockets.broadcast(
-        [`room-${this.req.organization.id}-lycaon`, `room-${this.req.organization.id}-team-${updated.team}`],
-        'thread-notify',
-        {
-          message: message,
-          user: this.req.me,
-          thread: updated,
-          timespan: Date.now(),
-        }
-      );
+      var rooms = [
+        `room-${this.req.organization.id}-lycaon`,
+        `room-${this.req.organization.id}-team-${updated.team}`,
+        `room-${this.req.organization.id}-thread-${updated.id}`,
+      ];
+
+      sails.sockets.broadcast(rooms, 'thread-notify', {
+        message: message,
+        user: this.req.me,
+        thread: updated,
+        timespan: Date.now(),
+      });
     }
 
     this.req.session.effectMessage = sails.__('The thread has been updated');

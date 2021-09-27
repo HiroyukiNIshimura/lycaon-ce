@@ -7,11 +7,11 @@
 <%= safeComment %>
 <% } %>
 
-<%= __('Changer') %>：<%= updater %>
-<%= __('Update date') %>：<%= updatedAt %>
+<%= __('Changer') %>: <%= updater %>
+<%= __('Update date') %>: <%= updatedAt %>
 ------------------------------
 
-<%= __('Team') %>：<%= team.name %>
+<%= __('Team') %>: <%= team.name %>
 [ <%= url.resolve(sails.config.custom.baseUrl, `/${organization.handleId}/team/${team.id}`) %> ]
 
 <%= title %>
@@ -19,12 +19,12 @@
 
 ------------------------------
 
-<%= __('Category') %>：<%= thread.category %>
-<%= __('Status') %>：<%= thread.status %>
-<%= __('Concept') %>：<%= thread.concept %>
-<%= __('Person in charge') %>：<%= thread.responsible %>
-<%= __('Deadline') %>：<%= thread.dueDate %>
-<%= __('Tags') %>：<%= thread.tags %>
+<%= __('Category') %>: <%= thread.category %>
+<%= __('Status') %>: <%= thread.status %>
+<%= __('Concept') %>: <%= thread.concept %>
+<%= __('Person in charge') %>: <%= thread.responsible %>
+<%= __('Deadline') %>: <%= thread.dueDate %>
+<%= __('Tags') %>: <%= thread.tags %>
 
 <%= safeThreadBody %>
 

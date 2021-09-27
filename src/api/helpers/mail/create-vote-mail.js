@@ -1,4 +1,5 @@
 const moment = require('moment');
+const momentTZ = require('moment-timezone');
 
 module.exports = {
   friendlyName: 'mail.createVoteMail',
@@ -60,8 +61,8 @@ module.exports = {
           vote: inputs.vote,
           title: subject,
           author: inputs.author,
-          releaseAt: moment(Number(inputs.vote.circulationFrom)).format('ll') + ' JST',
-          endAt: moment(Number(inputs.vote.circulationTo)).format('ll') + ' JST',
+          releaseAt: momentTZ(Number(inputs.vote.circulationFrom)).tz('Asia/Tokyo').format('ll') + ' JST',
+          endAt: momentTZ(Number(inputs.vote.circulationTo)).tz('Asia/Tokyo').format('ll') + ' JST',
           locale: lang,
         },
       };

@@ -1,41 +1,41 @@
 <% /* Note: This is injected into `views/layouts/layout-email.ejs` */ %>
 
-  <h4>
-    <%= title %>
-  </h4>
+<h4>
+  <%= title %>
+</h4>
 
-  <p style="margin-top: 10px;">
-    <%= vote.subject %>
-  </p>
-  <p style="margin-top: 0px;">
-    <%= __('Author') %>：<%= author.fullName %>
-  </p>
-  <p style="margin-top: 0px;">
-    <%= __('Release date') %>：<%= releaseAt %>
-  </p>
-  <p style="margin-top: 0px;">
-    <%= __('End date') %>：<%= endAt %>
-  </p>
+<p style="margin-top: 10px;">
+  <%= vote.subject %>
+</p>
+<p style="margin-top: 0px;">
+  <%= __('Author') %>: <%= author.fullName %>
+</p>
+<p style="margin-top: 0px;">
+  <%= __('Release date') %>: <%= releaseAt %>
+</p>
+<p style="margin-top: 0px;">
+  <%= __('End date') %>: <%= endAt %>
+</p>
 
-  <p style="margin-top: 10px;">
-    <%= __('Commenter') %>：<%= commenter.fullName %>
-  </p>
-  <p style="margin-top: 0px;">
-    <%= __('Comment date') %>：<%= commentAt %>
-  </p>
-  <hr />
+<p style="margin-top: 10px;">
+  <%= __('Commenter') %>: <%= commenter.fullName %>
+</p>
+<p style="margin-top: 0px;">
+  <%= __('Comment date') %>: <%= commentAt %>
+</p>
+<hr />
 
-  <%- commentBody %>
+<%- commentBody %>
 
-    <hr />
+<hr />
 
-    <p style="margin-bottom: 25px;">
-      <a style="color: #00acc4;" href="<%= url.resolve(sails.config.custom.baseUrl, `/${organization.handleId}/vote/${vote.id}${hashTag}`) %>">
-        <%= __('Please check from this link') %>
-      </a>
-    </p>
+<p style="margin-bottom: 25px;">
+  <a style="color: #00acc4;" href="<%= url.resolve(sails.config.custom.baseUrl, `/${organization.handleId}/vote/${vote.id}${hashTag}`) %>">
+    <%= __('Please check from this link') %>
+  </a>
+</p>
 
-    <p style="margin-bottom: 5px;">Sincerely,</p>
-    <p style="margin-top: 0px;">
-      <%= fromName %>
-    </p>
+<p style="margin-bottom: 5px;">Sincerely,</p>
+<p style="margin-top: 0px;">
+  <%= fromName %>
+</p>
