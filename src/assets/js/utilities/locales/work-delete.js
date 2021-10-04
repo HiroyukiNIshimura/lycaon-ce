@@ -1,1 +1,1 @@
-const lycaon_lang_work_delete = {"Do not notify the screen of entry / exit notifications":""};
+const lycaon_lang_work_delete = {"Ignore this message if you have not signed up for our account":""};

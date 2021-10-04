@@ -516,6 +516,8 @@ parasails.registerPage('team', {
 
         if (this.selectedTab.tab.id === 'tab-git') {
           this.drawRevisionGraph();
+        } else {
+          this.revisionGraph = null;
         }
 
         this.submitForm('#query-counter-form');
@@ -797,7 +799,11 @@ parasails.registerPage('team', {
       var commitTableRows = $('.changeset-container');
       var holder = document.getElementById('holder');
 
-      this.revisionGraph = Raphael(holder);
+      if (this.revisionGraph) {
+        this.revisionGraph.set().clear();
+      } else {
+        this.revisionGraph = Raphael(holder);
+      }
 
       var top = this.revisionGraph.set();
       var graphXOffset = commitTableRows.first().find('.card').first().position().left - $(holder).position().left;

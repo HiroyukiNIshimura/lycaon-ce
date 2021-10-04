@@ -638,12 +638,37 @@ parasails.registerPage('member-info', {
     normalize: function (contents) {
       const markdownIt = window.markdownit();
       var linkify = markdownIt.linkify;
+      linkify.add('#', {
+        validate: function (text, pos, self) {
+          if (!SAILS_LOCALS.me || !SAILS_LOCALS.me.organization) {
+            return 0;
+          }
+
+          var tail = text.slice(pos);
+
+          if (!self.re.thread) {
+            self.re.thread = new RegExp('^([0-9]){1,8}(?=$|' + self.re.src_ZPCc + ')');
+          }
+          if (self.re.thread.test(tail)) {
+            // Linkifier allows punctuation chars before prefix,
+            // but we additionally disable `#` ("##threadid" is invalid)
+            if (pos >= 2 && tail[pos - 2] === '#') {
+              return false;
+            }
+            return tail.match(self.re.thread)[0].length;
+          }
+          return 0;
+        },
+        normalize: function (match) {
+          match.url = `/${SAILS_LOCALS.me.organization.handleId}/thread/` + match.text.trim().replace(/^#/, '');
+          match.text = match.text.trim() + ' ';
+        },
+      });
 
       var matchs = linkify.match(contents);
       _.each(matchs, (match) => {
         var el = `<a href="${match.url}">${match.text}</a>`;
-        var re = new RegExp(match.text.trim());
-        contents = contents.replace(re, el);
+        contents = contents.replace(match.text.trim(), el);
       });
 
       var result = '';

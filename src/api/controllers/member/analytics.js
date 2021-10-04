@@ -26,10 +26,16 @@ module.exports = {
   fn: async function (inputs) {
     var response = { analytics: {}, labels: [], summary: {} };
 
-    response.user = await User.findOne({ id: inputs.id, deleted: false });
+    response.user = await User.findOne({ id: inputs.id, deleted: false }).populate('teams');
     if (!response.user) {
       throw 'notFound';
     }
+
+    var teams = response.user.teams
+      .map((o) => {
+        return o.id;
+      })
+      .join(',');
 
     const NATIVE_SQL = {
       monthly: `
@@ -90,24 +96,28 @@ select to_char(to_timestamp("createdAt"/1000), 'D') as dt, count(*) as qty
 select to_char(to_timestamp("commitAt"/1000), 'YYYY/MM') as dt, count(*) as qty
   from "git_log"
  where "author_email" = $1 and "commitAt" >= $2 and "commitAt" <= $3
+   and "team" = any(string_to_array($4, ',')::integer[])
  group by to_char(to_timestamp("commitAt"/1000), 'YYYY/MM');
     `,
       daily: `
 select to_char(to_timestamp("commitAt"/1000), 'DD') as dt, count(*) as qty
   from "git_log"
  where "author_email" = $1 and "commitAt" >= $2 and "commitAt" <= $3
+   and "team" = any(string_to_array($4, ',')::integer[])
  group by to_char(to_timestamp("commitAt"/1000), 'DD');
     `,
       hourly: `
 select to_char(to_timestamp("commitAt"/1000), 'HH24') as dt, count(*) as qty
   from "git_log"
-  where "author_email" = $1 and "commitAt" >= $2 and "commitAt" <= $3
-  group by to_char(to_timestamp("commitAt"/1000), 'HH24');
+ where "author_email" = $1 and "commitAt" >= $2 and "commitAt" <= $3
+   and "team" = any(string_to_array($4, ',')::integer[])
+ group by to_char(to_timestamp("commitAt"/1000), 'HH24');
         `,
       weekly: `
 select to_char(to_timestamp("commitAt"/1000), 'D') as dt, count(*) as qty
   from "git_log"
  where "author_email" = $1 and "commitAt" >= $2 and "commitAt" <= $3
+   and "team" = any(string_to_array($4, ',')::integer[])
  group by to_char(to_timestamp("commitAt"/1000), 'D');
     `,
     };
@@ -202,7 +212,7 @@ select to_char(to_timestamp("commitAt"/1000), 'D') as dt, count(*) as qty
       var result = await sails.sendNativeQuery(wikisql, [response.user.id, from.valueOf(), to.valueOf()]);
       response.analytics.wiki = result.rows;
 
-      result = await sails.sendNativeQuery(gitsql, [response.user.emailAddress, from.valueOf(), to.valueOf()]);
+      result = await sails.sendNativeQuery(gitsql, [response.user.emailAddress, from.valueOf(), to.valueOf(), teams]);
       response.analytics.git = result.rows;
     } catch (err) {
       sails.log.error(err);
