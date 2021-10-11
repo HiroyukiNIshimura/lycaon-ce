@@ -72,6 +72,7 @@ module.exports = {
         whereClause: whereClause,
         sort: [{ accessCount: 'DESC' }, { id: 'ASC' }],
         pagination: pagination,
+        user: this.req.me,
       });
     } catch (err) {
       sails.log.error(err);

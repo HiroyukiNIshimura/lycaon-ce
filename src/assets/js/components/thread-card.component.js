@@ -29,7 +29,7 @@ parasails.registerComponent('threadCard', {
   //  ╠═╣ ║ ║║║║
   //  ╩ ╩ ╩ ╩ ╩╩═╝
   template: `
-<div class="card h-100 card-selectable">
+<div class="card h-100 card-selectable" :style="flagColorStyle">
   <div class="thread-priority-bar" :aria-label="i18n('Importance: High')" data-microtip-position="bottom" role="tooltip"
     v-show="thread.priority === 2"></div>
   <div class="thread-urgency-bar" :aria-label="i18n('Urgency')" data-microtip-position="bottom" role="tooltip"
@@ -136,6 +136,25 @@ parasails.registerComponent('threadCard', {
     },
     updateTranslator: function (val) {
       return this.i18n('{0} updated at {1}').format('', val);
+    },
+    hex2rgba: function (hex, alpha = 1) {
+      let r = hex.match(/^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i);
+      let c = null;
+      if (r) {
+        c = r.slice(1, 4).map((x) => {
+          return parseInt(x, 16);
+        });
+      }
+      r = hex.match(/^#([0-9a-f])([0-9a-f])([0-9a-f])$/i);
+      if (r) {
+        c = r.slice(1, 4).map((x) => {
+          return 0x11 * parseInt(x, 16);
+        });
+      }
+      if (!c) {
+        return null;
+      }
+      return `rgba(${c[0]}, ${c[1]}, ${c[2]}, ${alpha})`;
     },
   },
   computed: {
@@ -245,6 +264,14 @@ parasails.registerComponent('threadCard', {
     },
     tagTooltip: function () {
       return this.i18n('Search for the same tag');
+    },
+    flagColorStyle: function () {
+      if (this.thread.flags.length > 0) {
+        var color = this.thread.flags[0].color;
+        return `border-color: ${color};border-width:3`;
+      } else {
+        return '';
+      }
     },
   },
 });

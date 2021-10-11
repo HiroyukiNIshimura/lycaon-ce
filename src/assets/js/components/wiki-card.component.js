@@ -63,7 +63,7 @@ parasails.registerComponent('wikiCard', {
         </div>
         <div class="card-text mt-3">
           <i class="far fa-thumbs-up"></i> {{ i18n('How nice!') }} × {{ formatter.format(niceCount) }}
-          <span style="color: Tomato" class="ml-3" v-if="isFan">
+          <span :style="flagColorStyle" class="ml-3" v-if="isFan">
             <i class="fas fa-flag"></i>
           </span>
         </div>
@@ -154,7 +154,14 @@ parasails.registerComponent('wikiCard', {
       return this.wiki.nice ? this.wiki.nice : 0;
     },
     isFan: function () {
-      return this.wiki.fans.length > 0;
+      return this.wiki.flags.length > 0;
+    },
+    flagColorStyle: function () {
+      if (this.wiki.flags.length > 0) {
+        return `color: ${this.wiki.flags[0].color}`;
+      } else {
+        return '';
+      }
     },
     tagTooltip: function () {
       return this.i18n('Search for the same tag');

@@ -65,7 +65,7 @@
                       <v-text-input type="text" :maxlength="200" id="thread-subject" class="form-control" v-model.trim="thread.subject" autocomplete="thread-subject" :class="[formErrors.subject || formErrors.subjectLength ? 'is-invalid' : '']"></v-text-input>
                       <label for="thread-subject">
                         <%= __("Thread") %> #
-                        {{ thread.id }}
+                        {{ thread.no }}
                       </label>
                       <div class="invalid-feedback" v-if="formErrors.subject">
                         <%= __("Please enter a subject") %>
@@ -73,7 +73,6 @@
                       <div class="invalid-feedback" v-if="formErrors.subjectLength">
                         <%= __("Please enter within {0} characters").format(200) %>
                       </div>
-
                     </div>
                   </div>
                 </div>
@@ -239,7 +238,7 @@
                     <span class="badge badge-success" v-if="thread.working">
                       <%= __("Working") %>
                     </span>
-                    <span style="color: Tomato" class="mr-1" v-if="isFan">
+                    <span :style="flagColorStyle" class="mr-1" v-if="isFan">
                       <i class="fas fa-flag"></i>
                     </span>
                     <a :href="mindmapLink" class="badge badge-info" v-if="fork || children.length > 0">

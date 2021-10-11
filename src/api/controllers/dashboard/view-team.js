@@ -69,7 +69,7 @@ module.exports = {
 
     var user = await User.findOne({
       id: this.req.me.id,
-    }).populate('flags');
+    }).populate('threadFlags');
 
     var dt = new Date();
     dt.setHours(0, 0, 0, 0);
@@ -99,8 +99,8 @@ module.exports = {
 
     response.counter = await sails.helpers.storage.queryCounter.with({
       team: response.team.id,
-      flags: user.flags.map((o) => {
-        return o.id;
+      flags: user.threadFlags.map((o) => {
+        return o.thread;
       }),
       user: user,
     });

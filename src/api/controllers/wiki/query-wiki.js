@@ -40,7 +40,7 @@ module.exports = {
       id: this.req.me.id,
     })
       .populate('teams', { where: { deleted: false }, sort: 'id ASC' })
-      .populate('wikiflags');
+      .populate('wikiFlags');
     if (user.teams.length < 1) {
       return response;
     }
@@ -71,8 +71,8 @@ module.exports = {
 
     if (inputs.isFlags) {
       whereClause.id = {
-        in: user.wikiflags.map((o) => {
-          return o.id;
+        in: user.wikiFlags.map((o) => {
+          return o.wiki;
         }),
       };
     }
@@ -102,7 +102,7 @@ module.exports = {
         .populate('team')
         .populate('owner')
         .populate('lastUpdateUser')
-        .populate('fans', { where: { id: this.req.me.id } });
+        .populate('flags', { where: { user: this.req.me.id } });
 
       for (let entry of response.data) {
         await User.setGravatarUrl(entry.owner, 36);

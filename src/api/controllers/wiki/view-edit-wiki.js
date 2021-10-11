@@ -40,7 +40,7 @@ module.exports = {
       })
       .populate('owner')
       .populate('votes')
-      .populate('fans', { where: { id: this.req.me.id } });
+      .populate('flags', { where: { user: this.req.me.id } });
     if (!response.wiki) {
       throw 'notFound';
     }
@@ -48,7 +48,7 @@ module.exports = {
     await User.setGravatarUrl(response.wiki.owner, 36);
 
     response.isFan = false;
-    if (response.wiki.fans.length > 0) {
+    if (response.wiki.flags.length > 0) {
       response.isFan = true;
     }
 

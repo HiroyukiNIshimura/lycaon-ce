@@ -84,6 +84,7 @@ module.exports = {
       response.data = await sails.helpers.storage.findThread.with({
         whereClause: whereClause,
         pagination: pagination,
+        user: this.req.me,
       });
     } catch (err) {
       sails.log.error(err);

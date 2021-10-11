@@ -77,12 +77,33 @@
             <%= __('Fork thread') %>
           </a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="javascript:void(0)" @click="updateFlagSubmit" v-if="isFan">
+
+          <a class="dropdown-item" href="javascript:void(0)" @click="updateFlagSubmit('')" v-if="isFan">
             <%= __('Remove the flag') %>
           </a>
-          <a class="dropdown-item" href="javascript:void(0)" @click="updateFlagSubmit" v-else>
-            <%= __('Flag') %>
-          </a>
+          <span class="dropdown-item-text" v-if="!isFan"><%= __('Flag') %></span>
+          <form v-if="!isFan">
+            <div class="row">
+              <div class="col ml-5">
+                <span style="color: #ff6600" class="mr-1" @click="updateFlagSubmit('#ff6600')">
+                  <i class="fas fa-flag"></i>
+                </span>
+                <span style="color: #00ff00" class="mr-1" @click="updateFlagSubmit('#00ff00')">
+                  <i class="fas fa-flag"></i>
+                </span>
+                <span style="color: #0033ff" class="mr-1" @click="updateFlagSubmit('#0033ff')">
+                  <i class="fas fa-flag"></i>
+                </span>
+                <span style="color: #cc00ff" class="mr-1" @click="updateFlagSubmit('#cc00ff')">
+                  <i class="fas fa-flag"></i>
+                </span>
+                <span style="color: #000000" class="mr-1" @click="updateFlagSubmit('#000000')">
+                  <i class="fas fa-flag"></i>
+                </span>
+              </div>
+            </div>
+          </form>
+
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="javascript:void(0)" @click="onConvertToWikiCkick">
             <%= __('Convert to Wiki') %>
@@ -117,12 +138,33 @@
             <%= __('Fork thread') %>
           </a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="javascript:void(0)" @click="updateFlagSubmit" v-if="isFan">
+          <a class="dropdown-item" href="javascript:void(0)" @click="updateFlagSubmit('')" v-if="isFan">
             <%= __('Remove the flag') %>
           </a>
-          <a class="dropdown-item" href="javascript:void(0)" @click="updateFlagSubmit" v-else>
-            <%= __('Flag') %>
-          </a>
+
+          <span class="dropdown-item-text" v-if="!isFan"><%= __('Flag') %></span>
+          <form v-if="!isFan">
+            <div class="row">
+              <div class="col ml-5">
+                <span style="color: #ff6600" class="mr-1" @click="updateFlagSubmit('#ff6600')">
+                  <i class="fas fa-flag"></i>
+                </span>
+                <span style="color: #00ff00" class="mr-1" @click="updateFlagSubmit('#00ff00')">
+                  <i class="fas fa-flag"></i>
+                </span>
+                <span style="color: #0033ff" class="mr-1" @click="updateFlagSubmit('#0033ff')">
+                  <i class="fas fa-flag"></i>
+                </span>
+                <span style="color: #cc00ff" class="mr-1" @click="updateFlagSubmit('#cc00ff')">
+                  <i class="fas fa-flag"></i>
+                </span>
+                <span style="color: #000000" class="mr-1" @click="updateFlagSubmit('#000000')">
+                  <i class="fas fa-flag"></i>
+                </span>
+              </div>
+            </div>
+          </form>
+
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="javascript:void(0)" @click="onConvertToWikiCkick">
             <%= __('Convert to Wiki') %>
@@ -158,12 +200,33 @@
               <%= __('Fork thread') %>
             </a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="javascript:void(0)" @click="updateFlagSubmit" v-if="isFan">
+            <a class="dropdown-item" href="javascript:void(0)" @click="updateFlagSubmit('')" v-if="isFan">
               <%= __('Remove the flag') %>
             </a>
-            <a class="dropdown-item" href="javascript:void(0)" @click="updateFlagSubmit" v-else>
-              <%= __('Flag') %>
-            </a>
+
+            <span class="dropdown-item-text" v-if="!isFan"><%= __('Flag') %></span>
+            <form v-if="!isFan">
+              <div class="row">
+                <div class="col ml-5">
+                  <span style="color: #ff6600" class="mr-1" @click="updateFlagSubmit('#ff6600')">
+                    <i class="fas fa-flag"></i>
+                  </span>
+                  <span style="color: #00ff00" class="mr-1" @click="updateFlagSubmit('#00ff00')">
+                    <i class="fas fa-flag"></i>
+                  </span>
+                  <span style="color: #0033ff" class="mr-1" @click="updateFlagSubmit('#0033ff')">
+                    <i class="fas fa-flag"></i>
+                  </span>
+                  <span style="color: #cc00ff" class="mr-1" @click="updateFlagSubmit('#cc00ff')">
+                    <i class="fas fa-flag"></i>
+                  </span>
+                  <span style="color: #000000" class="mr-1" @click="updateFlagSubmit('#000000')">
+                    <i class="fas fa-flag"></i>
+                  </span>
+                </div>
+              </div>
+            </form>
+
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="javascript:void(0)" @click="onConvertToWikiCkick">
               <%= __('Convert to Wiki') %>
@@ -204,4 +267,5 @@
 </div>
 
 <ajax-form id="flag-update-form" action="updateThreadFlag" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedFlagForm" @rejected="onCloudError" :handle-parsing="handleParsingFlagForm">
+  <input type="hidden" name="flag-color" v-model="flagColor" />
 </ajax-form>

@@ -92,9 +92,9 @@ module.exports = {
       collection: 'wikiItem',
       via: 'wiki',
     },
-    fans: {
-      collection: 'user',
-      via: 'wikiflags',
+    flags: {
+      collection: 'wikiFlag',
+      via: 'wiki',
     },
     votes: {
       collection: 'user',

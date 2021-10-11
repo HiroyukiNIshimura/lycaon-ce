@@ -25,14 +25,12 @@ module.exports = {
 
     var user = await User.findOne({
       id: this.req.me.id,
-    })
-      .populate('teams', {
-        where: { deleted: false },
-        sort: 'id ASC',
-        limit: pagination.limit,
-        skip: pagination.skip,
-      })
-      .populate('flags');
+    }).populate('teams', {
+      where: { deleted: false },
+      sort: 'id ASC',
+      limit: pagination.limit,
+      skip: pagination.skip,
+    });
 
     if (user.teams.length < 1) {
       return response;
@@ -40,8 +38,8 @@ module.exports = {
 
     var NATIVE_COUNT_SQL = `
 select count("team__teams"."id") as qty
-  from "public"."team_users__user_teams" as "team_users__user_teams__teams" 
-  left outer join "team" as "team__teams" on "team_users__user_teams__teams"."team_users" = "team__teams"."id" 
+  from "public"."team_users__user_teams" as "team_users__user_teams__teams"
+  left outer join "team" as "team__teams" on "team_users__user_teams__teams"."team_users" = "team__teams"."id"
  where "team__teams"."deleted" = false
    and "team_users__user_teams__teams"."user_teams" = $1
 `;

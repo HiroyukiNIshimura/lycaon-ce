@@ -11,6 +11,9 @@ module.exports = {
     pagination: {
       type: 'ref',
     },
+    user: {
+      type: 'ref',
+    },
   },
   exits: {
     success: {
@@ -40,7 +43,8 @@ module.exports = {
       .populate('owner')
       .populate('responsible')
       .populate('workingUser')
-      .populate('lastUpdateUser');
+      .populate('lastUpdateUser')
+      .populate('flags', { where: { user: inputs.user.id } });
 
     for (let entry of response) {
       await User.setGravatarUrl(entry.owner, 36);

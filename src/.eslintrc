@@ -62,7 +62,9 @@
     "VoteSneeze": true,
     "Wiki": true,
     "WikiItem": true,
-    "ClientHash": true
+    "ClientHash": true,
+    "ThreadFlag":true,
+    "WikiFlag": true
     // …and any others.
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   },

@@ -68,6 +68,9 @@ parasails.registerPage('thread', {
     rightSidebar: 'noactive',
     sidebarCollapse: 'active',
     mainContents: 'active',
+    flagColor: '',
+    isFan: false,
+
     reloaded: false,
     // Main syncing/loading state for this page.
     syncing: false,
@@ -136,6 +139,11 @@ parasails.registerPage('thread', {
       this.responsible = this.thread.responsible.id;
     } else {
       this.responsible = '';
+    }
+
+    if (this.thread.flags.length > 0) {
+      this.isFan = true;
+      this.flagColor = this.thread.flags[0].color;
     }
   },
   mounted: async function () {
@@ -1112,6 +1120,7 @@ parasails.registerPage('thread', {
       var argins = {
         id: this.thread.id,
         state: !this.isFan,
+        flagColor: this.flagColor,
       };
       return argins;
     },
@@ -1381,10 +1390,11 @@ parasails.registerPage('thread', {
       });
       form.submit();
     },
-    updateFlagSubmit: function () {
+    updateFlagSubmit: function (color) {
       var form = _.find(this.$children, {
         $el: $('#flag-update-form')[0],
       });
+      this.flagColor = color;
       form.submit();
     },
     parentSelectedEvent: function (option) {
@@ -1750,6 +1760,9 @@ parasails.registerPage('thread', {
     },
     myTeams: function () {
       return this.me.teams;
+    },
+    flagColorStyle: function () {
+      return `color: ${this.flagColor}`;
     },
   },
 });

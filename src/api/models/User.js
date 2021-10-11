@@ -231,13 +231,13 @@ So, while this \`isSuperAdmin\` demarcation might not be the right approach fore
       collection: 'threadActivity',
       via: 'user',
     },
-    flags: {
-      collection: 'thread',
-      via: 'fans',
+    threadFlags: {
+      collection: 'threadFlag',
+      via: 'user',
     },
-    wikiflags: {
-      collection: 'wiki',
-      via: 'fans',
+    wikiFlags: {
+      collection: 'wikiFlag',
+      via: 'user',
     },
     wikivotes: {
       collection: 'wiki',

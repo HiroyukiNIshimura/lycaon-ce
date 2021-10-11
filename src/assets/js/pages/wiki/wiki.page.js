@@ -11,6 +11,8 @@ parasails.registerPage('wiki', {
     isWikiEditDisabled: '',
     conflictUser: {},
     showCloseWikiModal: false,
+    flagColor: '',
+    isFan: false,
     showToc: true,
     // Main syncing/loading state for this page.
     syncing: false,
@@ -32,6 +34,11 @@ parasails.registerPage('wiki', {
   //  ╩═╝╩╚  ╚═╝╚═╝ ╩ ╚═╝╩═╝╚═╝
   beforeMount: function () {
     this.appendix = _.clone(this.wiki.items);
+
+    if (this.wiki.flags.length > 0) {
+      this.isFan = true;
+      this.flagColor = this.wiki.flags[0].color;
+    }
   },
   mounted: async function () {
     var self = this;
@@ -139,10 +146,11 @@ parasails.registerPage('wiki', {
       };
       return argins;
     },
-    ckickUpdateFlag: function () {
+    ckickUpdateFlag: function (color) {
       var form = _.find(this.$children, {
         $el: $('#flag-wiki-form')[0],
       });
+      this.flagColor = color;
       form.submit();
     },
     submittedFlagForm: async function () {
@@ -156,6 +164,7 @@ parasails.registerPage('wiki', {
       var argins = {
         id: this.wiki.id,
         state: !this.isFan,
+        flagColor: this.flagColor,
       };
       return argins;
     },
@@ -210,6 +219,9 @@ parasails.registerPage('wiki', {
     },
     tagTooltip: function () {
       return this.i18n('Search for the same tag');
+    },
+    flagColorStyle: function () {
+      return `color: ${this.flagColor}`;
     },
   },
 });

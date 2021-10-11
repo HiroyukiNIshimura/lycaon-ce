@@ -35,7 +35,7 @@ module.exports = {
       id: this.req.me.id,
     })
       .populate('teams', { where: { deleted: false }, sort: 'id ASC' })
-      .populate('flags');
+      .populate('threadFlags');
     if (user.teams.length < 1) {
       return response;
     }
@@ -54,8 +54,8 @@ module.exports = {
       whereClause = {
         team: inputs.id,
         id: {
-          in: user.flags.map((o) => {
-            return o.id;
+          in: user.threadFlags.map((o) => {
+            return o.thread;
           }),
         },
       };
@@ -67,8 +67,8 @@ module.exports = {
           }),
         },
         id: {
-          in: user.flags.map((o) => {
-            return o.id;
+          in: user.threadFlags.map((o) => {
+            return o.thread;
           }),
         },
       };
@@ -79,6 +79,7 @@ module.exports = {
       response.data = await sails.helpers.storage.findThread.with({
         whereClause: whereClause,
         pagination: pagination,
+        user: this.req.me,
       });
     } catch (err) {
       sails.log.error(err);

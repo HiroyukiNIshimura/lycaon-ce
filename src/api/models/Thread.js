@@ -183,9 +183,9 @@ module.exports = {
     parent: {
       model: 'thread',
     },
-    fans: {
-      collection: 'user',
-      via: 'flags',
+    flags: {
+      collection: 'threadFlag',
+      via: 'thread',
     },
   },
 };

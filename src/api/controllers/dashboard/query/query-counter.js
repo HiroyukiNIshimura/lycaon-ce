@@ -26,13 +26,13 @@ module.exports = {
       })
         .populate('organization')
         .populate('teams', { where: { deleted: false } })
-        .populate('flags');
+        .populate('threadFlags');
 
       if (inputs.id) {
         response.counter = await sails.helpers.storage.queryCounter.with({
           team: inputs.id,
-          flags: user.flags.map((o) => {
-            return o.id;
+          flags: user.threadFlags.map((o) => {
+            return o.thread;
           }),
           user: user,
         });
@@ -41,8 +41,8 @@ module.exports = {
           team: user.teams.map((o) => {
             return o.id;
           }),
-          flags: user.flags.map((o) => {
-            return o.id;
+          flags: user.threadFlags.map((o) => {
+            return o.thread;
           }),
           user: user,
         });

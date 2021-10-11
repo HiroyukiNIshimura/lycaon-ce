@@ -157,10 +157,10 @@ module.exports = {
       if (inputs.flag) {
         let user = await User.findOne({
           id: this.req.me.id,
-        }).populate('flags', { where: { team: inputs.id } });
+        }).populate('threadFlags');
         whereClause.id = {
-          in: user.flags.map((o) => {
-            return o.id;
+          in: user.threadFlags.map((o) => {
+            return o.thread;
           }),
         };
       }
@@ -220,6 +220,7 @@ module.exports = {
         whereClause: whereClause,
         sort: sort,
         pagination: pagination,
+        user: this.req.me,
       });
     } catch (err) {
       sails.log.error(err);

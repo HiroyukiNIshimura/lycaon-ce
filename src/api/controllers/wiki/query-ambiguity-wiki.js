@@ -1,3 +1,5 @@
+const WikiFlag = require('../../models/WikiFlag');
+
 module.exports = {
   friendlyName: 'Query ambiguity wikis',
   description: 'Query ambiguity wikis.',
@@ -129,14 +131,14 @@ module.exports = {
         "public"."wiki"
         LEFT OUTER JOIN "team" as "team__team" ON "wiki"."team" = "team__team"."id"
         LEFT OUTER JOIN "user" as "user__owner" on "wiki"."owner" = "user__owner"."id"
-        LEFT OUTER JOIN "user" as "user__lastUpdateUser" on "wiki"."lastUpdateUser" = "user__lastUpdateUser"."id" 
+        LEFT OUTER JOIN "user" as "user__lastUpdateUser" on "wiki"."lastUpdateUser" = "user__lastUpdateUser"."id"
         `;
 
-    var NATIVE_WHERE = `WHERE "wiki"."team" = $1 
+    var NATIVE_WHERE = `WHERE "wiki"."team" = $1
 AND ("wiki"."subject" ilike $2 OR "wiki"."body" ilike $3)
 `;
 
-    var NATIVE_WHERE2 = `WHERE "wiki"."team" IN (SELECT "id" FROM "team" WHERE "organization" = $1)  
+    var NATIVE_WHERE2 = `WHERE "wiki"."team" IN (SELECT "id" FROM "team" WHERE "organization" = $1)
 AND ("wiki"."subject" ilike $2 OR "wiki"."body" ilike $3)
 `;
 
@@ -144,7 +146,7 @@ AND ("wiki"."subject" ilike $2 OR "wiki"."body" ilike $3)
         `;
 
     var NATIVE_ITEM = `
-SELECT "id", "name", "virtualPath", "wiki"                             
+SELECT "id", "name", "virtualPath", "wiki"
   FROM "public"."wiki_item"
  WHERE "wiki" = $1
    AND "qWords" ilike $2
@@ -227,15 +229,7 @@ SELECT "id", "name", "virtualPath", "wiki"
         wiki.tags.push(o.tag_wikis);
       });
 
-      var fans = await sails.models['user_wikiflags__wiki_fans'].find({
-        // eslint-disable-next-line camelcase
-        wiki_fans: wiki.id,
-        // eslint-disable-next-line camelcase
-        user_wikiflags: this.req.me.id,
-      });
-      _.each(fans, (o) => {
-        wiki.fans.push(o.user_wikiflags);
-      });
+      wiki.flags = await WikiFlag.find({ wiki: wiki.id, user: this.req.me.id });
 
       wiki.itemHits = [];
       let rawResult = await sails.sendNativeQuery(NATIVE_ITEM, [wiki.id, word]);
