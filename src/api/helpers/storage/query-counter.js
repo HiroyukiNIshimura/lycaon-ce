@@ -66,7 +66,6 @@ module.exports = {
           id: {
             in: flags,
           },
-          status: 0,
         });
 
         query.queryLocal = Thread.count().where({
