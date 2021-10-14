@@ -266,7 +266,7 @@ parasails.registerComponent('threadCard', {
       return this.i18n('Search for the same tag');
     },
     flagColorStyle: function () {
-      if (this.thread.flags.length > 0) {
+      if (this.thread.flags && this.thread.flags.length > 0) {
         var color = this.thread.flags[0].color;
         return `border-color: ${color};border-width:3`;
       } else {

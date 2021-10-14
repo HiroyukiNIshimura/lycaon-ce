@@ -1,5 +1,3 @@
-const WikiFlag = require('../../models/WikiFlag');
-
 module.exports = {
   friendlyName: 'Query ambiguity wikis',
   description: 'Query ambiguity wikis.',
