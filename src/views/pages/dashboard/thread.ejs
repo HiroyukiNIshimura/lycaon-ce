@@ -310,7 +310,7 @@
                   <%= __("Person in charge") %>
                 </small>
                 <span class="ml-2">
-                  <user-identity :user="thread.responsible" :organization="organization" size="sm"></user-identity>
+                  <user-identity :user="thread.responsible" :organization="organization" size="sm" v-on:icon-click="onIdentityIconClick" :pop-status="popStatus"></user-identity>
                 </span>
               </div>
               <div class="col-auto">

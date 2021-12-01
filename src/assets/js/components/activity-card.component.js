@@ -24,6 +24,7 @@ parasails.registerComponent('activityCard', {
       formatDate: $lycaon.formatter.formatDate,
       description: '',
       interval: undefined,
+      popStatus: {},
     };
   },
 
@@ -43,7 +44,7 @@ parasails.registerComponent('activityCard', {
   </div>
   <div class="mt-3">
     <small>
-      {{ i18n('Changer') }}: <user-identity :user="activity.user" :organization="organization" size="sm"></user-identity>
+      {{ i18n('Changer') }}: <user-identity :user="activity.user" :organization="organization" size="sm"  v-on:icon-click="onIdentityIconClick" :pop-status="popStatus"></user-identity>
     </small>
   </div>
   <div class="mt-3">
@@ -76,6 +77,13 @@ parasails.registerComponent('activityCard', {
   },
   mounted: async function () {
     //…
+    var self = this;
+    $('body').on('click', (e) => {
+      if ($('.user-avater-icon').has(e.target).length > 0) {
+      } else {
+        self.popStatus = '';
+      }
+    });
   },
   beforeDestroy: function () {
     if (this.interval) {
@@ -146,6 +154,9 @@ parasails.registerComponent('activityCard', {
           break;
       }
       return '';
+    },
+    onIdentityIconClick: function (popInfo) {
+      this.popStatus = popInfo.id;
     },
   },
   computed: {

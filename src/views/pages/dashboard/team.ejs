@@ -16,7 +16,7 @@
             <div class="card">
               <div class="card-body">
                 <div class="card-title">
-                  <user-identity :user="item" :organization="organization" size=""></user-identity>
+                  <user-identity :user="item" :organization="organization" size="" v-on:icon-click="onIdentityIconClick" :pop-status="popStatus"></user-identity>
                 </div>
                 <div class="card-subtitle" v-if="item.lastSeenAt && item.lastSeenAt > 0">
                   <small v-if="item.lastSeenAt && item.lastSeenAt > 0">
@@ -86,7 +86,7 @@
     </div>
     <div class="row mt-3 align-items-center">
       <div class="col-auto mr-3 mb-1" v-for="item in members">
-        <user-identity :user="item" :organization="organization" size="sm" :id="parseUserId(item)" :avater-id="parseUserAvaterId(item)"></user-identity>
+        <user-identity :user="item" :organization="organization" size="sm" :id="parseUserId(item)" :avater-id="parseUserAvaterId(item)" v-on:icon-click="onIdentityIconClick" :pop-status="popStatus" is-pop-icon="true"></user-identity>
       </div>
       <div class="col-auto mr-3 mb-1" v-if="memberQty > members.length">
         <button type="button" class="btn btn-link text-primary" @click="showAllMember">
@@ -331,7 +331,7 @@
             <div class="mt-3" v-if="queryResults.length > 0">
               <div class="row">
                 <div class="col-auto mb-2 ml-1" v-for="item in queryResults">
-                  <thread-card :thread="item" :organization="organization" class="thread-card">
+                  <thread-card :thread="item" :organization="organization" class="thread-card" :show-flag-remove="true">
                   </thread-card>
                 </div>
               </div>

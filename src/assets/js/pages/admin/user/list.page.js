@@ -9,6 +9,7 @@ parasails.registerPage('admin-user-list', {
     showDeleteModal: false,
     showResetModal: false,
     deleteBtnDisabled: false,
+    popStatus: {},
     // Main syncing/loading state for this page.
     syncing: false,
     // Form data
@@ -33,6 +34,14 @@ parasails.registerPage('admin-user-list', {
     if (this.effectMessage) {
       $lycaon.cloudSuccessToast(this.effectMessage);
     }
+
+    var self = this;
+    $('body').on('click', (e) => {
+      if ($('.user-avater-icon').has(e.target).length > 0) {
+      } else {
+        self.popStatus = '';
+      }
+    });
   },
   watch: {
     'formData.deletePin': function (val) {
@@ -47,6 +56,9 @@ parasails.registerPage('admin-user-list', {
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
+    onIdentityIconClick: function (popInfo) {
+      this.popStatus = popInfo.id;
+    },
     clickCallback: function (pageNum) {
       location.href = `/${this.organization.handleId}/admin/users/${pageNum}`;
     },

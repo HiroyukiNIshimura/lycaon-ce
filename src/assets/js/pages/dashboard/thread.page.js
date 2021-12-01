@@ -70,8 +70,9 @@ parasails.registerPage('thread', {
     mainContents: 'active',
     flagColor: '',
     isFan: false,
-
     reloaded: false,
+    //for user-identify
+    popStatus: {},
     // Main syncing/loading state for this page.
     syncing: false,
     // Form data
@@ -369,6 +370,13 @@ parasails.registerPage('thread', {
         }
       });
 
+      //for user-identify
+      $('body').on('click', (e) => {
+        if ($('.user-avater-icon').has(e.target).length > 0) {
+        } else {
+          self.popStatus = '';
+        }
+      });
       //
     });
   },
@@ -420,17 +428,6 @@ parasails.registerPage('thread', {
       } else {
         this.mainContents = 'active';
       }
-
-      //TODO Editorのツールバーリサイズ不具合対応
-      this.$nextTick(() => {
-        if (this.commentEditor.isMarkdownMode()) {
-          this.commentEditor.changeMode('wysiwyg');
-          this.commentEditor.changeMode('markdown');
-        } else {
-          this.commentEditor.changeMode('markdown');
-          this.commentEditor.changeMode('wysiwyg');
-        }
-      });
     },
     blockViewer: function (label) {
       this.viewerBlock = Vue.$loading.show(
@@ -1642,6 +1639,10 @@ parasails.registerPage('thread', {
     selectedImageList: function (image) {
       this.showImageListModal = false;
       this.threadEditor.insertText(`![](${image.virtualUrlMid})`);
+    },
+    //for user-identify
+    onIdentityIconClick: function (popInfo) {
+      this.popStatus = popInfo.id;
     },
   },
   computed: {

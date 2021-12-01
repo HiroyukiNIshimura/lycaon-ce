@@ -60,7 +60,7 @@ module.exports = {
       .populate('team')
       .populate('owner')
       .populate('lastUpdateUser')
-      .populate('fans', { where: { id: this.req.me.id } });
+      .populate('flags', { where: { id: this.req.me.id } });
 
     for (let entry of response.wikis) {
       await User.setGravatarUrl(entry.owner, 36);

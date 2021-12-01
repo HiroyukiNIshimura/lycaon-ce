@@ -19,6 +19,7 @@ parasails.registerComponent('wikiCard', {
     showTeam: { type: [Boolean, String], default: false },
     isAnimate: { type: [Boolean, String], default: true },
     word: '',
+    adminPage: false,
   },
   //  ╦╔╗╔╦╔╦╗╦╔═╗╦    ╔═╗╔╦╗╔═╗╔╦╗╔═╗
   //  ║║║║║ ║ ║╠═╣║    ╚═╗ ║ ╠═╣ ║ ║╣
@@ -28,6 +29,7 @@ parasails.registerComponent('wikiCard', {
       formatter: formatter,
       dateAgo: $lycaon.formatter.dateAgo,
       formatDate: $lycaon.formatter.formatDate,
+      popStatus: {},
     };
   },
 
@@ -56,7 +58,7 @@ parasails.registerComponent('wikiCard', {
         </div>
         <div class="card-text mt-3">
           <small>
-            <user-identity :user="wiki.owner" :organization="organization" size="sm"></user-identity>
+            <user-identity :user="wiki.owner" :organization="organization" size="sm"  v-on:icon-click="onIdentityIconClick" :pop-status="popStatus"></user-identity>
             <lycaon-timestamp :at="wiki.createdAt" format="timeago" :translator="translator" short="true">
             </lycaon-timestamp>
           </small>
@@ -82,6 +84,13 @@ parasails.registerComponent('wikiCard', {
   },
   mounted: async function () {
     //
+    var self = this;
+    $('body').on('click', (e) => {
+      if ($('.user-avater-icon').has(e.target).length > 0) {
+      } else {
+        self.popStatus = '';
+      }
+    });
   },
   beforeDestroy: function () {
     //…
@@ -112,8 +121,15 @@ parasails.registerComponent('wikiCard', {
         var url = `/doc/${this.wiki.no}`;
         window.open(url, '_blank');
       } else {
-        location.href = `/${this.organization.handleId}/wiki/${this.wiki.no}`;
+        if (this.adminPage) {
+          location.href = `/${this.organization.handleId}/admin/wiki/${this.wiki.no}`;
+        } else {
+          location.href = `/${this.organization.handleId}/wiki/${this.wiki.no}`;
+        }
       }
+    },
+    onIdentityIconClick: function (popInfo) {
+      this.popStatus = popInfo.id;
     },
   },
   computed: {
@@ -124,7 +140,11 @@ parasails.registerComponent('wikiCard', {
       return '#';
     },
     wikiLink: function () {
-      return `/${this.organization.handleId}/wiki/${this.wiki.no}`;
+      if (this.adminPage) {
+        return `/${this.organization.handleId}/admin/wiki/${this.wiki.no}`;
+      } else {
+        return `/${this.organization.handleId}/wiki/${this.wiki.no}`;
+      }
     },
     target: function () {
       if (this.isPublic) {

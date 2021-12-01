@@ -30,7 +30,7 @@
       <div class="card-body">
         <div class="row d-none d-sm-block">
           <div class="col">
-            <user-identity :user="reply.owner" :organization="organization" size=""></user-identity>
+            <user-identity :user="reply.owner" :organization="organization" size="" v-on:icon-click="onIdentityIconClick" :pop-status="popStatus"></user-identity>
             <small class="card-subtitle ml-2 text-muted">[ <a :href="replyAnker(reply)">rep-
                 {{ reply.serialNumber }}</a> ]
             </small>
@@ -44,7 +44,7 @@
         </div>
         <div class="row d-block d-sm-none">
           <div class="col">
-            <user-identity :user="reply.owner" :organization="organization" size="">
+            <user-identity :user="reply.owner" :organization="organization" size="" v-on:icon-click="onIdentityIconClick" :pop-status="popStatus">
             </user-identity>
           </div>
         </div>

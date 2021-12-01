@@ -1,4 +1,5 @@
-const removeMd = require('remove-markdown');
+const MarkdownIt = require('markdown-it');
+const plainText = require('markdown-it-plain-text');
 
 module.exports = {
   friendlyName: 'mdToSanitize',
@@ -19,12 +20,10 @@ module.exports = {
         return '';
       }
 
-      return removeMd(inputs.markdown, {
-        stripListLeaders: false,
-        listUnicodeChar: '',
-        gfm: true,
-        useImgAltText: true,
-      });
+      var md = new MarkdownIt();
+      md.use(plainText);
+      md.render(inputs.markdown);
+      return md.plainText;
     } catch (err) {
       sails.log.debug(err);
       throw err;

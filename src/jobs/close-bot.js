@@ -45,7 +45,7 @@ SELECT a.*
                 tags: currentTags.map((o) => {
                   return o.tag_threads;
                 }),
-                tagToken: '',
+                tagToken: ':',
               };
 
               let tags = await Tag.find()

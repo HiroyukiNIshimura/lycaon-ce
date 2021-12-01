@@ -11,6 +11,8 @@ parasails.registerPage('vote-answer', {
     multipleAnswer: [],
     other: '',
     otherChoice: {},
+    popStatus: {},
+
     //…
     // Main syncing/loading state for this page.
     syncing: false,
@@ -57,13 +59,22 @@ parasails.registerPage('vote-answer', {
   },
   mounted: async function () {
     //…
+    var self = this;
+    $('body').on('click', (e) => {
+      if ($('.user-avater-icon').has(e.target).length > 0) {
+      } else {
+        self.popStatus = '';
+      }
+    });
   },
   //  ╦╔╗╔╔╦╗╔═╗╦═╗╔═╗╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
     //…
-
+    onIdentityIconClick: function (popInfo) {
+      this.popStatus = popInfo.id;
+    },
     getCheckBoxId: function (index) {
       return `vote-multiple-checkbox-${index}`;
     },

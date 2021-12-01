@@ -62,6 +62,7 @@ parasails.registerPage('team', {
     wordSearchWikiWord: '',
     //dialogs
     showMemberModal: false,
+    popStatus: {},
     // Main syncing/loading state for this page.
     syncing: false,
     // Form data
@@ -122,6 +123,10 @@ parasails.registerPage('team', {
     }
   },
   mounted: async function () {
+    if (this.effectMessage) {
+      $lycaon.cloudSuccessToast(this.effectMessage);
+    }
+
     var canvas = document.getElementById('qrcode');
     QRCode.toCanvas(canvas, location.href, (error) => {
       if (error) {
@@ -131,6 +136,13 @@ parasails.registerPage('team', {
     });
 
     var self = this;
+    $('body').on('click', (e) => {
+      if ($('.user-avater-icon').has(e.target).length > 0) {
+      } else {
+        self.popStatus = '';
+      }
+    });
+
     window.addEventListener('beforeunload', () => {
       //$lycaon.socket.post('/ws/v1/team-out', { id: self.team.id });
     });
@@ -268,6 +280,9 @@ parasails.registerPage('team', {
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
+    onIdentityIconClick: function (popInfo) {
+      this.popStatus = popInfo.id;
+    },
     renderCharts: function (team) {
       var c1 = document.getElementById('summary-chart');
 

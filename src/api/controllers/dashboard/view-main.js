@@ -53,6 +53,11 @@ select count("team__teams"."id") as qty
       throw err;
     }
 
+    if (this.req.session.effectMessage) {
+      response.effectMessage = this.req.session.effectMessage;
+      delete this.req.session.effectMessage;
+    }
+
     this.req.session.ReferencePoint = [];
     this.req.session.ReferencePoint.push(this.req.originalUrl);
 

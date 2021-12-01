@@ -39,7 +39,7 @@
             <span>
               <%= __("Author") %>:
             </span>
-            <user-identity :user="vote.author" :organization="organization" size="sm"></user-identity>
+            <user-identity :user="vote.author" :organization="organization" size="sm" v-on:icon-click="onIdentityIconClick" :pop-status="popStatus"></user-identity>
           </div>
         </div>
         <div class="row mt-3">
@@ -160,7 +160,7 @@
               <%= __("Unanswered") %>
             </span>
 
-            <user-identity class="ml-1" :user="item" :organization="organization" size="sm"></user-identity>
+            <user-identity class="ml-1" :user="item" :organization="organization" size="sm" v-on:icon-click="onIdentityIconClick" :pop-status="popStatus"></user-identity>
             <span v-if="item.answered">
               {{ getAnswers(item) }}
             </span>

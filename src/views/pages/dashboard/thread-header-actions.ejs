@@ -21,7 +21,7 @@
 </div>
 <div class="row mt-1 border border-top-0 border-right-0 border-left-0  align-items-center">
   <div class="col-auto mr-3 mb-1" v-for="item in members">
-    <user-identity :user="item" :organization="organization" size="sm" :id="parseUserId(item)" :avater-id="parseUserAvaterId(item)"></user-identity>
+    <user-identity :user="item" :organization="organization" size="sm" :id="parseUserId(item)" :avater-id="parseUserAvaterId(item)" v-on:icon-click="onIdentityIconClick" :pop-status="popStatus" :thread="thread" :is-pop-icon="threadMode === 'view'"></user-identity>
   </div>
   <div class="col-auto mr-3 mb-1" v-if="memberQty > members.length">
     <button type="button" class="btn btn-link text-primary" @click="showAllMember">
@@ -44,7 +44,7 @@
     </div>
     <div class="col-auto mt-1 ml-1">
       <small>
-        <user-identity :user="thread.owner" :organization="organization" size="sm"></user-identity>
+        <user-identity :user="thread.owner" :organization="organization" size="sm" v-on:icon-click="onIdentityIconClick" :pop-status="popStatus"></user-identity>
         - <lycaon-timestamp :at="thread.createdAt" format="timeago" :translator="translator"></lycaon-timestamp>
       </small>
     </div>

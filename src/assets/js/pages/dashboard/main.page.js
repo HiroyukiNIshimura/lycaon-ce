@@ -78,6 +78,10 @@ parasails.registerPage('main', {
     });
   },
   mounted: async function () {
+    if (this.effectMessage) {
+      $lycaon.cloudSuccessToast(this.effectMessage);
+    }
+
     var canvas = document.getElementById('qrcode');
     QRCode.toCanvas(canvas, location.href, (error) => {
       if (error) {

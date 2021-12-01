@@ -132,11 +132,15 @@ module.exports = {
         LEFT OUTER JOIN "user" as "user__lastUpdateUser" on "wiki"."lastUpdateUser" = "user__lastUpdateUser"."id"
         `;
 
-    var NATIVE_WHERE = `WHERE "wiki"."team" = $1
+    var NATIVE_WHERE = `WHERE "wiki"."concept" = 0
+AND "wiki"."deleted" = false
+AND "wiki"."team" = $1
 AND ("wiki"."subject" ilike $2 OR "wiki"."body" ilike $3)
 `;
 
-    var NATIVE_WHERE2 = `WHERE "wiki"."team" IN (SELECT "id" FROM "team" WHERE "organization" = $1)
+    var NATIVE_WHERE2 = `WHERE "wiki"."concept" = 0
+AND "wiki"."deleted" = false
+AND "wiki"."team" IN (SELECT "id" FROM "team" WHERE "organization" = $1)
 AND ("wiki"."subject" ilike $2 OR "wiki"."body" ilike $3)
 `;
 
@@ -147,6 +151,8 @@ AND ("wiki"."subject" ilike $2 OR "wiki"."body" ilike $3)
 SELECT "id", "name", "virtualPath", "wiki"
   FROM "public"."wiki_item"
  WHERE "wiki" = $1
+   AND "wiki"."concept" = 0
+   AND "wiki"."deleted" = false
    AND "qWords" ilike $2
     `;
 

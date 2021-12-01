@@ -5,7 +5,6 @@
     </ajax-form>
     <ajax-form id="create-message-form" action="createMessage" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedCreateMessageForm" @rejected="onCloudError" :handle-parsing="handleParsingCreateMessageForm">
     </ajax-form>
-    </v-tab>
     <ajax-form id="query-monthly-form" action="analytics" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedMonthlyForm" @rejected="onCloudError" :handle-parsing="handleParsingMonthlyForm">
     </ajax-form>
     <ajax-form id="query-daily-form" action="analytics" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedDailyForm" @rejected="onCloudError" :handle-parsing="handleParsingDailyForm">
@@ -17,7 +16,7 @@
 
     <div class="row">
       <div class="col-auto">
-        <user-identity :user="user" :organization="organization" size=""></user-identity>
+        <user-identity :user="user" :organization="organization" size="" v-on:icon-click="onIdentityIconClick" :pop-status="popStatus"></user-identity>
       </div>
       <div class="col text-right">
         <a class="btn btn-light btn-sm" :href="returnLink"><i class="far fa-arrow-alt-circle-left"></i>

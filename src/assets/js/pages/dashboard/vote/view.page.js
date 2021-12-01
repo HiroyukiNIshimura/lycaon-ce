@@ -14,6 +14,8 @@ parasails.registerPage('vote-view', {
     commentEditor: {},
     sneezeEditor: {},
     openCommentIdentity: null,
+    popStatus: {},
+
     //…
     // Main syncing/loading state for this page.
     syncing: false,
@@ -64,6 +66,14 @@ parasails.registerPage('vote-view', {
       $lycaon.infoKeepToast(`After browsing the circulation, click the 'Confirmed content' button!`);
     }
 
+    var self = this;
+    $('body').on('click', (e) => {
+      if ($('.user-avater-icon').has(e.target).length > 0) {
+      } else {
+        self.popStatus = '';
+      }
+    });
+
     this.$nextTick(() => {
       this.renderCharts();
     });
@@ -73,6 +83,9 @@ parasails.registerPage('vote-view', {
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
+    onIdentityIconClick: function (popInfo) {
+      this.popStatus = popInfo.id;
+    },
     renderCharts: function () {
       if (!this.vote.isQuestionnaireFormat) {
         return;

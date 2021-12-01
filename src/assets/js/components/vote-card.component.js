@@ -23,6 +23,7 @@ parasails.registerComponent('voteCard', {
       dateAgo: $lycaon.formatter.dateAgo,
       formatDate: $lycaon.formatter.formatDate,
       me: {},
+      popStatus: {},
     };
   },
 
@@ -48,7 +49,7 @@ parasails.registerComponent('voteCard', {
       </div>
       <div class="card-text mt-3">
         <span>{{ i18n('Author') }}: </span>
-        <user-identity :user="vote.author" :organization="organization" size="sm"></user-identity>
+        <user-identity :user="vote.author" :organization="organization" size="sm"  v-on:icon-click="onIdentityIconClick" :pop-status="popStatus"></user-identity>
       </div>
       <div class="text-center mt-3">
         <span class="" v-if="!state.after && vote.author && vote.author.id === me.id"><a class="btn btn-info btn-sm"
@@ -67,6 +68,13 @@ parasails.registerComponent('voteCard', {
   },
   mounted: async function () {
     //…
+    var self = this;
+    $('body').on('click', (e) => {
+      if ($('.user-avater-icon').has(e.target).length > 0) {
+      } else {
+        self.popStatus = '';
+      }
+    });
   },
   beforeDestroy: function () {
     //…
@@ -75,7 +83,11 @@ parasails.registerComponent('voteCard', {
   //  ╦╔╗╔╔╦╗╔═╗╦═╗╔═╗╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
-  methods: {},
+  methods: {
+    onIdentityIconClick: function (popInfo) {
+      this.popStatus = popInfo.id;
+    },
+  },
   computed: {
     voteLink: function () {
       return `/${this.organization.handleId}/vote/${this.vote.id}`;

@@ -78,6 +78,9 @@
     "EasyMDE": true,
     "DOMPurify": true,
     "marked": true,
+    "ArrayBuffer": true,
+    "DataView": true,
+    "CRC32": true,
     //mixin
     "messageNotify": true,
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

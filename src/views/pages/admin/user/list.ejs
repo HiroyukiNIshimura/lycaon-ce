@@ -110,7 +110,7 @@
         <div class="card card-width h-100 card-selectable">
           <div class="card-body">
             <div class="card-title">
-              <user-identity :user="item" :organization="organization" size="" show-user-name="false"></user-identity>
+              <user-identity :user="item" :organization="organization" size="" show-user-name="false" v-on:icon-click="onIdentityIconClick" :pop-status="popStatus"></user-identity>
               <a class="" :href="infoLink(item)">
                 {{ item.fullName }}</a>
             </div>

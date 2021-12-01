@@ -4,7 +4,7 @@
       <div class="card-body">
         <div class="row d-none d-sm-block">
           <div class="col">
-            <user-identity :user="sneeze.owner" :organization="organization" size=""></user-identity>
+            <user-identity :user="sneeze.owner" :organization="organization" size="" v-on:icon-click="onIdentityIconClick" :pop-status="popStatus"></user-identity>
             <small class="card-subtitle ml-2 text-muted">[ <a :href="sneezeAnker(sneeze)">comment-
                 {{ sneeze.serialNumber }}</a> ]</small>
             <small class="card-subtitle text-muted">
@@ -14,7 +14,7 @@
         </div>
         <div class="row d-block d-sm-none">
           <div class="col">
-            <user-identity :user="sneeze.owner" :organization="organization" size="">
+            <user-identity :user="sneeze.owner" :organization="organization" size="" v-on:icon-click="onIdentityIconClick" :pop-status="popStatus">
             </user-identity>
           </div>
         </div>

@@ -37,7 +37,7 @@
         <span>
           <%= __("Author") %>:
         </span>
-        <user-identity :user="vote.author" :organization="organization" size="sm"></user-identity>
+        <user-identity :user="vote.author" :organization="organization" size="sm" v-on:icon-click="onIdentityIconClick" :pop-status="popStatus"></user-identity>
       </div>
     </div>
 

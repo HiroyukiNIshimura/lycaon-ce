@@ -12,7 +12,7 @@ parasails.registerComponent('threadCard', {
   //  ╔═╗╦═╗╔═╗╔═╗╔═╗
   //  ╠═╝╠╦╝║ ║╠═╝╚═╗
   //  ╩  ╩╚═╚═╝╩  ╚═╝
-  props: ['thread', 'selectedTags', 'team', 'organization', 'word', 'showCounter'],
+  props: ['thread', 'selectedTags', 'team', 'organization', 'word', 'showCounter', 'showFlagRemove'],
 
   //  ╦╔╗╔╦╔╦╗╦╔═╗╦    ╔═╗╔╦╗╔═╗╔╦╗╔═╗
   //  ║║║║║ ║ ║╠═╣║    ╚═╗ ║ ╠═╣ ║ ║╣
@@ -22,6 +22,10 @@ parasails.registerComponent('threadCard', {
       formatter: formatter,
       dateAgo: $lycaon.formatter.dateAgo,
       formatDate: $lycaon.formatter.formatDate,
+      popStatus: '',
+      syncing: false,
+      formErrors: {},
+      cloudError: '',
     };
   },
 
@@ -35,9 +39,9 @@ parasails.registerComponent('threadCard', {
   <div class="thread-urgency-bar" :aria-label="i18n('Urgency')" data-microtip-position="bottom" role="tooltip"
     :class="urgencyBarColor" v-show="thread.urgency > 0"></div>
   <div class="card-body">
-    <div class="row">
-      <div class="col h5 card-subtitle mb-2">
-        <span class="badge badge-pill badge-primary">{{ thread.category.name }}</span>
+    <div class="row mb-2">
+      <div class="col h5 card-subtitle">
+        <span class="badge badge-pill" :style="categoryStyle(thread.category.name)">{{ thread.category.name }}</span>
       </div>
       <div class="col text-right">
         <span class="fa-layers fa-fw" style="color: Dodgerblue;font-size: 1.6rem;" v-if="thread.sneezeQty > 0">
@@ -69,31 +73,32 @@ parasails.registerComponent('threadCard', {
       </div>
       <div class="card-text mb-2">{{ i18n('Person in charge') }}:
         <span v-if="thread.responsible">
-          <user-identity :user="thread.responsible" :organization="organization" size="sm"></user-identity>
+          <user-identity :user="thread.responsible" :organization="organization" size="sm"  v-on:icon-click="onIdentityIconClick" :pop-status="popStatus"></user-identity>
         </span>
         <span v-else>{{ i18n('unspecified') }}</span>
       </div>
       <div class="card-text mb-1">
         <small>
-          <user-identity :user="thread.owner" :organization="organization" size="sm"></user-identity>
+          <user-identity :user="thread.owner" :organization="organization" size="sm"  v-on:icon-click="onIdentityIconClick" :pop-status="popStatus"></user-identity>
           <lycaon-timestamp :at="thread.createdAt" format="timeago" :translator="createTranslator" short="true">
           </lycaon-timestamp>
         </small>
       </div>
       <div class="card-text mb-1" v-if="thread.lastUpdateUser">
         <small>
-          <user-identity :user="thread.lastUpdateUser" :organization="organization" size="sm"></user-identity>
+          <user-identity :user="thread.lastUpdateUser" :organization="organization" size="sm"  v-on:icon-click="onIdentityIconClick" :pop-status="popStatus"></user-identity>
           <lycaon-timestamp :at="thread.lastHumanUpdateAt" format="timeago" :translator="updateTranslator" short="true">
           </lycaon-timestamp>
         </small>
       </div>
       <div class="card-text mb-1" v-if="thread.working">
         <small>
-          <user-identity :user="thread.workingUser" :organization="organization" size="sm"></user-identity>
+          <user-identity :user="thread.workingUser" :organization="organization" size="sm"  v-on:icon-click="onIdentityIconClick" :pop-status="popStatus"></user-identity>
           {{ i18n('{0} is working').format('') }}
         </small>
       </div>
       <div class="card-section-overlay" v-if="hitContent" v-html="hitContent"></div>
+      <div class="card-text text-right" v-if="showFlagRemove"><small><a href="javascript:void(0)" @click="removeFlagSubmit">{{ i18n('Remove the flag') }}</a></small></div>
     </div>
   </div>
   <div class="card-footer">
@@ -101,7 +106,7 @@ parasails.registerComponent('threadCard', {
     <span class="badge badge-success mr-1" v-for="(item, index) in thread.tags" :key="index" v-if="team">
       {{ item.name }}
     </span>
-    <a :href="tagLink(item)" class="badge badge-success mr-1" :aria-label="tagTooltip" data-microtip-position="top"
+    <a :href="tagLink(item)" :class="tagStyle(item)" class="mr-1" :aria-label="tagTooltip" data-microtip-position="top"
       data-microtip-size="medium" role="tooltip" v-for="(item, index) in thread.tags" :key="index" v-if="!team">
       {{ item.name }}
     </a>
@@ -110,6 +115,7 @@ parasails.registerComponent('threadCard', {
       <small><a :href="milestoneLink">{{ thread.milestone.name }}</a></small>
     </div>
   </div>
+  <ajax-form ref="flagRemoveAction" action="updateThreadFlag" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedFlagForm" :handle-parsing="handleParsingFlagForm"></ajax-form>
 </div>
 `,
 
@@ -119,6 +125,13 @@ parasails.registerComponent('threadCard', {
   //…
   mounted: async function () {
     //…
+    var self = this;
+    $('body').on('click', (e) => {
+      if ($('.user-avater-icon').has(e.target).length > 0) {
+      } else {
+        self.popStatus = '';
+      }
+    });
   },
   beforeDestroy: function () {
     //…
@@ -156,6 +169,59 @@ parasails.registerComponent('threadCard', {
       }
       return `rgba(${c[0]}, ${c[1]}, ${c[2]}, ${alpha})`;
     },
+    getColor: function (str) {
+      var view = new DataView(new ArrayBuffer(4));
+      view.setUint32(0, CRC32.str(str), false);
+      var buff = new Uint8Array(view.buffer);
+      return {
+        r: buff[0] & 0xff,
+        g: buff[1] & 0xff,
+        b: buff[2] & 0xff,
+      };
+    },
+    categoryStyle: function (str) {
+      var color = this.getColor(str);
+      return `background:rgb(${color.r},${color.g},${color.b});`;
+    },
+    onIdentityIconClick: function (popInfo) {
+      this.popStatus = popInfo.id;
+    },
+    tagStyle: function (item) {
+      if (this.word) {
+        if (item.name === this.word) {
+          return 'badge badge-danger';
+        }
+      }
+
+      if (this.selectedTags) {
+        if (
+          _.findIndex(this.selectedTags, (o) => {
+            return o.id === item.id;
+          }) > -1
+        ) {
+          return 'badge badge-danger';
+        }
+      }
+
+      return 'badge badge-success';
+    },
+    removeFlagSubmit: function () {
+      this.$refs.flagRemoveAction.submit();
+    },
+    handleParsingFlagForm: function () {
+      this.formErrors = {};
+
+      var argins = {
+        id: this.thread.id,
+        state: false,
+      };
+      return argins;
+    },
+    submittedFlagForm: async function () {
+      this.cloudSuccess = true;
+      this.syncing = true;
+      location.reload();
+    },
   },
   computed: {
     threadLink: function () {
@@ -169,7 +235,7 @@ parasails.registerComponent('threadCard', {
     },
     milestoneLink: function () {
       if (this.thread.milestone) {
-        return `/${this.organization.handleId}/milestone/${this.thread.milestone.team}`;
+        return `/${this.organization.handleId}/team/${this.thread.milestone.team}/milestone/${this.thread.milestone.id}`;
       }
       return '#';
     },
@@ -268,7 +334,7 @@ parasails.registerComponent('threadCard', {
     flagColorStyle: function () {
       if (this.thread.flags && this.thread.flags.length > 0) {
         var color = this.thread.flags[0].color;
-        return `border-color: ${color};border-width:3`;
+        return `border-color:${color}; border-bottom-width:5px`;
       } else {
         return '';
       }

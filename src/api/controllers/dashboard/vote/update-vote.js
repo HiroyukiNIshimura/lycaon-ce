@@ -166,11 +166,15 @@ module.exports = {
 
           await VoteChoices.createEach(choicesToSets).usingConnection(db);
         } else {
-          await VoteChoices.create({
+          var newChoise = await VoteChoices.create({
             choices: 'Browsed',
             isOther: false,
             vote: updated.id,
-          }).usingConnection(db);
+          })
+            .fetch()
+            .usingConnection(db);
+
+          await VoteAnswer.update({ vote: updated.id }).set({ voteChoices: newChoise.id }).usingConnection(db);
         }
       });
 

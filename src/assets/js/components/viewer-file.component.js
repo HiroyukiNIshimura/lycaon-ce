@@ -19,6 +19,7 @@ parasails.registerComponent('viewerFile', {
   data: function () {
     return {
       dateAgo: $lycaon.formatter.dateAgo,
+      popStatus: {},
     };
   },
 
@@ -47,7 +48,7 @@ parasails.registerComponent('viewerFile', {
                 data-microtip-position="top" data-microtip-size="medium" role="tooltip">{{ truncate(item.name, 24) }} <i
                   class="fas fa-cloud-download-alt fa-lg"></i></a>
               <lycaon-timestamp :at="item.createdAt" format="timeago" :translator="translator"></lycaon-timestamp>
-              <user-identity :user="item.owner" :organization="organization" size="sm"></user-identity>
+              <user-identity :user="item.owner" :organization="organization" size="sm"  v-on:icon-click="onIdentityIconClick" :pop-status="popStatus"></user-identity>
               {{ i18n("Attached file") }}
             </small>
           </li>
@@ -84,6 +85,13 @@ parasails.registerComponent('viewerFile', {
   },
   mounted: async function () {
     //
+    var self = this;
+    $('body').on('click', (e) => {
+      if ($('.user-avater-icon').has(e.target).length > 0) {
+      } else {
+        self.popStatus = '';
+      }
+    });
   },
   beforeDestroy: function () {
     //…
@@ -102,6 +110,9 @@ parasails.registerComponent('viewerFile', {
         return text;
       }
       return chars.slice(0, length).join('') + '...';
+    },
+    onIdentityIconClick: function (popInfo) {
+      this.popStatus = popInfo.id;
     },
   },
   computed: {

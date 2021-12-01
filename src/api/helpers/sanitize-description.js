@@ -1,4 +1,5 @@
-const removeMd = require('remove-markdown');
+const MarkdownIt = require('markdown-it');
+const plainText = require('markdown-it-plain-text');
 
 module.exports = {
   friendlyName: 'sanitizeDescription',
@@ -22,12 +23,11 @@ module.exports = {
         return '';
       }
 
-      var raw = removeMd(inputs.markdown, {
-        stripListLeaders: false,
-        listUnicodeChar: '',
-        gfm: true,
-        useImgAltText: true,
-      });
+      var md = new MarkdownIt();
+      md.use(plainText);
+      md.render(inputs.markdown);
+      var raw = md.plainText;
+
       var chars = Array.from(raw);
       if (chars.length > inputs.max) {
         return chars.slice(0, inputs.max).join('') + '...';

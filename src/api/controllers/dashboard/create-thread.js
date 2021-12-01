@@ -142,7 +142,7 @@ module.exports = {
           }
         }
 
-        thread.tagToken = '';
+        thread.tagToken = ':';
         _.each(thread.tags, (tag) => {
           thread.tagToken += tag + ':';
         });

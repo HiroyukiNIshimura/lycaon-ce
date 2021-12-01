@@ -19,6 +19,9 @@ parasails.registerComponent('userIdentity', {
     organization: {},
     id: '',
     avaterId: '',
+    popStatus: '',
+    thread: {},
+    isPopIcon: false,
   },
   //  ╦╔╗╔╦╔╦╗╦╔═╗╦    ╔═╗╔╦╗╔═╗╔╦╗╔═╗
   //  ║║║║║ ║ ║╠═╣║    ╚═╗ ║ ╠═╣ ║ ║╣
@@ -27,22 +30,44 @@ parasails.registerComponent('userIdentity', {
     return {
       uuid: '',
       me: {},
+      showPoporver: false,
+      myPop: false,
+      yourPop: false,
+      isThread: false,
     };
   },
-
   //  ╦ ╦╔╦╗╔╦╗╦
   //  ╠═╣ ║ ║║║║
   //  ╩ ╩ ╩ ╩ ╩╩═╝
   template: `
 <span class="ml-1" v-if="user">
-  <span :id="parseAvaterId" class="user-avater-icon">
+  <span :id="parseAvaterId" class="user-avater-icon" @click="onIconClick" ref="userIdentity">
     <img :class="sizeClass" :src="user.gravatarUrl" v-if="user.avatarType === 'gravatar'" />
-    <img class="rounded-circle" :class="sizeClass" :src="user.avatarVirtualUrl"
-      v-else-if="user.avatarType === 'user-avatar'" />
+    <img class="rounded-circle" :class="sizeClass" :src="user.avatarVirtualUrl" v-else-if="user.avatarType === 'user-avatar'" />
     <svg :class="sizeClass" :data-jdenticon-value="user.emailAddress" v-else></svg>
   </span>
-  <a :id="parseUserId" class="ml-1 comment-tip" :href="menberInfoLink"
-    v-if="showUserName == true">{{ user.fullName }}</a>
+  <a :id="parseUserId" class="ml-1 comment-tip" :href="menberInfoLink" v-if="showUserName == true">
+    {{ user.fullName }}</a>
+
+  <div class="v-popover fade v-bs-popover-right show" x-placement="bottom" style="width:15rem" :style="transform" v-if="myPop && showPoporver">
+    <div class="v-arrow"></div>
+    <h3 class="v-popover-header">{{ i18n('Move to selected team') }}</h3>
+    <div class="v-popover-body">
+      <div v-for="team in me.teams"><a :href="teamLink(team)">{{ team.name }}</a></div>
+    </div>
+  </div>
+  <div class="v-popover fade v-bs-popover-right show" x-placement="bottom" style="width:10rem" :style="transform" v-if="yourPop && showPoporver">
+    <div class="v-arrow"></div>
+    <h3 class="v-popover-header"></h3>
+    <div class="v-popover-body">
+      <div>
+        <div><a :href="messageLink"><i class="far fa-comment-dots"></i> {{ i18n('Send a message') }}</a></div>
+        <div v-if="isThread">
+          <a href="#" @click.prevent="sendPleaseRead"><i class="fab fa-readme"></i> {{ i18n('Please read!') }}</a>
+        </div>
+      </div>
+    </div>
+  </div>
 </span>
 <span class="ml-1" v-else>
   {{ i18n('Anonymous account') }}
@@ -57,57 +82,67 @@ parasails.registerComponent('userIdentity', {
     var dt = new Date();
     this.uuid = `${this.user.id}-${dt.valueOf()}`;
     this.me = SAILS_LOCALS.me;
+
+    if (this.me && this.me.id === this.user.id && this.me.teams && this.me.teams.length > 0) {
+      this.myPop = true;
+      this.yourPop = false;
+    } else {
+      this.myPop = false;
+      this.yourPop = true;
+    }
+
+    if (this.thread) {
+      this.isThread = true;
+    }
   },
   mounted: async function () {
     jdenticon();
-
-    this.$nextTick(() => {
-      var self = this;
-
-      var $avater = $('#' + this.parseAvaterId);
-
-      if (this.me && this.me.id === this.user.id && this.me.teams && this.me.teams.length > 0) {
-        $avater.popover({
-          placement: 'bottom',
-          html: true,
-          trigger: 'click',
-          title: self.i18n('Move to selected team'),
-          content: function () {
-            var html = '';
-            _.each(self.me.teams, (o) => {
-              var href = `/${self.organization.handleId}/team/${o.id}`;
-              html += `<div><a href="${href}">${o.name}</a></div>`;
-            });
-            return html;
-          },
-        });
-      } else {
-        $avater.popover({
-          placement: 'bottom',
-          html: true,
-          trigger: 'click',
-          content: function () {
-            var href = `/${self.organization.handleId}/member/${self.user.id}?tab=tab-message`;
-            var html = `<div><a href="${href}"><i class="far fa-comment-dots"></i> ${self.i18n(
-              'Send a message'
-            )}</a></div>`;
-            return html;
-          },
-        });
-      }
-      $avater.on('shown.bs.popover', () => {
-        $('.user-avater-icon').not($avater).popover('hide');
-      });
-    });
   },
   beforeDestroy: function () {
     //…
   },
 
+  watch: {
+    popStatus: function (val) {
+      if (this.uuid !== val) {
+        this.showPoporver = false;
+        this.$forceUpdate();
+      }
+    },
+  },
   //  ╦╔╗╔╔╦╗╔═╗╦═╗╔═╗╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
-  methods: {},
+  methods: {
+    onIconClick: function (e) {
+      if (this.isPopIcon) {
+        this.showPoporver = !this.showPoporver;
+        this.$emit('icon-click', { id: this.uuid, status: this.showPoporver, event: e });
+      }
+    },
+    sendPleaseRead: function () {
+      if (!this.thread) {
+        return;
+      }
+
+      try {
+        $lycaon.axios.post(
+          '/api/v1/member/messages/create',
+          {
+            id: this.user.id,
+            contents: `#${this.thread.no} ${this.i18n('I updated the thread, so please check it')}`,
+          },
+          {}
+        );
+        $lycaon.successToast('You have sent a message to {0} asking you to read this thread', [this.user.fullName]);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    teamLink: function (team) {
+      return `/${this.organization.handleId}/team/${team.id}`;
+    },
+  },
   computed: {
     sizeClass: function () {
       if (this.size === 'sm') {
@@ -129,6 +164,15 @@ parasails.registerComponent('userIdentity', {
     },
     menberInfoLink: function () {
       return `/${this.organization.handleId}/member/${this.user.id}`;
+    },
+    messageLink: function () {
+      return `/${this.organization.handleId}/member/${this.user.id}?tab=tab-message`;
+    },
+    transform: function () {
+      var position = $(this.$refs.userIdentity).position();
+      var top = position.top + 6;
+      var left = position.left + 20;
+      return `position absolute; transform: translate3d(${left}px, ${top}px, 0px); top: 0px; left: 0px; will-change: transform;`;
     },
   },
 });

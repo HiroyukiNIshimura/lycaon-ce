@@ -99,7 +99,7 @@ module.exports = {
           }
         }
 
-        wiki.tagToken = '';
+        wiki.tagToken = ':';
         _.each(wiki.tags, (tag) => {
           wiki.tagToken += tag + ':';
         });

@@ -50,7 +50,7 @@ SELECT (SELECT bigm_similarity($1, t."subject")) as "subjectScore",
     comment += '間違ってたらごめんなさい😅\n';
 
     for (let entry of targes) {
-      comment += ` #${entry.id} ${entry.subject} (score: ${entry.subjectScore.toFixed(3)}/${entry.bodyScore.toFixed(
+      comment += ` #${entry.no} ${entry.subject} (score: ${entry.subjectScore.toFixed(3)}/${entry.bodyScore.toFixed(
         3
       )})\n`;
     }

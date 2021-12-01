@@ -13,6 +13,7 @@ parasails.registerPage('member-info', {
     currentPage: 1,
     selectedTab: {},
     isEditArrived: false,
+    popStatus: {},
     // Main syncing/loading state for this page.
     syncing: false,
     // Form data
@@ -35,6 +36,13 @@ parasails.registerPage('member-info', {
   mounted: async function () {
     //…
     var self = this;
+    $('body').on('click', (e) => {
+      if ($('.user-avater-icon').has(e.target).length > 0) {
+      } else {
+        self.popStatus = '';
+      }
+    });
+
     io.socket.on('message-notify', (response) => {
       if (response.data.sendTo === self.me.id) {
         $lycaon.socketToast(response.message);
@@ -91,6 +99,9 @@ parasails.registerPage('member-info', {
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
+    onIdentityIconClick: function (popInfo) {
+      this.popStatus = popInfo.id;
+    },
     onEditorFocus: function () {
       $lycaon.socket.post('/ws/v1/message-edit-in', { partner: this.user.id });
     },

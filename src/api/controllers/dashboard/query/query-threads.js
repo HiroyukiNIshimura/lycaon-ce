@@ -168,7 +168,7 @@ module.exports = {
       if (inputs.tags) {
         whereClause.or = [];
         _.each(inputs.tags, (entry) => {
-          whereClause.or.push({ tagToken: { contains: entry.id + ':' } });
+          whereClause.or.push({ tagToken: { contains: ':' + entry.id + ':' } });
         });
       }
 

@@ -35,6 +35,19 @@ module.exports = {
       word: inputs.word,
     };
 
+    var pagination = await sails.helpers.pagination.with({
+      page: inputs.page,
+      rowPerPage: sails.config.custom.threadGridRowPerPage,
+    });
+    response.pagination = pagination;
+
+    var user = await User.findOne({
+      id: this.req.me.id,
+    }).populate('teams', { where: { deleted: false }, sort: 'id ASC' });
+    if (user.teams.length < 1) {
+      return response;
+    }
+
     var NATIVE_COUNT = `SELECT count("thread".*) as "qty" FROM "public"."thread"
 `;
 
@@ -221,6 +234,8 @@ module.exports = {
         LEFT OUTER JOIN "user" as "user__lastUpdateUser" on "thread"."lastUpdateUser" = "user__lastUpdateUser"."id"
                 `;
 
+    var tags = await Tag.find().where({ name: inputs.word });
+
     var NATIVE_WHERE = `WHERE "thread"."team" = $1
 AND "thread"."local" = false
 AND ("thread"."subject" ilike $2 OR "thread"."body" ilike $3
@@ -230,6 +245,18 @@ AND ("thread"."subject" ilike $2 OR "thread"."body" ilike $3
  OR "thread"."no" = $7
       )
 `;
+    if (tags.length > 0) {
+      NATIVE_WHERE = `WHERE "thread"."team" = $1
+AND "thread"."local" = false
+AND ("thread"."subject" ilike $2 OR "thread"."body" ilike $3
+ OR "thread"."id" in (SELECT "thread" FROM "sneeze" WHERE "comment" ilike $4)
+ OR "thread"."id" in (SELECT "thread" FROM "reply" WHERE "comment" ilike $5)
+ OR "thread"."id" in (SELECT "thread" FROM "thread_item" WHERE "qWords" ilike $6)
+ OR "thread"."no" = $7
+ OR "thread"."tagToken" ilike '%:${tags[0].id}:%'
+      )
+`;
+    }
 
     var NATIVE_WHERE2 = `WHERE "thread"."team" IN (SELECT "id" FROM "team" WHERE "organization" = $1)
 AND "thread"."local" = false
@@ -240,6 +267,18 @@ AND ("thread"."subject" ilike $2 OR "thread"."body" ilike $3
  OR "thread"."no" = $7
       )
 `;
+    if (tags.length > 0) {
+      NATIVE_WHERE2 = `WHERE "thread"."team" IN (SELECT "id" FROM "team" WHERE "organization" = $1)
+AND "thread"."local" = false
+AND ("thread"."subject" ilike $2 OR "thread"."body" ilike $3
+ OR "thread"."id" in (SELECT "thread" FROM "sneeze" WHERE "comment" ilike $4)
+ OR "thread"."id" in (SELECT "thread" FROM "reply" WHERE "comment" ilike $5)
+ OR "thread"."id" in (SELECT "thread" FROM "thread_item" WHERE "qWords" ilike $6)
+ OR "thread"."no" = $7
+ OR "thread"."tagToken" ilike '%:${tags[0].id}:%'
+      )
+`;
+    }
 
     var NATIVE_ORDER = `ORDER BY "thread"."lastHumanUpdateAt" DESC, "thread"."id" DESC LIMIT $8 OFFSET $9
         `;
@@ -263,19 +302,6 @@ SELECT "id", "name", "virtualPath", "thread"
  WHERE "thread" = $1
    AND "qWords" ilike $2
     `;
-
-    var pagination = await sails.helpers.pagination.with({
-      page: inputs.page,
-      rowPerPage: sails.config.custom.threadGridRowPerPage,
-    });
-    response.pagination = pagination;
-
-    var user = await User.findOne({
-      id: this.req.me.id,
-    }).populate('teams', { where: { deleted: false }, sort: 'id ASC' });
-    if (user.teams.length < 1) {
-      return response;
-    }
 
     var sql;
     var params = [];
