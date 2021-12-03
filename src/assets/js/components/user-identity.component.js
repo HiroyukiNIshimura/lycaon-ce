@@ -21,6 +21,7 @@ parasails.registerComponent('userIdentity', {
     avaterId: '',
     popStatus: '',
     thread: {},
+    team: {},
     isPopIcon: false,
   },
   //  ╦╔╗╔╦╔╦╗╦╔═╗╦    ╔═╗╔╦╗╔═╗╔╦╗╔═╗
@@ -34,6 +35,7 @@ parasails.registerComponent('userIdentity', {
       myPop: false,
       yourPop: false,
       isThread: false,
+      isTeam: false,
     };
   },
   //  ╦ ╦╔╦╗╔╦╗╦
@@ -61,9 +63,15 @@ parasails.registerComponent('userIdentity', {
     <h3 class="v-popover-header"></h3>
     <div class="v-popover-body">
       <div>
-        <div><a :href="messageLink"><i class="far fa-comment-dots"></i> {{ i18n('Send a message') }}</a></div>
+        <div><a :href="messageLink"><i class="far fa-comment-dots fa-fw"></i> {{ i18n('Send a message') }}</a></div>
         <div v-if="isThread">
-          <a href="#" @click.prevent="sendPleaseRead"><i class="fab fa-readme"></i> {{ i18n('Please read!') }}</a>
+          <a href="#" @click.prevent="sendPleaseRead"><i class="fab fa-readme fa-fw"></i> {{ i18n('Please read!') }}</a>
+        </div>
+        <div v-if="isTeam">
+          <a :href="ownersLink"><i class="fas fa-user-edit fa-fw"></i> {{ i18n('Created threads') }}</a>
+        </div>
+        <div v-if="isTeam">
+          <a :href="responsiblesLink"><i class="fas fa-map-pin fa-fw"></i> {{ i18n('Threads in charge') }}</a>
         </div>
       </div>
     </div>
@@ -93,6 +101,9 @@ parasails.registerComponent('userIdentity', {
 
     if (this.thread) {
       this.isThread = true;
+    }
+    if (this.team) {
+      this.isTeam = true;
     }
   },
   mounted: async function () {
@@ -167,6 +178,12 @@ parasails.registerComponent('userIdentity', {
     },
     messageLink: function () {
       return `/${this.organization.handleId}/member/${this.user.id}?tab=tab-message`;
+    },
+    ownersLink: function () {
+      return `/${this.organization.handleId}/team/${this.team.id}/owner/${this.user.id}`;
+    },
+    responsiblesLink: function () {
+      return `/${this.organization.handleId}/team/${this.team.id}/responsible/${this.user.id}`;
     },
     transform: function () {
       var position = $(this.$refs.userIdentity).position();

@@ -17,6 +17,12 @@ module.exports = {
     milestone: {
       type: 'number',
     },
+    owner: {
+      type: 'number',
+    },
+    responsible: {
+      type: 'number',
+    },
     tag: {
       type: 'number',
     },
@@ -49,6 +55,8 @@ module.exports = {
 
     this.res.cookie('teamQueryParam', {
       milestone: inputs.milestone,
+      owner: inputs.owner,
+      responsible: inputs.responsible,
       tag: inputs.tag,
       target: inputs.target,
     });

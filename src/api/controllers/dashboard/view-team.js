@@ -130,6 +130,42 @@ module.exports = {
           word: '',
           resultTarget: 'thread',
         };
+      } else if (this.req.cookies.teamQueryParam.owner) {
+        response.query = {
+          milestone: '',
+          category: '',
+          responsible: '',
+          concept: '',
+          status: '',
+          owner: this.req.cookies.teamQueryParam.owner,
+          locked: '',
+          priority: '',
+          working: false,
+          flag: false,
+          tags: [],
+          sustain: false,
+          sort: 0,
+          word: '',
+          resultTarget: 'thread',
+        };
+      } else if (this.req.cookies.teamQueryParam.responsible) {
+        response.query = {
+          milestone: '',
+          category: '',
+          responsible: this.req.cookies.teamQueryParam.responsible,
+          concept: '',
+          status: '',
+          owner: '',
+          locked: '',
+          priority: '',
+          working: false,
+          flag: false,
+          tags: [],
+          sustain: false,
+          sort: 0,
+          word: '',
+          resultTarget: 'thread',
+        };
       } else if (this.req.cookies.teamQueryParam.tag) {
         if (this.req.cookies.teamQueryParam.target === 'thread') {
           response.query = {

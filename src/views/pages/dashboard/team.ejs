@@ -86,7 +86,7 @@
     </div>
     <div class="row mt-3 align-items-center">
       <div class="col-auto mr-3 mb-1" v-for="item in members">
-        <user-identity :user="item" :organization="organization" size="sm" :id="parseUserId(item)" :avater-id="parseUserAvaterId(item)" v-on:icon-click="onIdentityIconClick" :pop-status="popStatus" is-pop-icon="true"></user-identity>
+        <user-identity :user="item" :organization="organization" size="sm" :id="parseUserId(item)" :avater-id="parseUserAvaterId(item)" v-on:icon-click="onIdentityIconClick" :pop-status="popStatus" is-pop-icon="true" :team="team"></user-identity>
       </div>
       <div class="col-auto mr-3 mb-1" v-if="memberQty > members.length">
         <button type="button" class="btn btn-link text-primary" @click="showAllMember">
