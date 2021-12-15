@@ -5,7 +5,7 @@ module.exports = {
 
   inputs: {
     orderSet: {
-      type: 'ref',
+      type: 'json',
       required: true,
     },
   },

@@ -132,6 +132,38 @@ module.exports = {
       return 0;
     });
 
+    try {
+      await sails.getDatastore().transaction(async (db) => {
+        var dt = Date.now();
+
+        await ThreadAccess.destroy({
+          lastAccessAt: { '<=': dt - sails.config.custom.threadAccessDeleteAge },
+        }).usingConnection(db);
+
+        var access = await ThreadAccess.findOne()
+          .where({ user: this.req.me.id, thread: response.thread.id })
+          .usingConnection(db);
+        if (access) {
+          access.count++;
+          access.lastAccessAt = dt;
+          access.team = response.team.id;
+
+          await ThreadAccess.updateOne({ id: access.id }).set(access).usingConnection(db);
+        } else {
+          await ThreadAccess.create({
+            count: 1,
+            lastAccessAt: dt,
+            team: response.team.id,
+            thread: response.thread.id,
+            user: this.req.me.id,
+          }).usingConnection(db);
+        }
+      });
+    } catch (error) {
+      sails.log.error(error);
+      throw error;
+    }
+
     response.witeListOfExts = [];
     if (this.req.sysSettings.witeListOfExts) {
       var exts = this.req.sysSettings.witeListOfExts.split(',');

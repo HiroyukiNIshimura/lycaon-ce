@@ -26,14 +26,14 @@ module.exports = {
     });
     if (already > 0) {
       sails.log.debug(`このスレッドでは提案済み。スレッド[${id}]`);
-      return;
+      return 'skip';
     }
 
     //1/3の確率のくじ引き
     var rnd = Math.floor(Math.random() * 100);
     if (rnd > 33) {
       sails.log.debug(`タグ候補サーチの抽選に外れました。スレッド[${id}]`);
-      return;
+      return 'skip';
     }
 
     var sentens =
@@ -69,7 +69,7 @@ module.exports = {
 
     if (results.length < 1) {
       sails.log.debug(`キーワードは見つかりませんでした。スレッド[${id}]`);
-      return;
+      return 'skip';
     }
 
     //

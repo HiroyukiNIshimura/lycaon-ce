@@ -197,6 +197,13 @@ module.exports = {
       this.res.clearCookie('teamQueryParam');
     }
 
+    response.accessList = await ThreadAccess.find({
+      where: { user: this.req.me.id, team: response.team.id },
+      sort: [{ count: 'DESC' }, { lastAccessAt: 'DESC' }],
+      limit: 10,
+      skip: 0,
+    }).populate('thread');
+
     response.messageStack = await sails.helpers.storage.findMessage.with({ me: this.req.me });
 
     if (this.req.session.effectMessage) {

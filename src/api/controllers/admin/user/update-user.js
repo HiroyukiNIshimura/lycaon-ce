@@ -23,7 +23,7 @@ module.exports = {
       type: 'boolean',
     },
     selectedTeams: {
-      type: 'ref',
+      type: 'json',
       required: true,
     },
   },

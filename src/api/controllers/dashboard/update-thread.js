@@ -30,7 +30,7 @@ module.exports = {
       required: true,
     },
     tags: {
-      type: 'ref',
+      type: 'json',
     },
     category: {
       type: 'number',

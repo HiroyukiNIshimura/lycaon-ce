@@ -1,0 +1,53 @@
+.access-sidenav {
+  height: 100%;
+  width: 300px;
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+  background-color: rgb(83, 83, 83);
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 60px;
+}
+
+.access-sidenav-inner {
+  margin-top: 150px;
+  margin-bottom: 2rem;
+}
+.access-sidenav-inner a {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 16px;
+  color: #f7873c;
+  display: block;
+  transition: 0.3s;
+}
+
+.access-sidenav-inner a:hover {
+  color: #f1f1f1;
+}
+
+.access-sidenav-inner .closebtn {
+  position: absolute;
+  top: 90px;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+}
+
+@media screen and (max-height: 450px) {
+  .access-sidenav {padding-top: 15px;}
+  .access-sidenav a {font-size: 18px;}
+}
+
+.slide-enter, .slide-leave-to {
+  opacity: 0;
+  transform: translateX(-100%);
+}
+.slide-enter-to, .slide-leave {
+  transform: translateX(0);
+}
+.slide-enter-active, .slide-leave-active {
+  transition: opacity 600ms, transform 500ms;
+}

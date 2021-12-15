@@ -32,26 +32,24 @@ module.exports = {
       },
     },
     circulationFrom: {
-      type: 'ref',
-      columnType: 'bigint',
+      type: 'json',
       required: true,
       description: '回覧期間FROM',
     },
     circulationTo: {
-      type: 'ref',
-      columnType: 'bigint',
+      type: 'json',
       required: true,
       description: '回覧期間To',
     },
     users: {
-      type: 'ref',
+      type: 'json',
     },
     multipleAnswers: {
       type: 'boolean',
       description: '回答が複数選択可能かどうか',
     },
     choices: {
-      type: 'ref',
+      type: 'json',
     },
     hasOther: {
       type: 'boolean',

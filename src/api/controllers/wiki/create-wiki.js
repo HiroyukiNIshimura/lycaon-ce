@@ -30,7 +30,7 @@ module.exports = {
       description: '0:非公開、1:外部に公開',
     },
     tags: {
-      type: 'ref',
+      type: 'json',
     },
   },
 

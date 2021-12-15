@@ -30,7 +30,7 @@ module.exports = {
       isIn: [0, 1],
     },
     tags: {
-      type: 'ref',
+      type: 'json',
     },
     deleted: {
       type: 'boolean',

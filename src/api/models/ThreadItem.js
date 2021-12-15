@@ -70,7 +70,7 @@ module.exports = {
       type: 'number',
       defaultsTo: 0,
       description: 'ファイルサイズ',
-      example: '12345',
+      example: 12345,
     },
     mimeType: {
       type: 'string',

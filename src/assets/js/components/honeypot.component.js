@@ -1,7 +1,7 @@
 /**
  * <honeypot>
  * -----------------------------------------------------------------------------
- * loading progress
+ * honeypot
  *
  * @type {Component}
  *
@@ -33,8 +33,7 @@ parasails.registerComponent('honeypot', {
   //  ║  ║╠╣ ║╣ ║  ╚╦╝║  ║  ║╣
   //  ╩═╝╩╚  ╚═╝╚═╝ ╩ ╚═╝╩═╝╚═╝
   beforeMount: function () {},
-  mounted: async function () {
-  },
+  mounted: async function () {},
   beforeDestroy: function () {
     //…
   },

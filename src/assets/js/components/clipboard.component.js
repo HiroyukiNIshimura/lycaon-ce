@@ -1,7 +1,7 @@
 /**
  * <clipboard>
  * -----------------------------------------------------------------------------
- * loading progress
+ * clipboard
  *
  * @type {Component}
  *

@@ -62,6 +62,7 @@ parasails.registerPage('team', {
     wordSearchWikiWord: '',
     //dialogs
     showMemberModal: false,
+    showAccessList: false,
     popStatus: {},
     // Main syncing/loading state for this page.
     syncing: false,
@@ -732,9 +733,6 @@ parasails.registerPage('team', {
       this.memberInfiniteState = $state;
       this.submitForm('#query-member-form');
     },
-    threadLink: function (thread) {
-      return `/${this.organization.handleId}/thread/${thread.id}`;
-    },
     gitLink: function (id) {
       return `/${this.organization.handleId}/team/git/${id}`;
     },
@@ -899,6 +897,9 @@ parasails.registerPage('team', {
       });
 
       top.toFront();
+    },
+    openAccessMenu: function () {
+      this.showAccessList = !this.showAccessList;
     },
   },
   computed: {

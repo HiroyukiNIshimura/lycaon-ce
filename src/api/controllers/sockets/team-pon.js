@@ -7,7 +7,7 @@ module.exports = {
       required: true,
     },
     user: {
-      type: 'ref',
+      type: 'json',
       required: true,
     },
   },

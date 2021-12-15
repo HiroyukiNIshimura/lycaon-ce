@@ -12,10 +12,10 @@ module.exports = {
       type: 'string',
     },
     selectedUsers: {
-      type: 'ref',
+      type: 'json',
     },
     selectedCategories: {
-      type: 'ref',
+      type: 'json',
     },
     useGit: {
       type: 'boolean',

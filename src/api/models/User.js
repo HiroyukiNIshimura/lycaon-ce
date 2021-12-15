@@ -267,6 +267,10 @@ So, while this \`isSuperAdmin\` demarcation might not be the right approach fore
       collection: 'ClientHash',
       via: 'user',
     },
+    access: {
+      collection: 'ThreadAccess',
+      via: 'user',
+    },
   },
 
   //function

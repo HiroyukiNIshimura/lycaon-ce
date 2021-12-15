@@ -24,13 +24,13 @@ module.exports = {
       defaultsTo: 'identify',
     },
     selectedTeams: {
-      type: 'ref',
+      type: 'json',
     },
     selectedCategories: {
-      type: 'ref',
+      type: 'json',
     },
     selectedTags: {
-      type: 'ref',
+      type: 'json',
     },
     notNeedMyOwnEmail: {
       type: 'boolean',

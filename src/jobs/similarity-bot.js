@@ -27,6 +27,13 @@ SELECT (SELECT bigm_similarity($1, t."subject")) as "subjectScore",
       return 'skip';
     }
 
+    //1/3の確率のくじ引き
+    var rnd = Math.floor(Math.random() * 100);
+    if (rnd > 33) {
+      sails.log.debug(`類似スレッド検索の抽選に外れました。スレッド[${id}]`);
+      return 'skip';
+    }
+
     var results = await sails.sendNativeQuery(NATIVE_SQL, [subject, body, id, team, subject, body]);
     var targes = _.filter(results.rows, (o) => {
       if (o.subjectScore > sails.config.custom.similarity.subjectLimt) {
@@ -39,7 +46,7 @@ SELECT (SELECT bigm_similarity($1, t."subject")) as "subjectScore",
     });
     if (targes.length < 1) {
       sails.log.debug(`類似スレッドは見つかりませんでした。スレッド[${id}]`);
-      return;
+      return 'skip';
     }
 
     sails.log.debug(`類似スレッドヒット ${targes.length}件！スレッド[${id}]`);

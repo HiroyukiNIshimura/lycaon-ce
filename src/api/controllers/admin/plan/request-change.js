@@ -15,7 +15,7 @@ module.exports = {
       required: true,
     },
     reasons: {
-      type: 'ref',
+      type: 'json',
     },
     grade: {
       type: 'string',

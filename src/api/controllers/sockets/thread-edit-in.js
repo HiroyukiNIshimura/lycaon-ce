@@ -7,7 +7,7 @@ module.exports = {
       required: true,
     },
     queryUser: {
-      type: 'ref',
+      type: 'json',
     },
     queryResponse: {
       type: 'boolean',

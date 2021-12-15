@@ -1,5 +1,6 @@
 <div id="team" v-cloak>
   <account-notification-banner></account-notification-banner>
+  <v-access :show="showAccessList" :items="accessList" @close-click="showAccessList=false"></v-access>
   <div class="container">
     <modal v-if="showMemberModal">
       <div class="modal-header">
@@ -203,6 +204,9 @@
                 <%= __('Word search') %>
               </label></small>
             <v-text-input type="text" :maxlength="30" class="form-control form-control-sm" id="query-word" v-model="query.word" v-on:keyup.enter="queryAmbiguity"></v-text-input>
+          </div>
+          <div class="col-12 col-md align-self-end text-right" v-if="accessList.length > 0">
+            <a href="javascript:void(0);" @click="openAccessMenu"><%= __('Threads of interest') %></a>
           </div>
         </div>
         <div class="row mt-3" id="query-results">

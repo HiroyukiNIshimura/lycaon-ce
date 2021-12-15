@@ -52,6 +52,9 @@ module.exports = {
             }
 
             tableDDLSpec[columnName] = wlsAttrDef.autoMigrations;
+            if (wlsAttrDef.foreignKey) {
+              //tableDDLSpec[columnName].columnType = '_numbertimestamp';
+            }
           });
         } catch (err) {
           sails.log.error(err);
@@ -63,10 +66,12 @@ module.exports = {
         if (primaryKey) {
           var pkColumnName = primaryKey.columnName;
           tableDDLSpec[pkColumnName].primaryKey = true;
+          //tableDDLSpec[pkColumnName].columnType = '_numbertimestamp';
         }
 
         try {
           await tableUpdate(WLAdapter, WLModel.datastore, WLModel.tableName, tableDDLSpec);
+          sails.log.info(`${WLModel.tableName}...スキーマアップデート完了`);
         } catch (err) {
           sails.log.error(err);
           hasError = true;

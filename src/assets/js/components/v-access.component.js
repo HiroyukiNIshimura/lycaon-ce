@@ -1,5 +1,5 @@
 /**
- * <account-notification-banner>
+ * <v-access>
  * -----------------------------------------------------------------------------
  *
  * @type {Component}
@@ -7,19 +7,18 @@
  * -----------------------------------------------------------------------------
  */
 
-parasails.registerComponent('accountNotificationBanner', {
+parasails.registerComponent('vAccess', {
   //  ╔═╗╦ ╦╔╗ ╦  ╦╔═╗  ╔═╗╦═╗╔═╗╔═╗╔═╗
   //  ╠═╝║ ║╠╩╗║  ║║    ╠═╝╠╦╝║ ║╠═╝╚═╗
   //  ╩  ╚═╝╚═╝╩═╝╩╚═╝  ╩  ╩╚═╚═╝╩  ╚═╝
-  props: [],
+  props: ['show', 'items'],
 
   //  ╦╔╗╔╦╔╦╗╦╔═╗╦    ╦╔╗╔╔╦╗╔═╗╦═╗╔╗╔╔═╗╦    ╔═╗╔╦╗╔═╗╔╦╗╔═╗
   //  ║║║║║ ║ ║╠═╣║    ║║║║ ║ ║╣ ╠╦╝║║║╠═╣║    ╚═╗ ║ ╠═╣ ║ ║╣
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╩╝╚╝ ╩ ╚═╝╩╚═╝╚╝╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
   data: function () {
     return {
-      notificationText: '',
-      roomName: undefined,
+      status: false,
     };
   },
 
@@ -28,11 +27,14 @@ parasails.registerComponent('accountNotificationBanner', {
   //  ╩ ╩ ╩ ╩ ╩╩═╝
   template: `
   <div>
-    <div class="container-fluid">
-      <div class="alert alert-warning mt-2" role="alert" v-if="notificationText">
-        {{notificationText}}
+    <transition name="slide">
+      <div ref="accessList" class="access-sidenav" v-if="show">
+        <div class="access-sidenav-inner">
+          <a href="javascript:void(0)" class="closebtn" @click="closeAccessMenu">&times;</a>
+          <a v-for="item in items" :href="threadLink(item.thread)">{{ item.thread.subject }}</a>
+        </div>
       </div>
-    </div>
+    </transition>
   </div>
   `,
 
@@ -40,33 +42,15 @@ parasails.registerComponent('accountNotificationBanner', {
   //  ║  ║╠╣ ║╣ ║  ╚╦╝║  ║  ║╣
   //  ╩═╝╩╚  ╚═╝╚═╝ ╩ ╚═╝╩═╝╚═╝
   mounted: async function () {
-    try {
-      await Cloud.observeMySession();
-    } catch (error) {
-      console.log(error);
-      location.href = '/';
-    }
-
-    // Listen for updates to the user's session
-    Cloud.on('session', (msg) => {
-      if (msg.notificationText && document.hidden) {
-        this.notificationText = msg.notificationText;
-      } else {
-        this.notificationText = '';
-      }
-    }); //œ
+    //…
+    //this.showMenu = this.show;
   },
 
   beforeDestroy: function () {
-    Cloud.off('session');
+    //…
   },
 
-  watch: {
-    loggedInUserId: function (unused) {
-      throw new Error('Changes to `loggedInUserId` are not currently supported in <account-notification-banner>!');
-    },
-  },
-
+  watch: {},
   //  ╦╔╗╔╔╦╗╔═╗╦═╗╔═╗╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
@@ -87,5 +71,11 @@ parasails.registerComponent('accountNotificationBanner', {
     //  ╠═╝╠╦╝║╚╗╔╝╠═╣ ║ ║╣   ║║║║╣  ║ ╠═╣║ ║ ║║╚═╗
     //  ╩  ╩╚═╩ ╚╝ ╩ ╩ ╩ ╚═╝  ╩ ╩╚═╝ ╩ ╩ ╩╚═╝═╩╝╚═╝
     //…
+    closeAccessMenu: function () {
+      this.$emit('close-click');
+    },
+    threadLink: function (thread) {
+      return `/${SAILS_LOCALS.organization.handleId}/thread/${thread.no}`;
+    },
   },
 });

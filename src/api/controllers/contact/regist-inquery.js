@@ -12,7 +12,7 @@ module.exports = {
       required: true,
     },
     categories: {
-      type: 'ref',
+      type: 'json',
     },
     fullName: {
       type: 'string',

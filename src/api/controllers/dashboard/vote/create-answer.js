@@ -10,7 +10,7 @@ module.exports = {
       description: 'vote.id',
     },
     answers: {
-      type: 'ref',
+      type: 'json',
       description: `voteChoices.id's array`,
     },
     otherId: {

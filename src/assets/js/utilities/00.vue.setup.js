@@ -23,6 +23,7 @@ Vue.component('gantt-header', Header);
 Vue.component('gantt-elastic', GanttElastic);
 
 /*https://github.com/ankurk91/vue-loading-overlay*/
+/*エディタなど要素のブロックに使用 */
 Vue.use(VueLoading);
 Vue.component('loadingOverlay', VueLoading);
 

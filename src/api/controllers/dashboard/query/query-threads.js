@@ -49,7 +49,7 @@ module.exports = {
       type: 'number',
     },
     tags: {
-      type: 'ref',
+      type: 'json',
     },
     sort: {
       type: 'number',

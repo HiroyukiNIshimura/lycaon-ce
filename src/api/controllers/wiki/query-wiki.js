@@ -7,7 +7,7 @@ module.exports = {
       description: 'team.id',
     },
     tags: {
-      type: 'ref',
+      type: 'json',
     },
     isFlags: {
       type: 'boolean',

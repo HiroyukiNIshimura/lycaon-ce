@@ -64,7 +64,8 @@
     "WikiItem": true,
     "ClientHash": true,
     "ThreadFlag": true,
-    "WikiFlag": true
+    "WikiFlag": true,
+    "ThreadAccess":true
     // …and any others.
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   },
