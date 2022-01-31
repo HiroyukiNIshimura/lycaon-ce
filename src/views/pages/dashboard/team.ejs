@@ -157,11 +157,13 @@
     </ajax-form>
     <ajax-form id="query-ambiguity-wiki-form" action="queryAmbiguityWiki" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedQueryForm" @rejected="onCloudError" :handle-parsing="handleParsingAmbiguityWikiForm">
     </ajax-form>
+    <ajax-form id="filter-thread-form" action="filterThreads" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedQueryForm" @rejected="onCloudError" :handle-parsing="handleParsinFfilterThreadsForm">
+    </ajax-form>
 
     <v-tabs :panel-id="panelId" :options="tabOptions" @changed="tabChanged">
       <v-tab :name="i18n('Open threads')" id="tab-team">
         <%- partial ('team-query.ejs') %>
-        <div class="row mt-3">
+        <div class="row align-items-center mt-3">
           <div class="col-auto">
             <small><label for="query-sort">
                 <%= __('Sort order') %>
@@ -199,12 +201,38 @@
               </option>
             </select>
           </div>
-          <div class="col-auto form-group">
+          <div class="col-auto" v-if="filterArea">
             <small><label for="query-word">
                 <%= __('Word search') %>
               </label></small>
             <v-text-input type="text" :maxlength="30" class="form-control form-control-sm" id="query-word" v-model="query.word" v-on:keyup.enter="queryAmbiguity"></v-text-input>
           </div>
+
+          <div class="col-auto" v-if="filterArea">
+            <div class="custom-control custom-checkbox mt-3">
+              <input type="checkbox" class="custom-control-input" id="form-working-thread" v-model="filterWorking" />
+              <label class="custom-control-label" for="form-working-thread">
+                <%= __('Working') %>
+              </label>
+            </div>
+          </div>
+          <div class="col-auto" v-if="filterArea">
+            <div class="custom-control custom-checkbox mt-3">
+              <input type="checkbox" class="custom-control-input" id="form-expired-thread" v-model="filterExpired" />
+              <label class="custom-control-label" for="form-expired-thread">
+                <%= __('Expired') %>
+              </label>
+            </div>
+          </div>
+          <div class="col-auto" v-if="filterArea">
+            <div class="custom-control custom-checkbox mt-3">
+              <input type="checkbox" class="custom-control-input" id="form-unassigned-thread" v-model="filterUnassigned" />
+              <label class="custom-control-label" for="form-unassigned-thread">
+                <%= __('Not in charge_2') %>
+              </label>
+            </div>
+          </div>
+
           <div class="col-12 col-md align-self-end text-right" v-if="accessList.length > 0">
             <a href="javascript:void(0);" @click="openAccessMenu"><%= __('Threads of interest') %></a>
           </div>
@@ -386,6 +414,7 @@
                 {{ i18nformatN('Item', 'Items', queryCount) }}
               </small>
             </h5>
+
             <div class="row">
               <div class="col-auto">
                 <div class="custom-control custom-checkbox">
@@ -395,7 +424,18 @@
                     </small></label>
                 </div>
               </div>
+              <div class="col-auto" v-if="nonmyown">
+                <select class="browser-default custom-select custom-select-sm" v-model="activtyOwner">
+                  <option value="">
+                    <%= __('All') %>
+                  </option>
+                  <option v-for="item in comboMembers" v-bind:value="item.id" v-if="item.id !== me.id">
+                    {{ item.fullName }}
+                  </option>
+                </select>
+              </div>
             </div>
+
             <div class="mt-3" v-if="queryResults.length > 0">
               <div id="activity-timeline">
                 <div class="activity-content" :data-vtdate="formatDatetime(item.createdAt)" v-for="item in queryResults">

@@ -25,6 +25,11 @@ parasails.registerPage('team', {
       word: '',
       wordWiki: '',
     },
+    filterWorking: false,
+    filterExpired: false,
+    filterUnassigned: false,
+    filterArea: true,
+    activtyOwner: '',
     queryPatern: 0,
     currentPage: 1,
     queryResults: [],
@@ -224,6 +229,17 @@ parasails.registerPage('team', {
 
     this.$nextTick(() => {
       this.renderCharts(this.team);
+
+      $('#collapse-query').on('shown.bs.collapse', () => {
+        self.filterWorking = false;
+        self.filterExpired = false;
+        self.filterUnassigned = false;
+        self.query.word = '';
+        self.filterArea = false;
+      });
+      $('#collapse-query').on('hidden.bs.collapse', () => {
+        self.filterArea = true;
+      });
     });
   },
   watch: {
@@ -286,6 +302,28 @@ parasails.registerPage('team', {
       this.clearData();
       this.submitForm('#query-activity-form');
     },
+    activtyOwner: function () {
+      this.clearData();
+      this.submitForm('#query-activity-form');
+    },
+    filterWorking: function () {
+      if (this.filterArea) {
+        this.clearData();
+        this.submitForm('#filter-thread-form');
+      }
+    },
+    filterExpired: function () {
+      if (this.filterArea) {
+        this.clearData();
+        this.submitForm('#filter-thread-form');
+      }
+    },
+    filterUnassigned: function () {
+      if (this.filterArea) {
+        this.clearData();
+        this.submitForm('#filter-thread-form');
+      }
+    },
   },
   //  ╦╔╗╔╔╦╗╔═╗╦═╗╔═╗╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
@@ -321,6 +359,8 @@ parasails.registerPage('team', {
     renderCharts: function (team) {
       var c1 = document.getElementById('summary-chart');
 
+      var self = this;
+
       if (c1) {
         new Chart(c1, {
           type: 'pie',
@@ -349,6 +389,26 @@ parasails.registerPage('team', {
               colorschemes: {
                 scheme: 'brewer.PastelTwo8',
               },
+            },
+            onClick: function (e, el) {
+              if (!el || el.length === 0) {
+                return;
+              }
+              if (self.selectedTab.tab.id === 'tab-team' && self.filterArea) {
+                switch (el[0].index) {
+                  case 0:
+                    self.filterWorking = !self.filterWorking;
+                    break;
+                  case 1:
+                    self.filterExpired = !self.filterExpired;
+                    break;
+                  case 2:
+                    self.filterUnassigned = !self.filterUnassigned;
+                    break;
+                  default:
+                    break;
+                }
+              }
             },
           },
         });
@@ -573,6 +633,16 @@ parasails.registerPage('team', {
         this.submitForm('#query-counter-form');
       });
     },
+    handleParsinFfilterThreadsForm: function () {
+      var argins = { id: this.team.id, page: this.currentPage };
+      argins.filterWorking = this.filterWorking;
+      argins.filterExpired = this.filterExpired;
+      argins.filterUnassigned = this.filterUnassigned;
+
+      argins.sort = this.query.sort;
+
+      return argins;
+    },
     handleParsingQueryThreadForm: function () {
       this.queryPatern = 0;
 
@@ -614,6 +684,7 @@ parasails.registerPage('team', {
       argins.flag = this.query.flag;
       argins.working = this.query.working;
       argins.sort = this.query.sort;
+
       if (this.query.tagQuery) {
         argins.tags = [this.query.tagQuery];
       } else {
@@ -665,7 +736,12 @@ parasails.registerPage('team', {
       this.submitForm('#query-activity-form');
     },
     handleParsingQueryActivityForm: function () {
-      var argins = { id: this.team.id, page: this.currentPage, nonmyown: this.nonmyown };
+      var argins = {
+        id: this.team.id,
+        page: this.currentPage,
+        nonmyown: this.nonmyown,
+        activtyOwner: this.activtyOwner,
+      };
       return argins;
     },
     flagHandler($state) {

@@ -51,6 +51,15 @@ module.exports = {
     tags: {
       type: 'json',
     },
+    filterWorking: {
+      type: 'boolean',
+    },
+    filterUnassigned: {
+      type: 'boolean',
+    },
+    filterExpired: {
+      type: 'boolean',
+    },
     sort: {
       type: 'number',
       description: 'sort column',
@@ -150,10 +159,6 @@ module.exports = {
         }
       }
 
-      if (inputs.working) {
-        whereClause.working = true;
-      }
-
       if (inputs.flag) {
         let user = await User.findOne({
           id: this.req.me.id,
@@ -170,6 +175,20 @@ module.exports = {
         _.each(inputs.tags, (entry) => {
           whereClause.or.push({ tagToken: { contains: ':' + entry.id + ':' } });
         });
+      }
+
+      if (inputs.working) {
+        whereClause.working = true;
+      }
+
+      if (inputs.filterWorking) {
+        whereClause.working = true;
+      }
+      if (inputs.filterExpired) {
+        whereClause.dueDateAt = { '<': Date.now() };
+      }
+      if (inputs.filterUnassigned) {
+        whereClause.responsible = null;
       }
 
       var sort = [{ lastHumanUpdateAt: 'DESC' }, { id: 'ASC' }];

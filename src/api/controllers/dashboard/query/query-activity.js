@@ -6,13 +6,17 @@ module.exports = {
       type: 'number',
       description: 'team.id',
     },
+    nonmyown: {
+      type: 'boolean',
+    },
+    activtyOwner: {
+      type: 'number',
+      description: 'owner.id',
+    },
     page: {
       type: 'number',
       description: 'For thread paginate',
       required: true,
-    },
-    nonmyown: {
-      type: 'boolean',
     },
   },
   exits: {
@@ -101,25 +105,38 @@ SELECT COUNT("thread_activity".*)
    AND "thread_activity"."user" != $2
 `;
 
+    var NATIVE_WHERE_MAIN_OTHEROWNER_SQL = `
+ WHERE "thread_activity"."team" = $1
+   AND "thread_activity"."user" = $2
+`;
+
     var rawResult = {};
+    var pagingParameter = [pagination.limit, pagination.skip];
 
     try {
       if (inputs.id) {
+        let bindParameters = [inputs.id, this.req.me.id];
         let where = NATIVE_WHERE_MAIN_SQL;
+
         if (inputs.nonmyown) {
-          where = NATIVE_WHERE_MAIN_NONMYOWN_SQL;
+          if (inputs.activtyOwner) {
+            where = NATIVE_WHERE_MAIN_OTHEROWNER_SQL;
+            bindParameters = [inputs.id, inputs.activtyOwner];
+          } else {
+            where = NATIVE_WHERE_MAIN_NONMYOWN_SQL;
+            bindParameters = [inputs.id, this.req.me.id];
+          }
         }
 
-        rawResult = await sails.sendNativeQuery(NATIVE_COUNT_SQL + where, [inputs.id, this.req.me.id]);
+        rawResult = await sails.sendNativeQuery(NATIVE_COUNT_SQL + where, bindParameters);
         response.records = rawResult.rows[0].count;
 
+        bindParameters = [...bindParameters, ...pagingParameter];
         response.data = await sails.helpers.storage.activityQuery.with({
-          where:
-            where +
-            `
+          where: (where += `
 ORDER BY "updatedAt" DESC, "id" DESC
-LIMIT $3 OFFSET $4`,
-          bindParameters: [inputs.id, this.req.me.id, pagination.limit, pagination.skip],
+LIMIT $3 OFFSET $4`),
+          bindParameters: bindParameters,
         });
       } else {
         let where = NATIVE_WHERE_TEAM_SQL;
