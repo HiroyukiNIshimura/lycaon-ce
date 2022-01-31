@@ -164,6 +164,11 @@ So, while this \`isSuperAdmin\` demarcation might not be the right approach fore
       defaultsTo: 'en',
       description: 'ユーザー指定のローケル',
     },
+    viewActivity: {
+      type: 'Number',
+      defaultsTo: 0,
+      description: 'スレッドページのアクテビティ表示のデフォルト',
+    },
     deleted: {
       type: 'boolean',
       description: '論理削除フラグ',

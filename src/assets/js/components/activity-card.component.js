@@ -34,7 +34,7 @@ parasails.registerComponent('activityCard', {
   template: `
 <div class="px-1 py-1" v-inview:animate="'zoomInDown'">
   <p v-if="team"><a :href="teamLink">{{ team.name }}</a></p>
-  <h6><a :href="threadLink">[#{{ activity.thread.no }}] {{ activity.thread.subject }}</a></h6>
+  <h6 style="word-wrap:break-word"><a :href="threadLink">[#{{ activity.thread.no }}] {{ activity.thread.subject }}</a></h6>
   <div class="mb-2">
     <span class="badge badge-light mr-1" v-if="activity.thread.concept === 0">{{ i18n('draft') }}</span>
     <span class="badge badge-success mr-1" v-if="activity.thread.concept === 1">{{ i18n('published') }}</span>
@@ -167,7 +167,13 @@ parasails.registerComponent('activityCard', {
           encodeURIComponent(JSON.stringify(this.query))
         );
       }
-      return `/${this.organization.handleId}/thread/${this.activity.thread.no}`;
+      var url = `/${this.organization.handleId}/thread/${this.activity.thread.no}`;
+      if (this.activity.sneezeNo && this.activity.replyNo) {
+        return `${url}#sneeze-${this.activity.sneezeNo}-reply-${this.activity.replyNo}`;
+      } else if (this.activity.sneezeNo) {
+        return `${url}#sneeze-${this.activity.sneezeNo}`;
+      }
+      return url;
     },
     teamLink: function () {
       if (this.team) {

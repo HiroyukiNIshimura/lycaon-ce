@@ -26,7 +26,7 @@
     <v-tagify-select id="user-selector" :values="selectedUsers" :settings="userTagifySettings" @change="onChangeUserTagify"></v-tagify-select>
   </div>
 </div>
-<div class="row mt-3">
+<div class="row mt-3 mb-5">
   <div class="col">
     <label for="category-selector">
       <%= __("Category to use") %>
@@ -35,6 +35,16 @@
     <div class="invalid-feedback" v-if="formErrors.category">
       <%= __("Please select at least one category") %>
     </div>
+  </div>
+</div>
+
+<div class="md-form">
+  <input type="number" id="form-number-of-threads-burden" class="form-control" v-model="formData.numberOfThreadsBurden" :class="[formErrors.numberOfThreadsBurden ? 'is-invalid' : '']" />
+  <label for="form-number-of-threads-burden">
+    <%= __('Number of threads in charge judged to be the burden of the person in charge') %>
+  </label>
+  <div class="invalid-feedback" v-if="formErrors.numberOfThreadsBurden">
+    <%= __('Enter an integer from 1 to 51,200') %>
   </div>
 </div>
 

@@ -223,6 +223,48 @@
           </div>
         </li>
       </ul>
+      <li class="nav-item mt-3">
+        <a class="text-warning" data-toggle="collapse" href="#menu-links" aria-controls="#menu-links" aria-expanded="false" @click="clickMenu('menu-links')">
+          <i class="fas fa-external-link-alt fa-fw"></i>
+          <%= __('Link') %>
+        </a>
+      </li>
+      <ul id="menu-links" class="nav flex-column list-style-icons collapse" data-parent="#accordion_menu">
+        <li class="nav-item">
+          <div class="mt-1 ml-2 with-scrollable">
+            <div v-for="team in me.teams">
+              -<a class="menu-link-team" data-toggle="collapse" :href="otherHashLink(team)" :aria-controls="otherHashLink(team)" aria-expanded="false">
+                {{ team.name }}</a>
+              <ul :id="otherLinkId(team)" class="collapse" data-parent="#menu-links">
+                <li class="">
+                  <a class="menu-link-item" :href="othrLinkUrl(team, 'team')"><%= __('Open threads') %></a>
+                </li>
+                <li class="">
+                  <a class="menu-link-item" :href="othrLinkUrl(team, 'working')"><%= __('Workings') %></a>
+                </li>
+                <li class="">
+                  <a class="menu-link-item" :href="othrLinkUrl(team, 'charge')"><%= __('Threads in charge') %></a>
+                </li>
+                <li class="">
+                  <a class="menu-link-item" :href="othrLinkUrl(team, 'flag')"><%= __('With flag') %></a>
+                </li>
+                <li class="">
+                  <a class="menu-link-item" :href="othrLinkUrl(team, 'private')"><%= __('Privates') %></a>
+                </li>
+                <li class="">
+                  <a class="menu-link-item" :href="othrLinkUrl(team, 'activity')"><%= __('Activities') %></a>
+                </li>
+                <li class="">
+                  <a class="menu-link-item" :href="othrLinkUrl(team, 'wiki')"><%= __('Wiki') %></a>
+                </li>
+                <li class="">
+                  <a class="menu-link-item" :href="othrLinkUrl(team, 'circular')"><%= __('Circular notice') %></a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </li>
+      </ul>
     </ul>
   </nav>
   <transition name="fade">

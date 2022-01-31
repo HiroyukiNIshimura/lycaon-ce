@@ -39,7 +39,7 @@ module.exports = {
       throw 'notFound';
     }
 
-    var room = `room-${this.req.organization.id}-thread-${thread.id}`;
+    var room = `room-${this.req.organization.id}-thread`;
 
     var message = {
       key: '{0} [{1}] has entered editing this thread',
@@ -57,6 +57,7 @@ module.exports = {
       message: message,
       user: this.req.me,
       queryUser: inputs.queryUser,
+      threadId: thread.id,
     });
 
     return {};

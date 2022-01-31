@@ -46,6 +46,10 @@ module.exports = {
       required: true,
       maxLength: 5,
     },
+    viewActivity: {
+      type: 'number',
+      required: true,
+    },
   },
 
   exits: {
@@ -119,6 +123,7 @@ module.exports = {
       noRaiseThreadNotify: inputs.noRaiseThreadNotify,
       noRaiseInoutNotify: inputs.noRaiseInoutNotify,
       languagePreference: inputs.language,
+      viewActivity: inputs.viewActivity,
     };
 
     if (inputs.avatarType !== 'user-avatar') {

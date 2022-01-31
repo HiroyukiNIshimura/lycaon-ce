@@ -30,9 +30,10 @@ module.exports = {
       throw 'notFound';
     }
 
-    var room = `room-${this.req.organization.id}-team-${inputs.id}`;
+    var room = `room-${this.req.organization.id}-team`;
     sails.sockets.broadcast(room, 'team-pon', {
       user: inputs.user,
+      teamId: team.id,
     });
 
     return {};

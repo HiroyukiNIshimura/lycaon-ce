@@ -84,3 +84,36 @@
   padding: 0.5rem 0.75rem;
   color: #212529;
 }
+
+.shake{
+    transform-origin: center bottom;
+    animation: yurayura 2s linear infinite;
+}
+
+@keyframes yurayura {
+  0% , 100%{
+      transform: rotate(10deg);
+  }
+  50%{
+      transform: rotate(-10deg);
+  }
+}
+
+.mold-filter-1 {
+    filter: drop-shadow(1px 1px 3px rgb(68, 137, 165));
+}
+.mold-filter-2 {
+    filter: drop-shadow(2px 2px 4px rgb(39, 113, 143));
+}
+.mold-filter-3 {
+    filter: drop-shadow(3px 3px 5px rgb(17, 110, 146));
+}
+.mold-filter-4 {
+    filter: drop-shadow(4px 4px 6px rgb(9, 108, 148));
+}
+.mold-filter-5 {
+    filter: drop-shadow(5px 5px 7px rgb(7, 108, 148));
+}
+.mold-filter-6 {
+    filter: drop-shadow(7px 7px 9px rgb(2, 73, 131));
+}

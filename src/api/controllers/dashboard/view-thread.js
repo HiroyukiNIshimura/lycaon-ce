@@ -71,6 +71,9 @@ module.exports = {
     });
     response.members = team.users;
     for (let entry of response.members) {
+      let results = await sails.helpers.burdenCheck.with({ team: team, user: entry });
+      entry.mold = results.mold;
+      entry.loadQty = results.loadQty;
       await User.setGravatarUrl(entry, 36);
     }
 

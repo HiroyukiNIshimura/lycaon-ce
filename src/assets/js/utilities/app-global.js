@@ -1044,6 +1044,14 @@ $(() => {
   });
 
   var lycaonLoad = function () {
+    if (SAILS_LOCALS.organization) {
+      if (!location.pathname.startsWith(`/${SAILS_LOCALS.organization.handleId}/thread`)) {
+        $lycaon.socket.post('/ws/v1/thread-out');
+      }
+      if (!location.pathname.startsWith(`/${SAILS_LOCALS.organization.handleId}/team`)) {
+        $lycaon.socket.post('/ws/v1/team-out');
+      }
+    }
     var url = $(location).attr('href');
     if (url.indexOf('#') !== -1) {
       var anchor = url.split('#');

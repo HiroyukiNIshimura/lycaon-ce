@@ -247,7 +247,7 @@
                   </div>
                 </div>
                 <div class="row mt-1">
-                  <div class="col">
+                  <div class="col word-break">
                     <span class="h4">
                       {{ thread.subject }}</span>
                   </div>
@@ -355,7 +355,7 @@
           <%- partial ('thread-activity.ejs') %>
 
           <div v-if="isCreateSneeze(item.type)">
-            <div v-show="viewActivity != 2">
+            <div v-show="viewActivity !== '2'">
               <!-- sneeze -->
               <%- partial ('thread-sneeze.ejs') %>
               <!-- reply -->
@@ -368,20 +368,46 @@
           <%= __("Comment size is too large") %>
         </div>
         <ajax-form action="createSneeze" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedSneezeCreateForm" @rejected="onCloudError" :handle-parsing="handleParsingSneezeCreateForm">
-          <div class="row mt-3" v-show="!isProtected">
-            <div class="col">
-              <div id="comment-editor"></div>
+          <div v-show="!isProtected">
+            <div v-if="!commentAriaEnabled">
+              <div class="row mt-3">
+                <div class="col">
+                  <input type="text" class="form-control" :placeholder="commentLabel" @click="showCommentAria" />
+                </div>
+              </div>
             </div>
-          </div>
-          <div class="row mt-3" v-show="!isProtected">
-            <div class="col text-right">
-              <button type="submit" class="btn btn-primary btn-sm">
-                <i class="fas fa-comment"></i>
-                <%= __("Add comment") %>
-              </button>
+            <div v-if="commentAriaEnabled">
+              <div class="row mt-5">
+                <div class="col">
+                  <div id="comment-editor"></div>
+                </div>
+              </div>
+              <div class="row mt-3">
+                <div class="col text-right">
+                  <button type="submit" class="btn btn-primary btn-sm">
+                    <i class="fas fa-comment"></i>
+                    <%= __("Add comment") %>
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </ajax-form>
+
+        <div id="thread-title-board" class="thread-title" style="display: none;">
+          <div class="row">
+            <div class="col-auto">
+              <span ref="clipper" class="h6 text-info text-muted mr-3" :aria-label="clipperMessage" data-microtip-position="bottom" :role="role"><a ref="clipperAction" href="javascript:void(0)" @click="copyNo">
+                  #
+                  {{ thread.no }}
+                </a></span>
+            </div>
+            <div class="col">
+              <span class="h6">
+                {{ thread.subject }}</span>
+            </div>
+          </div>
+        </div>
       </div>
       <!--right-sidebar-->
       <%- partial ('thread-right-side-menu.ejs') %>

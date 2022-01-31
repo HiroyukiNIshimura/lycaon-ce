@@ -54,6 +54,10 @@ module.exports = {
       defaultsTo: 0,
       isIn: [0, 1],
     },
+    numberOfThreadsBurden: {
+      type: 'number',
+      defaultsTo: 20,
+    },
   },
   exits: {
     notFound: {
@@ -117,6 +121,7 @@ module.exports = {
       gitOrigin: inputs.gitOrigin,
       connectType: inputs.connectType,
       defaultConcept: inputs.defaultConcept,
+      numberOfThreadsBurden: inputs.numberOfThreadsBurden,
       gitRepository: '',
       gitUser: '',
       gitPassword: '',

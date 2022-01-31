@@ -43,12 +43,12 @@ parasails.registerComponent('userIdentity', {
   //  ╩ ╩ ╩ ╩ ╩╩═╝
   template: `
 <span class="ml-1" v-if="user">
-  <span :id="parseAvaterId" class="user-avater-icon" @click="onIconClick" ref="userIdentity">
+  <span :id="parseAvaterId" class="user-avater-icon" :class="molded" @click="onIconClick" ref="userIdentity">
     <img :class="sizeClass" :src="user.gravatarUrl" v-if="user.avatarType === 'gravatar'" />
     <img class="rounded-circle" :class="sizeClass" :src="user.avatarVirtualUrl" v-else-if="user.avatarType === 'user-avatar'" />
     <svg :class="sizeClass" :data-jdenticon-value="user.emailAddress" v-else></svg>
   </span>
-  <a :id="parseUserId" class="ml-1 comment-tip" :href="menberInfoLink" v-if="showUserName == true">
+  <a :id="parseUserId" class="ml-1 comment-tip" :href="menberInfoLink" v-if="showUserName === true">
     {{ user.fullName }}</a>
 
   <div class="v-popover fade v-bs-popover-right show" x-placement="bottom" style="width:15rem" :style="transform" v-if="myPop && showPoporver">
@@ -71,7 +71,7 @@ parasails.registerComponent('userIdentity', {
           <a :href="ownersLink"><i class="fas fa-user-edit fa-fw"></i> {{ i18n('Created threads') }}</a>
         </div>
         <div v-if="isTeam">
-          <a :href="responsiblesLink"><i class="fas fa-map-pin fa-fw"></i> {{ i18n('Threads in charge') }}</a>
+          <a :href="responsiblesLink"><i class="fas fa-map-pin fa-fw"></i> {{ i18n('Threads in charge') }} ({{ user.loadQty }})</a>
         </div>
       </div>
     </div>
@@ -190,6 +190,12 @@ parasails.registerComponent('userIdentity', {
       var top = position.top + 6;
       var left = position.left + 20;
       return `position absolute; transform: translate3d(${left}px, ${top}px, 0px); top: 0px; left: 0px; will-change: transform;`;
+    },
+    molded: function () {
+      if (this.user.mold) {
+        return `mold-filter-${this.user.mold}`;
+      }
+      return '';
     },
   },
 });

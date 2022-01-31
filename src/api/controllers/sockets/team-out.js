@@ -1,15 +1,7 @@
 module.exports = {
   friendlyName: 'team out',
   description: 'team out.',
-  inputs: {
-    id: {
-      type: 'number',
-      required: true,
-    },
-    navigation: {
-      type: 'string',
-    },
-  },
+  inputs: {},
   exits: {
     notFound: {
       responseType: 'notfound',
@@ -18,31 +10,8 @@ module.exports = {
   },
 
   fn: async function (inputs) {
-    var team = await sails.helpers.validateMembership.with({
-      id: inputs.id,
-      user: this.req.me,
-    });
-    if (!team) {
-      throw 'notFound';
-    }
-    if (team.organization !== this.req.organization.id) {
-      throw 'notFound';
-    }
-
-    var message = {};
-
-    if (!this.req.session.teamNotifyExpiresAt || this.req.session.teamNotifyExpiresAt <= Date.now()) {
-      this.req.session.teamNotifyExpiresAt = Date.now() + sails.config.custom.socketMessageResetTokenTTL;
-
-      message = {
-        key: '{0} [{1}] has left this team',
-        params: [this.req.me.fullName, this.req.me.emailAddress],
-      };
-    }
-
-    var room = `room-${this.req.organization.id}-team-${team.id}`;
+    var room = `room-${this.req.organization.id}-team`;
     sails.sockets.broadcast(room, 'team-out', {
-      message: message,
       user: this.req.me,
     });
     sails.sockets.leave(this.req, room);

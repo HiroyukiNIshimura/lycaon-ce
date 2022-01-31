@@ -125,14 +125,7 @@ FROM
         };
 
         _.forEach(row, (val, key) => {
-          if (
-            key !== '__proto__' &&
-            key !== 'user' &&
-            key !== 'team' &&
-            key !== 'thread' &&
-            key !== 'sneeze' &&
-            key !== 'reply'
-          ) {
+          if (key !== '__proto__' && key !== 'user' && key !== 'team' && key !== 'thread') {
             if (key.startsWith('thread__')) {
               let col = key.replace('thread__', '');
               if (col !== 'owner' && col !== 'responsible' && col !== 'lastUpdateUser') {
@@ -156,12 +149,6 @@ FROM
             } else if (key.startsWith('lastUpdateUser__')) {
               let col = key.replace('lastUpdateUser__', '');
               activity.thread.lastUpdateUser[col] = val;
-            } else if (key.startsWith('sneeze__')) {
-              let col = key.replace('sneeze__', '');
-              activity.sneeze[col] = val;
-            } else if (key.startsWith('reply__')) {
-              let col = key.replace('reply__', '');
-              activity.reply[col] = val;
             } else {
               activity[key] = val;
             }

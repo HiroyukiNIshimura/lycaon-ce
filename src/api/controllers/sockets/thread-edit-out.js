@@ -33,7 +33,7 @@ module.exports = {
       throw 'notFound';
     }
 
-    var room = `room-${this.req.organization.id}-thread-${thread.id}`;
+    var room = `room-${this.req.organization.id}-thread`;
 
     var message = {
       key: '{0} [{1}] has finished editing this thread',
@@ -43,6 +43,7 @@ module.exports = {
     sails.sockets.broadcast(room, 'thread-edit-out', {
       message: message,
       user: this.req.me,
+      threadId: thread.id,
     });
 
     return {};

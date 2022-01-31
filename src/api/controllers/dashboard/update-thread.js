@@ -199,7 +199,7 @@ module.exports = {
           };
 
           //
-          sails.sockets.broadcast(`room-${this.req.organization.id}-thread-${updated.id}`, 'thread-update', {
+          sails.sockets.broadcast(`room-${this.req.organization.id}-thread`, 'thread-update', {
             message: message,
             user: this.req.me,
             thread: updated,

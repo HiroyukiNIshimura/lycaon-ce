@@ -104,12 +104,12 @@
     </small>
   </div>
 </div>
-<div class="row ml-5 mt-3" v-if="isCreateReply(item.type) && viewActivity == 2">
+<div class="row ml-5 mt-3" v-if="isCreateReply(item.type) && viewActivity === '2'">
   <div class="col">
     <button type="button" class="btn btn-light btn-circle-timeline">
       <i class="fas fa-reply"></i></button><small class="ml-2">
       <user-identity class="mr-1" :user="item.user" :organization="organization" size="sm" v-on:icon-click="onIdentityIconClick" :pop-status="popStatus"></user-identity> - <lycaon-timestamp :at="item.createdAt" format="timeago" :translator="createReplyTranslator"></lycaon-timestamp> [
-      <span v-if="viewActivity === 0">
+      <span v-if="viewActivity === '0'">
         <a href="javascript:void(0)" @click="jumpToReply(item.reply)">comment-
           {{ item.sneeze.serialNumber }} /
           rep-
@@ -130,7 +130,7 @@
     <button type="button" class="btn btn-light btn-circle-timeline">
       <i class="fas fa-reply"></i></button><small class="ml-2">
       <user-identity class="mr-1" :user="item.user" :organization="organization" size="sm" v-on:icon-click="onIdentityIconClick" :pop-status="popStatus"></user-identity> - <lycaon-timestamp :at="item.createdAt" format="timeago" :translator="updateReplyTranslator"></lycaon-timestamp> [
-      <span v-if="viewActivity === 0">
+      <span v-if="viewActivity === '0'">
         <a href="javascript:void(0)" @click="jumpToReply(item.reply)">comment-
           {{ item.sneeze.serialNumber }} /
           rep-
@@ -146,12 +146,12 @@
     </small>
   </div>
 </div>
-<div class="row ml-5 mt-3" v-if="isCreateSneeze(item.type) && viewActivity == 2">
+<div class="row ml-5 mt-3" v-if="isCreateSneeze(item.type) && viewActivity === 2">
   <div class="col">
     <button type="button" class="btn btn-light btn-circle-timeline">
       <i class="fas fa-comment"></i></button><small class="ml-2">
       <user-identity class="mr-1" :user="item.user" :organization="organization" size="sm" v-on:icon-click="onIdentityIconClick" :pop-status="popStatus"></user-identity> - <lycaon-timestamp :at="item.createdAt" format="timeago" :translator="createSneezTranslator"></lycaon-timestamp> [
-      <span v-if="viewActivity === 0">
+      <span v-if="viewActivity === '0'">
         <a href="javascript:void(0)" @click="jumpToSneeze(item.sneeze)">comment-
           {{ item.sneeze.serialNumber }}</a>
       </span>
@@ -168,7 +168,7 @@
     <button type="button" class="btn btn-light btn-circle-timeline">
       <i class="fas fa-comment"></i></button><small class="ml-2">
       <user-identity class="mr-1" :user="item.user" :organization="organization" size="sm" v-on:icon-click="onIdentityIconClick" :pop-status="popStatus"></user-identity> - <lycaon-timestamp :at="item.createdAt" format="timeago" :translator="updateSneezTranslator"></lycaon-timestamp> [
-      <span v-if="viewActivity === 0">
+      <span v-if="viewActivity === '0'">
         <a href="javascript:void(0)" @click="jumpToSneeze(item.sneeze)">comment-
           {{ item.sneeze.serialNumber }}</a>
       </span>

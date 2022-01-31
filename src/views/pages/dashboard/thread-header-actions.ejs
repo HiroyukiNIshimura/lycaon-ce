@@ -62,18 +62,18 @@
   <div class="row d-none d-lg-block">
     <div class="col-12 col-sm-auto text-right">
       <div class="btn-group">
-        <button type="button" class="btn btn-info btn-sm" @click="onNewThreadCkick">
+        <a class="btn btn-info btn-sm" :href="newThreadLink">
           <i class="fas fa-plus-circle"></i>
           <%= __('New thread') %>
-        </button>
+        </a>
         <button type="button" class="btn btn-info btn-sm dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <span class="sr-only">Toggle Dropdown</span>
         </button>
         <div class="dropdown-menu">
-          <a class="dropdown-item" href="javascript:void(0)" @click="onNewThreadCkick">
+          <a class="dropdown-item" :href="newThreadLink">
             <%= __('New thread') %>
           </a>
-          <a class="dropdown-item" href="javascript:void(0)" @click="onForkCkick">
+          <a class="dropdown-item" :href="forkThreadLink">
             <%= __('Fork thread') %>
           </a>
           <div class="dropdown-divider"></div>
@@ -105,7 +105,7 @@
           </form>
 
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="javascript:void(0)" @click="onConvertToWikiCkick">
+          <a class="dropdown-item" :href="convertToWikiLink">
             <%= __('Convert to Wiki') %>
           </a>
         </div>
@@ -131,10 +131,10 @@
           <a class="dropdown-item" href="javascript:void(0)" @click="updateStatusSubmit" v-else-if="!isClosed && !isProtected">
             <%= __('Close this thread') %>
           </a>
-          <a class="dropdown-item" href="javascript:void(0)" @click="onNewThreadCkick">
+          <a class="dropdown-item" :href="newThreadLink">
             <%= __('New thread') %>
           </a>
-          <a class="dropdown-item" href="javascript:void(0)" @click="onForkCkick">
+          <a class="dropdown-item" :href="forkThreadLink" @click="onForkCkick">
             <%= __('Fork thread') %>
           </a>
           <div class="dropdown-divider"></div>
@@ -166,7 +166,7 @@
           </form>
 
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="javascript:void(0)" @click="onConvertToWikiCkick">
+          <a class="dropdown-item" :href="convertToWikiLink">
             <%= __('Convert to Wiki') %>
           </a>
         </div>
@@ -193,10 +193,10 @@
             <a class="dropdown-item" href="javascript:void(0)" @click="updateStatusSubmit" v-else-if="!isClosed && !isProtected">
               <%= __('Close this thread') %>
             </a>
-            <a class=" dropdown-item" href="javascript:void(0)" @click="onNewThreadCkick">
+            <a class=" dropdown-item" :href="newThreadLink">
               <%= __('New thread') %>
             </a>
-            <a class="dropdown-item" href="javascript:void(0)" @click="onForkCkick">
+            <a class="dropdown-item" :href="forkThreadLink">
               <%= __('Fork thread') %>
             </a>
             <div class="dropdown-divider"></div>
@@ -228,7 +228,7 @@
             </form>
 
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="javascript:void(0)" @click="onConvertToWikiCkick">
+            <a class="dropdown-item" :href="convertToWikiLink">
               <%= __('Convert to Wiki') %>
             </a>
           </div>

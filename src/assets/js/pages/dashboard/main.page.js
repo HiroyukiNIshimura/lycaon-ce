@@ -226,7 +226,7 @@ parasails.registerPage('main', {
       if (selectedTab.tab.id === 'tab-team') {
         this.submitForm('#query-my-team-form');
       }
-      if (selectedTab.tab.id === 'tab-thread') {
+      if (selectedTab.tab.id === 'tab-charge') {
         this.submitForm('#query-thread-form');
       }
       if (selectedTab.tab.id === 'tab-activity') {
@@ -442,5 +442,9 @@ parasails.registerPage('main', {
       location.href = `/${this.organization.handleId}/vote/create`;
     },
   },
-  computed: {},
+  computed: {
+    newVoteLink: function () {
+      return `/${this.organization.handleId}/vote/create`;
+    },
+  },
 });

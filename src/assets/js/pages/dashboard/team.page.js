@@ -60,6 +60,7 @@ parasails.registerPage('team', {
     revisionGraph: undefined,
     wordSearchWord: '',
     wordSearchWikiWord: '',
+    tabOptions: { useUrlFragment: false, defaultTabHash: 'tab-team' },
     //dialogs
     showMemberModal: false,
     showAccessList: false,
@@ -100,6 +101,14 @@ parasails.registerPage('team', {
         id: entry.id,
       });
     });
+
+    if (this.tab) {
+      expiringStorage.set(
+        `vue-tabs-component.cache.${window.location.host}${window.location.pathname}`,
+        `#${this.tab}`,
+        5
+      );
+    }
 
     if (this.query.resultTarget === 'thread') {
       expiringStorage.set(
@@ -144,10 +153,6 @@ parasails.registerPage('team', {
       }
     });
 
-    window.addEventListener('beforeunload', () => {
-      //$lycaon.socket.post('/ws/v1/team-out', { id: self.team.id });
-    });
-
     io.socket.on('thread-notify', (data) => {
       if (
         _.findIndex(self.me.teams, (o) => {
@@ -166,26 +171,31 @@ parasails.registerPage('team', {
 
     $lycaon.socket.post('/ws/v1/team-in', { id: this.team.id, navigation: this.navigation }, () => {
       io.socket.on('team-in', (data) => {
-        var id = self.parseUserId(data.user);
-        if (!$('#' + id).hasClass('blink')) {
-          $('#' + id).addClass('blink');
+        if (data.teamId === self.team.id) {
+          self.memberIn(data);
+          if (data.user.id !== self.me.id && !self.me.noRaiseInoutNotify) {
+            $lycaon.socketToast(data.message);
+          }
+          $lycaon.socket.post('/ws/v1/team-pon', { id: self.team.id, user: self.me });
+        } else {
+          self.memberOut(data);
         }
-        if (data.user.id !== self.me.id && !self.me.noRaiseInoutNotify) {
-          $lycaon.socketToast(data.message);
-        }
-        $lycaon.socket.post('/ws/v1/team-pon', { id: self.team.id, user: self.me });
       });
       io.socket.on('team-out', (data) => {
-        var id = self.parseUserId(data.user);
-        $('#' + id).removeClass('blink');
-        if (data.user.id !== self.me.id && !self.me.noRaiseInoutNotify) {
-          $lycaon.socketToast(data.message);
+        self.memberOut(data);
+        if (data.teamId === self.team.id) {
+          if (data.user.id !== self.me.id && !self.me.noRaiseInoutNotify) {
+            $lycaon.socketToast(data.message);
+          }
         }
       });
       io.socket.on('team-pon', (data) => {
         if (data.user.id !== self.me.id) {
-          var id = self.parseUserId(data.user);
-          $('#' + id).addClass('blink');
+          if (data.teamId === self.team.id) {
+            self.memberIn(data);
+          } else {
+            self.memberOut(data);
+          }
         }
       });
     });
@@ -281,6 +291,30 @@ parasails.registerPage('team', {
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
+    memberIn: function (data) {
+      var id = this.parseUserId(data.user);
+      if (!$('#' + id).hasClass('blink')) {
+        $('#' + id).addClass('blink');
+      }
+      var avaterId = this.parseUserAvaterId(data.user);
+      if (
+        !$('#' + avaterId)
+          .children('img,svg')
+          .hasClass('shake')
+      ) {
+        $('#' + avaterId)
+          .children('img,svg')
+          .addClass('shake');
+      }
+    },
+    memberOut: function (data) {
+      var id = this.parseUserId(data.user);
+      $('#' + id).removeClass('blink');
+      var avaterId = this.parseUserAvaterId(data.user);
+      $('#' + avaterId)
+        .children('img,svg')
+        .removeClass('shake');
+    },
     onIdentityIconClick: function (popInfo) {
       this.popStatus = popInfo.id;
     },
@@ -353,7 +387,7 @@ parasails.registerPage('team', {
           }
         });
       }
-      if (selectedTab.tab.id === 'tab-thread') {
+      if (selectedTab.tab.id === 'tab-charge') {
         this.submitForm('#query-thread-form');
       }
       if (selectedTab.tab.id === 'tab-activity') {
@@ -903,6 +937,15 @@ parasails.registerPage('team', {
     },
   },
   computed: {
+    newThreadLink: function () {
+      return `/${this.organization.handleId}/thread/create/${this.team.id}`;
+    },
+    newWikiLink: function () {
+      return `/${this.organization.handleId}/wiki/create/${this.team.id}`;
+    },
+    newVoteLink: function () {
+      return `/${this.organization.handleId}/vote/create?team=${this.team.id}`;
+    },
     showGit: function () {
       return this.team.useGit;
     },

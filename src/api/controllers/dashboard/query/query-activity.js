@@ -139,6 +139,30 @@ LIMIT $3 OFFSET $4`,
           bindParameters: [this.req.me.id, this.req.me.id, pagination.limit, pagination.skip],
         });
       }
+
+      //
+      for (const entry of response.data) {
+        if (entry.sneeze) {
+          let sneezes = await Sneeze.find({ where: { thread: entry.thread.id }, sort: 'id ASC' });
+
+          entry.sneezeNo =
+            _.findIndex(sneezes, (o) => {
+              return o.id === entry.sneeze;
+            }) + 1;
+
+          if (entry.reply) {
+            let replys = await Reply.find({
+              where: { sneeze: entry.sneeze, thread: entry.thread.id },
+              sort: 'id ASC',
+            });
+
+            entry.replyNo =
+              _.findIndex(replys, (o) => {
+                return o.id === entry.reply;
+              }) + 1;
+          }
+        }
+      }
     } catch (err) {
       sails.log.error(err);
       throw err;

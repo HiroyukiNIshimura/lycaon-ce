@@ -15,7 +15,7 @@ parasails.registerPage('edit-profile', {
     cloudTagTags: [],
     tagTagifySettings: {},
     selectedTags: [],
-
+    viewActivity: '0',
     avatarType: 'identify',
     hasAvatar: false,
     avatarUrl: '',
@@ -53,6 +53,7 @@ parasails.registerPage('edit-profile', {
       this.me.languagePreference = this.language;
     }
     this.formData.language = this.me.languagePreference;
+    this.formData.viewActivity = this.me.viewActivity;
 
     this.avatarType = this.me.avatarType;
     this.hasAvatar = this.me.avatarVirtualUrl ? true : false;

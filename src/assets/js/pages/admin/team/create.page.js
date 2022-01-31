@@ -71,6 +71,7 @@ parasails.registerPage('admin-team-create', {
 
     this.formData.gitOrigin = 'master';
     this.defaultConcept = 0;
+    this.formData.numberOfThreadsBurden = 20;
   },
   mounted: async function () {
     this.selectedUsers = _.extend([], this.cloudUsers);

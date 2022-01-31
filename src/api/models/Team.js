@@ -82,6 +82,11 @@ module.exports = {
         '新規スレッド作成時デフォルトコンセプト 0:ドラフト（他者に見えるが他者による変更はできない）、1:公開（他者に見えて他者も変更可能）',
       example: 0,
     },
+    numberOfThreadsBurden: {
+      type: 'number',
+      defaultsTo: 20,
+      description: '担当者の負担と判断する担当スレッド数',
+    },
     deleted: {
       type: 'boolean',
       description: '論理削除フラグ',

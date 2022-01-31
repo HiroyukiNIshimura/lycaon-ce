@@ -55,7 +55,7 @@ module.exports = {
           params: [this.req.me.fullName, this.req.me.emailAddress],
         };
       }
-
+      //Wikiは編集中の通知だけなのでWiki.IDまで指定したRoom名
       var room = `room-${this.req.organization.id}-wiki-${wiki.id}`;
       sails.sockets.broadcast(room, 'wiki-edit-in', {
         message: message,

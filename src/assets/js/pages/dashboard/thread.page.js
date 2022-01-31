@@ -29,7 +29,7 @@ parasails.registerPage('thread', {
     appendix: [],
     local: false,
     status: 0,
-    viewActivity: 0,
+    viewActivity: '0',
     selectedResponsible: '',
     isThreadEditDisabled: false,
     parentSelected: {},
@@ -71,6 +71,7 @@ parasails.registerPage('thread', {
     flagColor: '',
     isFan: false,
     reloaded: false,
+    commentAriaEnabled: false,
     //for user-identify
     popStatus: {},
     // Main syncing/loading state for this page.
@@ -93,6 +94,7 @@ parasails.registerPage('thread', {
   beforeMount: function () {
     this.refsUpdate = 0;
     this.clipperMessage = i18next.t('Copy thread No');
+    this.viewActivity = String(this.me.viewActivity);
 
     this.tagifySettings = {
       placeholder: i18next.t('You can tag up to {0}').format(10),
@@ -154,15 +156,7 @@ parasails.registerPage('thread', {
     var self = this;
     window.addEventListener('beforeunload', () => {
       if (self.threadMode === 'edit') {
-        $lycaon.socket.post('/ws/v1/thread-edit-out', { id: self.thread.id }, () => {
-          if (!self.reloaded) {
-            //$lycaon.socket.post('/ws/v1/thread-out', { id: self.thread.id });
-          }
-        });
-      } else {
-        if (!self.reloaded) {
-          //$lycaon.socket.post('/ws/v1/thread-out', { id: self.thread.id });
-        }
+        $lycaon.socket.post('/ws/v1/thread-edit-out', { id: self.thread.id }, () => {});
       }
     });
 
@@ -220,42 +214,51 @@ parasails.registerPage('thread', {
         });
       });
       io.socket.on('thread-in', (data) => {
-        var id = self.parseUserId(data.user);
-        $('#' + id).addClass('blink');
-        if (data.user.id !== self.me.id && !self.me.noRaiseInoutNotify) {
-          $lycaon.socketToast(data.message);
+        if (data.threadId === self.thread.id) {
+          self.memberIn(data);
+          if (data.user.id !== self.me.id && !self.me.noRaiseInoutNotify) {
+            $lycaon.socketToast(data.message);
+          }
+          $lycaon.socket.post('/ws/v1/thread-pon', { id: self.thread.id, user: self.me });
+        } else {
+          self.memberOut(data);
         }
-        $lycaon.socket.post('/ws/v1/thread-pon', { id: self.thread.id, user: self.me });
       });
       io.socket.on('thread-out', (data) => {
-        var id = self.parseUserId(data.user);
-        $('#' + id).removeClass('blink');
+        self.memberOut(data);
         if (data.user.id !== self.me.id && !self.me.noRaiseInoutNotify) {
           $lycaon.socketToast(data.message);
         }
       });
       io.socket.on('thread-pon', (data) => {
         if (data.user.id !== self.me.id) {
-          var id = self.parseUserId(data.user);
-          $('#' + id).addClass('blink');
+          if (data.threadId === self.thread.id) {
+            self.memberIn(data);
+          } else {
+            self.memberOut(data);
+          }
         }
       });
       io.socket.on('thread-edit-in', (data) => {
-        if (data.queryUser && data.queryUser.id === self.me.id) {
-          $lycaon.socketToast(data.message);
-          self.isThreadEditDisabled = true;
-          self.blockViewer(i18next.t('This thread is being edited by {0} ...').format(data.user.fullName));
-        } else if (!data.queryUser && data.user.id !== self.me.id) {
-          $lycaon.socketToast(data.message);
-          self.isThreadEditDisabled = true;
-          self.blockViewer(i18next.t('This thread is being edited by {0} ...').format(data.user.fullName));
+        if (data.threadId === self.thread.id) {
+          if (data.queryUser && data.queryUser.id === self.me.id) {
+            $lycaon.socketToast(data.message);
+            self.isThreadEditDisabled = true;
+            self.blockViewer(i18next.t('This thread is being edited by {0} ...').format(data.user.fullName));
+          } else if (!data.queryUser && data.user.id !== self.me.id) {
+            $lycaon.socketToast(data.message);
+            self.isThreadEditDisabled = true;
+            self.blockViewer(i18next.t('This thread is being edited by {0} ...').format(data.user.fullName));
+          }
         }
       });
       io.socket.on('thread-edit-out', (data) => {
-        if (data.user.id !== self.me.id) {
-          $lycaon.socketToast(data.message);
-          self.isThreadEditDisabled = false;
-          self.hideBlock();
+        if (data.threadId === self.thread.id) {
+          if (data.user.id !== self.me.id) {
+            $lycaon.socketToast(data.message);
+            self.isThreadEditDisabled = false;
+            self.hideBlock();
+          }
         }
       });
       io.socket.on('thread-update', (data) => {
@@ -323,15 +326,6 @@ parasails.registerPage('thread', {
         }
       });
 
-      this.commentEditor = $lycaon.markdown.createEditor(
-        '#comment-editor',
-        '300px',
-        'tab',
-        i18next.t('Feel free to enter your comments ...'),
-        '',
-        this.addImageBlobHook.bind(this)
-      );
-
       var id = expiringStorage.get(this.storageKey);
       if (id) {
         $('#' + id).addClass('show');
@@ -377,6 +371,20 @@ parasails.registerPage('thread', {
           self.popStatus = '';
         }
       });
+
+      var $titleBoard = $('#thread-title-board');
+      $titleBoard.hide();
+      $(window).scroll(function () {
+        if (self.threadMode === 'edit') {
+          $titleBoard.hide();
+        } else {
+          if ($(this).scrollTop() > 900) {
+            $titleBoard.fadeIn();
+          } else {
+            $titleBoard.fadeOut();
+          }
+        }
+      });
       //
     });
   },
@@ -412,6 +420,54 @@ parasails.registerPage('thread', {
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
+    showCommentAria: function () {
+      this.commentAriaEnabled = true;
+      this.$nextTick(() => {
+        this.commentEditor = $lycaon.markdown.createEditor(
+          '#comment-editor',
+          '300px',
+          'tab',
+          i18next.t('Feel free to enter your comments ...'),
+          '',
+          this.addImageBlobHook.bind(this)
+        );
+        $lycaon.jumpTo($('#comment-editor'));
+        this.commentEditor.focus();
+      });
+    },
+    jumpToCommentEditor: function () {
+      if (this.commentAriaEnabled) {
+        $lycaon.jumpTo($('#comment-editor'));
+        this.commentEditor.focus();
+      } else {
+        this.showCommentAria();
+      }
+      return false;
+    },
+    memberIn: function (data) {
+      var id = this.parseUserId(data.user);
+      if (!$('#' + id).hasClass('blink')) {
+        $('#' + id).addClass('blink');
+      }
+      var avaterId = this.parseUserAvaterId(data.user);
+      if (
+        !$('#' + avaterId)
+          .children('img,svg')
+          .hasClass('shake')
+      ) {
+        $('#' + avaterId)
+          .children('img,svg')
+          .addClass('shake');
+      }
+    },
+    memberOut: function (data) {
+      var id = this.parseUserId(data.user);
+      $('#' + id).removeClass('blink');
+      var avaterId = this.parseUserAvaterId(data.user);
+      $('#' + avaterId)
+        .children('img,svg')
+        .removeClass('shake');
+    },
     toggleRightMenu: function () {
       if (this.sidebarCollapse === 'active') {
         this.sidebarCollapse = '';
@@ -764,67 +820,67 @@ parasails.registerPage('thread', {
       return type === 'create';
     },
     isUpdateThread: function (type) {
-      return type === 'update' && this.viewActivity !== 1;
+      return type === 'update' && this.viewActivity !== '1';
     },
     isUpdateSubject: function (type) {
-      return type === 'update-subject' && this.viewActivity !== 1;
+      return type === 'update-subject' && this.viewActivity !== '1';
     },
     isLocal: function (type) {
-      return type === 'local' && this.viewActivity !== 1;
+      return type === 'local' && this.viewActivity !== '1';
     },
     isUpdateConcept: function (type) {
-      return type === 'update-concept' && this.viewActivity !== 1;
+      return type === 'update-concept' && this.viewActivity !== '1';
     },
     isUpdateStatus: function (type) {
-      return type === 'update-status' && this.viewActivity !== 1;
+      return type === 'update-status' && this.viewActivity !== '1';
     },
     isUpdateDuedate: function (type) {
-      return type === 'update-duedate' && this.viewActivity !== 1;
+      return type === 'update-duedate' && this.viewActivity !== '1';
     },
     isUpdatePriority: function (type) {
-      return type === 'update-priority' && this.viewActivity !== 1;
+      return type === 'update-priority' && this.viewActivity !== '1';
     },
     isUpdateLock: function (type) {
-      return type === 'update-lock' && this.viewActivity !== 1;
+      return type === 'update-lock' && this.viewActivity !== '1';
     },
     isUpdateWorking: function (type) {
-      return type === 'update-working' && this.viewActivity !== 1;
+      return type === 'update-working' && this.viewActivity !== '1';
     },
     isUpdateCategory: function (type) {
-      return type === 'update-category' && this.viewActivity !== 1;
+      return type === 'update-category' && this.viewActivity !== '1';
     },
     isResponsible: function (type) {
-      return type === 'responsible' && this.viewActivity !== 1;
+      return type === 'responsible' && this.viewActivity !== '1';
     },
     isCreateSneeze: function (type) {
       return type === 'create-sneeze';
     },
     isUpdateSneeze: function (type) {
-      return type === 'update-sneeze' && this.viewActivity !== 1;
+      return type === 'update-sneeze' && this.viewActivity !== '1';
     },
     isCreateReply: function (type) {
       return type === 'create-reply';
     },
     isUpdateReply: function (type) {
-      return type === 'update-reply' && this.viewActivity !== 1;
+      return type === 'update-reply' && this.viewActivity !== '1';
     },
     isAttachFile: function (type) {
-      return type === 'attach-file' && this.viewActivity !== 1;
+      return type === 'attach-file' && this.viewActivity !== '1';
     },
     isDeleteFile: function (type) {
-      return type === 'delete-file' && this.viewActivity !== 1;
+      return type === 'delete-file' && this.viewActivity !== '1';
     },
     isMilestone: function (type) {
-      return type === 'milestone' && this.viewActivity !== 1;
+      return type === 'milestone' && this.viewActivity !== '1';
     },
     isRelationship: function (type) {
-      return type === 'relationship' && this.viewActivity !== 1;
+      return type === 'relationship' && this.viewActivity !== '1';
     },
     isDeleteRelationship: function (type) {
-      return type === 'delete-relationship' && this.viewActivity !== 1;
+      return type === 'delete-relationship' && this.viewActivity !== '1';
     },
     isFork: function (type) {
-      return type === 'fork' && this.viewActivity !== 1;
+      return type === 'fork' && this.viewActivity !== '1';
     },
     getSneezeIdentity: function (sneeze) {
       return 'sneeze-' + String(sneeze.serialNumber);
@@ -999,11 +1055,6 @@ parasails.registerPage('thread', {
     },
     jumpToReply: function (reply) {
       $lycaon.jumpTo($('#' + this.getSneezeReplyIdentity(reply)));
-      return false;
-    },
-    jumpToCommentEditor: function () {
-      $lycaon.jumpTo($('#comment-editor'));
-      this.commentEditor.focus();
       return false;
     },
     onNewThreadCkick: function () {
@@ -1644,6 +1695,18 @@ parasails.registerPage('thread', {
     onIdentityIconClick: function (popInfo) {
       this.popStatus = popInfo.id;
     },
+    otherTeamLink: function (team) {
+      return `/${this.organization.handleId}/team/${team.id}`;
+    },
+    otherHashLink: function (team) {
+      return `#menu-links-team-${team.id}`;
+    },
+    otherLinkId: function (team) {
+      return `menu-links-team-${team.id}`;
+    },
+    othrLinkUrl: function (team, tab) {
+      return `/${this.organization.handleId}/team/${team.id}?tab=${tab}`;
+    },
   },
   computed: {
     displayStatus: function () {
@@ -1764,6 +1827,18 @@ parasails.registerPage('thread', {
     },
     flagColorStyle: function () {
       return `color: ${this.flagColor}`;
+    },
+    newThreadLink: function () {
+      return `/${this.organization.handleId}/thread/create/${this.team.id}`;
+    },
+    forkThreadLink: function () {
+      return `/${this.organization.handleId}/thread/create/${this.team.id}/${this.thread.id}`;
+    },
+    convertToWikiLink: function () {
+      return `/${this.organization.handleId}/wiki/convert/${this.thread.no}`;
+    },
+    commentLabel: function () {
+      return this.i18n('Add comment...');
     },
   },
 });

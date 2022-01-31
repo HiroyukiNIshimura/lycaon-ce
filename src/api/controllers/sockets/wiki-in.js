@@ -38,6 +38,7 @@ module.exports = {
         throw 'notFound';
       }
 
+      //Wikiは編集中の通知だけなのでWiki.IDまで指定したRoom名
       var room = `room-${this.req.organization.id}-wiki-${wiki.id}`;
       sails.sockets.join(this.req, room, (err) => {
         if (!err) {

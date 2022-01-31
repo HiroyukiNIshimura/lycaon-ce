@@ -41,6 +41,7 @@ parasails.registerPage('admin-team-edit', {
     this.connectType = this.team.connectType;
     this.formData.gitOrigin = this.team.gitOrigin;
     this.defaultConcept = this.team.defaultConcept;
+    this.formData.numberOfThreadsBurden = this.team.numberOfThreadsBurden;
 
     this.userTagifySettings = {
       placeholder: i18next.t('Select users to join the team'),
@@ -156,6 +157,15 @@ parasails.registerPage('admin-team-edit', {
       }
       if (argins.selectedCategories.length < 1) {
         this.formErrors.category = true;
+      }
+
+      if (
+        !argins.numberOfThreadsBurden ||
+        !Number.isInteger(Number(argins.numberOfThreadsBurden)) ||
+        Number(argins.numberOfThreadsBurden) < 1 ||
+        Number(argins.numberOfThreadsBurden) > 51200
+      ) {
+        this.formErrors.numberOfThreadsBurden = true;
       }
 
       if (argins.useGit) {

@@ -107,7 +107,7 @@
         </div>
       </v-tab>
 
-      <v-tab :name="i18n('Threads in charge')" id="tab-thread" :counter="counter.myThread">
+      <v-tab :name="i18n('Threads in charge')" id="tab-charge" :counter="counter.myThread">
         <div class="row">
           <div class="col">
             <h5>
@@ -292,7 +292,7 @@
         <div class="row mt-3">
           <div class="col">
             <h5 class="mb-3">
-              Wiki
+              <%= __('Wiki') %>
               <small class="text-muted">
                 <%= __('Total number of search results') %>
                 {{ formatter.format(queryCount) }}
@@ -347,10 +347,10 @@
       </v-tab>
       <v-tab :name="i18n('Circular notice')" id="tab-circular" :counter="counter.votes">
         <div class="text-right">
-          <button type="button" class="btn btn-info" @click="onNewVoteCkick">
+          <a class="btn btn-info" :href="newVoteLink">
             <i class="fas fa-plus-circle"></i>
             <%= __('New circulation notice') %>
-          </button>
+          </a>
         </div>
         <div class="row mt-3">
           <div class="col">

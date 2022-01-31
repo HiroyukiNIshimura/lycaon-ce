@@ -14,6 +14,11 @@ module.exports = {
       required: true,
       description: 'team.id',
     },
+    tab: {
+      type: 'string',
+      isIn: ['team', 'working', 'charge', 'flag', 'private', 'activity', 'git', 'wiki', 'circular'],
+      defaultsTo: 'team',
+    },
   },
   exits: {
     success: {
@@ -30,7 +35,9 @@ module.exports = {
   },
 
   fn: async function (inputs) {
-    var response = {};
+    var response = {
+      tab: 'tab-' + inputs.tab,
+    };
 
     response.team = await sails.helpers.validateMembership.with({
       id: inputs.id,
@@ -47,6 +54,9 @@ module.exports = {
     });
     response.members = team.users;
     for (let entry of response.members) {
+      let results = await sails.helpers.burdenCheck.with({ team: team, user: entry });
+      entry.mold = results.mold;
+      entry.loadQty = results.loadQty;
       await User.setGravatarUrl(entry);
     }
 
@@ -153,8 +163,8 @@ module.exports = {
           milestone: '',
           category: '',
           responsible: this.req.cookies.teamQueryParam.responsible,
-          concept: '',
-          status: '',
+          concept: '1',
+          status: '0',
           owner: '',
           locked: '',
           priority: '',
