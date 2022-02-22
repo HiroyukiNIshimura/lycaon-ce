@@ -203,6 +203,14 @@ parasails.registerPage('team', {
           }
         }
       });
+      io.socket.on('serach-member-pon', (data) => {
+        if (data.manSercher === self.me.id) {
+          $lycaon.linkerToast(data.url, data.message);
+          SAILS_LOCALS.lycaonTimestamp = _.filter(SAILS_LOCALS.lycaonTimestamp, (o) => {
+            return o.serachMember !== data.serachMember.id;
+          });
+        }
+      });
     });
 
     if (this.query) {
@@ -252,7 +260,11 @@ parasails.registerPage('team', {
     },
     'query.sort': function () {
       this.clearData();
-      this.submitForm('#query-team-form');
+      if (this.filterArea && (this.filterWorking || this.filterExpired || this.filterUnassigned)) {
+        this.submitForm('#filter-thread-form');
+      } else {
+        this.submitForm('#query-team-form');
+      }
     },
     selectedCategory: function () {
       this.clearData();
@@ -424,13 +436,17 @@ parasails.registerPage('team', {
       this.selectedTab = selectedTab;
 
       if (selectedTab.tab.id === 'tab-team') {
-        var cached = expiringStorage.get(this.queryThreadStorageKey);
-        if (cached) {
-          this.query = cached;
-          this.filtered = true;
+        if (this.filterArea && (this.filterWorking || this.filterExpired || this.filterUnassigned)) {
+          this.submitForm('#filter-thread-form');
+        } else {
+          var cached = expiringStorage.get(this.queryThreadStorageKey);
+          if (cached) {
+            this.query = cached;
+            this.filtered = true;
+          }
+          this.queryPatern = 0;
+          this.submitForm('#query-team-form');
         }
-        this.queryPatern = 0;
-        this.submitForm('#query-team-form');
 
         this.$nextTick(() => {
           if (this.query) {
@@ -517,6 +533,8 @@ parasails.registerPage('team', {
         flag: false,
         tags: [],
         sustain: false,
+        word: '',
+        wordWiki: '',
       };
 
       this.selectedTags = [];
@@ -542,10 +560,15 @@ parasails.registerPage('team', {
     },
     threadHandler($state) {
       this.infiniteState = $state;
-      if (this.queryPatern === 0) {
-        this.submitForm('#query-team-form');
+
+      if (this.filterArea && (this.filterWorking || this.filterExpired || this.filterUnassigned)) {
+        this.submitForm('#filter-thread-form');
       } else {
-        this.submitForm('#query-ambiguity-form');
+        if (this.queryPatern === 0) {
+          this.submitForm('#query-team-form');
+        } else {
+          this.submitForm('#query-ambiguity-form');
+        }
       }
     },
     submittedQueryForm: function (response) {
@@ -573,7 +596,10 @@ parasails.registerPage('team', {
       }
       this.cloudSuccess = true;
 
-      if (this.queryPatern === 1) {
+      if (this.queryPatern === 0) {
+        this.query.word = '';
+        this.query.wordWiki = '';
+      } else if (this.queryPatern === 1) {
         this.wordSearchWord = response.word;
         this.$nextTick(() => {
           var re = new RegExp($lycaon.regexEscape(this.wordSearchWord), 'ig');
@@ -1010,6 +1036,21 @@ parasails.registerPage('team', {
     },
     openAccessMenu: function () {
       this.showAccessList = !this.showAccessList;
+    },
+    articleClass: function (index, wiki) {
+      if (wiki.items && wiki.items.length > 0) {
+        var mimes = ['image/bmp', 'image/jpeg', 'image/png', 'image/gif', 'image/tiff'];
+        if (_.indexOf(mimes, wiki.items[0].mimeType) > -1) {
+          if (index === 0) {
+            return 'post-card-large';
+          }
+          return '';
+        } else {
+          return 'no-image';
+        }
+      }
+
+      return 'no-image';
     },
   },
   computed: {

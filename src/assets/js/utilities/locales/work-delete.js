@@ -1,1 +1,1 @@
-const lycaon_lang_work_delete = {"Ignore this message if you have not signed up for our account":""};
+const lycaon_lang_work_delete = {"Unfortunately, I couldn't find it right away":"Unfortunately, I couldn't find it right away."};

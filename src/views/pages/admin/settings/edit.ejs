@@ -123,6 +123,17 @@
           <%= __('Don\'t share wikis within your organization') %>
         </label>
       </div>
+      <hr />
+
+      <h5>
+        <%= __('Activities') %>
+      </h5>
+      <div class="custom-control custom-checkbox">
+        <input type="checkbox" class="custom-control-input" id="form-not-share-Activities" v-model="formData.notShareActivity" />
+        <label class="custom-control-label" for="form-not-share-Activities">
+          <%= __('Don\'t share activities within your organization') %>
+        </label>
+      </div>
 
       <div class="row">
         <div class="col text-right">

@@ -159,6 +159,16 @@ const $lycaon = {
     }
     Vue.$toast.error(message, { duration: 50000 });
   },
+  linkerToast: function (url, key, parames) {
+    var message = this.i18n(key, parames);
+    if (!message) {
+      return;
+    }
+    Vue.$toast.default(`<a class="toast-linker" href="${url}">${message}</a>`, {
+      position: 'bottom-right',
+      duration: 10000,
+    });
+  },
   cloudSuccessToast: function (message) {
     //サーバー側でメッセージ構築
     if (!message) {
@@ -327,14 +337,6 @@ const $lycaon = {
     }
 
     return score;
-  },
-  rejectIgnoreExts: function (files, key, whitelist) {
-    return _.filter(files, (entry) => {
-      var exists = _.find(whitelist, (ext) => {
-        return entry[key].endsWith(ext);
-      });
-      return exists;
-    });
   },
   i18nInit: function () {
     var lang = i18next.language;
@@ -1044,6 +1046,8 @@ $(() => {
   });
 
   var lycaonLoad = function () {
+    SAILS_LOCALS.lycaonTimestamp = [];
+
     if (SAILS_LOCALS.organization) {
       if (!location.pathname.startsWith(`/${SAILS_LOCALS.organization.handleId}/thread`)) {
         $lycaon.socket.post('/ws/v1/thread-out');
@@ -1087,6 +1091,16 @@ $(() => {
 
     $('.toastui-editor-contents table').addClass('table');
     $('.toastui-editor-contents table').wrap('<div class="table-responsive">');
+
+    $('.md-viewer img').click(function () {
+      $('#image-display').html($(this).prop('outerHTML'));
+      $('#image-display').fadeIn(200);
+      return false;
+    });
+    $('#image-display').click(function () {
+      $('#image-display').fadeOut(200);
+      return false;
+    });
   };
 
   $(document).ready(lycaonLoad);

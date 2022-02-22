@@ -65,6 +65,11 @@ module.exports = {
       defaultsTo: false,
       description: 'Wikiを組織内で共有しない',
     },
+    notShareActivity: {
+      type: 'boolean',
+      defaultsTo: false,
+      description: 'アクティビティを組織内で共有しない',
+    },
 
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗

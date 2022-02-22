@@ -44,6 +44,6 @@ module.exports = {
       delete this.req.session.effectMessage;
     }
 
-    return response;
+    return await sails.helpers.compact(response);
   },
 };

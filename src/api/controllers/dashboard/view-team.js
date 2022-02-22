@@ -17,7 +17,6 @@ module.exports = {
     tab: {
       type: 'string',
       isIn: ['team', 'working', 'charge', 'flag', 'private', 'activity', 'git', 'wiki', 'circular'],
-      defaultsTo: 'team',
     },
   },
   exits: {
@@ -35,9 +34,11 @@ module.exports = {
   },
 
   fn: async function (inputs) {
-    var response = {
-      tab: 'tab-' + inputs.tab,
-    };
+    var response = {};
+
+    if (inputs.tab) {
+      response.tab = 'tab-' + inputs.tab;
+    }
 
     response.team = await sails.helpers.validateMembership.with({
       id: inputs.id,
@@ -224,6 +225,6 @@ module.exports = {
     this.req.session.ReferencePoint = [];
     this.req.session.ReferencePoint.push(this.req.originalUrl);
 
-    return response;
+    return await sails.helpers.compact(response);
   },
 };

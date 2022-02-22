@@ -207,7 +207,7 @@ module.exports = {
     }
 
     return {
-      thread: thread,
+      thread: await sails.helpers.compact(thread),
       nodes: nodes,
       connections: connections,
       simulation: simulation,

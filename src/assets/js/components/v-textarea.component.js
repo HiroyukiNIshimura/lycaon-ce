@@ -35,7 +35,7 @@ parasails.registerComponent('vTextarea', {
   //  ╠═╣ ║ ║║║║
   //  ╩ ╩ ╩ ╩ ╩╩═╝
   template: `
-<textarea @input="onInput" v-model="text"></textarea>
+<textarea @input="onInput" v-model="text" @focus="onEditorFocus" @blur="onEditorBlur"></textarea>
 `,
 
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
@@ -62,6 +62,12 @@ parasails.registerComponent('vTextarea', {
         this.text = this.letters.splice(0, this.maxlength).join('');
       }
       this.$emit('input', this.text);
+    },
+    onEditorFocus(event) {
+      this.$emit('focus', event);
+    },
+    onEditorBlur(event) {
+      this.$emit('blur', event);
     },
   },
   computed: {

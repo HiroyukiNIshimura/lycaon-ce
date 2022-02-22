@@ -53,6 +53,6 @@ module.exports = {
 
     response.deletePin = await sails.helpers.genPin();
 
-    return response;
+    return await sails.helpers.compact(response);
   },
 };

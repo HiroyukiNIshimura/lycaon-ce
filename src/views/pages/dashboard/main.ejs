@@ -220,7 +220,7 @@
           </div>
         </div>
       </v-tab>
-      <v-tab :name="i18n('Activities')" id="tab-activity">
+      <v-tab :name="i18n('Activities')" id="tab-activity" v-if="!sysSettings.notShareActivity">
         <div class="row">
           <div class="col">
             <h5 class="mb-3">
@@ -260,7 +260,7 @@
           </div>
         </div>
       </v-tab>
-      <v-tab :name="i18n('Buzzed threads')" id="tab-buzz">
+      <v-tab :name="i18n('Buzzed threads')" id="tab-buzz" v-if="!sysSettings.notShareActivity">
         <div class="row">
           <div class="col">
             <h5 class="mb-3">
@@ -331,10 +331,8 @@
                 <v-tagify-select :values="selectedWikiTags" :settings="tagifySettings" @change="onChangeWikiTags"></v-tagify-select>
               </div>
             </div>
-            <div class="row mt-3" v-if="queryResults.length > 0">
-              <div class="col-auto mb-2 ml-1 wiki-card" v-for="(item, index) in queryResults" :key="index" v-inview:parent="'animate'">
-                <wiki-card :wiki="item" :organization="organization" :show-team="true"></wiki-card>
-              </div>
+            <div class="outer" v-if="queryResults.length > 0">
+              <wiki-card-2 :organization="organization" :show-team="true" :data="queryResults"></wiki-card-2>
               <infinite-loading spinner="waveDots" @infinite="wikiHandler"></infinite-loading>
             </div>
             <div v-else class="text-muted mt-3">

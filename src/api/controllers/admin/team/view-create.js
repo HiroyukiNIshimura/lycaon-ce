@@ -34,6 +34,6 @@ module.exports = {
     if (!(await sails.helpers.planing.planingTeam.with({ organization: this.req.organization.id }))) {
       response.unplanned = true;
     }
-    return response;
+    return await sails.helpers.compact(response);
   },
 };

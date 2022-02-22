@@ -118,7 +118,7 @@ parasails.registerComponent('dropFileupload', {
       this.upload(event.target.files || event.dataTransfer.files);
     },
     upload: function (data) {
-      var files = $lycaon.rejectIgnoreExts(_.toArray(data), 'name', this.whitelist);
+      var files = this.rejectIgnoreExts(_.toArray(data));
       if (files.length > 5) {
         $lycaon.infoToast('You can only drag up to {0} files at a time', [5]);
       } else {
@@ -128,6 +128,26 @@ parasails.registerComponent('dropFileupload', {
         });
       }
       this.isDragEnter = false;
+    },
+    rejectIgnoreExts: function (files) {
+      var maxSize = SAILS_LOCALS.sysSettings.maxUploadFileSize;
+      var self = this;
+      return _.filter(files, (entry) => {
+        if (entry.size > maxSize) {
+          $lycaon.errorToast('You cannot upload files that exceed the size {0} bytes set by your organization', [
+            maxSize,
+          ]);
+          return false;
+        }
+        var exists = _.find(self.whitelist, (ext) => {
+          let filename = entry.name.toLowerCase();
+          return filename.endsWith(ext);
+        });
+        if (!exists) {
+          $lycaon.errorToast('{0} is an unauthorized extension. Uploading is not possible', [entry.name]);
+        }
+        return exists;
+      });
     },
     whitelistStr: function () {
       return this.whitelist.join(', ');

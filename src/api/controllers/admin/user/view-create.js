@@ -30,6 +30,6 @@ module.exports = {
       response.unplanned = true;
     }
 
-    return response;
+    return await sails.helpers.compact(response);
   },
 };

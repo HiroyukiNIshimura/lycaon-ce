@@ -90,11 +90,6 @@ parasails.registerPage('main', {
       $(canvas).css({ width: '80px', height: '80px' });
     });
 
-    $('#nav-tab a').on('click', function (e) {
-      e.preventDefault();
-      $(this).tab('show');
-    });
-
     var self = this;
     io.socket.on('thread-notify', (data) => {
       if (
@@ -440,6 +435,21 @@ parasails.registerPage('main', {
     },
     onNewVoteCkick: function () {
       location.href = `/${this.organization.handleId}/vote/create`;
+    },
+    articleClass: function (index, wiki) {
+      if (wiki.items && wiki.items.length > 0) {
+        var mimes = ['image/bmp', 'image/jpeg', 'image/png', 'image/gif', 'image/tiff'];
+        if (_.indexOf(mimes, wiki.items[0].mimeType) > -1) {
+          if (index === 0) {
+            return 'post-card-large';
+          }
+          return '';
+        } else {
+          return 'no-image';
+        }
+      }
+
+      return 'no-image';
     },
   },
   computed: {

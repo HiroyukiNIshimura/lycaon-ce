@@ -68,6 +68,9 @@ parasails.registerComponent('userIdentity', {
           <a href="#" @click.prevent="sendPleaseRead"><i class="fab fa-readme fa-fw"></i> {{ i18n('Please read!') }}</a>
         </div>
         <div v-if="isTeam">
+          <a href="#" @click.prevent="searchMember"><i class="fas fa-search-location fa-fw"></i> {{ i18n('Find a member') }}</a>
+        </div>
+        <div v-if="isTeam">
           <a :href="ownersLink"><i class="fas fa-user-edit fa-fw"></i> {{ i18n('Created threads') }}</a>
         </div>
         <div v-if="isTeam">
@@ -152,6 +155,33 @@ parasails.registerComponent('userIdentity', {
     },
     teamLink: function (team) {
       return `/${this.organization.handleId}/team/${team.id}`;
+    },
+    searchMember: function () {
+      if (!SAILS_LOCALS.lycaonTimestamp) {
+        SAILS_LOCALS.lycaonTimestamp = [];
+      }
+      SAILS_LOCALS.lycaonTimestamp.push({
+        serachMember: this.user.id,
+        stamp: Date.now(),
+      });
+
+      var self = this;
+      $lycaon.socket.post('/ws/v1/member-serach', { id: this.team.id, serachMember: this.user.id }, () => {
+        setTimeout(() => {
+          if (
+            _.find(SAILS_LOCALS.lycaonTimestamp, (o) => {
+              return o.serachMember === self.user.id;
+            })
+          ) {
+            //
+            // eslint-disable-next-line quotes
+            $lycaon.linkerToast('#', self.i18n('Unfortunately, {0} was not found immediately', [self.user.fullName]));
+            SAILS_LOCALS.lycaonTimestamp = _.filter(SAILS_LOCALS.lycaonTimestamp, (o) => {
+              return o.serachMember !== self.user.id;
+            });
+          }
+        }, 5000);
+      });
     },
   },
   computed: {

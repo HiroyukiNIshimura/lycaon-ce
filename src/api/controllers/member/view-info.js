@@ -62,6 +62,6 @@ module.exports = {
 
     response.tab = inputs.tab;
 
-    return response;
+    return await sails.helpers.compact(response);
   },
 };

@@ -40,7 +40,7 @@ module.exports = {
     var messageStack = await sails.helpers.storage.findMessage.with({ me: this.req.me });
 
     return {
-      teams: user.teams,
+      teams: await sails.helpers.compact(user.teams),
       emailNoThankYous: user.emailNoThankYous,
       tags: tags,
       sendMailTags: user.sendMailTags,

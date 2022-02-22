@@ -71,7 +71,7 @@
               <i class="far fa-comment-dots prefix"></i>
               <label for="my-message" class="md-textarea-label label-color">
                 {{ messegeLabel }}</label>
-              <v-textarea id="my-message" class="md-textarea form-control" rows="3" :maxlength="2000" :class="[formErrors.contents || formErrors.contentsLength ? 'is-invalid' : '']" v-model.trim="formData.contents" @focus="onEditorFocus" @blur="onEditorBlur"></v-textarea>
+              <v-textarea id="my-message" class="md-textarea form-control" rows="3" :maxlength="2000" :class="[formErrors.contents || formErrors.contentsLength ? 'is-invalid' : '']" v-model.trim="formData.contents" @blur="onEditorBlur" @input="onEdit"></v-textarea>
               <div class="invalid-feedback" v-if="formErrors.contents">
                 <%= __('Please enter a message') %>
               </div>

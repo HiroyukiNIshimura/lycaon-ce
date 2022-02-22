@@ -60,6 +60,6 @@ module.exports = {
 
     await User.setGravatarUrl(response.vote.author, 36);
 
-    return response;
+    return await sails.helpers.compact(response);
   },
 };

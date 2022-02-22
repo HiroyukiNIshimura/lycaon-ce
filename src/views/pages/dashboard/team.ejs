@@ -566,9 +566,15 @@
                 <v-tagify-select :values="selectedWikiTags" :settings="tagifySettings" @change="onChangeWikiTags"></v-tagify-select>
               </div>
             </div>
-            <div class="row mt-3" v-if="queryResults.length > 0">
-              <div class="col-auto mb-2 ml-1 wiki-card" v-for="(item, index) in queryResults" :key="index">
-                <wiki-card :wiki="item" :organization="organization" :show-team="false" :word="wordSearchWikiWord"></wiki-card>
+            <div class="outer" v-if="queryResults.length > 0">
+              <wiki-card-2 :organization="organization" :show-team="false" :data="queryResults"></wiki-card-2>
+
+              <div class="inner posts">
+                <div class="post-feed">
+                  <article :class="articleClass(index, item)" v-for="(item, index) in queryResults" :key="index">
+                    <wiki-card-2 :wiki="item" :organization="organization" :show-team="false" :word="wordSearchWikiWord"></wiki-card-2>
+                  </article>
+                </div>
               </div>
               <infinite-loading spinner="waveDots" @infinite="wikiHandler"></infinite-loading>
             </div>

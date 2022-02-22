@@ -274,6 +274,8 @@ module.exports = {
               await image.writeAsync(path.resolve(sails.config.appPath, item.virtualPathSmall));
             }
           } catch (err) {
+            // jimpエラーがたまーに出る
+            // https://github.com/oliver-moran/jimp/issues/643
             sails.log.error(err);
           }
         }

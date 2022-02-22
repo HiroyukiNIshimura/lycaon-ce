@@ -61,6 +61,6 @@ select count("team__teams"."id") as qty
     this.req.session.ReferencePoint = [];
     this.req.session.ReferencePoint.push(this.req.originalUrl);
 
-    return response;
+    return await sails.helpers.compact(response);
   },
 };

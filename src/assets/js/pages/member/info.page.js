@@ -102,7 +102,7 @@ parasails.registerPage('member-info', {
     onIdentityIconClick: function (popInfo) {
       this.popStatus = popInfo.id;
     },
-    onEditorFocus: function () {
+    onEdit: function () {
       $lycaon.socket.post('/ws/v1/message-edit-in', { partner: this.user.id });
     },
     onEditorBlur: function () {

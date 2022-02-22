@@ -150,12 +150,13 @@ module.exports = function defineCustomHook(sails) {
             }
 
             // Otherwise, look up the logged-in user.
-            var loggedInUser = await User.findOne({
-              id: req.session.userId,
-            })
-              .populate('organization')
-              .populate('teams');
-
+            var loggedInUser = await sails.helpers.compact(
+              await User.findOne({
+                id: req.session.userId,
+              })
+                .populate('organization')
+                .populate('teams')
+            );
             // If the logged-in user has gone missing, log a warning,
             // wipe the user id from the requesting user agent's session,
             // and then send the "unauthorized" response.

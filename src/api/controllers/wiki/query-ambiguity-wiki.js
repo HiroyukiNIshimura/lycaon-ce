@@ -151,9 +151,8 @@ AND ("wiki"."subject" ilike $2 OR "wiki"."body" ilike $3)
 SELECT "id", "name", "virtualPath", "wiki"
   FROM "public"."wiki_item"
  WHERE "wiki" = $1
-   AND "wiki"."concept" = 0
-   AND "wiki"."deleted" = false
    AND "qWords" ilike $2
+   AND EXISTS (SELECT 1 FROM "public"."wiki" WHERE "concept" = 0 AND "deleted" = false AND "id" = "wiki_item"."wiki")
     `;
 
     var pagination = await sails.helpers.pagination.with({

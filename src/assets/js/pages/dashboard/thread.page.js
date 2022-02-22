@@ -161,18 +161,24 @@ parasails.registerPage('thread', {
     });
 
     io.socket.on('thread-notify', (data) => {
-      if (data.user.id !== self.me.id && data.message) {
-        $lycaon.socketToast(data.message);
-        if (self.thread.id === data.thread.id) {
-          self.thread = Object.assign({}, self.thread, {
-            working: data.thread.working,
-            status: data.thread.status,
-            concept: data.thread.concept,
-            locked: data.thread.locked,
-            workingUser: data.user,
-            dueDate: data.dueDate,
-          });
-          self.status = self.thread.status;
+      if (
+        _.findIndex(self.me.teams, (o) => {
+          return o.id === data.thread.team;
+        }) > -1
+      ) {
+        if (data.user.id !== self.me.id && data.message) {
+          $lycaon.socketToast(data.message);
+          if (self.thread.id === data.thread.id) {
+            self.thread = Object.assign({}, self.thread, {
+              working: data.thread.working,
+              status: data.thread.status,
+              concept: data.thread.concept,
+              locked: data.thread.locked,
+              workingUser: data.user,
+              dueDate: data.dueDate,
+            });
+            self.status = self.thread.status;
+          }
         }
       }
     });
@@ -198,6 +204,16 @@ parasails.registerPage('thread', {
           self.isCommentArrived = true;
           //
         }
+      }
+    });
+
+    io.socket.on('serach-member', (data) => {
+      if (data.serachMember === self.me.id) {
+        $lycaon.socket.post('/ws/v1/member-serach-pon', {
+          id: self.team.id,
+          manSercher: data.manSercher,
+          threadId: self.thread.id,
+        });
       }
     });
 

@@ -49,6 +49,10 @@ module.exports = {
       type: 'boolean',
       defaultsTo: false,
     },
+    notShareActivity: {
+      type: 'boolean',
+      defaultsTo: false,
+    },
   },
   exits: {
     success: {},

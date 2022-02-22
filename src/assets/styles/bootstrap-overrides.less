@@ -2,10 +2,78 @@
  * This file is for overriding some default bootstrap styles.
  *
  * > NOTE THAT THIS FILE AFFECTS GLOBAL STYLES.
+ * https://mdbootstrap.com/education/bootstrap/
  */
 
-//MDB
-//https://mdbootstrap.com/education/bootstrap/
+
+.container {
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}
+@media (min-width: 576px) {
+  .container {
+    max-width: 700px;
+  }
+}
+@media (min-width: 768px) {
+  .container {
+    max-width: 900px;
+  }
+}
+@media (min-width: 992px) {
+  .container {
+    max-width: 1000px;
+  }
+}
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1500px;
+  }
+}
+.container-fluid,
+.container-lg,
+.container-md,
+.container-sm,
+.container-xl {
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}
+@media (min-width: 576px) {
+  .container,
+  .container-sm {
+    max-width: 700px;
+  }
+}
+@media (min-width: 768px) {
+  .container,
+  .container-md,
+  .container-sm {
+    max-width: 900px;
+  }
+}
+@media (min-width: 992px) {
+  .container,
+  .container-lg,
+  .container-md,
+  .container-sm {
+    max-width: 1000px;
+  }
+}
+@media (min-width: 1200px) {
+  .container,
+  .container-lg,
+  .container-md,
+  .container-sm,
+  .container-xl {
+    max-width: 1500px;
+  }
+}
 
 .btn-circle-timeline {
   position: relative;

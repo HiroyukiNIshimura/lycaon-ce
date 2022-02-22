@@ -44,6 +44,6 @@ module.exports = {
       });
     }
 
-    return response;
+    return await sails.helpers.compact(response);
   },
 };

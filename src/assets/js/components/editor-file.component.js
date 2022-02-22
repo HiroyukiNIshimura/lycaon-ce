@@ -332,7 +332,7 @@ parasails.registerComponent('editorFile', {
 
       var mainKey =
         // eslint-disable-next-line quotes
-        "With the contract plan, you can upload attachments of '{1} to one {0}' and '{2} for the entire organization'";
+        "With the contract plan, you can upload attachments of '{1} to one {0}' and '{2}'";
 
       var docName = '';
       var firstKey = '';

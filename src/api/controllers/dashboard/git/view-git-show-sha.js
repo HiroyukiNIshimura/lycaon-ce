@@ -54,6 +54,6 @@ module.exports = {
       response.backToUrl = _.last(this.req.session.ReferencePoint);
     }
 
-    return response;
+    return await sails.helpers.compact(response);
   },
 };
