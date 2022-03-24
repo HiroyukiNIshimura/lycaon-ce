@@ -12,6 +12,7 @@ parasails.registerComponent('threadCard', {
   //  ╔═╗╦═╗╔═╗╔═╗╔═╗
   //  ╠═╝╠╦╝║ ║╠═╝╚═╗
   //  ╩  ╩╚═╚═╝╩  ╚═╝
+  // カードアイテムにteam の値が設定されているのはmainページの方
   props: ['thread', 'selectedTags', 'team', 'organization', 'word', 'showCounter', 'showFlagRemove'],
 
   //  ╦╔╗╔╦╔╦╗╦╔═╗╦    ╔═╗╔╦╗╔═╗╔╦╗╔═╗
@@ -41,7 +42,12 @@ parasails.registerComponent('threadCard', {
   <div class="card-body">
     <div class="row mb-2">
       <div class="col h5 card-subtitle">
-        <span class="badge badge-pill" :style="categoryStyle(thread.category.name)">{{ thread.category.name }}</span>
+        <span class="badge badge-pill" :style="categoryStyle(thread.category.name)" v-if="team">{{ thread.category.name }}</span>
+
+        <a :href="categoryLink(thread.category)" class="badge badge-pill" :style="categoryStyle(thread.category.name)" :aria-label="categoryTooltip" data-microtip-position="top" data-microtip-size="medium" role="tooltip" v-if="!team">
+      {{ thread.category.name }}
+        </a>
+
       </div>
       <div class="col text-right">
         <span class="fa-layers fa-fw" style="color: Dodgerblue;font-size: 1.6rem;" v-if="thread.sneezeQty > 0">
@@ -142,7 +148,10 @@ parasails.registerComponent('threadCard', {
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
     tagLink: function (tag) {
-      return `/${this.organization.handleId}/team/${this.thread.team.id}/thread/${tag.id}`;
+      return `/${this.organization.handleId}/team/${this.thread.team.id}/thread?tag=${tag.id}`;
+    },
+    categoryLink: function (category) {
+      return `/${this.organization.handleId}/team/${this.thread.team.id}/thread?category=${category.id}`;
     },
     createTranslator: function (val) {
       return this.i18n('{0} opened at {1}').format('', val);
@@ -330,6 +339,9 @@ parasails.registerComponent('threadCard', {
     },
     tagTooltip: function () {
       return this.i18n('Search for the same tag');
+    },
+    categoryTooltip: function () {
+      return this.i18n('Search for the same category');
     },
     flagColorStyle: function () {
       if (this.thread.flags && this.thread.flags.length > 0) {

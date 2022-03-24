@@ -127,7 +127,7 @@ parasails.registerComponent('wikiCard2', {
     },
     tagLink: function (tag, wiki) {
       if (wiki.team) {
-        return `/${this.organization.handleId}/team/${wiki.team.id}/wiki/${tag.id}`;
+        return `/${this.organization.handleId}/team/${wiki.team.id}/wiki?tag=${tag.id}`;
       }
       return 'javascript:void(0)';
     },

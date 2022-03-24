@@ -1,0 +1,29 @@
+<% /* Note: This is injected into `views/layouts/layout-email.ejs` */ %>
+
+<h4>
+  <%= title %>
+</h4>
+<p style="margin-top: 10px;">
+  <%= __('Team') %>: <%= team.name %>
+</p>
+<p style="margin-top: 0px;">
+  <%= wiki.subject %>
+</p>
+<p style="margin-top: 0px;">
+  <%= __('Changer') %>: <%= changer.fullName %>
+</p>
+<p style="margin-top: 0px;">
+  <%= __('Update date') %>: <%= updateAt %>
+</p>
+<hr />
+
+<p style="margin-bottom: 25px;">
+  <a style="color: #00acc4;" href="<%= url.resolve(sails.config.custom.baseUrl, `/${organization.handleId}/wiki/${wiki.no}`) %>">
+    <%= __('Please check from this link') %>
+  </a>
+</p>
+
+<p style="margin-bottom: 5px;">Sincerely,</p>
+<p style="margin-top: 0px;">
+  <%= fromName %>
+</p>

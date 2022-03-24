@@ -1,0 +1,25 @@
+<modal v-if="showPrevious">
+  <div class="modal-header">
+    <h5 class="modal-title">
+      <%= __("Changes from the last time") %>
+    </h5>
+    <button type="button" class="close" @click="showPrevious=false">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col">
+        <div class="md-viewer" id="previuos-diff-viewer"></div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col text-right">
+        <button type="button" class="btn btn-light btn-sm" @click="showPrevious=false">
+          <i class="fas fa-window-close"></i>
+          <%= __("close") %>
+        </button>
+      </div>
+    </div>
+  </div>
+</modal>

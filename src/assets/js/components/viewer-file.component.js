@@ -59,7 +59,7 @@ parasails.registerComponent('viewerFile', {
       <span class="align-middle" :aria-label="item.name" data-microtip-position="top" data-microtip-size="medium"
         role="tooltip" v-for="(item, index) in appendix">
         <a href="javascript:void(0)" rel="noopener">
-          <img class="img-fluid img-file-list" :src="item.virtualUrlSmall" v-if="item.mimeType.startsWith('image')">
+          <img class="img-fluid img-file-list" :src="item.virtualUrlSmall" :data-source-image="item.virtualUrl" v-if="item.mimeType.startsWith('image')">
           <i class="far fa-file-word fa-3x mr-1"
             v-else-if="item.mimeType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'"></i>
           <i class="far fa-file-excel fa-3x mr-1"

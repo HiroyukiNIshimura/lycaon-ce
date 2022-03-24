@@ -12,7 +12,7 @@ parasails.registerPage('edit-wiki', {
     wikiEditor: {},
     tagifySettings: {},
     cloudTags: [],
-
+    isNotify: false,
     conflictUser: {},
     newSubject: '',
     newBody: '',

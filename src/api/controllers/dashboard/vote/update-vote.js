@@ -1,3 +1,5 @@
+const DiffMatchPatch = require('diff-match-patch');
+
 module.exports = {
   friendlyName: 'update vote',
 
@@ -78,6 +80,9 @@ module.exports = {
       throw 'notFound';
     }
 
+    const dmp = new DiffMatchPatch();
+    const diff = dmp.diff_main(current.body, inputs.body);
+
     var valuesToSet = {
       subject: inputs.subject,
       body: inputs.body,
@@ -88,6 +93,7 @@ module.exports = {
       multipleAnswers: inputs.multipleAnswers,
       hasOther: inputs.hasOther,
       mailSended: false,
+      previous: JSON.stringify(diff),
     };
 
     if (inputs.users) {

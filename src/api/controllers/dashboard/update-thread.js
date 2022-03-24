@@ -1,3 +1,5 @@
+const DiffMatchPatch = require('diff-match-patch');
+
 module.exports = {
   friendlyName: 'Update thread',
   description: 'Update the thread',
@@ -88,6 +90,10 @@ module.exports = {
     thread.lastHumanUpdateAt = Date.now();
     thread.responsible = inputs.responsible ? inputs.responsible : null;
     thread.milestone = inputs.milestone ? inputs.milestone : null;
+
+    const dmp = new DiffMatchPatch();
+    const diff = dmp.diff_main(current.body, thread.body);
+    thread.previous = JSON.stringify(diff);
 
     var milestone;
     if (inputs.milestone) {

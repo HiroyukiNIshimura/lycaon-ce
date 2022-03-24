@@ -39,6 +39,11 @@ module.exports = {
       description: '本文',
       example: 'これはMarkdownのままのデータ',
     },
+    previous: {
+      type: 'string',
+      description: '一世代前の本文との差分',
+      example: 'これはJSONデータ',
+    },
     concept: {
       type: 'ref',
       columnType: 'smallint',

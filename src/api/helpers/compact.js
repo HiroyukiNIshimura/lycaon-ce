@@ -31,10 +31,10 @@ module.exports = {
       'rawData',
       'userAgent',
       'clientIp',
-      'gitPassword',
-      'gitlabToken',
+      //'gitPassword',
+      //'gitlabToken',
     ];
-    return filter(inputs.value, (value, prop, subject) => {
+    return filter(inputs.value, (value, prop) => {
       if (ignores.indexOf(prop) > -1) {
         return false;
       }

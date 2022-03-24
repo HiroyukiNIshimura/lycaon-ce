@@ -49,7 +49,7 @@ parasails.registerComponent('imageList', {
         <div class="card card-image card-selectable" v-for="item in images" @click="selectImage(item)">
           <img :src="imageRef(item)" class="card-img-top" />
           <div class="card-img-overlay">
-            <p class="text-white">{{ item.name }}</p>
+            <p class="text-info">{{ item.name }}</p>
           </div>
         </div>
       </div>

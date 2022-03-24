@@ -64,6 +64,7 @@ parasails.registerPage('thread', {
     showConflictModal: false,
     showEmotionsModal: false,
     showImageListModal: false,
+    showPrevious: false,
     emotionsRadar: {},
     rightSidebar: 'noactive',
     sidebarCollapse: 'active',
@@ -1519,7 +1520,7 @@ parasails.registerPage('thread', {
       form.submit();
     },
     tagLink: function (tag) {
-      return `/${this.organization.handleId}/team/${this.team.id}/thread/${tag.id}`;
+      return `/${this.organization.handleId}/team/${this.team.id}/thread?tag=${tag.id}`;
     },
     isActivityOpen: function (item) {
       return item.stateWord === 'open';
@@ -1722,6 +1723,43 @@ parasails.registerPage('thread', {
     },
     othrLinkUrl: function (team, tab) {
       return `/${this.organization.handleId}/team/${team.id}?tab=${tab}`;
+    },
+    buildPrevious: function () {
+      if (this.thread.previous) {
+        let previuosDiff = $lycaon.parsePrevious(this.thread.previous);
+        this.showPrevious = true;
+        this.$nextTick(() => {
+          $lycaon.markdown.createViewer('#previuos-diff-viewer', previuosDiff, '100%');
+          var paragraphClass = '';
+          $('#previuos-diff-viewer .toastui-editor-contents')
+            .children()
+            .each((o, el) => {
+              switch (el.nodeName) {
+                case 'H1':
+                  paragraphClass = 'md-section-h1';
+                  break;
+                case 'H2':
+                  paragraphClass = 'md-section-h2';
+                  break;
+                case 'H3':
+                  paragraphClass = 'md-section-h3';
+                  break;
+                case 'H4':
+                  paragraphClass = 'md-section-h4';
+                  break;
+                case 'H5':
+                  paragraphClass = 'md-section-h5';
+                  break;
+                case 'H6':
+                  paragraphClass = 'md-section-h6';
+                  break;
+                default:
+                  $(el).addClass(paragraphClass);
+                  break;
+              }
+            });
+        });
+      }
     },
   },
   computed: {

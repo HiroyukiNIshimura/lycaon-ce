@@ -12,7 +12,7 @@ module.exports = {
   fn: async function (inputs) {
     var NATIVE_COUNT_SQL = `
 SELECT (
-  (SELECT COUNT(*)  
+  (SELECT COUNT(*)
      FROM public.thread_item
     WHERE thread IN (
       SELECT id
@@ -24,7 +24,7 @@ SELECT (
        )
     )
       AND "mimeType" like 'image/%')
-+ (SELECT COUNT(*)  
++ (SELECT COUNT(*)
      FROM public.wiki_item
     WHERE wiki IN (
       SELECT id
@@ -36,7 +36,7 @@ SELECT (
        )
     )
       AND "mimeType" like 'image/%')
-+ (SELECT COUNT(*)  
++ (SELECT COUNT(*)
      FROM public.vote_item
     WHERE vote IN (
       SELECT id
@@ -49,7 +49,7 @@ SELECT (
 
     var NATIVE_SELECT_SQL = `
 SELECT t.* FROM (
-  (SELECT "id", "name", "virtualUrl", "virtualUrlMid", "virtualUrlSmall", "hashName", "size", "mimeType", 'thread' as parent  
+  (SELECT "createdAt", "id", "name", "virtualUrl", "virtualUrlMid", "virtualUrlSmall", "hashName", "size", "mimeType", 'thread' as parent
      FROM public.thread_item
     WHERE thread IN (
       SELECT id
@@ -62,7 +62,7 @@ SELECT t.* FROM (
     )
       AND "mimeType" like 'image/%')
   UNION ALL
-  (SELECT "id", "name", "virtualUrl", "virtualUrlMid", "virtualUrlSmall", "hashName", "size", "mimeType", 'wiki' as parent    
+  (SELECT "createdAt", "id", "name", "virtualUrl", "virtualUrlMid", "virtualUrlSmall", "hashName", "size", "mimeType", 'wiki' as parent
      FROM public.wiki_item
     WHERE wiki IN (
       SELECT id
@@ -75,7 +75,7 @@ SELECT t.* FROM (
     )
       AND "mimeType" like 'image/%')
   UNION ALL
-  (SELECT "id", "name", "virtualUrl", "virtualUrlMid", "virtualUrlSmall", "hashName", "size", "mimeType", 'vote' as parent    
+  (SELECT "createdAt", "id", "name", "virtualUrl", "virtualUrlMid", "virtualUrlSmall", "hashName", "size", "mimeType", 'vote' as parent
      FROM public.vote_item
     WHERE vote IN (
       SELECT id
@@ -84,7 +84,7 @@ SELECT t.* FROM (
     )
       AND "mimeType" like 'image/%')
 ) t
-ORDER BY t."id" DESC, t."hashName" DESC
+ORDER BY t."createdAt" DESC, t."hashName" DESC
 LIMIT $4 OFFSET $5
 `;
 

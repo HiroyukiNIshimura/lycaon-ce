@@ -7,15 +7,26 @@
         {{ team.name }}</a>
     </div>
   </div>
-  <div class="row">
-    <div class="col">
-      <div class="form-group text-right">
+
+  <div class="row mt-3 justify-content-end">
+    <% if(action==='updateWiki') { %>
+    <div class="col-auto">
+      <div class="custom-control custom-checkbox">
+        <input type="checkbox" class="custom-control-input" id="form-share-wiki" v-model="formData.notify" />
+        <label class="custom-control-label" for="form-share-wiki">
+          <%= __('Notify for updates') %>
+        </label>
+      </div>
+    </div>
+    <% } %>
+    <div class="col-auto">
+      <div class="form-group">
         <button type="button" class="btn btn-light btn-sm" @click="onEditCancelClick">
           <i class="fas fa-window-close"></i>
           <%= __("Cancel") %>
         </button>
         <button type="submit" class="btn btn-primary btn-sm">
-          <% if(action==='createWiki' ) { %>
+          <% if(action==='createWiki') { %>
           <i class="fas fa-plus-circle"></i>
           <%= __("Create") %>
           <% } else { %>
@@ -24,6 +35,10 @@
           <% } %>
         </button>
       </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
       <div class="md-form">
         <v-text-input type="text" :maxlength="200" id="wiki-subject" class="form-control" v-model.trim="formData.subject" autocomplete="wiki-subject" :class="[formErrors.subject || formErrors.subjectLength ? 'is-invalid' : '']"></v-text-input>
         <label for="wiki-subject">
@@ -36,44 +51,46 @@
           <%= __("Please enter within {0} characters").format(200) %>
         </div>
       </div>
-      <div class="row mt-3">
-        <div class="col">
-          <label for="wiki-tags">
-            <%= __("Tags") %><small class="text-muted ml-3">
-              <%= __("You can tag up to {0}").format(10) %>
-            </small>
-          </label>
-          <v-tagify-select id="wiki-tags" :values="selectedTags" :settings="tagifySettings" @change="onChangeTags"></v-tagify-select>
-        </div>
-      </div>
-
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
       <div class="text-danger" v-if="formErrors.bodyLength">
         <%= __("Body size is too large") %>
       </div>
-      <div class="row mt-3">
-        <div class="col">
-          <div ref="wikiEditor" id="wiki-editor"></div>
-        </div>
+      <div ref="wikiEditor" id="wiki-editor"></div>
+    </div>
+  </div>
+  <div class="row mt-3 justify-content-end">
+    <% if(action==='updateWiki') { %>
+    <div class="col-auto">
+      <div class="custom-control custom-checkbox">
+        <input type="checkbox" class="custom-control-input" id="form-share-wiki" v-model="formData.notify" />
+        <label class="custom-control-label" for="form-share-wiki">
+          <%= __('Notify for updates') %>
+        </label>
       </div>
-      <div class="row mt-1">
-        <div class="col text-right">
-          <button type="button" class="btn btn-light btn-sm" @click="onEditCancelClick">
-            <i class="fas fa-window-close"></i>
-            <%= __("Cancel") %>
-          </button>
-          <button type="submit" class="btn btn-primary btn-sm">
-            <% if(action==='createWiki' ) { %>
-            <i class="fas fa-plus-circle"></i>
-            <%= __("Create") %>
-            <% } else { %>
-            <i class="fas fa-save"></i>
-            <%= __("Save") %>
-            <% } %>
-          </button>
-        </div>
+    </div>
+    <% } %>
+    <div class="col-auto">
+      <div class="form-group">
+        <button type="button" class="btn btn-light btn-sm" @click="onEditCancelClick">
+          <i class="fas fa-window-close"></i>
+          <%= __("Cancel") %>
+        </button>
+        <button type="submit" class="btn btn-primary btn-sm">
+          <% if(action==='createWiki') { %>
+          <i class="fas fa-plus-circle"></i>
+          <%= __("Create") %>
+          <% } else { %>
+          <i class="fas fa-save"></i>
+          <%= __("Save") %>
+          <% } %>
+        </button>
       </div>
     </div>
   </div>
+
 </ajax-form>
 <!-- appendix -->
 <% if(action==='updateWiki' ) { %>

@@ -118,7 +118,6 @@ module.exports = {
               organization: this.req.me.organization,
               wiki: created,
               author: this.req.me,
-              target: 'create',
               user: entry,
               team: team,
             });

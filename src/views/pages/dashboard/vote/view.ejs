@@ -1,6 +1,8 @@
 <div id="vote-view" v-cloak>
   <account-notification-banner></account-notification-banner>
   <div class="container">
+    <%- partial ('../../previous-modal.ejs') %>
+
     <ajax-form id="confirm-circulation" action="confirmCirculation" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedConfirmForm" @rejected="onCloudError" :handle-parsing="handleParsingConfirmForm">
     </ajax-form>
     <div id="cloud-error" class="row">
@@ -76,7 +78,15 @@
         </div>
         <!-- appendix -->
         <viewer-file :organization="organization" :appendix="appendix" :download-appendix="downloadAppendix"></viewer-file>
-        <div class="row mt-5 mb-5 p-3 shadow rounded">
+        <div class="row mt-5">
+          <div class="col text-right">
+            <button type="button" class="btn btn-link btn-sm" @click="buildPrevious" v-if="vote.previous">
+              <i class="fas fa-exchange-alt"></i>
+              <%= __("Change point") %>
+            </button>
+          </div>
+        </div>
+        <div class="row mb-5 p-3 shadow rounded">
           <div class="col text-break md-viewer" id="viewer"></div>
         </div>
 

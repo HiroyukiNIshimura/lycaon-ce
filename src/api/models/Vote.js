@@ -29,6 +29,11 @@ module.exports = {
       },
       description: '本文',
     },
+    previous: {
+      type: 'string',
+      description: '一世代前の本文との差分',
+      example: 'これはJSONデータ',
+    },
     isQuestionnaireFormat: {
       type: 'boolean',
       description: 'アンケート形式かどうか',

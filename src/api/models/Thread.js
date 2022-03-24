@@ -42,6 +42,11 @@ module.exports = {
       description: '本文',
       example: 'これはMarkdownのままのデータ',
     },
+    previous: {
+      type: 'string',
+      description: '一世代前の本文との差分',
+      example: 'これはJSONデータ',
+    },
     local: {
       type: 'boolean',
       description: '自分だけのスレッド。他者には見えない。trueの場合はコンセプトは変更できない。',

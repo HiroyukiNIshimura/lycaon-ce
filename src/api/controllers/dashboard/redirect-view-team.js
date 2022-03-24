@@ -23,13 +23,16 @@ module.exports = {
     responsible: {
       type: 'number',
     },
-    tag: {
+    category: {
       type: 'number',
     },
     target: {
       type: 'string',
       isIn: ['thread', 'wiki'],
       defaultsTo: 'thread',
+    },
+    tag: {
+      type: 'number',
     },
   },
   exits: {
@@ -57,8 +60,9 @@ module.exports = {
       milestone: inputs.milestone,
       owner: inputs.owner,
       responsible: inputs.responsible,
-      tag: inputs.tag,
+      category: inputs.category,
       target: inputs.target,
+      tag: inputs.tag,
     });
 
     throw { redirect: `/${this.req.organization.handleId}/team/${inputs.id}` };

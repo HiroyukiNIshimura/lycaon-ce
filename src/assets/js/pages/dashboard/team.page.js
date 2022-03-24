@@ -520,22 +520,7 @@ parasails.registerPage('team', {
       }
     },
     clickClear: function () {
-      this.query = {
-        category: '',
-        responsible: '',
-        milestone: '',
-        concept: '',
-        status: 0,
-        owner: '',
-        locked: '',
-        priority: '',
-        working: false,
-        flag: false,
-        tags: [],
-        sustain: false,
-        word: '',
-        wordWiki: '',
-      };
+      this.query = this.emptyQuery();
 
       this.selectedTags = [];
       expiringStorage.delete(this.queryThreadStorageKey);
@@ -1052,6 +1037,25 @@ parasails.registerPage('team', {
 
       return 'no-image';
     },
+    emptyQuery: function () {
+      return {
+        category: '',
+        responsible: '',
+        milestone: '',
+        concept: '',
+        status: 0,
+        owner: '',
+        locked: '',
+        priority: '',
+        working: false,
+        flag: false,
+        tags: [],
+        sustain: false,
+        word: '',
+        wordWiki: '',
+        sort: 0,
+      };
+    },
   },
   computed: {
     newThreadLink: function () {
@@ -1078,22 +1082,9 @@ parasails.registerPage('team', {
       return new Date();
     },
     isShow() {
-      var query = _.isEqual(this.query, {
-        category: '',
-        responsible: '',
-        milestone: '',
-        concept: '',
-        status: 0,
-        owner: '',
-        locked: '',
-        priority: '',
-        working: false,
-        flag: false,
-        tags: [],
-        sustain: false,
-      });
+      var query = _.isEqual(this.query, this.emptyQuery());
 
-      if (query || this.selectedTags.length > 0 || this.filtered) {
+      if (!query || this.selectedTags.length > 0 || this.filtered) {
         return 'show';
       }
       return '';

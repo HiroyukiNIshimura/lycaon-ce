@@ -18,10 +18,11 @@
   h1 {
     color: #494949;
     font-weight: bold;
-    //border: solid 3px #ea5219;
     padding: 0.3em;
-    //border-radius: 0.5em;
     margin: 1em 0 1em;
+  }
+  .md-section-h1 {
+    margin-left: 0em;
   }
   h2 {
     color: #494949;
@@ -30,6 +31,10 @@
     margin: 1em 0 1em;
     padding: 0.5em 0.5em 0.2em 1.8em;
     border-bottom: 2px solid #ea5219;
+    margin-left: 0.5em;
+  }
+  .md-section-h2 {
+    margin-left: 0.5em;
   }
   h2:before {
     content: '□';
@@ -57,6 +62,10 @@
     background-color: #f4f4f4;
     border-left: 6px solid #ea5219;
     margin-top: 1em;
+    margin-left: 1em;
+  }
+  .md-section-h3 {
+    margin-left: 1em;
   }
   h4 {
     position: relative;
@@ -65,6 +74,11 @@
     border-radius: 6px;
     padding-left: 1.3em; /*アイコン分のスペース*/
     line-height: 1.4;
+    margin-top: 1em;
+    margin-left: 1.5em;
+  }
+  .md-section-h4 {
+    margin-left: 1.5em;
   }
   h4:before {
     font-family: 'Font Awesome 5 Free';
@@ -74,7 +88,7 @@
     font-size: 1em; /*サイズ*/
     left: 0; /*アイコンの位置*/
     top: 0; /*アイコンの位置*/
-    color: #5ab9ff; /*アイコン色*/
+    color: #ee6a3a; /*アイコン色*/
     padding: 0.5em 0.1em;
   }
   h5 {
@@ -83,10 +97,19 @@
     border-bottom-style: dotted;
     border-bottom-color: #ea5219;
     border-bottom-width: thin;
-    margin-top: 0.5em;
+    margin-top: 1em;
+    margin-left: 2em;
+  }
+  .md-section-h5 {
+    margin-left: 2em;
   }
   h6 {
     font-size: 1rem;
+    margin-top: 1em;
+    margin-left: 2.5em;
+  }
+  .md-section-h6 {
+    margin-left: 2.5em;
   }
   table thead tr th {
     background: #ea5219;
@@ -127,6 +150,38 @@
     max-width: 80%;
     height: auto;
   }
+
+  @media (min-width:768px) {
+    h1 {
+      margin-top: 2.5em;
+      margin-bottom: 0.8em;
+    }
+
+    h2 {
+      margin-top: 2em;
+      margin-bottom: 0.7em;
+    }
+
+    h3 {
+      margin-top: 1.5em;
+      margin-bottom: 0.6em;
+    }
+
+    h4 {
+      margin-top: 1em;
+      margin-bottom: 0.5em;
+    }
+
+    h5 {
+      margin-top: 1em;
+      margin-bottom: 0.5em;
+    }
+
+    h6 {
+      margin-top: 1em;
+      margin-bottom: 0.5em;
+    }
+  }
 }
 
 .markdown-wiki-styles {
@@ -155,20 +210,36 @@
     border-top: solid 3px #364e96; /*上線*/
     border-bottom: solid 3px #364e96; /*下線*/
   }
+  .md-section-h1 {
+    margin-left: 0em;
+  }
   h2 {
     color: #6594e0; /*文字色*/
     /*線の種類（点線）2px 線色*/
     border-bottom: dashed 2px #6594e0;
+    margin-left: 0.5em;
   }
-
+  .md-section-h2 {
+    margin-left: 0.5em;
+  }
   h3 {
     padding: 0.25em 0.5em; /*上下 左右の余白*/
     color: #494949; /*文字色*/
     background: transparent; /*背景透明に*/
     border-left: solid 5px #7db4e6; /*左線*/
+    margin-top: 1em;
+    margin-left: 1em;
+  }
+  .md-section-h3 {
+    margin-left: 1em;
   }
   h4 {
     background: linear-gradient(transparent 70%, #a7d6ff 70%);
+    margin-top: 1em;
+    margin-left: 1.5em;
+  }
+  .md-section-h4 {
+    margin-left: 1.5em;
   }
   h5 {
     color: #494949;
@@ -176,10 +247,19 @@
     border-bottom-style: dotted;
     border-bottom-color: #364e96;
     border-bottom-width: thin;
-    margin-top: 0.5em;
+    margin-top: 1em;
+    margin-left: 2em;
+  }
+  .md-section-h5 {
+    margin-left: 2em;
   }
   h6 {
     font-size: 1rem;
+    margin-top: 1em;
+    margin-left: 2.5em;
+  }
+  .md-section-h6 {
+    margin-left: 2.5em;
   }
   table thead tr th {
     background: #7db4e6;
@@ -220,6 +300,33 @@
     max-width: 80%;
     height: auto;
   }
+
+  @media (min-width:768px){
+    h1 {
+      margin-top: 2.5em;
+      margin-bottom: 0.8em;
+    }
+    h2 {
+      margin-top: 2em;
+      margin-bottom: 0.7em;
+    }
+    h3 {
+      margin-top: 1.5em;
+      margin-bottom: 0.6em;
+    }
+    h4 {
+      margin-top: 1em;
+      margin-bottom: 0.5em;
+    }
+    h5 {
+      margin-top: 1em;
+      margin-bottom: 0.5em;
+    }
+    h6 {
+      margin-top: 1em;
+      margin-bottom: 0.5em;
+    }
+  }
 }
 
 .markdown-vote-styles {
@@ -246,6 +353,9 @@
     position: relative;
     padding-bottom: 0.5em;
   }
+  .md-section-h1 {
+    margin-left: 0em;
+  }
   h1::before,
   h1::after {
     position: absolute;
@@ -268,6 +378,11 @@
     position: relative;
     padding: 0 0.5em 0.5em 2em;
     border-bottom: 1px solid #ccc;
+    margin-top: 1em;
+    margin-left: 0.5em;
+  }
+  .md-section-h2 {
+    margin-left: 0.5em;
   }
   h2::before,
   h2::after {
@@ -294,9 +409,19 @@
   h3 {
     padding: 0.25em 0 0.25em 0.75em;
     border-left: 6px solid #ccc;
+    margin-top: 1em;
+    margin-left: 1em;
+  }
+  .md-section-h3 {
+    margin-left: 1em;
   }
   h4 {
     background: linear-gradient(transparent 70%, #fcef3c 70%);
+    margin-top: 1em;
+    margin-left: 1.5em;
+  }
+  .md-section-h4 {
+    margin-left: 1.5em;
   }
   h5 {
     color: #494949;
@@ -304,10 +429,19 @@
     border-bottom-style: dotted;
     border-bottom-color: #364e96;
     border-bottom-width: thin;
-    margin-top: 0.5em;
+    margin-top: 1em;
+    margin-left: 2em;
+  }
+  .md-section-h5 {
+    margin-left: 2em;
   }
   h6 {
     font-size: 1rem;
+    margin-top: 1em;
+    margin-left: 2.5em;
+  }
+  .md-section-h6 {
+    margin-left: 2.5em;
   }
   table thead tr th {
     background: rgba(85, 84, 84, 0.5);
@@ -347,5 +481,37 @@
     box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12) !important;
     max-width: 80%;
     height: auto;
+  }
+
+  @media (min-width:768px) {
+    h1 {
+      margin-top: 2.5em;
+      margin-bottom: 0.8em;
+    }
+
+    h2 {
+      margin-top: 2em;
+      margin-bottom: 0.7em;
+    }
+
+    h3 {
+      margin-top: 1.5em;
+      margin-bottom: 0.6em;
+    }
+
+    h4 {
+      margin-top: 1em;
+      margin-bottom: 0.5em;
+    }
+
+    h5 {
+      margin-top: 1em;
+      margin-bottom: 0.5em;
+    }
+
+    h6 {
+      margin-top: 1em;
+      margin-bottom: 0.5em;
+    }
   }
 }

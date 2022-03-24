@@ -2,6 +2,7 @@
   <account-notification-banner></account-notification-banner>
   <div class="container">
     <%- partial ('thread-modals.ejs') %>
+    <%- partial ('../previous-modal.ejs') %>
 
     <ajax-form id="query-member-form" action="queryAllMember" :syncing.sync="syncing" :cloud-error.sync="cloudError" @submitted="submittedMemberForm" @rejected="onCloudError" :handle-parsing="handleParsingMemberForm">
     </ajax-form>
@@ -333,7 +334,17 @@
             <!-- appendix -->
             <editor-file :appendix="appendix" :organization="organization" mode="update" :delete-appendix="deleteAppendix" :download-appendix="downloadAppendix" :whitelist="witeListOfExts" :add-image="addImageBlobHook" :is-uploading="isUploading" :planlimitation="planlimitation" title="thread" :is-demosite="isDemosite" :hidden-upload="thread.locked" :parent="thread.id" :show-query="true">
             </editor-file>
-            <div class="row mt-5 mb-5 p-3 shadow rounded" v-show="thread.body">
+
+            <div class="row mt-5">
+              <div class="col text-right">
+                <button type="button" class="btn btn-link btn-sm" @click="buildPrevious" v-if="thread.previous">
+                  <i class="fas fa-exchange-alt"></i>
+                  <%= __("Change point") %>
+                </button>
+              </div>
+            </div>
+
+            <div class="row mb-5 p-3 shadow rounded" v-show="thread.body">
               <div class="col">
                 <div class="row" v-if="thread.emotional">
                   <div class="col text-right"><small><a href="javascript:void(0)" @click="showEmotionsRadar">

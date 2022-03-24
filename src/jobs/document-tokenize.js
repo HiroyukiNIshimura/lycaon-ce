@@ -10,22 +10,38 @@ const _ = require('@sailshq/lodash');
 module.exports = {
   tokenize: async function (type, item) {
     var token = '';
-    if (item.mimeType === 'application/pdf') {
-      token = await this.fromPdf(item);
-    } else if (item.mimeType === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
-      token = this.fromExcel(item);
-    } else if (item.mimeType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
-      token = await this.fromWord(item);
-    } else if (item.mimeType === 'text/plain') {
-      var buffer = fs.readFileSync(path.resolve(sails.config.appPath, item.virtualPath));
-      var detected = encoding.detect(buffer);
-      token = encoding.convert(buffer, {
-        from: detected,
-        to: 'UNICODE',
-        type: 'string',
-      });
-    } else {
-      return;
+    try {
+      switch (item.mimeType) {
+        case 'application/pdf':
+          token = await this.fromPdf(item);
+          break;
+        case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
+          token = this.fromExcel(item);
+          break;
+        case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+          token = await this.fromWord(item);
+          break;
+        case 'text/plain':
+        case 'text/csv':
+        case 'text/html':
+        case 'text/javascript':
+        case 'text/xml':
+        case 'application/json':
+        case 'application/xml':
+          var buffer = fs.readFileSync(path.resolve(sails.config.appPath, item.virtualPath));
+          var detected = encoding.detect(buffer);
+          token = encoding.convert(buffer, {
+            from: detected,
+            to: 'UNICODE',
+            type: 'string',
+          });
+          break;
+
+        default:
+          return;
+      }
+    } catch (error) {
+      //添付してすぐ削除されるとファイルが無くなっているのでそういうのは無視
     }
 
     if (!token) {
@@ -106,6 +122,7 @@ module.exports = {
   },
   wakati: async function (tokens) {
     var buffer = [];
+    tokens = tokens.replace(/[!-/:-@[-`{-~]/g, ' ');
     if (tokens.length > 5000) {
       tokens = tokens.substr(0, 5000);
     }

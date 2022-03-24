@@ -1,3 +1,5 @@
+const DiffMatchPatch = require('diff-match-patch');
+
 module.exports = {
   friendlyName: 'Update wiki',
 
@@ -36,6 +38,10 @@ module.exports = {
       type: 'boolean',
       description: '論理削除フラグ',
     },
+    notify: {
+      type: 'boolean',
+      description: '通知を行うか否か',
+    },
   },
 
   exits: {
@@ -62,7 +68,7 @@ module.exports = {
     }
 
     if (current.concept === 0) {
-      var team = await sails.helpers.validateMembership.with({
+      let team = await sails.helpers.validateMembership.with({
         id: current.team,
         user: this.req.me,
       });
@@ -74,6 +80,10 @@ module.exports = {
     var wiki = _.clone(inputs);
     wiki.tags = [];
     wiki.lastUpdateUser = this.req.me.id;
+
+    const dmp = new DiffMatchPatch();
+    const diff = dmp.diff_main(current.body, wiki.body);
+    wiki.previous = JSON.stringify(diff);
 
     var updated = {};
 
@@ -126,6 +136,25 @@ module.exports = {
       user: this.req.me,
       wiki: updated,
     });
+
+    if (inputs.concept === 0 && inputs.notify) {
+      let team = await Team.findOne({ id: updated.team }).populate('users');
+      for (let entry of team.users) {
+        var data = await sails.helpers.mail.updateWikiMail.with({
+          organization: this.req.me.organization,
+          wiki: updated,
+          changer: this.req.me,
+          user: entry,
+          team: team,
+        });
+
+        await sails.helpers.agendaSchedule.with({
+          ttl: Date.now() + sails.config.custom.mailSendTTL,
+          job: 'send-email',
+          data: data,
+        });
+      }
+    }
 
     this.req.session.effectMessage = sails.__('The Wiki has been updated');
 

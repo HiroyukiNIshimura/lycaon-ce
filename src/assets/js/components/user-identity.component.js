@@ -36,6 +36,7 @@ parasails.registerComponent('userIdentity', {
       yourPop: false,
       isThread: false,
       isTeam: false,
+      dragableItems: [],
     };
   },
   //  ╦ ╦╔╦╗╔╦╗╦
@@ -43,11 +44,13 @@ parasails.registerComponent('userIdentity', {
   //  ╩ ╩ ╩ ╩ ╩╩═╝
   template: `
 <span class="ml-1" v-if="user">
-  <span :id="parseAvaterId" class="user-avater-icon" :class="molded" @click="onIconClick" ref="userIdentity">
-    <img :class="sizeClass" :src="user.gravatarUrl" v-if="user.avatarType === 'gravatar'" />
-    <img class="rounded-circle" :class="sizeClass" :src="user.avatarVirtualUrl" v-else-if="user.avatarType === 'user-avatar'" />
-    <svg :class="sizeClass" :data-jdenticon-value="user.emailAddress" v-else></svg>
-  </span>
+  <draggable tag="span" :group="group" @add="onAdd" :list="dragableItems">
+    <span :id="parseAvaterId" class="user-avater-icon" :class="molded" @click="onIconClick" ref="userIdentity">
+      <img :class="sizeClass" :src="user.gravatarUrl" v-if="user.avatarType === 'gravatar'" />
+      <img class="rounded-circle" :class="sizeClass" :src="user.avatarVirtualUrl" v-else-if="user.avatarType === 'user-avatar'" />
+      <svg :class="sizeClass" :data-jdenticon-value="user.emailAddress" v-else></svg>
+    </span>
+  </draggable>
   <a :id="parseUserId" class="ml-1 comment-tip" :href="menberInfoLink" v-if="showUserName === true">
     {{ user.fullName }}</a>
 
@@ -108,6 +111,8 @@ parasails.registerComponent('userIdentity', {
     if (this.team) {
       this.isTeam = true;
     }
+
+    this.dragableItems = [this.user.id];
   },
   mounted: async function () {
     jdenticon();
@@ -128,6 +133,9 @@ parasails.registerComponent('userIdentity', {
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗
   //  ╩╝╚╝ ╩ ╚═╝╩╚═╩ ╩╚═╝ ╩ ╩╚═╝╝╚╝╚═╝
   methods: {
+    onAdd: function () {
+      location.href = `/${this.organization.handleId}/member/${this.user.id}?tab=tab-message`;
+    },
     onIconClick: function (e) {
       if (this.isPopIcon) {
         this.showPoporver = !this.showPoporver;
@@ -226,6 +234,13 @@ parasails.registerComponent('userIdentity', {
         return `mold-filter-${this.user.mold}`;
       }
       return '';
+    },
+    group: function () {
+      if (this.me && this.me.id === this.user.id) {
+        return { name: 'people', pull: 'clone', put: false };
+      } else {
+        return { name: 'people', pull: false, put: true };
+      }
     },
   },
 });

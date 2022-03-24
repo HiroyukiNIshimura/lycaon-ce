@@ -2,8 +2,8 @@ const moment = require('moment');
 const momentTZ = require('moment-timezone');
 
 module.exports = {
-  friendlyName: 'mail.createWikiMail',
-  description: 'create wiki mail data.',
+  friendlyName: 'mail.updateWikiMail',
+  description: 'update wiki mail data.',
   inputs: {
     organization: {
       type: 'ref',
@@ -13,7 +13,7 @@ module.exports = {
       type: 'ref',
       required: true,
     },
-    author: {
+    changer: {
       type: 'ref',
       required: true,
     },
@@ -37,11 +37,11 @@ module.exports = {
       sails.hooks.i18n.setLocale(lang);
       moment.locale(lang);
 
-      var subject = sails.__('A new Wiki has been published');
+      var subject = sails.__('The public wiki has been updated');
 
       var data = {
         organization: inputs.organization,
-        template: 'email-wiki-notify',
+        template: 'email-wiki-update-notify',
         subject: subject,
         to: inputs.user.emailAddress,
         toName: inputs.user.fullName,
@@ -49,8 +49,8 @@ module.exports = {
           organization: inputs.organization,
           wiki: inputs.wiki,
           title: subject,
-          author: inputs.author,
-          releaseAt: momentTZ(Number(inputs.wiki.createdAt)).tz('Asia/Tokyo').format('lll') + ' JST',
+          changer: inputs.changer,
+          updateAt: momentTZ(Number(inputs.wiki.updatedAt)).tz('Asia/Tokyo').format('lll') + ' JST',
           locale: lang,
           team: inputs.team,
         },

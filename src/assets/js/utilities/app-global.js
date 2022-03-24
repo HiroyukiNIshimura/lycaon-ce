@@ -413,6 +413,36 @@ const $lycaon = {
       $('#stack-exchange').show();
     }
   },
+  parsePrevious: function (previous) {
+    //
+    try {
+      const data = JSON.parse(previous);
+      var diffs = '';
+
+      var unchanged = _.every(data, (o) => {
+        return o[0] === 0;
+      });
+
+      if (unchanged) {
+        return '';
+      }
+
+      data.forEach((diff) => {
+        if (diff[0] === -1) {
+          diffs += `<del style='background: #dda0dd'>${diff[1]}</del>`;
+        }
+        if (diff[0] === 0) {
+          diffs += diff[1];
+        }
+        if (diff[0] === 1) {
+          diffs += `<span style='background: #7fffd4'>${diff[1]}</span>`;
+        }
+      });
+      return diffs;
+    } catch (error) {
+      console.log(error);
+    }
+  },
   axios: {
     get: async function (url, config, common) {
       var conf = _.extend({}, config || {});
@@ -1092,8 +1122,13 @@ $(() => {
     $('.toastui-editor-contents table').addClass('table');
     $('.toastui-editor-contents table').wrap('<div class="table-responsive">');
 
-    $('.md-viewer img').click(function () {
-      $('#image-display').html($(this).prop('outerHTML'));
+    $('.md-viewer img, #wrapper-appendix img').click(function () {
+      var src = $(this).data('source-image');
+      if (src) {
+        $('#image-display').html(`<img src="${src}"></img>`);
+      } else {
+        $('#image-display').html($(this).prop('outerHTML'));
+      }
       $('#image-display').fadeIn(200);
       return false;
     });
@@ -1101,6 +1136,35 @@ $(() => {
       $('#image-display').fadeOut(200);
       return false;
     });
+
+    var paragraphClass = '';
+    $('.toastui-editor-contents')
+      .children()
+      .each((o, el) => {
+        switch (el.nodeName) {
+          case 'H1':
+            paragraphClass = 'md-section-h1';
+            break;
+          case 'H2':
+            paragraphClass = 'md-section-h2';
+            break;
+          case 'H3':
+            paragraphClass = 'md-section-h3';
+            break;
+          case 'H4':
+            paragraphClass = 'md-section-h4';
+            break;
+          case 'H5':
+            paragraphClass = 'md-section-h5';
+            break;
+          case 'H6':
+            paragraphClass = 'md-section-h6';
+            break;
+          default:
+            $(el).addClass(paragraphClass);
+            break;
+        }
+      });
   };
 
   $(document).ready(lycaonLoad);

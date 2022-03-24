@@ -177,6 +177,24 @@ module.exports = {
           word: '',
           resultTarget: 'thread',
         };
+      } else if (this.req.cookies.teamQueryParam.category) {
+        response.query = {
+          milestone: '',
+          category: this.req.cookies.teamQueryParam.category,
+          responsible: '',
+          concept: '1',
+          status: '0',
+          owner: '',
+          locked: '',
+          priority: '',
+          working: false,
+          flag: false,
+          tags: [],
+          sustain: false,
+          sort: 0,
+          word: '',
+          resultTarget: 'thread',
+        };
       } else if (this.req.cookies.teamQueryParam.tag) {
         if (this.req.cookies.teamQueryParam.target === 'thread') {
           response.query = {
