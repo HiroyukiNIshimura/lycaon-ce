@@ -233,11 +233,11 @@
 
   <% /* bowser.js (for browser detection) -- included inline to avoid issues with minification that could affect the unsupported browser overlay */%>
   <script>
-    ! function(e, i, s) {
+    ! function (e, i, s) {
       if ("undefined" != typeof module && module.exports) module.exports = s();
       else if ("function" == typeof define && define.amd) define(i, s);
       else e[i] = s()
-    }(this, "bowser", function() {
+    }(this, "bowser", function () {
       var e = true;
 
       function i(i) {
@@ -548,7 +548,7 @@
         return B
       }
       var s = i("undefined" !== typeof navigator ? navigator.userAgent || "" : "");
-      s.test = function(e) {
+      s.test = function (e) {
         for (var i = 0; i < e.length; ++i) {
           var o = e[i];
           if ("string" === typeof o)
@@ -571,18 +571,18 @@
 
       function n(e) {
         var i = Math.max(o(e[0]), o(e[1]));
-        var s = r(e, function(e) {
+        var s = r(e, function (e) {
           var s = i - o(e);
           e += new Array(s + 1).join(".0");
-          return r(e.split("."), function(e) {
+          return r(e.split("."), function (e) {
             return new Array(20 - e.length).join("0") + e
           }).reverse()
         });
         while (--i >= 0)
           if (s[0][i] > s[1][i]) return 1;
           else if (s[0][i] === s[1][i]) {
-          if (0 === i) return 0
-        } else return -1
+            if (0 === i) return 0
+          } else return -1
       }
 
       function t(e, o, r) {
@@ -819,7 +819,7 @@
   <% /* Display an overlay if the current browser is not supported.
               (Relies on `bowser`, which is loaded inline above.) */ %>
   <script>
-    (function() {
+    (function () {
       if (typeof bowser !== 'undefined') {
         var LATEST_SUPPORTED_VERSION_BY_OS = {
           iOS: '10',
@@ -859,7 +859,7 @@
   <script>
     $(function whenDomIsReady() {
       $lycaon.socket.post('/ws/v1/join-organization', {}, (res) => {
-        io.socket.on('disconnect', function() {
+        io.socket.on('disconnect', function () {
           //location.href = '/';
         });
       });

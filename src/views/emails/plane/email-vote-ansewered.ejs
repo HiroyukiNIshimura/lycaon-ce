@@ -1,0 +1,16 @@
+<% /* Note: This is injected into `views/layouts/layout-email.ejs` */ %>
+
+<%= title %>
+
+<%= vote.subject %>
+
+<%= __('Release date') %>: <%= releaseAt %>
+<%= __('End date') %>: <%= endAt %>
+------------------------------
+
+<%= __('Please check from this link') %>
+[ <%= url.resolve(sails.config.custom.baseUrl, `/${organization.handleId}/vote/${vote.id}`) %> ]
+
+------------------------------
+Sincerely,
+<%= fromName %>

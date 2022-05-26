@@ -4,7 +4,7 @@ parasails.registerPage('admin-plan-change-downgrade-confirm', {
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
   data: {
     changeDate: '',
-    selectedDate: {},
+    selectedDate: undefined,
     errorSelectedDate: false,
     reasons: [],
     errorReasons: false,
@@ -29,7 +29,7 @@ parasails.registerPage('admin-plan-change-downgrade-confirm', {
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
   //  ║  ║╠╣ ║╣ ║  ╚╦╝║  ║  ║╣
   //  ╩═╝╩╚  ╚═╝╚═╝ ╩ ╚═╝╩═╝╚═╝
-  beforeMount: function () {},
+  beforeMount: function () { },
   mounted: async function () {
     //…
   },

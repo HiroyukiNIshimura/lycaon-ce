@@ -4,7 +4,7 @@ parasails.registerPage('backoffice-notification-create', {
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
   data: {
     formatDate: $lycaon.formatter.formatDate,
-    selectedDate: {},
+    selectedDate: undefined,
     //…
     // Main syncing/loading state for this page.
     syncing: false,
@@ -33,7 +33,7 @@ parasails.registerPage('backoffice-notification-create', {
 
     this.formData.category = 'notice';
   },
-  mounted: async function () {},
+  mounted: async function () { },
 
   //  ╦╔╗╔╔╦╗╔═╗╦═╗╔═╗╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
   //  ║║║║ ║ ║╣ ╠╦╝╠═╣║   ║ ║║ ║║║║╚═╗

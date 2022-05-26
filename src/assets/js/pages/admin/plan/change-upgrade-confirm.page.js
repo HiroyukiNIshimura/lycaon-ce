@@ -4,7 +4,7 @@ parasails.registerPage('admin-plan-change-upgrade-confirm', {
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
   data: {
     changeDate: '',
-    selectedDate: {},
+    selectedDate: undefined,
     errorSelectedDate: false,
     // Main syncing/loading state for this page.
     syncing: false,
@@ -27,7 +27,7 @@ parasails.registerPage('admin-plan-change-upgrade-confirm', {
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
   //  ║  ║╠╣ ║╣ ║  ╚╦╝║  ║  ║╣
   //  ╩═╝╩╚  ╚═╝╚═╝ ╩ ╚═╝╩═╝╚═╝
-  beforeMount: function () {},
+  beforeMount: function () { },
   mounted: async function () {
     //…
   },

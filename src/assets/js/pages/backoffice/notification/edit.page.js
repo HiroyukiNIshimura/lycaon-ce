@@ -4,7 +4,7 @@ parasails.registerPage('backoffice-notification-edit', {
   //  ╩╝╚╝╩ ╩ ╩╩ ╩╩═╝  ╚═╝ ╩ ╩ ╩ ╩ ╚═╝
   data: {
     formatDate: $lycaon.formatter.formatDate,
-    selectedDate: {},
+    selectedDate: undefined,
 
     //…
     // Main syncing/loading state for this page.

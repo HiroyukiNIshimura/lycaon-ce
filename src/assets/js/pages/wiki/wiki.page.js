@@ -15,6 +15,7 @@ parasails.registerPage('wiki', {
     isFan: false,
     showToc: true,
     showPrevious: false,
+    previuosDiff: '',
     // Main syncing/loading state for this page.
     syncing: false,
     // Form data
@@ -200,39 +201,8 @@ parasails.registerPage('wiki', {
     },
     buildPrevious: function () {
       if (this.wiki.previous) {
-        let previuosDiff = $lycaon.parsePrevious(this.wiki.previous);
+        this.previuosDiff = $lycaon.parsePrevious(this.wiki.previous);
         this.showPrevious = true;
-        this.$nextTick(() => {
-          $lycaon.markdown.createViewer('#previuos-diff-viewer', previuosDiff, '100%');
-          var paragraphClass = '';
-          $('#previuos-diff-viewer .toastui-editor-contents')
-            .children()
-            .each((o, el) => {
-              switch (el.nodeName) {
-                case 'H1':
-                  paragraphClass = 'md-section-h1';
-                  break;
-                case 'H2':
-                  paragraphClass = 'md-section-h2';
-                  break;
-                case 'H3':
-                  paragraphClass = 'md-section-h3';
-                  break;
-                case 'H4':
-                  paragraphClass = 'md-section-h4';
-                  break;
-                case 'H5':
-                  paragraphClass = 'md-section-h5';
-                  break;
-                case 'H6':
-                  paragraphClass = 'md-section-h6';
-                  break;
-                default:
-                  $(el).addClass(paragraphClass);
-                  break;
-              }
-            });
-        });
       }
     },
   },

@@ -32,7 +32,7 @@ parasails.registerPage('member-info', {
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
   //  ║  ║╠╣ ║╣ ║  ╚╦╝║  ║  ║╣
   //  ╩═╝╩╚  ╚═╝╚═╝ ╩ ╚═╝╩═╝╚═╝
-  beforeMount: function () {},
+  beforeMount: function () { },
   mounted: async function () {
     //…
     var self = this;
@@ -44,7 +44,7 @@ parasails.registerPage('member-info', {
     });
 
     io.socket.on('message-notify', (response) => {
-      if (response.data.sendTo === self.me.id) {
+      if (response.data.sendTo === self.me.id && response.data.sendFrom.id === self.user.id) {
         $lycaon.socketToast(response.message);
 
         if (self.selectedTab.tab.id === 'tab-message') {

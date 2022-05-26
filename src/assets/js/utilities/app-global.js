@@ -428,14 +428,15 @@ const $lycaon = {
       }
 
       data.forEach((diff) => {
+        var santized = _.escape(diff[1]);
         if (diff[0] === -1) {
-          diffs += `<del style='background: #dda0dd'>${diff[1]}</del>`;
+          diffs += `<del class="previous-sentence">${santized}</del>`;
         }
         if (diff[0] === 0) {
-          diffs += diff[1];
+          diffs += santized;
         }
         if (diff[0] === 1) {
-          diffs += `<span style='background: #7fffd4'>${diff[1]}</span>`;
+          diffs += `<span  class="new-sentence">${santized}</span>`;
         }
       });
       return diffs;
@@ -585,7 +586,9 @@ const $lycaon = {
           var tail = text.slice(pos);
 
           if (!self.re.thread) {
-            self.re.thread = new RegExp('^([0-9]){1,8}(?=$|' + self.re.src_ZPCc + ')');
+            self.re.thread = new RegExp(
+              '^([0-9]{1,8}(.sneeze-[0-9]{1,4}(-reply-[0-9]{1,4})?)?)(?=$|' + self.re.src_ZPCc + ')'
+            );
           }
           if (self.re.thread.test(tail)) {
             // Linkifier allows punctuation chars before prefix,
@@ -598,7 +601,14 @@ const $lycaon = {
           return 0;
         },
         normalize: function (match) {
-          match.url = `/${SAILS_LOCALS.me.organization.handleId}/thread/` + match.text.trim().replace(/^#/, '');
+          var word = match.text.trim().replace(/^#/, '');
+          var arry = word.split('.');
+          if (arry.length === 1) {
+            match.url = `/${SAILS_LOCALS.me.organization.handleId}/thread/${arry[0]}`;
+          } else {
+            match.url = `/${SAILS_LOCALS.me.organization.handleId}/thread/${arry[0]}#${arry[1]}`;
+          }
+
           match.text = match.text.trim() + ' ';
         },
       });
@@ -1029,22 +1039,10 @@ const $lycaon = {
       );
     },
     getMarkdown: function (editor) {
-      if (editor.isWysiwygMode()) {
-        editor.changeMode('markdown');
-        var md = editor.getMarkdown();
-        editor.changeMode('wysiwyg');
-        return md;
-      }
       return editor.getMarkdown();
     },
     setMarkdown: function (editor, md) {
-      if (editor.isWysiwygMode()) {
-        editor.changeMode('markdown');
-        editor.setMarkdown(md);
-        editor.changeMode('wysiwyg');
-      } else {
-        editor.setMarkdown(md);
-      }
+      editor.setMarkdown(md);
     },
   },
 };

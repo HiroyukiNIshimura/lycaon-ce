@@ -26,7 +26,7 @@ parasails.registerPage('milestone-create', {
   //  ╦  ╦╔═╗╔═╗╔═╗╦ ╦╔═╗╦  ╔═╗
   //  ║  ║╠╣ ║╣ ║  ╚╦╝║  ║  ║╣
   //  ╩═╝╩╚  ╚═╝╚═╝ ╩ ╚═╝╩═╝╚═╝
-  beforeMount: function () {},
+  beforeMount: function () { },
   mounted: async function () {
     //…
     $lycaon.invalidEnterKey();

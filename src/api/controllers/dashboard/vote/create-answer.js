@@ -98,6 +98,43 @@ module.exports = {
         await VoteAnswer.createEach(valuesToSets).usingConnection(db);
       });
 
+      //回答が出そろったか確認
+      var updated = await Vote.findOne({
+        id: inputs.id,
+        organization: this.req.organization.id,
+        isQuestionnaireFormat: true,
+      })
+        .populate('users')
+        .populate('choices')
+        .populate('answers');
+
+      for (let user of updated.users) {
+        if (_.find(updated.answers, (o) => {
+          return o.user === user.id;
+        })) {
+          user.alreadyAnswered = true;
+        }
+      }
+
+      if (_.every(updated.users, 'alreadyAnswered')) {
+        //アンケートの回答が出そろった
+        for (let entry of updated.users) {
+          var data = await sails.helpers.mail.createVoteAnseweredMail.with({
+            organization: this.req.me.organization,
+            vote: updated,
+            user: entry,
+          });
+
+          await sails.helpers.agendaSchedule.with({
+            ttl: Date.now() + sails.config.custom.mailSendTTL,
+            job: 'send-email',
+            data: data,
+          });
+        }
+      }
+      //メール配信データ作成時にsails.hooks.i18n.localeが変更されているので
+      sails.hooks.i18n.setLocale(this.req.me.languagePreference);
+
       this.req.session.effectMessage = sails.__('The answer to the question has been confirmed');
       return {
         id: current.id,

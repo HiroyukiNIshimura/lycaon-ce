@@ -51,6 +51,7 @@ module.exports = {
     sails.sockets.broadcast(rooms, 'message-read', {
       data: updated,
       sendTo: sendTo,
+      reader: this.req.me,
       timespan: Date.now(),
     });
 

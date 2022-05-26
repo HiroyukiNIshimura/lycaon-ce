@@ -91,9 +91,11 @@ module.exports = {
     thread.responsible = inputs.responsible ? inputs.responsible : null;
     thread.milestone = inputs.milestone ? inputs.milestone : null;
 
-    const dmp = new DiffMatchPatch();
-    const diff = dmp.diff_main(current.body, thread.body);
-    thread.previous = JSON.stringify(diff);
+    if (current.body !== thread.body) {
+      const dmp = new DiffMatchPatch();
+      const diff = dmp.diff_main(current.body, thread.body);
+      thread.previous = JSON.stringify(diff);
+    }
 
     var milestone;
     if (inputs.milestone) {

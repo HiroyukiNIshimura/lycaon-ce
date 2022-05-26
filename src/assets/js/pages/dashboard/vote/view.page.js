@@ -16,6 +16,7 @@ parasails.registerPage('vote-view', {
     openCommentIdentity: null,
     popStatus: {},
     showPrevious: false,
+    previuosDiff: '',
 
     //…
     // Main syncing/loading state for this page.
@@ -366,44 +367,13 @@ parasails.registerPage('vote-view', {
     },
     buildPrevious: function () {
       if (this.vote.previous) {
-        let previuosDiff = $lycaon.parsePrevious(this.vote.previous);
+        this.previuosDiff = $lycaon.parsePrevious(this.vote.previous);
         this.showPrevious = true;
-        this.$nextTick(() => {
-          $lycaon.markdown.createViewer('#previuos-diff-viewer', previuosDiff, '100%');
-          var paragraphClass = '';
-          $('#previuos-diff-viewer .toastui-editor-contents')
-            .children()
-            .each((o, el) => {
-              switch (el.nodeName) {
-                case 'H1':
-                  paragraphClass = 'md-section-h1';
-                  break;
-                case 'H2':
-                  paragraphClass = 'md-section-h2';
-                  break;
-                case 'H3':
-                  paragraphClass = 'md-section-h3';
-                  break;
-                case 'H4':
-                  paragraphClass = 'md-section-h4';
-                  break;
-                case 'H5':
-                  paragraphClass = 'md-section-h5';
-                  break;
-                case 'H6':
-                  paragraphClass = 'md-section-h6';
-                  break;
-                default:
-                  $(el).addClass(paragraphClass);
-                  break;
-              }
-            });
-        });
       }
     },
   },
   computed: {
-    commentTranslator: function () {},
+    commentTranslator: function () { },
     beforeRelease: function () {
       return this.badState === 'notAnswerNotReleased';
     },
